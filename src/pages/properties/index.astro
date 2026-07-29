@@ -1,0 +1,37 @@
+---
+import { getAllProperties } from "@/features/landing/data/properties";
+import PropertyCard from "@/features/landing/PropertyCard.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildSeo } from "@/lib/seo";
+
+const seo = buildSeo({
+  title: "Browse Verified Properties",
+  description:
+    "Browse blockchain-verified properties for sale in Ghana, complete with flexible financing options for qualified buyers.",
+  path: "/properties",
+});
+
+const allProperties = getAllProperties();
+---
+
+<BaseLayout seo={seo}>
+  <section class="py-16">
+    <div class="mx-auto max-w-[1536px] px-6 sm:px-8 lg:px-16">
+      <h1
+        class="text-ink-900 text-[clamp(2rem,4vw,2.75rem)] leading-[1.15] font-bold tracking-[-0.02em]"
+      >
+        Browse verified properties
+      </h1>
+      <p class="text-ink-500 mt-3 max-w-2xl text-[16px] leading-relaxed">
+        Every listing below is title-verified against Ghana&apos;s Lands Commission records and
+        recorded on-chain.
+      </p>
+
+      <div
+        class="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-y-12"
+      >
+        {allProperties.map((property) => <PropertyCard property={property} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

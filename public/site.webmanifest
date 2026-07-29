@@ -1,0 +1,13 @@
+{
+  "name": "Afram — Liberating Capital.",
+  "short_name": "Afram",
+  "description": "Afram is a blockchain-verified real estate marketplace connecting buyers, vendors, and financiers in Ghana.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#007481",
+  "icons": [
+    { "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

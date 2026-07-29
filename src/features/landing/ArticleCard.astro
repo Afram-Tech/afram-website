@@ -1,0 +1,37 @@
+---
+import type { Article } from "@/features/landing/data/articles";
+import { formatArticleDate } from "@/features/landing/data/articles";
+
+interface Props {
+  article: Article;
+}
+
+const { article } = Astro.props;
+---
+
+<a href={`/insights/${article.slug}`} class="group block">
+  <div class="bg-ink-50 relative aspect-16/11 overflow-hidden rounded-[1.25rem]">
+    <img
+      src={article.cover}
+      alt={article.title}
+      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+    />
+    <span
+      class="text-brand-700 absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 text-[12px] font-semibold backdrop-blur-sm"
+    >
+      {article.category}
+    </span>
+  </div>
+
+  <h3
+    class="text-ink-900 group-hover:text-brand-700 mt-4 text-[1.2rem] leading-tight font-bold tracking-[-0.01em] transition-colors"
+  >
+    {article.title}
+  </h3>
+  <p class="text-ink-500 mt-2 line-clamp-2 text-[14px] leading-relaxed">{article.excerpt}</p>
+  <div class="text-ink-400 mt-3 flex items-center gap-2 text-[13px]">
+    <span class="tnum">{formatArticleDate(article.date)}</span>
+    <span aria-hidden="true">·</span>
+    <span class="tnum">{article.readMinutes} min read</span>
+  </div>
+</a>

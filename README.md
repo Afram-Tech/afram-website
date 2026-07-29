@@ -1,38 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Afram Website
 
-## Getting Started
+The public marketing site for [Afram](https://afram.co) — a blockchain-verified real estate
+marketplace connecting buyers, vendors, and financiers in Ghana.
 
-First, run the development server:
+Built with [Astro](https://astro.build), [Tailwind CSS v4](https://tailwindcss.com), and
+TypeScript. Interactive widgets (persona tabs, the affordability calculator, the newsletter form)
+are React islands via [`@astrojs/react`](https://docs.astro.build/en/guides/integrations-guide/react/);
+everything else ships as zero-JS static HTML.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:4321](http://localhost:4321) to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command          | Description                            |
+| ---------------- | -------------------------------------- |
+| `pnpm dev`       | Start the local dev server             |
+| `pnpm build`     | Build the static site to `dist/`       |
+| `pnpm preview`   | Preview the production build locally   |
+| `pnpm lint`      | Lint with ESLint (TS + Astro)          |
+| `pnpm format`    | Format with Prettier                   |
+| `pnpm typecheck` | Type-check `.ts`/`.tsx`/`.astro` files |
+| `pnpm test`      | Run unit tests (Vitest)                |
+| `pnpm test:e2e`  | Run end-to-end tests (Playwright)      |
 
-## Learn More
+## Project structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+  components/   Shared UI (Astro components + React islands)
+  config/       Site metadata, navigation, env validation
+  features/     Feature-scoped code (landing sections, persona content)
+  layouts/      Page layouts (BaseLayout with SEO head + nav/footer)
+  lib/          Framework-agnostic helpers (formatting, SEO, cn)
+  pages/        File-based routes
+  types/        Shared TypeScript types
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-# afram-website
+Property listings and article content in `src/features/landing/data/` are static seed data —
+swap in a real data source (e.g. a GraphQL API with generated types) when ready.

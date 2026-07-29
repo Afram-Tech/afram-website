@@ -1,0 +1,49 @@
+---
+import { cn } from "@/lib/utils";
+
+interface Props {
+  seed: string;
+  tone?: "brand" | "ink" | "gold" | "sky";
+  src?: string;
+  alt?: string;
+  class?: string;
+}
+
+const TONES = {
+  brand: ["#064a55", "#0b343b", "#5fc6d1"],
+  ink: ["#1b2128", "#0f1419", "#5b6470"],
+  gold: ["#7a4708", "#0f1419", "#fbbf24"],
+  sky: ["#0b4f6c", "#0f1419", "#0ea5e9"],
+} as const;
+
+function hash(value: string) {
+  return [...value].reduce((acc, char) => (acc * 33 + char.charCodeAt(0)) >>> 0, 5381);
+}
+
+const { seed, tone = "brand", src, alt, class: className } = Astro.props;
+
+const [a, b, hi] = TONES[tone];
+const h = hash(seed);
+const angle = 120 + (h % 80);
+const x = 15 + (h % 60);
+const y = 10 + ((h >> 3) % 50);
+---
+
+<div
+  class={cn("relative overflow-hidden bg-ink-900", className)}
+  style={{
+    backgroundImage: `radial-gradient(120% 120% at ${x}% ${y}%, ${hi}40 0%, transparent 45%), linear-gradient(${angle}deg, ${a} 0%, ${b} 70%)`,
+  }}
+>
+  {
+    src ? (
+      <img
+        src={src}
+        alt={alt ?? ""}
+        loading="lazy"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+    ) : null
+  }
+  <slot />
+</div>

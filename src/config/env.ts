@@ -1,13 +1,13 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
-  NEXT_PUBLIC_SITE_URL: z.url().default("http://localhost:3000"),
+  MODE: z.enum(["development", "production", "test"]).default("development"),
+  PUBLIC_SITE_URL: z.url().default("http://localhost:4321"),
 });
 
 const parsed = envSchema.safeParse({
-  NODE_ENV: process.env.NODE_ENV,
-  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+  MODE: import.meta.env.MODE,
+  PUBLIC_SITE_URL: import.meta.env.PUBLIC_SITE_URL,
 });
 
 if (!parsed.success) {

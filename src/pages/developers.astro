@@ -1,0 +1,56 @@
+---
+import { PersonaFaq } from "@/components/persona/PersonaFaq";
+import PersonaFinalCta from "@/components/persona/PersonaFinalCta.astro";
+import PersonaPhotoHero from "@/components/persona/PersonaPhotoHero.astro";
+import PersonaScroller from "@/components/persona/PersonaScroller.astro";
+import JsonLd from "@/components/JsonLd.astro";
+import DeveloperValue from "@/features/developers/DeveloperValue.astro";
+import SellFlow from "@/features/developers/SellFlow.astro";
+import TalkToPartner from "@/features/developers/TalkToPartner.astro";
+import { ORDER, PERSONAS } from "@/features/personas/developer-personas";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { ACCENT_VARS } from "@/lib/accents";
+import { buildFaqJsonLd, buildSeo } from "@/lib/seo";
+
+const seo = buildSeo({
+  title: "List Properties — Raise Capital and Accelerate Sales",
+  description:
+    "List an Afram-verified project and reach pre-financed, ready buyers. Recover capital faster without waiting on slow sales, whether you're an individual vendor or a development firm.",
+  path: "/developers",
+});
+
+const ordered = ORDER.map((id) => PERSONAS[id]);
+const faqGroups = ordered.map((persona) => ({ label: persona.tab, faqs: persona.faqs }));
+const allFaqs = ordered.flatMap((persona) =>
+  persona.faqs.map((faq) => ({ question: faq.q, answer: faq.a })),
+);
+---
+
+<BaseLayout seo={seo}>
+  <JsonLd slot="head" data={buildFaqJsonLd(allFaqs)} />
+  <div style={ACCENT_VARS.emerald}>
+    <PersonaPhotoHero
+      image="/for-vendors-hero.png"
+      imageAlt="A vendor reviewing project plans on-site"
+      headline={["Raise Capital", "and accelerate sales"]}
+      subhead="List an Afram-verified project and bring it financed buyers who are ready to sign — and recover capital without waiting on slow sales."
+      ctaLabel="List Properties"
+      ctaHref="/signup"
+    />
+
+    <PersonaScroller personas={ordered} />
+
+    <DeveloperValue />
+    <SellFlow />
+    <TalkToPartner />
+
+    <PersonaFaq client:visible title="Questions vendors ask…" groups={faqGroups} />
+
+    <PersonaFinalCta
+      title="Turn idle inventory into cash."
+      subtitle="List a verified project and let financed buyers come to you."
+      primary={{ label: "List a project", href: "/signup" }}
+      secondary={{ label: "Talk to a partner", href: "#talk" }}
+    />
+  </div>
+</BaseLayout>

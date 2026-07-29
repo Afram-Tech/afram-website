@@ -1,0 +1,25 @@
+---
+import { cn } from "@/lib/utils";
+
+interface Props {
+  tone?: "brand" | "gold" | "sky" | "muted" | "light";
+  class?: string;
+}
+
+const tones = {
+  brand: "text-accent-600",
+  gold: "text-gold-600",
+  sky: "text-sky-600",
+  muted: "text-ink-500",
+  light: "text-brand-300",
+};
+
+const { tone = "brand", class: className } = Astro.props;
+---
+
+<span
+  class={cn("inline-flex items-center gap-2 text-[13px] font-semibold", tones[tone], className)}
+>
+  <span class="h-1.5 w-1.5 rounded-full bg-current" aria-hidden="true"></span>
+  <slot />
+</span>

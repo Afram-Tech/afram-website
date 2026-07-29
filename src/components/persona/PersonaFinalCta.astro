@@ -1,0 +1,54 @@
+---
+import { ArrowRight } from "lucide-react";
+
+import DuotonePhoto from "@/components/ui/DuotonePhoto.astro";
+import Section from "@/components/ui/Section.astro";
+import { buttonVariants } from "@/components/ui/button-variants";
+
+interface Props {
+  title: string;
+  subtitle: string;
+  primary: { label: string; href: string };
+  secondary?: { label: string; href: string };
+}
+
+const { title, subtitle, primary, secondary } = Astro.props;
+---
+
+<Section class="pt-0">
+  <div class="relative min-h-[360px] overflow-hidden rounded-[2rem] lg:min-h-[440px]">
+    <DuotonePhoto
+      src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1600&q=68"
+      alt=""
+      class="absolute inset-0 h-full w-full"
+    >
+      <div
+        class="from-brand-950/82 via-brand-950/45 to-brand-900/20 absolute inset-0 bg-gradient-to-t"
+      >
+      </div>
+    </DuotonePhoto>
+    <div
+      class="relative z-10 flex min-h-[360px] flex-col justify-end p-8 sm:p-12 lg:min-h-[440px] lg:p-14"
+    >
+      <h2
+        class="max-w-2xl text-[clamp(2rem,3.8vw,3rem)] leading-[1.06] font-extrabold tracking-[-0.02em] text-white"
+      >
+        {title}
+      </h2>
+      <p class="mt-4 max-w-md text-lg text-white/75">{subtitle}</p>
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <a href={primary.href} class={buttonVariants("inverse", "lg")}>
+          {primary.label}
+          <ArrowRight className="h-4 w-4" />
+        </a>
+        {
+          secondary ? (
+            <a href={secondary.href} class={buttonVariants("outline", "lg")}>
+              {secondary.label}
+            </a>
+          ) : null
+        }
+      </div>
+    </div>
+  </div>
+</Section>
