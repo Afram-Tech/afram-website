@@ -1,3 +1,5 @@
+"use client";
+
 import { ArrowRight, CheckCircle2, Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";

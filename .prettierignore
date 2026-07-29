@@ -1,5 +1,4 @@
-dist
-.astro
+.next
 node_modules
 pnpm-lock.yaml
 playwright-report

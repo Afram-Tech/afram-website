@@ -1,39 +1,42 @@
-import { type FormEvent, useState } from "react";
+"use client";
 
-import { Button } from "@/components/ui/Button";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { useState } from "react";
 
 export function NewsletterForm() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "submitted">("idle");
+  const [done, setDone] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setStatus("submitted");
-  }
-
-  if (status === "submitted") {
-    return <p className="text-ink-300 text-sm">Thanks — you&apos;re on the list.</p>;
+  if (done) {
+    return (
+      <div className="bg-brand-50 text-brand-700 flex items-center gap-2 rounded-xl px-4 py-3.5 text-sm font-medium">
+        <CheckCircle2 className="h-4 w-4" />
+        You&apos;re on the list — talk soon.
+      </div>
+    );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex max-w-sm gap-2">
-      <label htmlFor="newsletter-email" className="sr-only">
-        Email address
-      </label>
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        setDone(true);
+      }}
+      className="flex flex-col gap-2 sm:flex-row"
+    >
       <input
-        id="newsletter-email"
         type="email"
         required
-        value={email}
-        onChange={(event) => setEmail(event.target.value)}
-        placeholder="you@email.com"
-        className="border-ink-700 placeholder:text-ink-400 focus:ring-brand-400 w-full rounded-full border bg-transparent px-4 py-2 text-sm text-white focus:ring-2 focus:outline-none"
+        placeholder="name@email.com"
+        aria-label="Email address"
+        className="border-ink-200 text-ink-900 placeholder:text-ink-400 focus:border-brand-500 flex-1 rounded-full border bg-white px-5 py-[12px] text-[15px] focus:outline-none"
       />
-      <Button type="submit" className="shrink-0">
+      <button
+        type="submit"
+        className="bg-brand-500 hover:bg-brand-600 inline-flex h-12 items-center justify-center gap-1.5 rounded-full px-6 text-[15px] font-semibold text-white transition-all active:scale-[0.98]"
+      >
         Subscribe
-      </Button>
+        <ArrowRight className="h-4 w-4" />
+      </button>
     </form>
   );
 }
-
-export default NewsletterForm;

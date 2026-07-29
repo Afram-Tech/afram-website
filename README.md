@@ -3,10 +3,8 @@
 The public marketing site for [Afram](https://afram.co) — a blockchain-verified real estate
 marketplace connecting buyers, vendors, and financiers in Ghana.
 
-Built with [Astro](https://astro.build), [Tailwind CSS v4](https://tailwindcss.com), and
-TypeScript. Interactive widgets (persona tabs, the affordability calculator, the newsletter form)
-are React islands via [`@astrojs/react`](https://docs.astro.build/en/guides/integrations-guide/react/);
-everything else ships as zero-JS static HTML.
+Built with [Next.js](https://nextjs.org) (App Router), [Tailwind CSS v4](https://tailwindcss.com),
+and TypeScript.
 
 ## Getting started
 
@@ -15,31 +13,30 @@ pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:4321](http://localhost:4321) to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the result.
 
 ## Scripts
 
-| Command          | Description                            |
-| ---------------- | -------------------------------------- |
-| `pnpm dev`       | Start the local dev server             |
-| `pnpm build`     | Build the static site to `dist/`       |
-| `pnpm preview`   | Preview the production build locally   |
-| `pnpm lint`      | Lint with ESLint (TS + Astro)          |
-| `pnpm format`    | Format with Prettier                   |
-| `pnpm typecheck` | Type-check `.ts`/`.tsx`/`.astro` files |
-| `pnpm test`      | Run unit tests (Vitest)                |
-| `pnpm test:e2e`  | Run end-to-end tests (Playwright)      |
+| Command          | Description                        |
+| ---------------- | ---------------------------------- |
+| `pnpm dev`       | Start the local dev server         |
+| `pnpm build`     | Build the production app           |
+| `pnpm start`     | Serve the production build locally |
+| `pnpm lint`      | Lint with ESLint (Next.js config)  |
+| `pnpm format`    | Format with Prettier               |
+| `pnpm typecheck` | Type-check with `tsc --noEmit`     |
+| `pnpm test`      | Run unit tests (Vitest)            |
+| `pnpm test:e2e`  | Run end-to-end tests (Playwright)  |
 
 ## Project structure
 
 ```
 src/
-  components/   Shared UI (Astro components + React islands)
+  app/          File-based routes (App Router), root layout, sitemap/robots
+  components/   Shared UI and layout components
   config/       Site metadata, navigation, env validation
   features/     Feature-scoped code (landing sections, persona content)
-  layouts/      Page layouts (BaseLayout with SEO head + nav/footer)
   lib/          Framework-agnostic helpers (formatting, SEO, cn)
-  pages/        File-based routes
   types/        Shared TypeScript types
 ```
 

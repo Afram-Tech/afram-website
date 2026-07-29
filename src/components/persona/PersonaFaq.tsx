@@ -1,4 +1,7 @@
+"use client";
+
 import { Info, Plus } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -36,12 +39,12 @@ export function PersonaFaq({
           <Info className="text-ink-400 mt-0.5 h-4 w-4 shrink-0" />
           <p className="text-ink-500 text-[13px] leading-relaxed">
             Investments can go down as well as up. Your capital is at risk.{" "}
-            <a
+            <Link
               href="/privacy-policy"
               className="text-ink-700 decoration-ink-300 hover:text-ink-900 font-medium underline underline-offset-2"
             >
               Read the key risks
-            </a>
+            </Link>
           </p>
         </div>
       </div>

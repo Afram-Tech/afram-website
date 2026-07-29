@@ -16,9 +16,12 @@
 /test-results
 /blob-report
 
-# astro
-/dist/
-.astro/
+# next.js
+/.next/
+/out/
+
+# production
+/build
 
 # misc
 .DS_Store
@@ -33,10 +36,9 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
-# vercel / netlify / cloudflare
+# vercel
 .vercel
-.netlify
-.wrangler
 
 # typescript
 *.tsbuildinfo
+next-env.d.ts

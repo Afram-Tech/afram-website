@@ -1,24 +1,37 @@
+import type { Metadata } from "next";
+
 import { siteConfig } from "@/config/site";
 
-export interface PageSeo {
-  title: string;
-  description: string;
-  canonical: string;
-  ogImage: string;
-}
-
-interface BuildSeoOptions {
+interface BuildMetadataOptions {
   title: string;
   description: string;
   path?: string;
 }
 
-export function buildSeo({ title, description, path = "" }: BuildSeoOptions): PageSeo {
+export function buildMetadata({ title, description, path = "" }: BuildMetadataOptions): Metadata {
+  const url = `${siteConfig.url}${path}`;
+  const fullTitle = `${title} — ${siteConfig.name}`;
+
   return {
-    title: `${title} — ${siteConfig.name}`,
+    title,
     description,
-    canonical: `${siteConfig.url}${path}`,
-    ogImage: `${siteConfig.url}${siteConfig.ogImage}`,
+    alternates: { canonical: url },
+    openGraph: {
+      title: fullTitle,
+      description,
+      url,
+      siteName: siteConfig.name,
+      type: "website",
+      images: [{ url: siteConfig.ogImage, width: 1200, height: 630, alt: fullTitle }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: fullTitle,
+      description,
+      images: [siteConfig.ogImage],
+      site: siteConfig.social.twitter,
+      creator: siteConfig.social.twitter,
+    },
   };
 }
 
