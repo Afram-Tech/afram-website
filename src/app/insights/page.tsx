@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { ARTICLES } from "@/features/landing/data/articles";
+import { getAllArticles } from "@/features/landing/data/articles";
 import { ArticleCard } from "@/features/landing/ArticleCard";
 import { buildMetadata } from "@/lib/seo";
 
@@ -11,7 +11,9 @@ export const metadata: Metadata = buildMetadata({
   path: "/insights",
 });
 
-export default function InsightsPage() {
+export default async function InsightsPage() {
+  const articles = await getAllArticles();
+
   return (
     <section className="py-16">
       <div className="mx-auto max-w-[1536px] px-6 sm:px-8 lg:px-16">
@@ -23,7 +25,7 @@ export default function InsightsPage() {
         </p>
 
         <div className="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12">
-          {ARTICLES.map((article) => (
+          {articles.map((article) => (
             <ArticleCard key={article.slug} article={article} />
           ))}
         </div>

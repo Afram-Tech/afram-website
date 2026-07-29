@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { siteConfig } from "@/config/site";
-import { ARTICLES } from "@/features/landing/data/articles";
+import { getAllArticles } from "@/features/landing/data/articles";
 import { getAllProperties } from "@/features/landing/data/properties";
 
 const STATIC_ROUTES = [
@@ -16,7 +16,7 @@ const STATIC_ROUTES = [
   { path: "/privacy-policy", priority: 0.2, changeFrequency: "yearly" as const },
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES.map((route) => ({
     url: `${siteConfig.url}${route.path}`,
     lastModified: new Date(),
@@ -31,7 +31,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  const articleEntries: MetadataRoute.Sitemap = ARTICLES.map((article) => ({
+  const articles = await getAllArticles();
+  const articleEntries: MetadataRoute.Sitemap = articles.map((article) => ({
     url: `${siteConfig.url}/insights/${article.slug}`,
     lastModified: new Date(article.date),
     changeFrequency: "monthly",

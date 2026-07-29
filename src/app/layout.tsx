@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteNav } from "@/components/layout/SiteNav";
 import { siteConfig } from "@/config/site";
 import { buildOrganizationJsonLd } from "@/lib/seo";
+import { SanityLive } from "@/sanity/lib/live";
 
 import "./globals.css";
 
@@ -51,6 +52,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SiteNav />
         <main className="flex-1">{children}</main>
         <SiteFooter />
+        <SanityLive />
       </body>
     </html>
   );

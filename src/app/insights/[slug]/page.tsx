@@ -1,3 +1,4 @@
+import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -5,20 +6,39 @@ import { notFound } from "next/navigation";
 
 import { JsonLd } from "@/components/JsonLd";
 import { siteConfig } from "@/config/site";
-import { ARTICLES, findArticleBySlug, formatArticleDate } from "@/features/landing/data/articles";
+import {
+  findArticleBySlug,
+  formatArticleDate,
+  getAllArticles,
+} from "@/features/landing/data/articles";
 import { buildMetadata } from "@/lib/seo";
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  return ARTICLES.map((article) => ({ slug: article.slug }));
+const portableTextComponents: PortableTextComponents = {
+  block: {
+    h2: ({ children }) => (
+      <h2 className="text-ink-900 mt-8 text-xl font-bold tracking-[-0.01em]">{children}</h2>
+    ),
+    blockquote: ({ children }) => (
+      <blockquote className="border-brand-300 text-ink-800 border-l-2 pl-5 text-lg font-medium italic">
+        {children}
+      </blockquote>
+    ),
+    normal: ({ children }) => <p>{children}</p>,
+  },
+};
+
+export async function generateStaticParams() {
+  const articles = await getAllArticles();
+  return articles.map((article) => ({ slug: article.slug }));
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = findArticleBySlug(slug);
+  const article = await findArticleBySlug(slug);
 
   if (!article) {
     return buildMetadata({
@@ -37,7 +57,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
-  const article = findArticleBySlug(slug);
+  const article = await findArticleBySlug(slug);
 
   if (!article) {
     notFound();
@@ -85,26 +105,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </div>
 
         <div className="text-ink-700 mt-8 space-y-5 text-[16px] leading-relaxed">
-          {article.body.map((block, index) => {
-            if (block.type === "h2") {
-              return (
-                <h2 key={index} className="text-ink-900 mt-8 text-xl font-bold tracking-[-0.01em]">
-                  {block.text}
-                </h2>
-              );
-            }
-            if (block.type === "quote") {
-              return (
-                <blockquote
-                  key={index}
-                  className="border-brand-300 text-ink-800 border-l-2 pl-5 text-lg font-medium italic"
-                >
-                  {block.text}
-                </blockquote>
-              );
-            }
-            return <p key={index}>{block.text}</p>;
-          })}
+          {article.body ? (
+            <PortableText value={article.body} components={portableTextComponents} />
+          ) : null}
         </div>
 
         <Link href="/insights" className="text-brand-600 mt-10 inline-block text-sm font-medium">

@@ -3,11 +3,12 @@ import Link from "next/link";
 
 import { Section } from "@/components/ui/Section";
 import { buttonVariants } from "@/components/ui/button-variants";
-import { ARTICLES } from "@/features/landing/data/articles";
+import { getAllArticles } from "@/features/landing/data/articles";
 import { ArticleCard } from "@/features/landing/ArticleCard";
 
-export function FeaturedArticlesSection() {
-  const featured = ARTICLES.slice(0, 3);
+export async function FeaturedArticlesSection() {
+  const articles = await getAllArticles();
+  const featured = articles.slice(0, 3);
 
   return (
     <Section className="bg-ink-50/40">
