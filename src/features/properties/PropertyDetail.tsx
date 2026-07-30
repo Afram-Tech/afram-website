@@ -17,14 +17,13 @@ import {
   ShieldCheck,
   Star,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 import { LockedSection } from "@/components/ui/LockedSection";
 import { buttonVariants } from "@/components/ui/button-variants";
 import type { Property } from "@/features/landing/data/properties";
 import { PropertyGallery } from "@/features/properties/PropertyGallery";
-import { formatPropertySize, ghs } from "@/lib/format";
+import { formatMoney, formatPropertySize, titleCase } from "@/lib/format";
 
 const DEPOSIT_RATE = 0.1;
 const ASSUMED_RATE = 0.12;
@@ -78,7 +77,7 @@ function H2({ children }: { children: React.ReactNode }) {
 }
 
 export function PropertyDetail({ property }: { property: Property }) {
-  const deposit = Math.round(property.startingGhs * DEPOSIT_RATE);
+  const deposit = Math.round(property.price * DEPOSIT_RATE);
 
   return (
     <div className="bg-white px-5 py-8 lg:px-[34px] lg:py-10">
@@ -118,7 +117,7 @@ export function PropertyDetail({ property }: { property: Property }) {
           </div>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3.5 py-1.5 text-[13px] font-semibold text-emerald-700 ring-1 ring-emerald-100">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            {property.status}
+            {titleCase(property.status)}
           </span>
         </div>
 
@@ -127,7 +126,7 @@ export function PropertyDetail({ property }: { property: Property }) {
 
         {/* Specs */}
         <div className="border-ink-100 mt-7 flex flex-wrap gap-x-6 gap-y-4 border-y py-5 sm:gap-x-10">
-          <Spec icon={Home} label="Type" value={property.type} />
+          <Spec icon={Home} label="Type" value={titleCase(property.type)} />
           <Spec icon={Bed} label="Bedrooms" value={String(property.beds)} />
           <Spec icon={Bath} label="Bathrooms" value={String(property.baths)} />
           <Spec icon={Maximize} label="Size" value={formatPropertySize(property.sqft)} />
@@ -202,36 +201,6 @@ export function PropertyDetail({ property }: { property: Property }) {
             </section>
 
             <section>
-              <H2>Floor plan</H2>
-              <div className="ring-ink-100 mt-4 overflow-hidden rounded-2xl ring-1">
-                <div className="bg-ink-50 relative aspect-[16/9]">
-                  <Image
-                    src={property.floorPlan}
-                    alt={`${property.name} floor plan`}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 60vw"
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-              <div className="mt-3 grid grid-cols-3 gap-3 text-center">
-                {[
-                  ["Size", formatPropertySize(property.sqft)],
-                  ["Bedrooms", String(property.beds)],
-                  ["Bathrooms", String(property.baths)],
-                ].map(([l, v]) => (
-                  <div key={l} className="bg-ink-50/70 ring-ink-100 rounded-xl py-3 ring-1">
-                    <p className="text-ink-400 text-[11px] tracking-wider uppercase">{l}</p>
-                    <p className="tnum text-ink-900 mt-0.5 text-[15px] font-semibold">{v}</p>
-                  </div>
-                ))}
-              </div>
-              <p className="text-ink-400 mt-3 text-center text-[13px]">
-                Indicative layout — final dimensions confirmed at handover.
-              </p>
-            </section>
-
-            <section>
               <H2>Address</H2>
               <LockedSection label="the exact address">
                 <div className="mt-4 space-y-3">
@@ -284,37 +253,6 @@ export function PropertyDetail({ property }: { property: Property }) {
                 </div>
               </LockedSection>
             </section>
-
-            <section>
-              <H2>Price history</H2>
-              <LockedSection label="price history">
-                <div className="ring-ink-100 mt-4 overflow-hidden rounded-2xl ring-1">
-                  <table className="w-full text-left text-[14px]">
-                    <thead className="bg-ink-50/70 text-ink-400 text-[11px] tracking-wider uppercase">
-                      <tr>
-                        <th className="px-5 py-3 font-medium">Date</th>
-                        <th className="px-5 py-3 font-medium">Activity</th>
-                        <th className="px-5 py-3 text-right font-medium">Price</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-ink-100 divide-y">
-                      {property.priceHistory.map((row) => (
-                        <tr key={row.date}>
-                          <td className="tnum text-ink-700 px-5 py-3.5">{row.date}</td>
-                          <td className="text-ink-700 px-5 py-3.5">{row.activity}</td>
-                          <td className="tnum text-ink-900 px-5 py-3.5 text-right font-semibold">
-                            {row.price}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <p className="text-ink-400 mt-3 text-[13px]">
-                  Price history recorded on-chain via Polygon. All figures in USD.
-                </p>
-              </LockedSection>
-            </section>
           </div>
 
           {/* Sticky purchase card */}
@@ -323,7 +261,7 @@ export function PropertyDetail({ property }: { property: Property }) {
               <div className="ring-ink-100 rounded-[1.5rem] bg-white p-6 shadow-[0_24px_70px_-30px_rgba(15,20,25,0.28)] ring-1">
                 <p className="text-ink-400 text-[13px]">Starting from</p>
                 <p className="tnum text-brand-500 mt-0.5 text-[2rem] font-extrabold tracking-[-0.02em]">
-                  {ghs(property.startingGhs)}
+                  {formatMoney(property.price, property.currency)}
                 </p>
 
                 <div className="bg-brand-50 mt-4 rounded-2xl p-4">
@@ -331,7 +269,7 @@ export function PropertyDetail({ property }: { property: Property }) {
                     10% deposit to reserve
                   </p>
                   <p className="tnum text-ink-900 mt-0.5 text-[1.25rem] font-bold">
-                    {ghs(deposit)}
+                    {formatMoney(deposit, property.currency)}
                   </p>
                   <p className="text-ink-500 mt-1 text-[13px] leading-relaxed">
                     Refundable deposit held by Afram. Verified within 1–2 business days.

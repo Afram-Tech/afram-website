@@ -3,11 +3,12 @@ import Link from "next/link";
 
 import { Section } from "@/components/ui/Section";
 import { buttonVariants } from "@/components/ui/button-variants";
-import { FEATURED_PROPERTIES } from "@/features/landing/data/properties";
+import { getAllProperties } from "@/features/landing/data/properties";
 import { PropertyCard } from "@/features/landing/PropertyCard";
 
-export function FeaturedPropertiesSection() {
-  const track = [...FEATURED_PROPERTIES, ...FEATURED_PROPERTIES];
+export async function FeaturedPropertiesSection() {
+  const featuredProperties = await getAllProperties();
+  const track = [...featuredProperties, ...featuredProperties];
 
   return (
     <Section id="properties">
@@ -38,7 +39,7 @@ export function FeaturedPropertiesSection() {
             <div
               key={`${property.slug}-${index}`}
               className="mr-7 w-[290px] shrink-0 sm:w-[330px]"
-              aria-hidden={index >= FEATURED_PROPERTIES.length ? true : undefined}
+              aria-hidden={index >= featuredProperties.length ? true : undefined}
             >
               <PropertyCard property={property} />
             </div>

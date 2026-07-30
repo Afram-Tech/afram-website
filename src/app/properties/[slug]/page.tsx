@@ -10,13 +10,14 @@ interface PropertyPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  return getAllProperties().map((property) => ({ slug: property.slug }));
+export async function generateStaticParams() {
+  const properties = await getAllProperties();
+  return properties.map((property) => ({ slug: property.slug }));
 }
 
 export async function generateMetadata({ params }: PropertyPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const property = findPropertyBySlug(slug);
+  const property = await findPropertyBySlug(slug);
 
   if (!property) {
     return buildMetadata({
@@ -35,7 +36,7 @@ export async function generateMetadata({ params }: PropertyPageProps): Promise<M
 
 export default async function PropertyPage({ params }: PropertyPageProps) {
   const { slug } = await params;
-  const property = findPropertyBySlug(slug);
+  const property = await findPropertyBySlug(slug);
 
   if (!property) {
     notFound();

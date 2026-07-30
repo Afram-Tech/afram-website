@@ -24,7 +24,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: route.priority,
   }));
 
-  const propertyEntries: MetadataRoute.Sitemap = getAllProperties().map((property) => ({
+  const properties = await getAllProperties();
+  const propertyEntries: MetadataRoute.Sitemap = properties.map((property) => ({
     url: `${siteConfig.url}/properties/${property.slug}`,
     lastModified: new Date(),
     changeFrequency: "weekly",

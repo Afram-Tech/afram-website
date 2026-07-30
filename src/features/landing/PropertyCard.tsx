@@ -2,8 +2,8 @@ import { Bath, BedDouble, MapPin, Maximize } from "lucide-react";
 import Link from "next/link";
 
 import { Photo } from "@/components/ui/Photo";
-import { formatPropertyPrice, type Property } from "@/features/landing/data/properties";
-import { formatPropertySize } from "@/lib/format";
+import type { Property } from "@/features/landing/data/properties";
+import { formatMoney, formatPropertySize, titleCase } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 export function PropertyCard({ property, className }: { property: Property; className?: string }) {
@@ -17,7 +17,7 @@ export function PropertyCard({ property, className }: { property: Property; clas
     >
       <div className="overflow-hidden rounded-[1.25rem]">
         <Photo
-          seed={property.seed}
+          seed={property.id}
           src={property.image}
           alt={property.name}
           className="h-52 w-full transition-transform duration-[1.1s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
@@ -30,7 +30,7 @@ export function PropertyCard({ property, className }: { property: Property; clas
             key={tag}
             className="bg-brand-50 text-brand-700 rounded-full px-2.5 py-1 text-[11px] font-medium"
           >
-            {tag}
+            {titleCase(tag)}
           </span>
         ))}
       </div>
@@ -42,7 +42,9 @@ export function PropertyCard({ property, className }: { property: Property; clas
         <MapPin className="text-brand-500 h-3.5 w-3.5" />
         {property.location}
       </p>
-      <p className="text-brand-500 mt-2 text-[18px] font-bold">{formatPropertyPrice(property)}</p>
+      <p className="text-brand-500 mt-2 text-[18px] font-bold">
+        From {formatMoney(property.price, property.currency)}
+      </p>
 
       <div className="border-ink-100 text-ink-500 mt-4 flex items-center gap-5 border-t pt-3 text-[13px]">
         <span className="flex items-center gap-1.5">

@@ -3,11 +3,12 @@ import Link from "next/link";
 
 import { Section } from "@/components/ui/Section";
 import { buttonVariants } from "@/components/ui/button-variants";
-import { FEATURED_PROPERTIES } from "@/features/landing/data/properties";
+import { getAllProperties } from "@/features/landing/data/properties";
 import { PropertyCard } from "@/features/landing/PropertyCard";
 
-export function MorePropertiesSection() {
-  const list = FEATURED_PROPERTIES.slice(0, 9);
+export async function MorePropertiesSection() {
+  const properties = await getAllProperties();
+  const list = properties.slice(0, 9);
 
   return (
     <Section>

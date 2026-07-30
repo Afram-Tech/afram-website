@@ -16,6 +16,16 @@ export function ghs(amount: number, decimals = 0): string {
   })}`;
 }
 
+/** Format an amount in its own currency, e.g. formatMoney(110000, "USD") -> "$110,000". */
+export function formatMoney(amount: number, currency: string, decimals = 0): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+    maximumFractionDigits: decimals,
+    minimumFractionDigits: decimals,
+  }).format(amount);
+}
+
 /** Compact GHS for large targets, e.g. GHS 1.2M */
 export function ghsCompact(amount: number): string {
   if (amount >= 1_000_000) {
@@ -33,4 +43,9 @@ export function sqftToSqm(squareFeet: number): number {
 /** Formats a property's floor area (stored in sqft) as a "123.4 m²" string. */
 export function formatPropertySize(squareFeet: number): string {
   return `${sqftToSqm(squareFeet).toLocaleString(undefined, { maximumFractionDigits: 1 })} m²`;
+}
+
+/** Title-cases a free-form label, e.g. "single unit" -> "Single Unit". */
+export function titleCase(value: string): string {
+  return value.replace(/\w\S*/g, (word) => word[0].toUpperCase() + word.slice(1).toLowerCase());
 }

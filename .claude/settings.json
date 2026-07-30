@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" --max-time 5 \"https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=68\")",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" --max-time 10 \"http://localhost:3000/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1564013799919-ab600027ffc6%3Fauto%3Dformat%26fit%3Dcrop%26w%3D1200%26q%3D68&w=1200&q=75\")"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" --max-time 10 \"http://localhost:3000/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1564013799919-ab600027ffc6%3Fauto%3Dformat%26fit%3Dcrop%26w%3D1200%26q%3D68&w=1200&q=75\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/properties)",
+      "Bash(curl -s -X POST https://afram-core-staging.fly.dev/graph -H 'Content-Type: application/json' --max-time 15 -d '{\"query\":\"query GetPublicProperties\\($pagination: Pagination\\) { getPublicProjects\\(pagination: $pagination\\) { property { projectImages thumbnail } } }\",\"variables\":{\"pagination\":{\"offset\":0,\"limit\":200}}}')",
+      "Bash(python3 -c ' *)",
+      "Bash(curl -s -o /dev/null -w \"home: %{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"properties: %{http_code}\\\\n\" http://localhost:3000/properties)"
     ]
   }
 }

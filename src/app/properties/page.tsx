@@ -11,8 +11,8 @@ export const metadata: Metadata = buildMetadata({
   path: "/properties",
 });
 
-export default function PropertiesPage() {
-  const allProperties = getAllProperties();
+export default async function PropertiesPage() {
+  const allProperties = await getAllProperties();
 
   return (
     <section className="py-16 lg:py-24">
