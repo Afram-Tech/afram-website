@@ -5,9 +5,28 @@ import { NewsletterForm } from "@/components/layout/NewsletterForm";
 import { PolygonWordmark } from "@/components/PolygonWordmark";
 import { FOOTER_COMPANY_LINKS, FOOTER_LEGAL_LINKS, FOOTER_SOCIAL_LINKS } from "@/config/navigation";
 import { siteConfig } from "@/config/site";
+import type { FooterContent } from "@/features/landing/data/footer";
 
-export function SiteFooter() {
+interface SiteFooterProps {
+  /** Overrides from the Sanity `footer` singleton — falls back to static config/copy when unset. */
+  content?: FooterContent | null;
+}
+
+export function SiteFooter({ content }: SiteFooterProps) {
   const year = new Date().getFullYear();
+  const companyLinks = content?.companyLinks ?? FOOTER_COMPANY_LINKS;
+  const socialLinks = content?.socialLinks ?? FOOTER_SOCIAL_LINKS;
+  const legalLinks = content?.legalLinks ?? FOOTER_LEGAL_LINKS;
+  const tagline = content?.tagline ?? siteConfig.tagline;
+  const newsletterHeading = content?.newsletterHeading ?? "Be the first to know.";
+  const newsletterBody =
+    content?.newsletterBody ??
+    "Stay ahead in real estate. Get updates, expert tips, and insider insights delivered monthly.";
+  const copyright = content?.copyrightTemplate
+    ? content.copyrightTemplate
+        .replace("{year}", String(year))
+        .replace("{name}", siteConfig.legalName)
+    : `© ${year} ${siteConfig.legalName}. All rights reserved.`;
 
   return (
     <footer>
@@ -22,7 +41,7 @@ export function SiteFooter() {
                 height={32}
                 className="h-8 w-auto"
               />
-              <p className="text-ink-400 mt-2 text-[13px]">{siteConfig.tagline}</p>
+              <p className="text-ink-400 mt-2 text-[13px]">{tagline}</p>
             </div>
             <span className="text-ink-400 inline-flex items-center gap-2 text-[13px] font-medium">
               POWERED BY
@@ -36,7 +55,7 @@ export function SiteFooter() {
                 Company
               </h2>
               <ul className="mt-4 space-y-2.5">
-                {FOOTER_COMPANY_LINKS.map((link) => (
+                {companyLinks.map((link) => (
                   <li key={link.label}>
                     <Link
                       href={link.href}
@@ -54,7 +73,7 @@ export function SiteFooter() {
                 Follow us
               </h2>
               <ul className="mt-4 space-y-2.5">
-                {FOOTER_SOCIAL_LINKS.map((link) => (
+                {socialLinks.map((link) => (
                   <li key={link.label}>
                     <a
                       href={link.href}
@@ -69,14 +88,13 @@ export function SiteFooter() {
 
             <div>
               <h2 className="text-ink-900 text-[18px] font-bold tracking-[-0.01em]">
-                Be the first to know.
+                {newsletterHeading}
               </h2>
               <p className="text-ink-500 mt-2 max-w-md text-[14px] leading-relaxed">
-                Stay ahead in real estate. Get updates, expert tips, and insider insights delivered
-                monthly.
+                {newsletterBody}
               </p>
               <div className="mt-4 max-w-md">
-                <NewsletterForm />
+                <NewsletterForm buttonLabel={content?.newsletterButtonLabel} />
               </div>
             </div>
           </div>
@@ -85,11 +103,9 @@ export function SiteFooter() {
 
       <div className="bg-brand-700 text-white/80">
         <div className="mx-auto flex max-w-[1536px] flex-col gap-3 px-6 py-5 text-[13px] sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-16">
-          <p>
-            © {year} {siteConfig.legalName}. All rights reserved.
-          </p>
+          <p>{copyright}</p>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
-            {FOOTER_LEGAL_LINKS.map((link) => (
+            {legalLinks.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}

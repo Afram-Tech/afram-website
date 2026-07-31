@@ -5,6 +5,8 @@ import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteNav } from "@/components/layout/SiteNav";
 import { siteConfig } from "@/config/site";
+import { getFooterContent } from "@/features/landing/data/footer";
+import { getNavigationContent } from "@/features/landing/data/navigation";
 import { buildOrganizationJsonLd } from "@/lib/seo";
 import { SanityLive } from "@/sanity/lib/live";
 
@@ -44,14 +46,16 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const [navigation, footer] = await Promise.all([getNavigationContent(), getFooterContent()]);
+
   return (
     <html lang="en" className={`${montserrat.variable} h-full antialiased`}>
       <body className="text-ink-900 flex min-h-full flex-col bg-white">
         <JsonLd data={buildOrganizationJsonLd()} />
-        <SiteNav />
+        <SiteNav verifyLabel={navigation?.verifyLabel} navGroups={navigation?.navGroups} />
         <main className="flex-1">{children}</main>
-        <SiteFooter />
+        <SiteFooter content={footer} />
         <SanityLive />
       </body>
     </html>

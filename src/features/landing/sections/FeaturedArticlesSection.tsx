@@ -6,7 +6,19 @@ import { buttonVariants } from "@/components/ui/button-variants";
 import { getAllArticles } from "@/features/landing/data/articles";
 import { ArticleCard } from "@/features/landing/ArticleCard";
 
-export async function FeaturedArticlesSection() {
+interface FeaturedArticlesSectionProps {
+  heading?: string;
+  subheading?: string;
+  ctaLabel?: string;
+  ctaLink?: string;
+}
+
+export async function FeaturedArticlesSection({
+  heading,
+  subheading,
+  ctaLabel,
+  ctaLink,
+}: FeaturedArticlesSectionProps = {}) {
   const articles = await getAllArticles();
   const featured = articles.slice(0, 3);
 
@@ -15,14 +27,17 @@ export async function FeaturedArticlesSection() {
       <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="max-w-xl">
           <h2 className="text-ink-900 text-[clamp(1.6rem,2.4vw,2rem)] leading-[1.18] font-bold tracking-[-0.02em]">
-            Insights
+            {heading ?? "Insights"}
           </h2>
           <p className="text-ink-500 mt-3 text-[16px] leading-relaxed">
-            Guides, market data, and verification explainers from the Afram team.
+            {subheading ?? "Guides, market data, and verification explainers from the Afram team."}
           </p>
         </div>
-        <Link href="/insights" className={buttonVariants("primary", "sm", "shrink-0 rounded-full")}>
-          See all
+        <Link
+          href={ctaLink ?? "/insights"}
+          className={buttonVariants("primary", "sm", "shrink-0 rounded-full")}
+        >
+          {ctaLabel ?? "See all"}
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>

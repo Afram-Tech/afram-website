@@ -6,7 +6,17 @@ import { buttonVariants } from "@/components/ui/button-variants";
 import { getAllProperties } from "@/features/landing/data/properties";
 import { PropertyCard } from "@/features/landing/PropertyCard";
 
-export async function MorePropertiesSection() {
+interface MorePropertiesSectionProps {
+  heading?: string;
+  ctaLabel?: string;
+  ctaLink?: string;
+}
+
+export async function MorePropertiesSection({
+  heading,
+  ctaLabel,
+  ctaLink,
+}: MorePropertiesSectionProps = {}) {
   const properties = await getAllProperties();
   const list = properties.slice(0, 9);
 
@@ -15,14 +25,14 @@ export async function MorePropertiesSection() {
       <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="max-w-xl">
           <h2 className="text-ink-900 text-[clamp(1.6rem,2.4vw,2rem)] leading-[1.18] font-bold tracking-[-0.02em]">
-            More Properties
+            {heading ?? "More Properties"}
           </h2>
         </div>
         <Link
-          href="/properties"
+          href={ctaLink ?? "/properties"}
           className={buttonVariants("primary", "sm", "shrink-0 rounded-full")}
         >
-          See more
+          {ctaLabel ?? "See more"}
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>

@@ -3,7 +3,11 @@
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 
-export function NewsletterForm() {
+interface NewsletterFormProps {
+  buttonLabel?: string;
+}
+
+export function NewsletterForm({ buttonLabel = "Subscribe" }: NewsletterFormProps) {
   const [done, setDone] = useState(false);
 
   if (done) {
@@ -34,7 +38,7 @@ export function NewsletterForm() {
         type="submit"
         className="bg-brand-500 hover:bg-brand-600 inline-flex h-12 items-center justify-center gap-1.5 rounded-full px-6 text-[15px] font-semibold text-white transition-all active:scale-[0.98]"
       >
-        Subscribe
+        {buttonLabel}
         <ArrowRight className="h-4 w-4" />
       </button>
     </form>

@@ -9,6 +9,7 @@ import { FeaturedPropertiesSection } from "@/features/landing/sections/FeaturedP
 import { HeroSection } from "@/features/landing/sections/HeroSection";
 import { MorePropertiesSection } from "@/features/landing/sections/MorePropertiesSection";
 import { PartnerLogosSection } from "@/features/landing/sections/PartnerLogosSection";
+import { getHomePageContent } from "@/features/landing/data/home";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -17,23 +18,42 @@ export const metadata: Metadata = buildMetadata({
   path: "/",
 });
 
-export default function HomePage() {
+export default async function HomePage() {
+  const content = await getHomePageContent();
+
   return (
     <>
-      <HeroSection />
-      <PartnerLogosSection />
-      <FeaturedPropertiesSection />
-      <MorePropertiesSection />
+      <HeroSection content={content ?? undefined} />
+      <PartnerLogosSection heading={content?.partnerLogosHeading} partners={content?.partners} />
+      <FeaturedPropertiesSection
+        heading={content?.featuredPropertiesHeading}
+        subheading={content?.featuredPropertiesSubheading}
+        ctaLabel={content?.featuredPropertiesCtaLabel}
+        ctaLink={content?.featuredPropertiesCtaLink}
+      />
+      <MorePropertiesSection
+        heading={content?.morePropertiesHeading}
+        ctaLabel={content?.morePropertiesCtaLabel}
+        ctaLink={content?.morePropertiesCtaLink}
+      />
       <Section id="calculator" className="bg-accent-50/60">
         <SectionHeading
           align="center"
-          eyebrow="Affordability"
-          title="What can you afford?"
-          intro="Set your monthly take-home. We'll show a comfortable home price, the deposit, and the instalment over 10 years."
+          eyebrow={content?.affordabilityEyebrow ?? "Affordability"}
+          title={content?.affordabilityTitle ?? "What can you afford?"}
+          intro={
+            content?.affordabilityIntro ??
+            "Set your monthly take-home. We'll show a comfortable home price, the deposit, and the instalment over 10 years."
+          }
         />
         <AffordabilityCalculatorSection />
       </Section>
-      <FeaturedArticlesSection />
+      <FeaturedArticlesSection
+        heading={content?.featuredArticlesHeading}
+        subheading={content?.featuredArticlesSubheading}
+        ctaLabel={content?.featuredArticlesCtaLabel}
+        ctaLink={content?.featuredArticlesCtaLink}
+      />
     </>
   );
 }

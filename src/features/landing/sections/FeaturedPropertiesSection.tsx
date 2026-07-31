@@ -6,7 +6,19 @@ import { buttonVariants } from "@/components/ui/button-variants";
 import { getAllProperties } from "@/features/landing/data/properties";
 import { PropertyCard } from "@/features/landing/PropertyCard";
 
-export async function FeaturedPropertiesSection() {
+interface FeaturedPropertiesSectionProps {
+  heading?: string;
+  subheading?: string;
+  ctaLabel?: string;
+  ctaLink?: string;
+}
+
+export async function FeaturedPropertiesSection({
+  heading,
+  subheading,
+  ctaLabel,
+  ctaLink,
+}: FeaturedPropertiesSectionProps = {}) {
   const featuredProperties = await getAllProperties();
   const track = [...featuredProperties, ...featuredProperties];
 
@@ -15,17 +27,18 @@ export async function FeaturedPropertiesSection() {
       <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="max-w-xl">
           <h2 className="text-ink-900 text-[clamp(1.6rem,2.4vw,2rem)] leading-[1.18] font-bold tracking-[-0.02em]">
-            Featured properties
+            {heading ?? "Featured properties"}
           </h2>
           <p className="text-ink-500 mt-3 text-[16px] leading-relaxed">
-            Browse verified properties listed on Afram&apos;s blockchain-powered marketplace.
+            {subheading ??
+              "Browse verified properties listed on Afram's blockchain-powered marketplace."}
           </p>
         </div>
         <Link
-          href="/properties"
+          href={ctaLink ?? "/properties"}
           className={buttonVariants("primary", "sm", "shrink-0 rounded-full")}
         >
-          See more
+          {ctaLabel ?? "See more"}
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>

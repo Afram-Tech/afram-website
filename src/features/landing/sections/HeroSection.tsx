@@ -3,16 +3,42 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { PolygonWordmark } from "@/components/PolygonWordmark";
+import type { HomePageContent } from "@/features/landing/data/home";
 import { ROLE_CARDS } from "@/features/landing/data/role-cards";
 import { lighten } from "@/lib/utils";
 
-export function HeroSection() {
+interface HeroSectionProps {
+  content?: HomePageContent;
+}
+
+export function HeroSection({ content }: HeroSectionProps) {
+  // Backgrounds, pill colors, and art positioning stay design-locked — only
+  // the copy/link/image for each role card is overridable from Sanity, and
+  // only when there's an override for that specific slot.
+  const roleCards = ROLE_CARDS.map((card, index) => {
+    const override = content?.roleCards?.[index];
+    return {
+      ...card,
+      eyebrow: override?.eyebrow || card.eyebrow,
+      title: override?.title || card.title,
+      href: override?.link || card.href,
+      art: { ...card.art, src: override?.image || card.art.src },
+    };
+  });
+
+  const heroEyebrow = content?.heroEyebrow ?? "Powered by";
+  const heroImage = content?.heroImage ?? "/hero-townhouses-v5.webp";
+  const primaryCtaLabel = content?.heroPrimaryCtaLabel ?? "View Properties";
+  const primaryCtaLink = content?.heroPrimaryCtaLink ?? "/properties";
+  const secondaryCtaLabel = content?.heroSecondaryCtaLabel ?? "How it works";
+  const secondaryCtaLink = content?.heroSecondaryCtaLink ?? "/how-it-works";
+
   return (
     <section className="flex min-h-[calc(100dvh-72px)] flex-col bg-white pt-4">
       <div className="relative min-h-140 flex-1 overflow-hidden bg-[linear-gradient(to_bottom,#c0f8f5_0%,#eafcfb_45%,#f7fefe_100%)] sm:min-h-90">
         <div className="pointer-events-none absolute inset-x-0 top-[68%] bottom-0 select-none sm:top-[44%] lg:top-[33%] xl:top-[30%] 2xl:top-[27%]">
           <Image
-            src="/hero-townhouses-v5.webp"
+            src={heroImage}
             alt="A row of modern verified homes"
             fill
             priority
@@ -24,28 +50,34 @@ export function HeroSection() {
         <div className="relative z-10 mx-auto h-full max-w-[1536px] px-6 sm:px-8 lg:px-16">
           <div className="max-w-[840px] pt-8 sm:pt-10 lg:pt-12">
             <div className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.14em] text-[#002d30]/60 uppercase">
-              Powered by
+              {heroEyebrow}
               <PolygonWordmark className="h-[12px] w-auto text-[#002D30]" />
             </div>
 
-            <h1 className="mt-4 text-[clamp(1.75rem,2.9vw,2.375rem)] leading-[1.16] font-semibold tracking-[-0.035em] text-[#002d30]">
-              A Transparent Real Estate Marketplace for
-              <br className="hidden sm:block" /> Buyers, Vendors, and Financiers
-              <br className="hidden sm:block" /> powered by Blockchain.
-            </h1>
+            {content?.heroHeading ? (
+              <h1 className="mt-4 text-[clamp(1.75rem,2.9vw,2.375rem)] leading-[1.16] font-semibold tracking-[-0.035em] whitespace-pre-line text-[#002d30]">
+                {content.heroHeading}
+              </h1>
+            ) : (
+              <h1 className="mt-4 text-[clamp(1.75rem,2.9vw,2.375rem)] leading-[1.16] font-semibold tracking-[-0.035em] text-[#002d30]">
+                A Transparent Real Estate Marketplace for
+                <br className="hidden sm:block" /> Buyers, Vendors, and Financiers
+                <br className="hidden sm:block" /> powered by Blockchain.
+              </h1>
+            )}
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Link
-                href="/properties"
+                href={primaryCtaLink}
                 className="inline-flex h-11 items-center justify-center rounded-full bg-[#002d30] px-7 text-[15px] font-semibold text-white transition-all hover:bg-[#06474c] active:scale-[0.98]"
               >
-                View Properties
+                {primaryCtaLabel}
               </Link>
               <Link
-                href="/how-it-works"
+                href={secondaryCtaLink}
                 className="inline-flex h-11 items-center justify-center rounded-full bg-[#d9f1f4] px-7 text-[15px] font-semibold text-[#002d30] backdrop-blur-sm transition-all hover:bg-[#c5e8ec] active:scale-[0.98]"
               >
-                How it works
+                {secondaryCtaLabel}
               </Link>
             </div>
           </div>
@@ -54,9 +86,9 @@ export function HeroSection() {
 
       <div className="mx-auto mt-2 w-full max-w-[1600px] shrink-0 px-6 pb-4 sm:px-8 sm:pb-6 lg:px-6">
         <div className="grid gap-2 rounded-[22px] bg-[#fafafa] p-2 sm:grid-cols-3">
-          {ROLE_CARDS.map((card) => (
+          {roleCards.map((card, index) => (
             <Link
-              key={card.href}
+              key={index}
               href={card.href}
               style={{
                 background: `linear-gradient(to bottom, ${card.backgroundColor}, ${lighten(card.backgroundColor, 0.6)})`,

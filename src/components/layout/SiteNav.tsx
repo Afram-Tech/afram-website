@@ -7,13 +7,19 @@ import { useEffect, useState } from "react";
 
 import { VerifyTitleDialog } from "@/components/VerifyTitleDialog";
 import { buttonVariants } from "@/components/ui/button-variants";
-import { NAV_GROUPS } from "@/config/navigation";
+import { NAV_GROUPS, type NavGroup } from "@/config/navigation";
 import { cn } from "@/lib/utils";
 
 const navLinkClassName =
   "rounded-lg px-3 py-2 text-[15px] font-medium text-ink-700 transition-colors hover:text-brand-600";
 
-export function SiteNav() {
+interface SiteNavProps {
+  /** Overrides from the Sanity `navigation` singleton — falls back to the static config when unset. */
+  navGroups?: NavGroup[];
+  verifyLabel?: string;
+}
+
+export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title" }: SiteNavProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -52,7 +58,7 @@ export function SiteNav() {
           </Link>
 
           <nav className="hidden items-center gap-1 lg:flex">
-            {NAV_GROUPS.map((group) => (
+            {navGroups.map((group) => (
               <div
                 key={group.label}
                 className="group relative"
@@ -102,7 +108,7 @@ export function SiteNav() {
             <Link href="/insights" className={navLinkClassName}>
               Insights
             </Link>
-            <VerifyTitleDialog className={navLinkClassName}>Verify a title</VerifyTitleDialog>
+            <VerifyTitleDialog className={navLinkClassName}>{verifyLabel}</VerifyTitleDialog>
           </nav>
 
           <div className="hidden items-center gap-3 lg:flex">
@@ -132,7 +138,7 @@ export function SiteNav() {
       {mobileMenuOpen ? (
         <div className="fixed inset-x-0 top-[72px] bottom-0 z-40 overflow-y-auto bg-white px-5 pt-3 pb-10 lg:hidden">
           <div className="divide-ink-100 divide-y">
-            {NAV_GROUPS.map((group) => (
+            {navGroups.map((group) => (
               <div key={group.label} className="py-3">
                 <Link
                   href={group.href}
@@ -181,7 +187,7 @@ export function SiteNav() {
               Create Account
             </Link>
             <VerifyTitleDialog className="bg-brand-50 text-brand-700 flex items-center justify-center rounded-xl px-4 py-3 text-base font-semibold">
-              Verify a title
+              {verifyLabel}
             </VerifyTitleDialog>
           </div>
         </div>
