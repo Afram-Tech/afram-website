@@ -79,7 +79,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   return (
     <article className="py-16">
       <JsonLd data={articleJsonLd} />
-      <div className="mx-auto max-w-2xl px-6 sm:px-8 lg:px-16">
+      <div className="mx-auto max-w-5xl px-6 sm:px-8 lg:px-16">
         <span className="bg-brand-50 text-brand-700 rounded-full px-3 py-1 text-[12px] font-semibold">
           {article.category}
         </span>
