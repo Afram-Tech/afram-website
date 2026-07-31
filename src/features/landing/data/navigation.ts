@@ -1,5 +1,5 @@
-import { client } from "@/sanity/lib/client";
 import { isSanityConfigured } from "@/sanity/lib/env";
+import { sanityFetch } from "@/sanity/lib/live";
 import { NAVIGATION_QUERY } from "@/sanity/lib/queries";
 
 import type { NavGroup } from "@/config/navigation";
@@ -51,7 +51,8 @@ export async function getNavigationContent(): Promise<NavigationContent | null> 
   if (!isSanityConfigured) return null;
 
   try {
-    const doc = await client.fetch<SanityNavigationDoc | null>(NAVIGATION_QUERY);
+    const { data } = await sanityFetch({ query: NAVIGATION_QUERY });
+    const doc = data as SanityNavigationDoc | null;
     return doc ? mapNavigation(doc) : null;
   } catch (error) {
     console.warn("Failed to fetch navigation content from Sanity:", error);

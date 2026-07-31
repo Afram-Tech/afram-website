@@ -1,8 +1,10 @@
 import type { PortableTextBlock } from "@portabletext/react";
 
-import { client } from "@/sanity/lib/client";
+import { stegaClean } from "@sanity/client/stega";
+
 import { isSanityConfigured } from "@/sanity/lib/env";
 import { urlFor } from "@/sanity/lib/image";
+import { sanityFetch } from "@/sanity/lib/live";
 import { ALL_ARTICLES_QUERY, ARTICLE_BY_SLUG_QUERY } from "@/sanity/lib/queries";
 
 export interface Article {
@@ -32,7 +34,9 @@ interface SanityArticleDoc {
 
 function mapArticle(doc: SanityArticleDoc): Article {
   return {
-    slug: doc.slug,
+    // Cleaned: used as a URL segment, React key, and lookup value — never
+    // rendered as visible text, so stripping stega here costs nothing.
+    slug: stegaClean(doc.slug),
     title: doc.title,
     excerpt: doc.excerpt,
     category: doc.category,
@@ -48,7 +52,8 @@ export async function getAllArticles(): Promise<Article[]> {
   if (!isSanityConfigured) return [];
 
   try {
-    const docs = await client.fetch<SanityArticleDoc[]>(ALL_ARTICLES_QUERY);
+    const { data } = await sanityFetch({ query: ALL_ARTICLES_QUERY });
+    const docs = data as SanityArticleDoc[];
     return docs.map(mapArticle);
   } catch (error) {
     console.warn("Failed to fetch Insights articles from Sanity:", error);
@@ -60,7 +65,8 @@ export async function findArticleBySlug(slug: string): Promise<Article | undefin
   if (!isSanityConfigured) return undefined;
 
   try {
-    const doc = await client.fetch<SanityArticleDoc | null>(ARTICLE_BY_SLUG_QUERY, { slug });
+    const { data } = await sanityFetch({ query: ARTICLE_BY_SLUG_QUERY, params: { slug } });
+    const doc = data as SanityArticleDoc | null;
     return doc ? mapArticle(doc) : undefined;
   } catch (error) {
     console.warn(`Failed to fetch article "${slug}" from Sanity:`, error);

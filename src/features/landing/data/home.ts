@@ -1,6 +1,6 @@
-import { client } from "@/sanity/lib/client";
 import { isSanityConfigured } from "@/sanity/lib/env";
 import { urlFor } from "@/sanity/lib/image";
+import { sanityFetch } from "@/sanity/lib/live";
 import { HOME_PAGE_QUERY } from "@/sanity/lib/queries";
 
 type SanityImageSource = Parameters<typeof urlFor>[0];
@@ -88,7 +88,8 @@ export async function getHomePageContent(): Promise<HomePageContent | null> {
   if (!isSanityConfigured) return null;
 
   try {
-    const doc = await client.fetch<SanityHomePageDoc | null>(HOME_PAGE_QUERY);
+    const { data } = await sanityFetch({ query: HOME_PAGE_QUERY });
+    const doc = data as SanityHomePageDoc | null;
     return doc ? mapHomePage(doc) : null;
   } catch (error) {
     console.warn("Failed to fetch home page content from Sanity:", error);

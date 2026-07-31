@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
+import { draftMode } from "next/headers";
+import { VisualEditing } from "next-sanity/visual-editing";
 
+import { DisableDraftMode } from "@/components/DisableDraftMode";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteNav } from "@/components/layout/SiteNav";
@@ -47,7 +50,11 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const [navigation, footer] = await Promise.all([getNavigationContent(), getFooterContent()]);
+  const [navigation, footer, { isEnabled: isDraftMode }] = await Promise.all([
+    getNavigationContent(),
+    getFooterContent(),
+    draftMode(),
+  ]);
 
   return (
     <html lang="en" className={`${montserrat.variable} h-full antialiased`}>
@@ -57,6 +64,12 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <main className="flex-1">{children}</main>
         <SiteFooter content={footer} />
         <SanityLive />
+        {isDraftMode && (
+          <>
+            <DisableDraftMode />
+            <VisualEditing />
+          </>
+        )}
       </body>
     </html>
   );

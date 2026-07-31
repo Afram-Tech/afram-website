@@ -1,5 +1,5 @@
-import { client } from "@/sanity/lib/client";
 import { isSanityConfigured } from "@/sanity/lib/env";
+import { sanityFetch } from "@/sanity/lib/live";
 import { HOW_IT_WORKS_PAGE_QUERY } from "@/sanity/lib/queries";
 
 export interface HowItWorksStepContent {
@@ -22,7 +22,8 @@ export async function getHowItWorksPageContent(): Promise<HowItWorksPageContent 
   if (!isSanityConfigured) return null;
 
   try {
-    const doc = await client.fetch<HowItWorksPageContent | null>(HOW_IT_WORKS_PAGE_QUERY);
+    const { data } = await sanityFetch({ query: HOW_IT_WORKS_PAGE_QUERY });
+    const doc = data as HowItWorksPageContent | null;
     if (!doc) return null;
     return {
       ...doc,

@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { stegaClean } from "@sanity/client/stega";
+
 import { JsonLd } from "@/components/JsonLd";
 import { siteConfig } from "@/config/site";
 import {
@@ -49,8 +51,8 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   }
 
   return buildMetadata({
-    title: article.title,
-    description: article.excerpt,
+    title: stegaClean(article.title),
+    description: stegaClean(article.excerpt),
     path: `/insights/${article.slug}`,
   });
 }
@@ -66,8 +68,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: article.title,
-    description: article.excerpt,
+    headline: stegaClean(article.title),
+    description: stegaClean(article.excerpt),
     datePublished: article.date,
     image: article.cover,
     author: { "@type": "Organization", name: siteConfig.legalName },

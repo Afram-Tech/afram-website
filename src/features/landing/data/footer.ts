@@ -1,5 +1,5 @@
-import { client } from "@/sanity/lib/client";
 import { isSanityConfigured } from "@/sanity/lib/env";
+import { sanityFetch } from "@/sanity/lib/live";
 import { FOOTER_QUERY } from "@/sanity/lib/queries";
 
 export interface FooterLink {
@@ -30,7 +30,8 @@ export async function getFooterContent(): Promise<FooterContent | null> {
   if (!isSanityConfigured) return null;
 
   try {
-    const doc = await client.fetch<FooterContent | null>(FOOTER_QUERY);
+    const { data } = await sanityFetch({ query: FOOTER_QUERY });
+    const doc = data as FooterContent | null;
     if (!doc) return null;
     return {
       ...doc,
