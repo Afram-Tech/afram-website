@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
+import { Section } from "@/components/ui/Section";
 import { getAllProperties } from "@/features/landing/data/properties";
-import { PropertyCard } from "@/features/landing/PropertyCard";
+import { PropertiesBrowser } from "@/features/properties/PropertiesBrowser";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -15,22 +16,8 @@ export default async function PropertiesPage() {
   const allProperties = await getAllProperties();
 
   return (
-    <section className="py-16 lg:py-24">
-      <div className="mx-auto max-w-[1536px] px-6 sm:px-8 lg:px-16">
-        <h1 className="text-ink-900 text-[clamp(2rem,4vw,2.75rem)] leading-[1.15] font-bold tracking-[-0.02em]">
-          Browse verified properties
-        </h1>
-        <p className="text-ink-500 mt-3 max-w-2xl text-[16px] leading-relaxed">
-          Every listing below is title-verified against Ghana&apos;s Lands Commission records and
-          recorded on-chain.
-        </p>
-
-        <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-y-12">
-          {allProperties.map((property) => (
-            <PropertyCard key={property.slug} property={property} />
-          ))}
-        </div>
-      </div>
-    </section>
+    <Section>
+      <PropertiesBrowser properties={allProperties} />
+    </Section>
   );
 }

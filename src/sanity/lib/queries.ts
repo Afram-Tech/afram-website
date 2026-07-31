@@ -78,3 +78,15 @@ export const HOME_PAGE_QUERY = `
     featuredArticlesCtaLink
   }
 `;
+
+export const HOW_IT_WORKS_PAGE_QUERY = `
+  *[_type == "howItWorksPage"][0] {
+    heroHeading,
+    heroIntro,
+    steps[] { title, description },
+    verifyHeading,
+    verifyBody,
+    verifyCtaLabel,
+    closingHeading
+  }
+`;

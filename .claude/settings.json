@@ -8,7 +8,9 @@
       "Bash(curl -s -X POST https://afram-core-staging.fly.dev/graph -H 'Content-Type: application/json' --max-time 15 -d '{\"query\":\"query GetPublicProperties\\($pagination: Pagination\\) { getPublicProjects\\(pagination: $pagination\\) { property { projectImages thumbnail } } }\",\"variables\":{\"pagination\":{\"offset\":0,\"limit\":200}}}')",
       "Bash(python3 -c ' *)",
       "Bash(curl -s -o /dev/null -w \"home: %{http_code}\\\\n\" http://localhost:3000/)",
-      "Bash(curl -s -o /dev/null -w \"properties: %{http_code}\\\\n\" http://localhost:3000/properties)"
+      "Bash(curl -s -o /dev/null -w \"properties: %{http_code}\\\\n\" http://localhost:3000/properties)",
+      "Bash(node .scratch-screenshot2.js)",
+      "Bash(node .scratch-screenshot3.js)"
     ]
   }
 }
