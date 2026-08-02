@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 import type { PortableTextBlock } from "@portabletext/react";
 
 import { stegaClean } from "@sanity/client/stega";
@@ -53,7 +55,7 @@ function mapArticle(doc: SanityArticleDoc): Article {
   };
 }
 
-export async function getAllArticles(): Promise<Article[]> {
+export const getAllArticles = cache(async function getAllArticles(): Promise<Article[]> {
   if (!isSanityConfigured) return [];
 
   try {
@@ -64,7 +66,7 @@ export async function getAllArticles(): Promise<Article[]> {
     console.warn("Failed to fetch Insights articles from Sanity:", error);
     return [];
   }
-}
+});
 
 /**
  * Slugs for `generateStaticParams`. Uses the plain client rather than the live
@@ -82,7 +84,9 @@ export async function getAllArticleSlugs(): Promise<string[]> {
   }
 }
 
-export async function findArticleBySlug(slug: string): Promise<Article | undefined> {
+export const findArticleBySlug = cache(async function findArticleBySlug(
+  slug: string,
+): Promise<Article | undefined> {
   if (!isSanityConfigured) return undefined;
 
   try {
@@ -93,7 +97,7 @@ export async function findArticleBySlug(slug: string): Promise<Article | undefin
     console.warn(`Failed to fetch article "${slug}" from Sanity:`, error);
     return undefined;
   }
-}
+});
 
 /** Format an ISO date string, e.g. "Jun 2, 2026". */
 export function formatArticleDate(iso: string): string {
