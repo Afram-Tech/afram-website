@@ -81,11 +81,14 @@ yarn deploy    # build and deploy to Cloudflare
 Set the environment variables above as Worker vars/secrets too — `.env` and `.env.local` are not
 read in production.
 
-### ISR cache (one-time setup)
+### ISR cache (not yet enabled)
 
-Pages with `revalidate` need a KV namespace to persist regenerated HTML between requests;
-without it every request re-renders from scratch. The Worker deploys and runs fine without it —
-the cache just reports a miss — so this can be done at any time:
+Pages with `revalidate` currently re-render on every request because no incremental cache is
+configured. Enabling KV makes them persist between requests, and lets `enableCacheInterception`
+serve them from the routing layer without booting the Next server.
+
+Order matters: `opennextjs-cloudflare deploy` populates the cache at deploy time and **fails the
+deploy** if the config names a binding that does not exist. Create the namespace first:
 
 ```bash
 yarn wrangler kv namespace create NEXT_INC_CACHE_KV
@@ -97,9 +100,7 @@ Add the returned `id` to `wrangler.jsonc`:
 "kv_namespaces": [{ "binding": "NEXT_INC_CACHE_KV", "id": "<paste-id-here>" }]
 ```
 
-Cached entries are additionally held in each colo's Cache API (`withRegionalCache`, long-lived),
-and `enableCacheInterception` serves them straight from the routing layer without booting the
-full Next server.
+Then switch `open-next.config.ts` to the configuration in its comment block.
 
 ## Project structure
 
