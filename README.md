@@ -9,8 +9,8 @@ and TypeScript.
 ## Getting started
 
 ```bash
-pnpm install
-pnpm dev
+yarn install
+yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to see the result.
@@ -47,14 +47,14 @@ GRAPHQL_API_URL=https://afram-core-staging.fly.dev/graph
 
 | Command          | Description                        |
 | ---------------- | ---------------------------------- |
-| `pnpm dev`       | Start the local dev server         |
-| `pnpm build`     | Build the production app           |
-| `pnpm start`     | Serve the production build locally |
-| `pnpm lint`      | Lint with ESLint (Next.js config)  |
-| `pnpm format`    | Format with Prettier               |
-| `pnpm typecheck` | Type-check with `tsc --noEmit`     |
-| `pnpm test`      | Run unit tests (Vitest)            |
-| `pnpm test:e2e`  | Run end-to-end tests (Playwright)  |
+| `yarn dev`       | Start the local dev server         |
+| `yarn build`     | Build the production app           |
+| `yarn start`     | Serve the production build locally |
+| `yarn lint`      | Lint with ESLint (Next.js config)  |
+| `yarn format`    | Format with Prettier               |
+| `yarn typecheck` | Type-check with `tsc --noEmit`     |
+| `yarn test`      | Run unit tests (Vitest)            |
+| `yarn test:e2e`  | Run end-to-end tests (Playwright)  |
 
 ## Project structure
 

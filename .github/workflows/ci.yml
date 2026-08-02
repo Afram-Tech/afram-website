@@ -12,30 +12,31 @@
 #     steps:
 #       - uses: actions/checkout@v4
 
-#       - uses: pnpm/action-setup@v4
-
 #       - uses: actions/setup-node@v4
 #         with:
 #           node-version: 22
-#           cache: pnpm
+#           cache: yarn
+
+#       - name: Enable corepack
+#         run: corepack enable
 
 #       - name: Install dependencies
-#         run: pnpm install --frozen-lockfile
+#         run: yarn install --immutable
 
 #       - name: Lint
-#         run: pnpm lint
+#         run: yarn lint
 
 #       - name: Format check
-#         run: pnpm format:check
+#         run: yarn format:check
 
 #       - name: Typecheck
-#         run: pnpm typecheck
+#         run: yarn typecheck
 
 #       - name: Unit tests
-#         run: pnpm test
+#         run: yarn test
 
 #       - name: Build
-#         run: pnpm build
+#         run: yarn build
 
 #   e2e:
 #     runs-on: ubuntu-latest
@@ -43,21 +44,22 @@
 #     steps:
 #       - uses: actions/checkout@v4
 
-#       - uses: pnpm/action-setup@v4
-
 #       - uses: actions/setup-node@v4
 #         with:
 #           node-version: 22
-#           cache: pnpm
+#           cache: yarn
+
+#       - name: Enable corepack
+#         run: corepack enable
 
 #       - name: Install dependencies
-#         run: pnpm install --frozen-lockfile
+#         run: yarn install --immutable
 
 #       - name: Install Playwright browsers
-#         run: pnpm exec playwright install --with-deps chromium
+#         run: yarn playwright install --with-deps chromium
 
 #       - name: Run e2e tests
-#         run: pnpm test:e2e
+#         run: yarn test:e2e
 #         env:
 #           CI: true
 
