@@ -31,7 +31,7 @@ export default function DevelopersPage() {
       <JsonLd data={buildFaqJsonLd(allFaqs)} />
       <div style={ACCENT_VARS.emerald as React.CSSProperties}>
         <PersonaPhotoHero
-          image="/for-vendors-hero.png"
+          image="/for-vendors-hero.webp"
           imageAlt="A vendor reviewing project plans on-site"
           headline={["Raise Capital", "and accelerate sales"]}
           subhead="List an Afram-verified project and bring it financed buyers who are ready to sign — and recover capital without waiting on slow sales."

@@ -31,7 +31,7 @@ export default function FinanciersPage() {
       <JsonLd data={buildFaqJsonLd(allFaqs)} />
       <div style={ACCENT_VARS.emerald as React.CSSProperties}>
         <PersonaPhotoHero
-          image="/for-financiers-hero.png"
+          image="/for-financiers-hero.webp"
           imageAlt="Two financiers shaking hands over a deal"
           headline={["Deploy Capital into", "Verified Real Estate"]}
           subhead="Deploy capital into title-verified Ghanaian real estate — secured by a first legal charge, on your own terms, with full KYC."

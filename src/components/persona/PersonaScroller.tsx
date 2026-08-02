@@ -60,7 +60,7 @@ export function PersonaScroller({ personas }: { personas: PersonaContent[] }) {
                       <span className="bg-ink-200 h-2.5 w-2.5 rounded-full" />
                     </div>
                     <Image
-                      src="/dash-buyer.png"
+                      src="/dash-buyer.webp"
                       alt=""
                       width={1200}
                       height={800}
