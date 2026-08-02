@@ -9,6 +9,7 @@ import { DeveloperValue } from "@/features/developers/DeveloperValue";
 import { SellFlow } from "@/features/developers/SellFlow";
 import { TalkToPartner } from "@/features/developers/TalkToPartner";
 import { ORDER, PERSONAS } from "@/features/personas/developer-personas";
+import { siteConfig } from "@/config/site";
 import { ACCENT_VARS } from "@/lib/accents";
 import { buildFaqJsonLd, buildMetadata } from "@/lib/seo";
 
@@ -36,7 +37,7 @@ export default function DevelopersPage() {
           headline={["Raise Capital", "and accelerate sales"]}
           subhead="List an Afram-verified project and bring it financed buyers who are ready to sign — and recover capital without waiting on slow sales."
           ctaLabel="List Properties"
-          ctaHref="/signup"
+          ctaHref={siteConfig.signUpUrl}
         />
 
         <PersonaScroller personas={ordered} />
@@ -50,7 +51,7 @@ export default function DevelopersPage() {
         <PersonaFinalCta
           title="Turn idle inventory into cash."
           subtitle="List a verified project and let financed buyers come to you."
-          primary={{ label: "List a project", href: "/signup" }}
+          primary={{ label: "List a project", href: siteConfig.signUpUrl }}
           secondary={{ label: "Talk to a partner", href: "#talk" }}
         />
       </div>

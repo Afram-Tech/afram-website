@@ -7,6 +7,9 @@ export const siteConfig = {
   url: "https://afram.co",
   ogImage: "/opengraph.png",
   registryUrl: "https://registry.afram.co",
+  /** Auth lives in the Afram app, not on this marketing site. */
+  signInUrl: "https://app.staging.afram.co/signin",
+  signUpUrl: "https://app.staging.afram.co/signup",
   social: {
     twitter: "@afram",
     facebook: "https://facebook.com/afram",

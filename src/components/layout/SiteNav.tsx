@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { VerifyTitleDialog } from "@/components/VerifyTitleDialog";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { NAV_GROUPS, type NavGroup } from "@/config/navigation";
+import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
 const navLinkClassName =
@@ -113,12 +114,12 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
 
           <div className="hidden items-center gap-3 lg:flex">
             <Link
-              href="/signup"
+              href={siteConfig.signUpUrl}
               className="text-ink-800 hover:text-brand-600 rounded-lg px-3.5 py-2 text-[15px] font-semibold transition-colors"
             >
               Create Account
             </Link>
-            <Link href="/signin" className={buttonVariants("primary", "sm")}>
+            <Link href={siteConfig.signInUrl} className={buttonVariants("primary", "sm")}>
               Log In
             </Link>
           </div>
@@ -173,14 +174,14 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
           </div>
           <div className="mt-6 flex flex-col gap-2.5">
             <Link
-              href="/signin"
+              href={siteConfig.signInUrl}
               onClick={() => setMobileMenuOpen(false)}
               className={buttonVariants("primary", "lg", "w-full")}
             >
               Log In
             </Link>
             <Link
-              href="/signup"
+              href={siteConfig.signUpUrl}
               onClick={() => setMobileMenuOpen(false)}
               className="bg-brand-50 text-brand-700 flex items-center justify-center rounded-xl px-4 py-3 text-base font-semibold"
             >
