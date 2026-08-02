@@ -2,10 +2,15 @@ import type { PortableTextBlock } from "@portabletext/react";
 
 import { stegaClean } from "@sanity/client/stega";
 
+import { client } from "@/sanity/lib/client";
 import { isSanityConfigured } from "@/sanity/lib/env";
 import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
-import { ALL_ARTICLES_QUERY, ARTICLE_BY_SLUG_QUERY } from "@/sanity/lib/queries";
+import {
+  ALL_ARTICLE_SLUGS_QUERY,
+  ALL_ARTICLES_QUERY,
+  ARTICLE_BY_SLUG_QUERY,
+} from "@/sanity/lib/queries";
 
 export interface Article {
   slug: string;
@@ -57,6 +62,22 @@ export async function getAllArticles(): Promise<Article[]> {
     return docs.map(mapArticle);
   } catch (error) {
     console.warn("Failed to fetch Insights articles from Sanity:", error);
+    return [];
+  }
+}
+
+/**
+ * Slugs for `generateStaticParams`. Uses the plain client rather than the live
+ * `sanityFetch`, which reads `draftMode()` — unavailable at build time, where
+ * there is no request. Stega is off since these are URL segments, not display text.
+ */
+export async function getAllArticleSlugs(): Promise<string[]> {
+  if (!isSanityConfigured) return [];
+
+  try {
+    return await client.withConfig({ stega: false }).fetch<string[]>(ALL_ARTICLE_SLUGS_QUERY);
+  } catch (error) {
+    console.warn("Failed to fetch Insights article slugs from Sanity:", error);
     return [];
   }
 }

@@ -45,16 +45,41 @@ GRAPHQL_API_URL=https://afram-core-staging.fly.dev/graph
 
 ## Scripts
 
-| Command          | Description                        |
-| ---------------- | ---------------------------------- |
-| `yarn dev`       | Start the local dev server         |
-| `yarn build`     | Build the production app           |
-| `yarn start`     | Serve the production build locally |
-| `yarn lint`      | Lint with ESLint (Next.js config)  |
-| `yarn format`    | Format with Prettier               |
-| `yarn typecheck` | Type-check with `tsc --noEmit`     |
-| `yarn test`      | Run unit tests (Vitest)            |
-| `yarn test:e2e`  | Run end-to-end tests (Playwright)  |
+| Command          | Description                                     |
+| ---------------- | ----------------------------------------------- |
+| `yarn dev`       | Start the local dev server                      |
+| `yarn build`     | Build the production app                        |
+| `yarn start`     | Serve the production build locally              |
+| `yarn lint`      | Lint with ESLint (Next.js config)               |
+| `yarn format`    | Format with Prettier                            |
+| `yarn typecheck` | Type-check with `tsc --noEmit`                  |
+| `yarn test`      | Run unit tests (Vitest)                         |
+| `yarn test:e2e`  | Run end-to-end tests (Playwright)               |
+| `yarn preview`   | Build and preview the Cloudflare Worker locally |
+| `yarn deploy`    | Build and deploy to Cloudflare Workers          |
+
+## Deploying to Cloudflare
+
+The site runs on Cloudflare Workers via [OpenNext](https://opennext.js.org/cloudflare). Plain
+`wrangler deploy` is not enough on its own — `opennextjs-cloudflare build` first transforms the
+Next.js output into a Worker at `.open-next/worker.js`, which is what `wrangler.jsonc` points at.
+
+In the Cloudflare dashboard (Workers &rarr; afram-website &rarr; Settings &rarr; Build):
+
+| Setting        | Value                              |
+| -------------- | ---------------------------------- |
+| Build command  | `yarn opennextjs-cloudflare build` |
+| Deploy command | `yarn wrangler deploy`             |
+
+Locally:
+
+```bash
+yarn preview   # build and run the Worker locally in workerd
+yarn deploy    # build and deploy to Cloudflare
+```
+
+Set the environment variables below as Worker secrets/vars too — they are not read from
+`.env.local` in production.
 
 ## Project structure
 
