@@ -78,8 +78,28 @@ yarn preview   # build and run the Worker locally in workerd
 yarn deploy    # build and deploy to Cloudflare
 ```
 
-Set the environment variables below as Worker secrets/vars too — they are not read from
-`.env.local` in production.
+Set the environment variables above as Worker vars/secrets too — `.env` and `.env.local` are not
+read in production.
+
+### ISR cache (one-time setup)
+
+Pages with `revalidate` need a KV namespace to persist regenerated HTML between requests;
+without it every request re-renders from scratch. The Worker deploys and runs fine without it —
+the cache just reports a miss — so this can be done at any time:
+
+```bash
+yarn wrangler kv namespace create NEXT_INC_CACHE_KV
+```
+
+Add the returned `id` to `wrangler.jsonc`:
+
+```jsonc
+"kv_namespaces": [{ "binding": "NEXT_INC_CACHE_KV", "id": "<paste-id-here>" }]
+```
+
+Cached entries are additionally held in each colo's Cache API (`withRegionalCache`, long-lived),
+and `enableCacheInterception` serves them straight from the routing layer without booting the
+full Next server.
 
 ## Project structure
 

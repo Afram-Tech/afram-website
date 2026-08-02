@@ -1,4 +1,5 @@
-import { graphqlFetch, readQuery } from "@/graphql/client";
+import { graphqlFetch } from "@/graphql/client";
+import { GET_PUBLIC_PROPERTIES } from "@/graphql/documents";
 
 export interface Property {
   id: string;
@@ -60,8 +61,6 @@ interface RawProject {
 interface GetPublicPropertiesResponse {
   getPublicProjects: RawProject[];
 }
-
-const QUERY = readQuery("properties.graphql");
 
 const LISTING_STATUS_LABELS: Record<string, string> = {
   listed: "Live on Afram Marketplace",
@@ -138,7 +137,7 @@ async function fetchPublicProperties(): Promise<Property[]> {
     const data = await graphqlFetch<
       GetPublicPropertiesResponse,
       { pagination: { offset: number; limit: number } }
-    >(QUERY, { pagination: { offset: 0, limit: 200 } });
+    >(GET_PUBLIC_PROPERTIES, { pagination: { offset: 0, limit: 200 } });
     return data.getPublicProjects
       .filter((project) => (project.projectType ?? "").toLowerCase() !== "multiple units")
       .map(mapProperty)
