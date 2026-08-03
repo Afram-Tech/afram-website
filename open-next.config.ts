@@ -22,6 +22,11 @@ import staticAssetsIncrementalCache from "@opennextjs/cloudflare/overrides/incre
  */
 export default defineCloudflareConfig({
   incrementalCache: staticAssetsIncrementalCache,
+  // Required whenever any route has `revalidate`. The default queue is "dummy",
+  // whose send() throws FatalError — so the first request after a page goes
+  // stale returns a 500 from routingHandler instead of revalidating. "direct"
+  // performs the revalidation in-process.
+  queue: "direct",
   // Serves cached pages from the routing layer, skipping the Next server
   // entirely. Must stay false if PPR is ever enabled.
   enableCacheInterception: true,
