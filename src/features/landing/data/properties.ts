@@ -1,4 +1,7 @@
-import { graphqlFetch, readQuery } from "@/graphql/client";
+import { cache } from "react";
+
+import { graphqlFetch } from "@/graphql/client";
+import { GET_PUBLIC_PROPERTIES } from "@/graphql/documents";
 
 export interface Property {
   id: string;
@@ -60,8 +63,6 @@ interface RawProject {
 interface GetPublicPropertiesResponse {
   getPublicProjects: RawProject[];
 }
-
-const QUERY = readQuery("properties.graphql");
 
 const LISTING_STATUS_LABELS: Record<string, string> = {
   listed: "Live on Afram Marketplace",
@@ -133,12 +134,17 @@ function mapProperty(project: RawProject): Property | undefined {
   };
 }
 
-async function fetchPublicProperties(): Promise<Property[]> {
+/**
+ * Deduped per request: `generateMetadata` and the page body both need the list,
+ * and this is a POST so Next's fetch cache does not cover it. Without `cache`
+ * every property page fetches and maps all 200 listings twice.
+ */
+const fetchPublicProperties = cache(async function fetchPublicProperties(): Promise<Property[]> {
   try {
     const data = await graphqlFetch<
       GetPublicPropertiesResponse,
       { pagination: { offset: number; limit: number } }
-    >(QUERY, { pagination: { offset: 0, limit: 200 } });
+    >(GET_PUBLIC_PROPERTIES, { pagination: { offset: 0, limit: 200 } });
     return data.getPublicProjects
       .filter((project) => (project.projectType ?? "").toLowerCase() !== "multiple units")
       .map(mapProperty)
@@ -147,7 +153,7 @@ async function fetchPublicProperties(): Promise<Property[]> {
     console.warn("Failed to fetch public properties from Afram GraphQL API:", error);
     return [];
   }
-}
+});
 
 export async function getAllProperties(): Promise<Property[]> {
   return fetchPublicProperties();

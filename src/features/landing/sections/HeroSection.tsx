@@ -95,9 +95,11 @@ export function HeroSection({ content }: HeroSectionProps) {
               }}
               className="group relative h-[135px] overflow-hidden rounded-[18px] px-5 pt-4 transition-shadow duration-300 hover:shadow-[0_18px_40px_-26px_rgba(0,45,48,0.45)] sm:h-[160px] lg:h-[175px]"
             >
-              <img
+              <Image
                 src={card.art.src}
                 alt={card.art.alt}
+                width={100}
+                height={100}
                 className={`pointer-events-none transition-transform duration-500 ease-out select-none group-hover:scale-[1.03] ${card.art.class}`}
               />
 

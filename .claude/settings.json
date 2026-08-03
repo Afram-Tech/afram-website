@@ -10,7 +10,11 @@
       "Bash(curl -s -o /dev/null -w \"home: %{http_code}\\\\n\" http://localhost:3000/)",
       "Bash(curl -s -o /dev/null -w \"properties: %{http_code}\\\\n\" http://localhost:3000/properties)",
       "Bash(node .scratch-screenshot2.js)",
-      "Bash(node .scratch-screenshot3.js)"
+      "Bash(node .scratch-screenshot3.js)",
+      "Bash(npm config *)",
+      "Bash(ls -la \"$\\(npm config get prefix\\)/bin\")",
+      "Bash(npx --yes corepack@latest enable yarn --install-directory /opt/homebrew/bin)",
+      "Read(//opt/homebrew/bin/**)"
     ]
   }
 }

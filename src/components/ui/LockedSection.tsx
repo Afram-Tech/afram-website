@@ -2,6 +2,7 @@ import { Lock } from "lucide-react";
 import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/button-variants";
+import { siteConfig } from "@/config/site";
 
 export function LockedSection({
   children,
@@ -22,7 +23,7 @@ export function LockedSection({
         <p className="text-ink-900 max-w-[240px] text-[14px] leading-snug font-semibold">
           Log in to view {label}
         </p>
-        <Link href="/signin" className={buttonVariants("primary", "sm")}>
+        <Link href={siteConfig.signInUrl} className={buttonVariants("primary", "sm")}>
           Log in or create account
         </Link>
       </div>

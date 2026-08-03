@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 import { isSanityConfigured } from "@/sanity/lib/env";
 import { sanityFetch } from "@/sanity/lib/live";
 import { NAVIGATION_QUERY } from "@/sanity/lib/queries";
@@ -47,15 +49,17 @@ function mapNavigation(doc: SanityNavigationDoc): NavigationContent {
 }
 
 /** Sanity's `navigation` singleton, or `null` if unset/unconfigured — callers fall back to the static defaults in `config/navigation.ts`. */
-export async function getNavigationContent(): Promise<NavigationContent | null> {
-  if (!isSanityConfigured) return null;
+export const getNavigationContent = cache(
+  async function getNavigationContent(): Promise<NavigationContent | null> {
+    if (!isSanityConfigured) return null;
 
-  try {
-    const { data } = await sanityFetch({ query: NAVIGATION_QUERY });
-    const doc = data as SanityNavigationDoc | null;
-    return doc ? mapNavigation(doc) : null;
-  } catch (error) {
-    console.warn("Failed to fetch navigation content from Sanity:", error);
-    return null;
-  }
-}
+    try {
+      const { data } = await sanityFetch({ query: NAVIGATION_QUERY });
+      const doc = data as SanityNavigationDoc | null;
+      return doc ? mapNavigation(doc) : null;
+    } catch (error) {
+      console.warn("Failed to fetch navigation content from Sanity:", error);
+      return null;
+    }
+  },
+);

@@ -11,7 +11,7 @@ import { siteConfig } from "@/config/site";
 import {
   findArticleBySlug,
   formatArticleDate,
-  getAllArticles,
+  getAllArticleSlugs,
 } from "@/features/landing/data/articles";
 import { buildMetadata } from "@/lib/seo";
 
@@ -34,8 +34,8 @@ const portableTextComponents: PortableTextComponents = {
 };
 
 export async function generateStaticParams() {
-  const articles = await getAllArticles();
-  return articles.map((article) => ({ slug: article.slug }));
+  const slugs = await getAllArticleSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {

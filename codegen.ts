@@ -4,7 +4,7 @@ const config: CodegenConfig = {
   overwrite: true,
   ignoreNoDocuments: true,
   schema: ["https://afram-core-staging.fly.dev/graph"],
-  documents: ["src/graphql/**/*.graphql"],
+  documents: ["src/graphql/**/*.ts"],
   generates: {
     "./src/types/generated/graphql.ts": {
       plugins: ["typescript", "typescript-operations"],

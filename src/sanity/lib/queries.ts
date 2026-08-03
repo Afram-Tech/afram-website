@@ -17,6 +17,10 @@ export const ALL_ARTICLES_QUERY = `
   }
 `;
 
+export const ALL_ARTICLE_SLUGS_QUERY = `
+  *[_type == "insightArticle" && defined(slug.current)].slug.current
+`;
+
 export const ARTICLE_BY_SLUG_QUERY = `
   *[_type == "insightArticle" && slug.current == $slug][0] {
     ${ARTICLE_CARD_FIELDS},

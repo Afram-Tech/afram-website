@@ -1,11 +1,18 @@
+import { cache } from "react";
+
 import type { PortableTextBlock } from "@portabletext/react";
 
 import { stegaClean } from "@sanity/client/stega";
 
+import { client } from "@/sanity/lib/client";
 import { isSanityConfigured } from "@/sanity/lib/env";
 import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
-import { ALL_ARTICLES_QUERY, ARTICLE_BY_SLUG_QUERY } from "@/sanity/lib/queries";
+import {
+  ALL_ARTICLE_SLUGS_QUERY,
+  ALL_ARTICLES_QUERY,
+  ARTICLE_BY_SLUG_QUERY,
+} from "@/sanity/lib/queries";
 
 export interface Article {
   slug: string;
@@ -48,7 +55,7 @@ function mapArticle(doc: SanityArticleDoc): Article {
   };
 }
 
-export async function getAllArticles(): Promise<Article[]> {
+export const getAllArticles = cache(async function getAllArticles(): Promise<Article[]> {
   if (!isSanityConfigured) return [];
 
   try {
@@ -59,9 +66,27 @@ export async function getAllArticles(): Promise<Article[]> {
     console.warn("Failed to fetch Insights articles from Sanity:", error);
     return [];
   }
+});
+
+/**
+ * Slugs for `generateStaticParams`. Uses the plain client rather than the live
+ * `sanityFetch`, which reads `draftMode()` — unavailable at build time, where
+ * there is no request. Stega is off since these are URL segments, not display text.
+ */
+export async function getAllArticleSlugs(): Promise<string[]> {
+  if (!isSanityConfigured) return [];
+
+  try {
+    return await client.withConfig({ stega: false }).fetch<string[]>(ALL_ARTICLE_SLUGS_QUERY);
+  } catch (error) {
+    console.warn("Failed to fetch Insights article slugs from Sanity:", error);
+    return [];
+  }
 }
 
-export async function findArticleBySlug(slug: string): Promise<Article | undefined> {
+export const findArticleBySlug = cache(async function findArticleBySlug(
+  slug: string,
+): Promise<Article | undefined> {
   if (!isSanityConfigured) return undefined;
 
   try {
@@ -72,7 +97,7 @@ export async function findArticleBySlug(slug: string): Promise<Article | undefin
     console.warn(`Failed to fetch article "${slug}" from Sanity:`, error);
     return undefined;
   }
-}
+});
 
 /** Format an ISO date string, e.g. "Jun 2, 2026". */
 export function formatArticleDate(iso: string): string {

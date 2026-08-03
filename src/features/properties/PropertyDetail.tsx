@@ -21,6 +21,7 @@ import Link from "next/link";
 
 import { LockedSection } from "@/components/ui/LockedSection";
 import { buttonVariants } from "@/components/ui/button-variants";
+import { siteConfig } from "@/config/site";
 import type { Property } from "@/features/landing/data/properties";
 import { PropertyGallery } from "@/features/properties/PropertyGallery";
 import { formatMoney, formatPropertySize, titleCase } from "@/lib/format";
@@ -283,7 +284,10 @@ export function PropertyDetail({ property }: { property: Property }) {
                   </span>
                 </div>
 
-                <Link href="/signup" className={buttonVariants("primary", "lg", "mt-5 w-full")}>
+                <Link
+                  href={siteConfig.signUpUrl}
+                  className={buttonVariants("primary", "lg", "mt-5 w-full")}
+                >
                   Express Interest
                 </Link>
 
