@@ -28,6 +28,7 @@ export interface Property {
   };
   address: { street: string; gps: string; propertyId: string };
   developer: string;
+  priceHistory: { date: string; event: string; price: number }[];
 }
 
 interface RawProperty {
@@ -131,6 +132,13 @@ function mapProperty(project: RawProject): Property | undefined {
       propertyId: property.id,
     },
     developer: "Afram Marketplace",
+    priceHistory: [
+      {
+        date: "Current",
+        event: LISTING_STATUS_LABELS[status] ?? "Listed",
+        price: property.price,
+      },
+    ],
   };
 }
 

@@ -254,6 +254,37 @@ export function PropertyDetail({ property }: { property: Property }) {
                 </div>
               </LockedSection>
             </section>
+
+            <section>
+              <H2>Price history</H2>
+              <LockedSection label="price history">
+                <div className="ring-ink-100 mt-4 overflow-hidden rounded-2xl ring-1">
+                  <table className="w-full text-left text-[14px]">
+                    <thead>
+                      <tr className="bg-ink-50/70 text-ink-400 text-[11px] tracking-wider uppercase">
+                        <th className="px-4 py-3 font-semibold">Date</th>
+                        <th className="px-4 py-3 font-semibold">Event</th>
+                        <th className="px-4 py-3 text-right font-semibold">Price</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-ink-100 divide-y">
+                      {property.priceHistory.map((entry, i) => (
+                        <tr key={i}>
+                          <td className="text-ink-500 px-4 py-3">{entry.date}</td>
+                          <td className="text-ink-700 px-4 py-3 font-medium">{entry.event}</td>
+                          <td className="tnum text-ink-900 px-4 py-3 text-right font-semibold">
+                            {formatMoney(entry.price, property.currency)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </LockedSection>
+              <p className="text-ink-400 mt-3 text-[12px] leading-relaxed">
+                Price changes are tracked by Afram to help you evaluate this listing over time.
+              </p>
+            </section>
           </div>
 
           {/* Sticky purchase card */}
