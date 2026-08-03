@@ -68,7 +68,7 @@ function MessageForm({ topics, cta }: { topics?: string[]; cta: string }) {
         setDone(true);
       }}
     >
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <input className={inputClass} placeholder="Full name" aria-label="Full name" required />
         <input
           className={inputClass}

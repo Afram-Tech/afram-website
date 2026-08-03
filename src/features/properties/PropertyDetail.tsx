@@ -162,7 +162,7 @@ export function PropertyDetail({ property }: { property: Property }) {
 
             <section>
               <H2>Amenities</H2>
-              <div className="mt-4 grid gap-x-8 gap-y-4 sm:grid-cols-2">
+              <div className="mt-4 grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
                 {property.amenities.map((amenity) => (
                   <span
                     key={amenity}
@@ -179,7 +179,7 @@ export function PropertyDetail({ property }: { property: Property }) {
 
             <section>
               <H2>Legal &amp; Title</H2>
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <LegalCard icon={FileText} label="Title type" value={property.legal.titleType} />
                 <LegalCard
                   icon={Map}
@@ -206,16 +206,16 @@ export function PropertyDetail({ property }: { property: Property }) {
                 <div className="mt-4 space-y-3">
                   <div className="bg-ink-50/70 ring-ink-100 flex items-center gap-3 rounded-2xl p-4 ring-1">
                     <Navigation className="text-brand-500 h-5 w-5 shrink-0" />
-                    <span className="flex flex-col">
+                    <span className="flex min-w-0 flex-col">
                       <span className="text-ink-400 text-[11px] tracking-wider uppercase">
                         Street address
                       </span>
-                      <span className="text-ink-900 text-[14px] font-semibold">
+                      <span className="text-ink-900 truncate text-[14px] font-semibold">
                         {property.address.street}
                       </span>
                     </span>
                   </div>
-                  <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <div className="bg-ink-50/70 ring-ink-100 flex items-center gap-3 rounded-2xl p-4 ring-1">
                       <Hash className="text-brand-500 h-5 w-5 shrink-0" />
                       <span className="flex min-w-0 flex-col">

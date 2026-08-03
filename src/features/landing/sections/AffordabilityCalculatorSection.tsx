@@ -49,7 +49,7 @@ export function AffordabilityCalculatorSection() {
         <span className="tnum">GHS 40,000</span>
       </div>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-3">
+      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Stat label="Home price" value={ghsCompact(snapshot.price)} />
         <Stat label="20% deposit" value={ghsCompact(snapshot.deposit)} />
         <Stat label="Monthly · 10 yr" value={ghs(snapshot.monthly)} accent />

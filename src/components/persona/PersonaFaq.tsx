@@ -23,7 +23,7 @@ export function PersonaFaq({
   const [openKey, setOpenKey] = useState<string | null>(null);
 
   return (
-    <div className="from-brand-50 via-ink-50/30 ring-brand-100/50 grid gap-10 rounded-[2rem] bg-gradient-to-br to-white p-8 ring-1 sm:p-12 lg:grid-cols-[0.8fr_1.2fr] lg:p-14">
+    <div className="from-brand-50 via-ink-50/30 ring-brand-100/50 grid grid-cols-1 gap-10 rounded-[2rem] bg-gradient-to-br to-white p-8 ring-1 sm:p-12 lg:grid-cols-[0.8fr_1.2fr] lg:p-14">
       <div>
         <div className="max-w-2xl">
           <span className="text-brand-600 inline-flex items-center gap-2 text-[13px] font-semibold">

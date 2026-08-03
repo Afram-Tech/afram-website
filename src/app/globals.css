@@ -139,4 +139,45 @@ body {
     font-feature-settings: "tnum";
     font-variant-numeric: tabular-nums;
   }
+
+  /* Entrance/exit animation for native <dialog> modals */
+  .modal-pop {
+    opacity: 0;
+    transform: scale(0.94) translateY(10px);
+    transition:
+      opacity 0.28s var(--ease-out-soft),
+      transform 0.28s var(--ease-out-soft),
+      overlay 0.28s var(--ease-out-soft) allow-discrete,
+      display 0.28s var(--ease-out-soft) allow-discrete;
+  }
+  .modal-pop[open] {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  @starting-style {
+    .modal-pop[open] {
+      opacity: 0;
+      transform: scale(0.94) translateY(10px);
+    }
+  }
+  .modal-pop::backdrop {
+    background-color: rgb(22 24 28 / 0%);
+    transition: background-color 0.28s var(--ease-out-soft) allow-discrete;
+  }
+  .modal-pop[open]::backdrop {
+    background-color: rgb(22 24 28 / 50%);
+  }
+  @starting-style {
+    .modal-pop[open]::backdrop {
+      background-color: rgb(22 24 28 / 0%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .modal-pop {
+      transition: none;
+    }
+    .modal-pop::backdrop {
+      transition: none;
+    }
+  }
 }

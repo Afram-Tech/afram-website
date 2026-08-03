@@ -34,7 +34,7 @@ export function SellFlow() {
         intro="No bank queues for your buyers, no chasing leads for you."
       />
 
-      <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {STEPS.map((step, index) => (
           <Reveal key={step.n} delay={index * 0.08}>
             <div className="ring-ink-100 flex h-full flex-col rounded-[1.75rem] bg-white p-7 ring-1">

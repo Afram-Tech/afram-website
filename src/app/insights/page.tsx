@@ -24,7 +24,7 @@ export default async function InsightsPage() {
           Guides, market data, and verification explainers from the Afram team.
         </p>
 
-        <div className="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12">
+        <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12">
           {articles.map((article) => (
             <ArticleCard key={article.slug} article={article} />
           ))}

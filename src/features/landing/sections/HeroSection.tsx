@@ -85,7 +85,7 @@ export function HeroSection({ content }: HeroSectionProps) {
       </div>
 
       <div className="mx-auto mt-2 w-full max-w-[1600px] shrink-0 px-6 pb-4 sm:px-8 sm:pb-6 lg:px-6">
-        <div className="grid gap-2 rounded-[22px] bg-[#fafafa] p-2 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-2 rounded-[22px] bg-[#fafafa] p-2 sm:grid-cols-3">
           {roleCards.map((card, index) => (
             <Link
               key={index}

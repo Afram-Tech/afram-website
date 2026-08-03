@@ -54,7 +54,7 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
 
   return (
     <>
-      <div className="mt-6 grid gap-3 lg:grid-cols-[1.9fr_1fr]">
+      <div className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-[1.9fr_1fr]">
         <button
           type="button"
           onClick={() => setIndex(0)}

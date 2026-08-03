@@ -16,7 +16,7 @@ export function PersonaScroller({ personas }: { personas: PersonaContent[] }) {
               <div
                 key={persona.id}
                 id={persona.id}
-                className="from-accent-50 via-accent-50/40 ring-accent-100/70 grid scroll-mt-24 items-center gap-10 overflow-hidden rounded-[2rem] bg-gradient-to-br to-white p-7 ring-1 sm:p-10 lg:grid-cols-2 lg:gap-14 lg:p-12"
+                className="from-accent-50 via-accent-50/40 ring-accent-100/70 grid scroll-mt-24 grid-cols-1 items-center gap-10 overflow-hidden rounded-[2rem] bg-gradient-to-br to-white p-7 ring-1 sm:p-10 lg:grid-cols-2 lg:gap-14 lg:p-12"
               >
                 <Reveal className={cn(flip && "lg:order-2")}>
                   <div className="flex items-center gap-3">

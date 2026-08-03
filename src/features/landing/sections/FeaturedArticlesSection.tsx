@@ -42,7 +42,7 @@ export async function FeaturedArticlesSection({
         </Link>
       </div>
 
-      <div className="mt-8 grid gap-x-8 gap-y-6 sm:mt-10 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12">
+      <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-6 sm:mt-10 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12">
         {featured.map((article) => (
           <ArticleCard key={article.slug} article={article} />
         ))}

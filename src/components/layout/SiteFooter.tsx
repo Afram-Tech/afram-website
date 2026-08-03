@@ -49,7 +49,7 @@ export function SiteFooter({ content }: SiteFooterProps) {
             </span>
           </div>
 
-          <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_1fr_1.6fr]">
+          <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-[1fr_1fr_1.6fr]">
             <div>
               <h2 className="text-ink-900 text-[13px] font-bold tracking-[0.1em] uppercase">
                 Company

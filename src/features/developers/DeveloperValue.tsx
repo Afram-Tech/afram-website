@@ -29,7 +29,7 @@ export function DeveloperValue() {
         title="Sell faster. Get paid sooner."
         intro="List a verified project and let financed buyers come to you."
       />
-      <div className="mt-12 grid gap-5 md:grid-cols-3">
+      <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
         {PILLARS.map((pillar, index) => (
           <Reveal key={pillar.title} delay={index * 0.08}>
             <FeatureCard

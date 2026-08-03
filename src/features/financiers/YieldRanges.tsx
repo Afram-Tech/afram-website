@@ -31,7 +31,7 @@ export function YieldRanges() {
         intro="Two ways capital is put to work. Ranges are indicative — not a forecast or a guarantee."
       />
 
-      <div className="mt-12 grid gap-5 md:grid-cols-2">
+      <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2">
         {DEALS.map((deal, index) => (
           <Reveal key={deal.type} delay={index * 0.07}>
             <div className="border-ink-100 flex h-full flex-col rounded-[1.75rem] border bg-white p-7 shadow-sm">

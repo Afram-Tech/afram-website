@@ -35,7 +35,7 @@ export default function FinanciersPage() {
           imageAlt="Two financiers shaking hands over a deal"
           headline={["Deploy Capital into", "Verified Real Estate"]}
           subhead="Deploy capital into title-verified Ghanaian real estate — secured by a first legal charge, on your own terms, with full KYC."
-          ctaLabel="Request Briefing"
+          ctaLabel="Get Started"
           ctaHref="#briefing"
         />
 

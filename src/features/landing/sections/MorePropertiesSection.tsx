@@ -37,7 +37,7 @@ export async function MorePropertiesSection({
         </Link>
       </div>
 
-      <div className="-mx-6 mt-8 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-2 sm:mx-0 sm:mt-10 sm:grid sm:grid-cols-2 sm:gap-x-8 sm:gap-y-10 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3 lg:gap-y-12">
+      <div className="mt-8 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-2 sm:mx-0 sm:mt-10 sm:grid sm:grid-cols-2 sm:gap-x-8 sm:gap-y-10 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3 lg:gap-y-12">
         {list.map((property) => (
           <div key={property.slug} className="w-[78%] shrink-0 snap-start sm:w-auto">
             <PropertyCard property={property} />

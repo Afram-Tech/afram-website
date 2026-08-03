@@ -35,7 +35,7 @@ export default function DevelopersPage() {
           imageAlt="A vendor reviewing project plans on-site"
           headline={["Raise Capital", "and accelerate sales"]}
           subhead="List an Afram-verified project and bring it financed buyers who are ready to sign — and recover capital without waiting on slow sales."
-          ctaLabel="List Properties"
+          ctaLabel="Get Started"
           ctaHref="/signup"
         />
 
