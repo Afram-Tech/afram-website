@@ -21,14 +21,14 @@ Create a `.env.local` file in the project root. All variables are optional — t
 runs without any of them — but Sanity-backed content (Insights articles) stays empty until the
 Sanity variables are set.
 
-| Variable                        | Required | Default                                    | Description                                                                                        |
-| ------------------------------- | -------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL`          | No       | `http://localhost:3000`                    | Canonical site URL, used for SEO metadata, sitemap, and robots. Set to `https://afram.co` in prod. |
-| `NEXT_PUBLIC_SANITY_PROJECT_ID` | No\*     | —                                          | Sanity project ID. Without it, article pages render empty (a placeholder keeps the build passing). |
-| `NEXT_PUBLIC_SANITY_DATASET`    | No       | `production`                               | Sanity dataset name.                                                                               |
-| `NEXT_PUBLIC_SANITY_STUDIO_URL` | No       | `http://localhost:5173/dashboard/cms`      | URL of the Sanity Studio (hosted in afram-dashboard), used by Visual Editing overlay links.        |
-| `SANITY_API_READ_TOKEN`         | No\*     | —                                          | Server-only viewer token for draft mode / live preview. Never expose to the client.                |
-| `GRAPHQL_API_URL`               | No       | `https://afram-core-staging.fly.dev/graph` | GraphQL endpoint for property listings (afram-core). Point at production when deploying.           |
+| Variable                            | Required | Default                                    | Description                                                                                        |
+| ----------------------------------- | -------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`              | No       | `http://localhost:3000`                    | Canonical site URL, used for SEO metadata, sitemap, and robots. Set to `https://afram.co` in prod. |
+| `NEXT_PUBLIC_SANITY_PROJECT_ID`     | No\*     | —                                          | Sanity project ID. Without it, article pages render empty (a placeholder keeps the build passing). |
+| `NEXT_PUBLIC_SANITY_DATASET`        | No       | `production`                               | Sanity dataset name.                                                                               |
+| `NEXT_PUBLIC_SANITY_STUDIO_URL`     | No       | `http://localhost:5173/dashboard/cms`      | URL of the Sanity Studio (hosted in afram-dashboard), used by Visual Editing overlay links.        |
+| `NEXT_PUBLIC_SANITY_API_READ_TOKEN` | No\*     | —                                          | Server-only viewer token for draft mode / live preview. Never expose to the client.                |
+| `GRAPHQL_API_URL`                   | No       | `https://afram-core-staging.fly.dev/graph` | GraphQL endpoint for property listings (afram-core). Point at production when deploying.           |
 
 \* Required for CMS-driven content and draft previews to work.
 
@@ -39,7 +39,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
 NEXT_PUBLIC_SANITY_DATASET=production
 NEXT_PUBLIC_SANITY_STUDIO_URL=http://localhost:5173/dashboard/cms
-SANITY_API_READ_TOKEN=your-viewer-token
+NEXT_PUBLIC_SANITY_API_READ_TOKEN=your-viewer-token
 GRAPHQL_API_URL=https://afram-core-staging.fly.dev/graph
 ```
 
@@ -104,7 +104,7 @@ yarn wrangler d1 create afram-website-tag-cache
 Paste the returned ids into `wrangler.jsonc`, replacing `REPLACE_WITH_KV_NAMESPACE_ID` and
 `REPLACE_WITH_D1_DATABASE_ID`. The D1 `revalidations` table is created automatically on deploy.
 
-Also set `SANITY_API_READ_TOKEN` as a Worker secret (Settings → Variables and secrets) — without it
+Also set `NEXT_PUBLIC_SANITY_API_READ_TOKEN` as a Worker secret (Settings → Variables and secrets) — without it
 `src/sanity/lib/live.ts` logs a warning and live content updates do not work.
 
 **Yarn 4 is required.** OpenNext only treats yarn `>= 4.0.0` as modern; on yarn 3 it injects a `--`
