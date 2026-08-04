@@ -11,4 +11,23 @@
   "observability": {
     "enabled": true,
   },
+  // Incremental cache. Create with:
+  //   yarn wrangler kv namespace create NEXT_INC_CACHE_KV
+  "kv_namespaces": [
+    {
+      "binding": "NEXT_INC_CACHE_KV",
+      "id": "d401b3613d3a4ed4bb27f4eb95ddd736",
+    },
+  ],
+  // Tag cache, so revalidateTag works. Create with:
+  //   yarn wrangler d1 create afram-website-tag-cache
+  // The `revalidations` table is created automatically on deploy.
+  "d1_databases": [
+    {
+      // Must stay exactly NEXT_TAG_CACHE_D1 — OpenNext looks the binding up by name.
+      "binding": "NEXT_TAG_CACHE_D1",
+      "database_name": "afram-website-tag-cache",
+      "database_id": "91ab0162-0f9e-4645-88c1-b36d69a4f9e8",
+    },
+  ],
 }

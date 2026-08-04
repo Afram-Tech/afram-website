@@ -1,33 +1,30 @@
 import { defineCloudflareConfig } from "@opennextjs/cloudflare";
-import staticAssetsIncrementalCache from "@opennextjs/cloudflare/overrides/incremental-cache/static-assets-incremental-cache";
+import kvIncrementalCache from "@opennextjs/cloudflare/overrides/incremental-cache/kv-incremental-cache";
+import d1NextTagCache from "@opennextjs/cloudflare/overrides/tag-cache/d1-next-tag-cache";
 
 /**
- * Prerendered pages are served from the Workers static assets binding instead of
- * being re-rendered per request. OpenNext's default is `"dummy"` — no cache at
- * all — which meant every hit re-ran the GraphQL fetch and a full React render,
- * exhausting the Worker CPU limit (error 1102).
+ * Cache setup for live Sanity updates.
  *
- * This cache is read-only: revalidation does not persist, so content refreshes
- * on redeploy. Requires no binding, so `opennextjs-cloudflare deploy` populates
- * it without any extra setup.
+ * - incrementalCache (KV): writable, so a revalidated page persists between
+ *   requests. The previous static-assets cache was read-only, which meant every
+ *   request past the revalidate window re-rendered from scratch.
+ * - tagCache (D1): makes `revalidateTag` actually take effect. Without it the
+ *   default is "dummy", whose writeTags() is a no-op and isStale() always
+ *   returns false — so SanityLive fired revalidations that did nothing. D1 is
+ *   used rather than the KV tag cache because the latter is experimental and
+ *   eventually consistent (up to 60s). The `revalidations` table is created
+ *   automatically by `opennextjs-cloudflare deploy`.
+ * - queue ("direct"): the default "dummy" queue throws FatalError the moment a
+ *   page goes stale, which returned 500s from routingHandler.
  *
- * To also persist revalidation, create the KV namespace and add its binding to
- * wrangler.jsonc FIRST (see README) — the deploy-time populate step fails hard
- * if the config names a binding that does not exist — then swap to:
- *
- *   import kvIncrementalCache from "@opennextjs/cloudflare/overrides/incremental-cache/kv-incremental-cache";
- *   import { withRegionalCache } from "@opennextjs/cloudflare/overrides/incremental-cache/regional-cache";
- *
- *   incrementalCache: withRegionalCache(kvIncrementalCache, { mode: "long-lived" }),
+ * Both bindings must exist in wrangler.jsonc before deploying — the deploy-time
+ * populate step fails hard if a configured binding is missing.
  */
 export default defineCloudflareConfig({
-  incrementalCache: staticAssetsIncrementalCache,
-  // Required whenever any route has `revalidate`. The default queue is "dummy",
-  // whose send() throws FatalError — so the first request after a page goes
-  // stale returns a 500 from routingHandler instead of revalidating. "direct"
-  // performs the revalidation in-process.
+  incrementalCache: kvIncrementalCache,
+  tagCache: d1NextTagCache,
   queue: "direct",
-  // Serves cached pages from the routing layer, skipping the Next server
-  // entirely. Must stay false if PPR is ever enabled.
+  // Serves cached pages from the routing layer, skipping the Next server.
+  // Must stay false if PPR is ever enabled.
   enableCacheInterception: true,
 });
