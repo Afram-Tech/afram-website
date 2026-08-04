@@ -107,6 +107,16 @@ Paste the returned ids into `wrangler.jsonc`, replacing `REPLACE_WITH_KV_NAMESPA
 Also set `NEXT_PUBLIC_SANITY_API_READ_TOKEN` as a Worker secret (Settings → Variables and secrets) — without it
 `src/sanity/lib/live.ts` logs a warning and live content updates do not work.
 
+**Insights pages are dynamic.** `/insights` and `/insights/[slug]` render per request via
+`getArticlesFresh` / `findArticleBySlug`, which read through the plain Sanity client with
+`cache: "no-store"`. This is deliberate: `sanityFetch` stores responses in Next's Data Cache for a
+year, invalidated only by tag revalidation, so newly published articles never appeared on reload.
+Costs roughly one 200ms Sanity round trip per request.
+
+The home page and sitemap keep using the cached `getAllArticles` — the home page also renders every
+property listing, and making it dynamic is what exhausted the Worker CPU limit before. Featured
+articles there refresh on deploy or tag revalidation, not on reload.
+
 **Yarn 4 is required.** OpenNext only treats yarn `>= 4.0.0` as modern; on yarn 3 it injects a `--`
 passthrough that Yarn Berry swallows, so `wrangler kv bulk put` receives no `--binding` flag and the
 deploy fails with `No KV namespace with binding "undefined"`.
