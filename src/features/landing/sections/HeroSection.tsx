@@ -65,7 +65,6 @@ export function HeroSection({ content }: HeroSectionProps) {
                 <br className="hidden sm:block" /> powered by Blockchain.
               </h1>
             )}
-
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Link
                 href={primaryCtaLink}
