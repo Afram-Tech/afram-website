@@ -316,7 +316,7 @@ export function PropertyDetail({ property }: { property: Property }) {
                 </div>
 
                 <Link
-                  href={siteConfig.signUpUrl}
+                  href={`${siteConfig.appUrl}/buyer/browse/property/${property.id}?modal=express-interest`}
                   className={buttonVariants("primary", "lg", "mt-5 w-full")}
                 >
                   Express Interest
