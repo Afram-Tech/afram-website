@@ -21,14 +21,14 @@ Create a `.env.local` file in the project root. All variables are optional — t
 runs without any of them — but Sanity-backed content (Insights articles) stays empty until the
 Sanity variables are set.
 
-| Variable                        | Required | Default                                    | Description                                                                                        |
-| ------------------------------- | -------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL`          | No       | `http://localhost:3000`                    | Canonical site URL, used for SEO metadata, sitemap, and robots. Set to `https://afram.co` in prod. |
-| `NEXT_PUBLIC_SANITY_PROJECT_ID` | No\*     | —                                          | Sanity project ID. Without it, article pages render empty (a placeholder keeps the build passing). |
-| `NEXT_PUBLIC_SANITY_DATASET`    | No       | `production`                               | Sanity dataset name.                                                                               |
-| `NEXT_PUBLIC_SANITY_STUDIO_URL` | No       | `http://localhost:5173/dashboard/cms`      | URL of the Sanity Studio (hosted in afram-dashboard), used by Visual Editing overlay links.        |
-| `SANITY_API_READ_TOKEN`         | No\*     | —                                          | Server-only viewer token for draft mode / live preview. Never expose to the client.                |
-| `GRAPHQL_API_URL`               | No       | `https://afram-core-staging.fly.dev/graph` | GraphQL endpoint for property listings (afram-core). Point at production when deploying.           |
+| Variable                            | Required | Default                                    | Description                                                                                        |
+| ----------------------------------- | -------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`              | No       | `http://localhost:3000`                    | Canonical site URL, used for SEO metadata, sitemap, and robots. Set to `https://afram.co` in prod. |
+| `NEXT_PUBLIC_SANITY_PROJECT_ID`     | No\*     | —                                          | Sanity project ID. Without it, article pages render empty (a placeholder keeps the build passing). |
+| `NEXT_PUBLIC_SANITY_DATASET`        | No       | `production`                               | Sanity dataset name.                                                                               |
+| `NEXT_PUBLIC_SANITY_STUDIO_URL`     | No       | `http://localhost:5173/dashboard/cms`      | URL of the Sanity Studio (hosted in afram-dashboard), used by Visual Editing overlay links.        |
+| `NEXT_PUBLIC_SANITY_API_READ_TOKEN` | No\*     | —                                          | Server-only viewer token for draft mode / live preview. Never expose to the client.                |
+| `GRAPHQL_API_URL`                   | No       | `https://afram-core-staging.fly.dev/graph` | GraphQL endpoint for property listings (afram-core). Point at production when deploying.           |
 
 \* Required for CMS-driven content and draft previews to work.
 
@@ -39,7 +39,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
 NEXT_PUBLIC_SANITY_DATASET=production
 NEXT_PUBLIC_SANITY_STUDIO_URL=http://localhost:5173/dashboard/cms
-SANITY_API_READ_TOKEN=your-viewer-token
+NEXT_PUBLIC_SANITY_API_READ_TOKEN=your-viewer-token
 GRAPHQL_API_URL=https://afram-core-staging.fly.dev/graph
 ```
 
@@ -81,30 +81,45 @@ yarn deploy    # build and deploy to Cloudflare
 Set the environment variables above as Worker vars/secrets too — `.env` and `.env.local` are not
 read in production.
 
-### Caching
+### Caching and live CMS updates
 
-Prerendered pages are served from the Workers static assets binding, so a request returns cached
-HTML instead of re-running data fetches and a React render. OpenNext's default is no cache at all,
-which exhausts the Worker CPU limit (error 1102) once traffic hits server-rendered pages.
+Three overrides in `open-next.config.ts` work together; OpenNext's defaults are all no-ops that
+fail in different ways:
 
-This cache is **read-only**: revalidation does not persist, so published CMS changes appear on the
-next deploy rather than after the `revalidate` window.
+| Override                | Why                                                                                                        |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `incrementalCache` (KV) | Writable, so a revalidated page persists. The default caches nothing and exhausts Worker CPU (error 1102). |
+| `tagCache` (D1)         | Makes `revalidateTag` take effect, so SanityLive updates land. The default `writeTags()` is a no-op.       |
+| `queue: "direct"`       | The default `"dummy"` queue throws `FatalError` the moment a page goes stale, returning 500s.              |
 
-To also persist revalidation, move to KV. Order matters: `opennextjs-cloudflare deploy` populates
-the cache at deploy time and **fails the deploy** if the config names a binding that does not
-exist. Create the namespace first:
+**One-time setup.** Both bindings must exist _before_ deploying — the deploy-time populate step
+fails hard if `wrangler.jsonc` names a binding that does not exist:
 
 ```bash
+yarn wrangler login
 yarn wrangler kv namespace create NEXT_INC_CACHE_KV
+yarn wrangler d1 create afram-website-tag-cache
 ```
 
-Add the returned `id` to `wrangler.jsonc`:
+Paste the returned ids into `wrangler.jsonc`, replacing `REPLACE_WITH_KV_NAMESPACE_ID` and
+`REPLACE_WITH_D1_DATABASE_ID`. The D1 `revalidations` table is created automatically on deploy.
 
-```jsonc
-"kv_namespaces": [{ "binding": "NEXT_INC_CACHE_KV", "id": "<paste-id-here>" }]
-```
+Also set `NEXT_PUBLIC_SANITY_API_READ_TOKEN` as a Worker secret (Settings → Variables and secrets) — without it
+`src/sanity/lib/live.ts` logs a warning and live content updates do not work.
 
-Then switch `open-next.config.ts` to the configuration in its comment block.
+**Insights pages are dynamic.** `/insights` and `/insights/[slug]` render per request via
+`getArticlesFresh` / `findArticleBySlug`, which read through the plain Sanity client with
+`cache: "no-store"`. This is deliberate: `sanityFetch` stores responses in Next's Data Cache for a
+year, invalidated only by tag revalidation, so newly published articles never appeared on reload.
+Costs roughly one 200ms Sanity round trip per request.
+
+The home page and sitemap keep using the cached `getAllArticles` — the home page also renders every
+property listing, and making it dynamic is what exhausted the Worker CPU limit before. Featured
+articles there refresh on deploy or tag revalidation, not on reload.
+
+**Yarn 4 is required.** OpenNext only treats yarn `>= 4.0.0` as modern; on yarn 3 it injects a `--`
+passthrough that Yarn Berry swallows, so `wrangler kv bulk put` receives no `--binding` flag and the
+deploy fails with `No KV namespace with binding "undefined"`.
 
 ## Project structure
 

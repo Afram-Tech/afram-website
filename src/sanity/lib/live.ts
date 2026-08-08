@@ -2,11 +2,11 @@ import { defineLive } from "next-sanity/live";
 
 import { client } from "@/sanity/lib/client";
 
-const token = process.env.SANITY_API_READ_TOKEN;
+const token = process.env.NEXT_PUBLIC_SANITY_API_READ_TOKEN;
 
 if (!token) {
   console.warn(
-    "SANITY_API_READ_TOKEN is not set — live content updates won't work until it is. Reads will still fall back to the CDN.",
+    "NEXT_PUBLIC_SANITY_API_READ_TOKEN is not set — live content updates won't work until it is. Reads will still fall back to the CDN.",
   );
 }
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { getAllArticles } from "@/features/landing/data/articles";
+import { getArticlesFresh } from "@/features/landing/data/articles";
 import { ArticleCard } from "@/features/landing/ArticleCard";
 import { buildMetadata } from "@/lib/seo";
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default async function InsightsPage() {
-  const articles = await getAllArticles();
+  const articles = await getArticlesFresh();
 
   return (
     <section className="py-16">
