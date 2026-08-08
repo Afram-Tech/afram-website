@@ -126,8 +126,8 @@ export function ContactSplit({
   cta?: string;
 }) {
   return (
-    <div className="ring-ink-100 overflow-hidden rounded-[2rem] shadow-[0_40px_100px_-50px_rgba(0,45,48,0.45)] ring-1 lg:grid lg:grid-cols-[0.95fr_1.05fr]">
-      <div className="bg-brand-950 relative overflow-hidden p-8 sm:p-10 lg:p-12">
+    <div className="ring-ink-100 -mx-2 overflow-hidden rounded-[2rem] shadow-[0_40px_100px_-50px_rgba(0,45,48,0.45)] ring-1 lg:grid lg:grid-cols-[0.95fr_1.05fr]">
+      <div className="bg-brand-950 relative overflow-hidden p-4 sm:p-10 lg:p-12">
         <div
           className="bg-brand-500/20 pointer-events-none absolute -top-24 -right-20 h-72 w-72 rounded-full blur-3xl"
           aria-hidden

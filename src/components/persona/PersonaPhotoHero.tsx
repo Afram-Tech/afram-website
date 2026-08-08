@@ -20,29 +20,34 @@ export function PersonaPhotoHero({
   ctaLabel: string;
   ctaHref: string;
 }) {
+  const headlineNodes = headline.map<ReactNode>((line, index) =>
+    index === 0 ? (
+      line
+    ) : (
+      <Fragment key={line}>
+        <br />
+        {line}
+      </Fragment>
+    ),
+  );
+
   return (
     <section className="bg-white px-6 pt-4 pb-6 sm:px-8 lg:px-16">
-      <div className="relative mx-auto h-[520px] max-w-[1536px] overflow-hidden rounded-[2rem] sm:h-[580px] lg:h-[640px]">
-        <Image src={image} alt={imageAlt} fill priority sizes="1536px" className="object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-white/5 to-transparent" />
+      <div className="mx-auto max-w-[1536px] overflow-hidden rounded-[2rem] lg:relative lg:h-[640px]">
+        {/* Below lg, the photo is a banner above the copy so text never overlaps faces. */}
+        <div className="relative h-[280px] sm:h-[360px] lg:absolute lg:inset-0 lg:h-full">
+          <Image src={image} alt={imageAlt} fill priority sizes="1536px" className="object-cover" />
+          <div className="absolute inset-0 hidden bg-gradient-to-r from-white/10 via-white/5 to-transparent lg:block" />
+        </div>
 
-        <div className="relative z-10 flex h-full max-w-[640px] flex-col justify-center px-6 sm:px-10 lg:px-14">
+        <div className="relative z-10 flex flex-col justify-center bg-white px-6 py-8 sm:px-10 sm:py-10 lg:h-full lg:max-w-[640px] lg:bg-transparent lg:px-14 lg:py-0">
           <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.14em] text-[#002d30]/70 uppercase">
             Powered by
             <PolygonWordmark className="h-[12px] w-auto text-[#002D30]" />
           </span>
 
           <h1 className="mt-6 text-[clamp(2.1rem,3.6vw,3.25rem)] leading-[1.05] tracking-[-0.03em] text-[#002d30]">
-            {headline.map<ReactNode>((line, index) =>
-              index === 0 ? (
-                line
-              ) : (
-                <Fragment key={line}>
-                  <br />
-                  {line}
-                </Fragment>
-              ),
-            )}
+            {headlineNodes}
           </h1>
 
           <p className="mt-5 max-w-md text-[17px] leading-relaxed text-[#002D30]/75">{subhead}</p>
