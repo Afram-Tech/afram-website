@@ -37,7 +37,7 @@ export default function DevelopersPage() {
           headline={["Raise Capital", "and accelerate sales"]}
           subhead="List an Afram-verified project and bring it financed buyers who are ready to sign — and recover capital without waiting on slow sales."
           ctaLabel="Get Started"
-          ctaHref="/signup"
+          ctaHref="https://app.staging.afram.co/signup?userType=issuer"
         />
 
         <PersonaScroller personas={ordered} />

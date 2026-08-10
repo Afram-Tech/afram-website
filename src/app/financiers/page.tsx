@@ -36,7 +36,7 @@ export default function FinanciersPage() {
           headline={["Deploy Capital into", "Verified Real Estate"]}
           subhead="Deploy capital into title-verified Ghanaian real estate — secured by a first legal charge, on your own terms, with full KYC."
           ctaLabel="Get Started"
-          ctaHref="#briefing"
+          ctaHref="https://app.staging.afram.co/signup?userType=financier"
         />
 
         <PersonaScroller personas={ordered} />
