@@ -4,7 +4,11 @@ import { useMemo, useState } from "react";
 
 import { ghs, ghsCompact } from "@/lib/format";
 
-const ASSUMED_RATE = 0.12;
+/** Amortisation assumptions, matched to the mortgage schedule (14% annual, 10yr, 80% LTV, 30% PTI). */
+const ANNUAL_RATE = 0.14;
+const TENOR_MONTHS = 10 * 12;
+const LTV = 0.8;
+const PAYMENT_TO_INCOME = 0.3;
 
 /** Max loan a fixed monthly payment can sustain at `annualRate` over `months`. */
 function affordableLoan(monthly: number, annualRate: number, months: number) {
@@ -17,13 +21,13 @@ export function AffordabilityCalculatorSection() {
   const [income, setIncome] = useState(8000);
 
   const snapshot = useMemo(() => {
-    const monthly = Math.round(income * 0.35);
-    const loan = affordableLoan(monthly, ASSUMED_RATE, 10 * 12);
-    const price = Math.round(loan / 0.8 / 1000) * 1000;
+    const monthly = Math.round(income * PAYMENT_TO_INCOME);
+    const loan = affordableLoan(monthly, ANNUAL_RATE, TENOR_MONTHS);
+    const price = Math.round(loan / LTV / 1000) * 1000;
     return {
       monthly,
       price,
-      deposit: Math.round((price * 0.2) / 1000) * 1000,
+      deposit: Math.round((price * (1 - LTV)) / 1000) * 1000,
     };
   }, [income]);
 
@@ -56,8 +60,8 @@ export function AffordabilityCalculatorSection() {
       </div>
 
       <p className="text-ink-400 mt-6 text-center text-[12px] leading-snug">
-        Illustrative only. Assumes a 20% deposit and a comfortable payment of about 35% of
-        take-home. Final terms are confirmed on application.
+        Illustrative only. Assumes a 20% deposit, a 14% annual rate over 10 years, and a comfortable
+        payment of about 30% of take-home. Final terms are confirmed on application.
       </p>
     </div>
   );
