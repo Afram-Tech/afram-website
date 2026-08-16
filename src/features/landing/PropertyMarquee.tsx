@@ -5,12 +5,11 @@ import { useState } from "react";
 import { PropertyCard } from "@/features/landing/PropertyCard";
 import type { Property } from "@/features/landing/data/properties";
 
-/** Full loop duration for the marquee scroll. Slower reads calmer for a list this size. */
 const MARQUEE_DURATION = "110s";
 
 export function PropertyMarquee({ properties }: { properties: Property[] }) {
   const [paused, setPaused] = useState(false);
-  const track = [...properties, ...properties];
+  // const track = [...properties, ...properties];
 
   return (
     <div
@@ -28,7 +27,7 @@ export function PropertyMarquee({ properties }: { properties: Property[] }) {
           animationDuration: MARQUEE_DURATION,
         }}
       >
-        {track.map((property, index) => (
+        {properties.map((property, index) => (
           <div
             key={`${property.slug}-${index}`}
             className="mr-7 w-[290px] shrink-0 sm:w-[330px]"
