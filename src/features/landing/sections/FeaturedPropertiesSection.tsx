@@ -3,8 +3,8 @@ import Link from "next/link";
 
 import { Section } from "@/components/ui/Section";
 import { buttonVariants } from "@/components/ui/button-variants";
-import { getAllProperties } from "@/features/landing/data/properties";
-import { PropertyCard } from "@/features/landing/PropertyCard";
+import { getFeaturedProperties } from "@/features/landing/data/properties";
+import { PropertyMarquee } from "@/features/landing/PropertyMarquee";
 
 interface FeaturedPropertiesSectionProps {
   heading?: string;
@@ -19,8 +19,7 @@ export async function FeaturedPropertiesSection({
   ctaLabel,
   ctaLink,
 }: FeaturedPropertiesSectionProps = {}) {
-  const featuredProperties = await getAllProperties();
-  const track = [...featuredProperties, ...featuredProperties];
+  const featuredProperties = await getFeaturedProperties();
 
   return (
     <Section id="properties">
@@ -43,22 +42,7 @@ export async function FeaturedPropertiesSection({
         </Link>
       </div>
 
-      <div className="group/ticker relative mt-10 overflow-hidden">
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-white to-transparent sm:w-24" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-white to-transparent sm:w-24" />
-
-        <div className="marquee-track flex group-hover/ticker:[animation-play-state:paused]">
-          {track.map((property, index) => (
-            <div
-              key={`${property.slug}-${index}`}
-              className="mr-7 w-[290px] shrink-0 sm:w-[330px]"
-              aria-hidden={index >= featuredProperties.length ? true : undefined}
-            >
-              <PropertyCard property={property} />
-            </div>
-          ))}
-        </div>
-      </div>
+      <PropertyMarquee properties={featuredProperties} />
     </Section>
   );
 }

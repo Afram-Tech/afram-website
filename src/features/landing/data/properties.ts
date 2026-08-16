@@ -29,6 +29,7 @@ export interface Property {
   address: { street: string; gps: string; propertyId: string };
   developer: string;
   priceHistory: { date: string; event: string; price: number }[];
+  isFeatured: boolean;
 }
 
 interface RawProperty {
@@ -53,6 +54,7 @@ interface RawProperty {
   thumbnail?: string | null;
   streetAddress?: string | null;
   gpsAddress?: string | null;
+  metadata?: unknown;
 }
 
 interface RawProject {
@@ -102,6 +104,9 @@ function mapProperty(project: RawProject): Property | undefined {
   ].filter((tag): tag is string => Boolean(tag));
 
   const status = property.status ?? "unlisted";
+  const isFeatured = Boolean(
+    (property.metadata as Record<string, unknown> | null | undefined)?.isFeatured,
+  );
 
   return {
     id: property.id,
@@ -139,6 +144,7 @@ function mapProperty(project: RawProject): Property | undefined {
         price: property.price,
       },
     ],
+    isFeatured,
   };
 }
 
@@ -165,6 +171,12 @@ const fetchPublicProperties = cache(async function fetchPublicProperties(): Prom
 
 export async function getAllProperties(): Promise<Property[]> {
   return fetchPublicProperties();
+}
+
+/** Properties tagged "isFeatured" from the dashboard. */
+export async function getFeaturedProperties(): Promise<Property[]> {
+  const properties = await fetchPublicProperties();
+  return properties.filter((property) => property.isFeatured);
 }
 
 export async function findPropertyBySlug(slug: string): Promise<Property | undefined> {
