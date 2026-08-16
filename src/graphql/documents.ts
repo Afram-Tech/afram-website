@@ -30,6 +30,7 @@ export const GET_PUBLIC_PROPERTIES = /* GraphQL */ `
         thumbnail
         streetAddress
         gpsAddress
+        metadata
       }
     }
   }
