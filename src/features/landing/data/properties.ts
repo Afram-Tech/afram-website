@@ -176,7 +176,7 @@ export async function getAllProperties(): Promise<Property[]> {
 /** Properties tagged "isFeatured" from the dashboard. */
 export async function getFeaturedProperties(): Promise<Property[]> {
   const properties = await fetchPublicProperties();
-  return properties.filter((property) => property.isFeatured);
+  return properties.filter((property) => Boolean(property.isFeatured) == true);
 }
 
 export async function findPropertyBySlug(slug: string): Promise<Property | undefined> {
