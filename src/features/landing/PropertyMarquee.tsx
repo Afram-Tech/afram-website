@@ -17,8 +17,8 @@ export function PropertyMarquee({ properties }: { properties: Property[] }) {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-white to-transparent sm:w-24" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-white to-transparent sm:w-24" />
+      <div className="pointer-events-none absolute top-0 left-0 z-10 h-52 w-8 bg-gradient-to-r from-white to-transparent sm:w-16" />
+      <div className="pointer-events-none absolute top-0 right-0 z-10 h-52 w-8 bg-gradient-to-l from-white to-transparent sm:w-16" />
 
       <div
         className="marquee-track flex"
