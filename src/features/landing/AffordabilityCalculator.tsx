@@ -43,7 +43,7 @@ export function AffordabilityCalculator({
   return (
     <div className="border-ink-100 mx-auto mt-12 max-w-3xl rounded-[1.75rem] border bg-white p-7 shadow-sm sm:p-10">
       <label className="text-ink-600 block text-sm font-medium" htmlFor="affordability-income">
-        Your monthly take-home
+        Choose an income range
       </label>
       <p className="tnum text-ink-900 mt-2 text-4xl font-semibold">{ghs(income)}</p>
       <input
@@ -63,7 +63,7 @@ export function AffordabilityCalculator({
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <Stat label="Home price" value={ghsCompact(snapshot.price)} />
+        {/* <Stat label="Home price" value={ghsCompact(snapshot.price)} />z */}
         <Stat label="20% deposit" value={ghsCompact(snapshot.deposit)} />
         <Stat label="Monthly · 10 yr" value={ghs(snapshot.monthly)} accent />
       </div>
@@ -112,7 +112,7 @@ function RecommendationStrip({ recommendations }: { recommendations: Recommended
 
 function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
-    <div className="bg-ink-50 rounded-2xl p-5 text-center">
+    <div className="bg-ink-50 w-full rounded-2xl p-5 text-center">
       <p className="text-ink-400 text-[12px] tracking-wider uppercase">{label}</p>
       <p
         className={`tnum mt-1 text-2xl font-semibold ${accent ? "text-accent-700" : "text-ink-900"}`}

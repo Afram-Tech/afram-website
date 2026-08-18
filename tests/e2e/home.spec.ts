@@ -4,7 +4,7 @@ test("home page renders the hero section and role cards", async ({ page }) => {
   await page.goto("/");
   await expect(
     page.getByRole("heading", {
-      name: "A Transparent Real Estate Marketplace for Buyers, Vendors, and Financiers powered by Blockchain.",
+      name: "Discover verified properties, access financing, and move confidently toward ownership.",
     }),
   ).toBeVisible();
   await expect(page.getByRole("link", { name: "View Properties" })).toBeVisible();
