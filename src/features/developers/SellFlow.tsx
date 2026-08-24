@@ -29,7 +29,6 @@ export function SellFlow() {
   return (
     <Section className="bg-ink-50/60">
       <SectionHeading
-        eyebrow="How selling works"
         title="Four steps from listing to cash."
         intro="No bank queues for your buyers, no chasing leads for you."
       />

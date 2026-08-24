@@ -8,7 +8,7 @@ import { formatMoney } from "@/lib/format";
 /** A smaller PropertyCard for tight spaces — e.g. the affordability calculator's recommendation strip. */
 export function PropertyCardCompact({ property }: { property: RecommendedProperty }) {
   return (
-    <Link href={`/properties/${property.slug}`} className="group block">
+    <Link href={`/properties/${property.slug}`} className="group block max-w-[200px]">
       <div className="overflow-hidden rounded-xl">
         <Photo
           seed={property.slug}

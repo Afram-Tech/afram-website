@@ -43,7 +43,7 @@ export default async function HomePage() {
           title={content?.affordabilityTitle ?? "What can you afford?"}
           intro={
             content?.affordabilityIntro ??
-            "Set your monthly take-home. We'll show a comfortable home price, the deposit, and the instalment over 10 years."
+            "Drag to set your monthly take-home. We'll show a comfortable home price, the deposit, and what the instalment looks like over five or ten years."
           }
         />
         <AffordabilityCalculatorSection />

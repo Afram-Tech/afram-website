@@ -47,11 +47,6 @@ export const NAV_GROUPS: NavGroup[] = [
         description: "Yield above treasury, your own rules",
         href: "/financiers#private-credit",
       },
-      {
-        label: "Impact / diaspora",
-        description: "Returns with measurable impact",
-        href: "/financiers#impact",
-      },
     ],
   },
 ];

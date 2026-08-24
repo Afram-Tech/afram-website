@@ -126,12 +126,41 @@ body {
     width: max-content;
     animation: afram-marquee var(--marquee-duration, 55s) linear infinite;
   }
+  @keyframes afram-scrim-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes afram-panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  .scrim-in {
+    animation: afram-scrim-in 0.18s var(--ease-out-soft) forwards;
+  }
+  .panel-in {
+    animation: afram-panel-in 0.24s var(--ease-out-soft) forwards;
+  }
   @media (prefers-reduced-motion: reduce) {
     .rise,
     .fade,
-    .marquee-track {
+    .marquee-track,
+    .scrim-in,
+    .panel-in {
       animation: none;
       opacity: 1;
+    }
+    .panel-in {
+      transform: none;
     }
   }
 
