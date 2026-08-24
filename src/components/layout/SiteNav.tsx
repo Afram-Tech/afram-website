@@ -59,6 +59,10 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
           </Link>
 
           <nav className="hidden items-center gap-1 lg:flex">
+            <Link href="/properties" className={navLinkClassName}>
+              Browse Properties
+            </Link>
+
             {navGroups.map((group) => (
               <div
                 key={group.label}
@@ -139,6 +143,14 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
       {mobileMenuOpen ? (
         <div className="fixed inset-x-0 top-[72px] bottom-0 z-40 overflow-y-auto bg-white px-5 pt-3 pb-10 lg:hidden">
           <div className="divide-ink-100 divide-y">
+            <Link
+              href="/properties"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-ink-900 block py-3 text-base font-semibold"
+            >
+              Browse Properties
+            </Link>
+
             {navGroups.map((group) => (
               <div key={group.label} className="py-3">
                 <Link

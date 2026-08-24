@@ -60,10 +60,8 @@ export function HeroSection({ content }: HeroSectionProps) {
               </h1>
             ) : (
               <h1 className="mt-4 text-[clamp(1.75rem,2.9vw,2.375rem)] leading-[1.16] font-semibold tracking-[-0.035em] text-[#002d30]">
-                Discover verified properties, access
-                <br className="hidden sm:block" />
-                financing, and move confidently
-                <br className="hidden sm:block" />
+                Discover verified properties, access <br className="hidden sm:block" />
+                financing, and move confidently <br className="hidden sm:block" />
                 toward ownership.
               </h1>
             )}
