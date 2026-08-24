@@ -16,7 +16,7 @@ const DEALS = [
   {
     icon: Building2,
     type: "Development lending",
-    body: "Fund construction with vetted vendors against the underlying parcel.",
+    body: "Fund construction with vetted developers against the underlying parcel.",
     yield: "30–45% p.a.",
     tenure: "12–36 months",
   },
@@ -24,12 +24,8 @@ const DEALS = [
 
 export function YieldRanges() {
   return (
-    <Section className="wash-mint">
-      <SectionHeading
-        eyebrow="Yield and tenure"
-        title="Transparent ranges."
-        intro="Two ways capital is put to work. Ranges are indicative — not a forecast or a guarantee."
-      />
+    <Section id="yield" className="wash-mint scroll-mt-24">
+      <SectionHeading title="Transparent ranges." intro="Two ways capital is put to work." />
 
       <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2">
         {DEALS.map((deal, index) => (
@@ -62,7 +58,25 @@ export function YieldRanges() {
         ))}
       </div>
 
-      <CapitalAtRiskBadge className="mt-8" />
+      {/*
+        A caveat, so it is styled as one: a hairline rule, no box, no fill, no
+        icon, no accent colour — those dress a disclaimer up as a feature. The
+        operative clause leads, on its own line and with an explicit subject,
+        because prominence and grammatical completeness are what get argued
+        about. Never below text-sm: shrinking a caveat is how sites make one
+        technically present and practically invisible.
+      */}
+      <div className="border-ink-900/10 mt-10 border-t pt-5 sm:mt-12 sm:pt-6">
+        <p className="text-ink-700 max-w-[54ch] text-sm leading-relaxed text-pretty">
+          <strong className="text-ink-900 block font-semibold">
+            These ranges are not an offer and not binding.
+          </strong>
+          They come from deals already completed on Afram. You and the other party agree the final
+          rate and terms.
+        </p>
+      </div>
+
+      <CapitalAtRiskBadge className="mt-6" />
     </Section>
   );
 }

@@ -12,6 +12,8 @@ export function PersonaPhotoHero({
   subhead,
   ctaLabel,
   ctaHref,
+  /** soft white diagonal wash for legibility over a darker photo (desktop) */
+  overlay = false,
 }: {
   image: string;
   imageAlt: string;
@@ -19,6 +21,7 @@ export function PersonaPhotoHero({
   subhead: string;
   ctaLabel: string;
   ctaHref: string;
+  overlay?: boolean;
 }) {
   const headlineNodes = headline.map<ReactNode>((line, index) =>
     index === 0 ? (
@@ -38,6 +41,16 @@ export function PersonaPhotoHero({
         <div className="relative h-[280px] sm:h-[360px] lg:absolute lg:inset-0 lg:h-full">
           <Image src={image} alt={imageAlt} fill priority sizes="1536px" className="object-cover" />
           <div className="absolute inset-0 hidden bg-gradient-to-r from-white/10 via-white/5 to-transparent lg:block" />
+          {overlay && (
+            <div
+              className="absolute inset-0 hidden lg:block"
+              style={{
+                backgroundImage:
+                  "linear-gradient(238deg, rgba(255,255,255,0.72) 22%, rgba(255,255,255,0.05) 52%)",
+              }}
+              aria-hidden
+            />
+          )}
         </div>
 
         <div className="relative z-10 flex flex-col justify-center bg-white px-6 py-8 sm:px-10 sm:py-10 lg:h-full lg:max-w-[640px] lg:bg-transparent lg:px-14 lg:py-0">
