@@ -60,7 +60,7 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
 
           <nav className="hidden items-center gap-1 lg:flex">
             <Link href="/properties" className={navLinkClassName}>
-              Browse Properties
+              View Properties
             </Link>
 
             {navGroups.map((group) => (
@@ -114,6 +114,9 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
               Insights
             </Link>
             <VerifyTitleDialog className={navLinkClassName}>{verifyLabel}</VerifyTitleDialog>
+            <Link href="/how-it-works" className={navLinkClassName}>
+              How Afram works
+            </Link>
           </nav>
 
           <div className="hidden items-center gap-3 lg:flex">
@@ -148,7 +151,7 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
               onClick={() => setMobileMenuOpen(false)}
               className="text-ink-900 block py-3 text-base font-semibold"
             >
-              Browse Properties
+              View Properties
             </Link>
 
             {navGroups.map((group) => (
@@ -182,6 +185,13 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
               className="text-ink-900 block py-3 text-base font-semibold"
             >
               Insights
+            </Link>
+            <Link
+              href="/how-it-works"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-ink-900 block py-3 text-base font-semibold"
+            >
+              How Afram works
             </Link>
           </div>
           <div className="mt-6 flex flex-col gap-2.5">

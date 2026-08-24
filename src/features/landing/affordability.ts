@@ -1,8 +1,9 @@
 /** Shared math for the affordability calculator, matched to Afram's mortgage amortisation model. */
 export const ANNUAL_RATE = 0.14; // 14% annual interest
-export const TENOR_MONTHS = 10 * 12; // 10-year loan
+export const TENOR_MONTHS = 10 * 12; // 10-year loan — the comfortable term the home price is solved from
+export const SHORT_TENOR_MONTHS = 5 * 12; // 5-year loan — same home, shown at a shorter term for comparison
 export const LTV = 0.8; // financier covers 80% of the property value
-export const PAYMENT_TO_INCOME = 0.3; // "comfortable" payment = 30% of take-home
+export const PAYMENT_TO_INCOME = 0.35; // "comfortable" payment = 35% of take-home
 export const EXCHANGE_RATE = 12; // GHS per USD, for comparing listings priced in different currencies
 
 export const INCOME_MIN = 2000;
@@ -34,12 +35,24 @@ export function paymentForLoan(loan: number, annualRate: number, months: number)
   return (loan * i) / (1 - Math.pow(1 + i, -months));
 }
 
-/** The price/deposit/monthly numbers the calculator shows for a given monthly take-home. */
+/**
+ * The price/deposit/monthly numbers the calculator shows for a given monthly
+ * take-home. The price is solved from the 10-year plan, since that is the
+ * comfortable one. The 5-year figure prices the SAME home over a shorter
+ * term, so it is deliberately higher than the comfort threshold — that is
+ * the trade being shown, not an error.
+ */
 export function incomeToSnapshot(income: number) {
-  const monthly = Math.round(income * PAYMENT_TO_INCOME);
-  const loan = affordableLoan(monthly, ANNUAL_RATE, TENOR_MONTHS);
+  const comfortable = Math.round(income * PAYMENT_TO_INCOME);
+  const loan = affordableLoan(comfortable, ANNUAL_RATE, TENOR_MONTHS);
   const price = Math.round(loan / LTV / 1000) * 1000;
-  return { monthly, price, deposit: Math.round((price * (1 - LTV)) / 1000) * 1000 };
+  const financed = price * LTV;
+  return {
+    price,
+    deposit: Math.round((price * (1 - LTV)) / 1000) * 1000,
+    monthly10: Math.round(paymentForLoan(financed, ANNUAL_RATE, TENOR_MONTHS)),
+    monthly5: Math.round(paymentForLoan(financed, ANNUAL_RATE, SHORT_TENOR_MONTHS)),
+  };
 }
 
 /** The monthly take-home needed to afford a home at `price` — the inverse of incomeToSnapshot's price step. */

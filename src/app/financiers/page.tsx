@@ -99,7 +99,7 @@ export default async function FinanciersPage() {
         paths={FINANCE_PATHS}
       />
       <RecognisedBy />
-      <PartnerLogos />
+      {/* <PartnerLogos /> */}
       <PersonaProof
         title="Assets already verified on Afram."
         intro="Every asset is reconciled against Lands Commission records before a loan is written against it. Look at the book yourself."

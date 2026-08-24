@@ -72,7 +72,7 @@ export default async function DevelopersPage() {
       <PersonaSwitcher personas={ordered} />
 
       <TwoPaths />
-      <PartnerLogos />
+      {/* <PartnerLogos /> */}
       <PersonaProof
         title="Projects already listed on Afram."
         intro="Every listing here cleared a title check before it went live. Browse what is on the platform today."
