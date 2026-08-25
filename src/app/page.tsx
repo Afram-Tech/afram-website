@@ -24,7 +24,7 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection content={content ?? undefined} />
-      <PartnerLogosSection heading={content?.partnerLogosHeading} partners={content?.partners} />
+      {/* <PartnerLogosSection heading={content?.partnerLogosHeading} partners={content?.partners} /> */}
       <FeaturedPropertiesSection
         heading={content?.featuredPropertiesHeading}
         subheading={content?.featuredPropertiesSubheading}
