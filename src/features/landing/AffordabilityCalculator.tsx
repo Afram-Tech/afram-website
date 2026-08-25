@@ -8,20 +8,33 @@ import { PropertyCardCompact } from "@/features/landing/PropertyCardCompact";
 import { PropertyCardCompactSkeleton } from "@/features/landing/PropertyCardCompactSkeleton";
 import {
   ANNUAL_RATE,
+  CURRENCIES,
   INCOME_MAX,
   INCOME_MIN,
   INCOME_STEP,
   LTV,
   TENOR_MONTHS,
+  type CurrencyCode,
   type RecommendedProperty,
+  formatCurrency,
+  formatCurrencyCompact,
+  fromGhs,
   incomeToSnapshot,
+  matchByBudget,
 } from "@/features/landing/affordability";
-import { ghs, ghsCompact } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 const RECOMMENDATION_COUNT = 3;
 /** How long the recommendation strip shows a skeleton after the price changes, before revealing matches. */
 const RECOMMENDATION_LOADING_MS = 450;
+/** Remembers the visitor's preferred display currency across visits. */
+const CURRENCY_STORAGE_KEY = "afram:affordability-currency";
+
+function readStoredCurrency(): CurrencyCode {
+  if (typeof window === "undefined") return "GHS";
+  const stored = window.localStorage.getItem(CURRENCY_STORAGE_KEY);
+  return stored === "USD" || stored === "GHS" ? stored : "GHS";
+}
 
 interface AffordabilityCalculatorProps {
   /** Starting income, pre-computed server-side so the calculator opens on Afram's cheapest listing. */
@@ -34,38 +47,81 @@ export function AffordabilityCalculator({
   initialIncome,
   properties,
 }: AffordabilityCalculatorProps) {
+  // The slider itself always operates in GHS — the mortgage assumptions
+  // (rate, LTV, comfortable share) are Ghana-specific business constants
+  // that shouldn't reinterpret when the display currency changes. Only the
+  // numbers shown to the visitor convert.
   const [income, setIncome] = useState(initialIncome);
+  const [currency, setCurrency] = useState<CurrencyCode>("GHS");
   const [open, setOpen] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
 
+  useEffect(() => {
+    // Reads localStorage, which isn't available during the server render —
+    // this necessarily runs once after mount to avoid a hydration mismatch,
+    // rather than as a lazy `useState` initializer.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCurrency(readStoredCurrency());
+  }, []);
+
+  const selectCurrency = (next: CurrencyCode) => {
+    setCurrency(next);
+    window.localStorage.setItem(CURRENCY_STORAGE_KEY, next);
+  };
+
   const snapshot = useMemo(() => incomeToSnapshot(income), [income]);
 
-  // Nearest listings by price. Showing only what is affordable leaves an
-  // empty shelf at most incomes, so show the closest either way and label
-  // them honestly — never imply something is in reach when it is not.
-  //
-  // `all` is the same list unsliced: the cards on the page are the head of
-  // what the dialog shows, so opening it never reshuffles what was on screen.
-  const { matches, all, withinBudget } = useMemo(() => {
-    const affordable = properties.filter((p) => p.priceGhs <= snapshot.price);
-    const pool = affordable.length > 0 ? affordable : properties;
-    const sorted = [...pool].sort(
-      (a, b) => Math.abs(a.priceGhs - snapshot.price) - Math.abs(b.priceGhs - snapshot.price),
-    );
-    return {
-      matches: sorted.slice(0, RECOMMENDATION_COUNT),
-      all: sorted,
-      withinBudget: affordable.length > 0,
-    };
-  }, [properties, snapshot.price]);
+  // Nearest listings by price, matched in one binary search against the
+  // pre-sorted catalogue — see `matchByBudget`. Showing only what is
+  // affordable leaves an empty shelf at most incomes, so show the closest
+  // either way and label them honestly — never imply something is in reach
+  // when it is not.
+  const { matches, all, withinBudget } = useMemo(
+    () => matchByBudget(properties, snapshot.price, RECOMMENDATION_COUNT),
+    [properties, snapshot.price],
+  );
+
+  // The on-page cards and dialog rows show every price in the selected
+  // display currency, converted from the same canonical GHS figure the
+  // matching above used — so a $98,000 card and a "GHS 1.1M" budget never
+  // look unrelated just because the listing itself was priced in USD.
+  const displayMatches = useMemo(
+    () => matches.map((p) => ({ ...p, price: fromGhs(p.priceGhs, currency), currency })),
+    [matches, currency],
+  );
 
   return (
     <div className="border-ink-100 mx-auto mt-10 max-w-5xl rounded-[1.75rem] border bg-white p-7 shadow-sm sm:mt-12 sm:p-10">
-      <label className="text-ink-600 block text-sm font-medium" htmlFor="affordability-income">
-        Your monthly take-home
-      </label>
+      <div className="flex items-center justify-between gap-3">
+        <label className="text-ink-600 block text-sm font-medium" htmlFor="affordability-income">
+          Your monthly take-home
+        </label>
+        <div
+          role="tablist"
+          aria-label="Display currency"
+          className="bg-ink-50 inline-flex shrink-0 items-center gap-0.5 rounded-full p-1"
+        >
+          {CURRENCIES.map((c) => (
+            <button
+              key={c.code}
+              type="button"
+              role="tab"
+              aria-selected={currency === c.code}
+              onClick={() => selectCurrency(c.code)}
+              className={cn(
+                "rounded-full px-3 py-1 text-[13px] font-semibold transition-colors",
+                currency === c.code
+                  ? "bg-brand-600 text-white shadow-sm"
+                  : "text-ink-500 hover:text-ink-900",
+              )}
+            >
+              {c.label}
+            </button>
+          ))}
+        </div>
+      </div>
       <p className="tnum text-ink-900 mt-2 text-[clamp(2rem,5vw,2.75rem)] font-bold tracking-[-0.03em]">
-        {ghs(income)}
+        {formatCurrency(income, currency)}
       </p>
       <input
         id="affordability-income"
@@ -79,15 +135,15 @@ export function AffordabilityCalculator({
         aria-label="Monthly take-home income"
       />
       <div className="text-ink-400 mt-1 flex justify-between text-[12px]">
-        <span className="tnum">{ghs(INCOME_MIN)}</span>
-        <span className="tnum">{ghs(INCOME_MAX)}</span>
+        <span className="tnum">{formatCurrency(INCOME_MIN, currency)}</span>
+        <span className="tnum">{formatCurrency(INCOME_MAX, currency)}</span>
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label="Home price" value={ghsCompact(snapshot.price)} lead />
-        <Stat label="20% deposit" value={ghsCompact(snapshot.deposit)} />
-        <Stat label="Monthly · 5 yr" value={ghs(snapshot.monthly5)} />
-        <Stat label="Monthly · 10 yr" value={ghs(snapshot.monthly10)} accent />
+        <Stat label="Home price" value={formatCurrencyCompact(snapshot.price, currency)} lead />
+        <Stat label="20% deposit" value={formatCurrencyCompact(snapshot.deposit, currency)} />
+        <Stat label="Monthly · 5 yr" value={formatCurrency(snapshot.monthly5, currency)} />
+        <Stat label="Monthly · 10 yr" value={formatCurrency(snapshot.monthly10, currency)} accent />
       </div>
 
       <p className="text-ink-400 mt-6 text-center text-[12.5px] leading-relaxed">
@@ -98,9 +154,9 @@ export function AffordabilityCalculator({
       </p>
 
       <RecommendationStrip
-        key={snapshot.price}
-        matches={matches}
-        all={all}
+        key={`${snapshot.price}-${currency}`}
+        matches={displayMatches}
+        allCount={all.length}
         withinBudget={withinBudget}
         onOpen={() => setOpen(true)}
         triggerRef={trigger}
@@ -115,6 +171,7 @@ export function AffordabilityCalculator({
         properties={all}
         budget={snapshot.price}
         withinBudget={withinBudget}
+        currency={currency}
         deposit={1 - LTV}
         rate={ANNUAL_RATE}
         months={TENOR_MONTHS}
@@ -125,13 +182,13 @@ export function AffordabilityCalculator({
 
 function RecommendationStrip({
   matches,
-  all,
+  allCount,
   withinBudget,
   onOpen,
   triggerRef,
 }: {
   matches: RecommendedProperty[];
-  all: RecommendedProperty[];
+  allCount: number;
   withinBudget: boolean;
   onOpen: () => void;
   triggerRef: React.RefObject<HTMLButtonElement | null>;
@@ -159,7 +216,7 @@ function RecommendationStrip({
           aria-haspopup="dialog"
           className="text-brand-700 hover:text-brand-800 group focus-visible:outline-accent-600 inline-flex items-center gap-1.5 rounded-full text-[14px] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
         >
-          {withinBudget ? `View all ${all.length}` : "View the nearest"}
+          {withinBudget ? `View all ${allCount}` : "View the nearest"}
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
         </button>
       </div>
