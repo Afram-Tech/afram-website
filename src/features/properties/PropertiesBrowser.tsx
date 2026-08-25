@@ -28,7 +28,7 @@ interface Filters {
 const DEFAULT_FILTERS: Filters = { status: "all", location: "all", type: "all", price: "all" };
 
 /** How many cards a scroll into view reveals at a time. */
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 12;
 
 const PRICE_BANDS = [
   { value: "0-100000", label: "Under $100,000", min: 0, max: 100_000 },
@@ -139,12 +139,10 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
   const sentinelRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = sentinelRef.current;
-    console.log("[DEBUG] effect ran", { el, hasMore });
     if (!el || !hasMore) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        console.log("[DEBUG] observer fired", entry.isIntersecting, entry.boundingClientRect);
         if (entry.isIntersecting) {
           setVisibleCount((count) => Math.min(count + PAGE_SIZE, filteredProperties.length));
         }

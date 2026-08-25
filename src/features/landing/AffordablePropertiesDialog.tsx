@@ -6,8 +6,13 @@ import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
 import { Photo } from "@/components/ui/Photo";
-import { paymentForLoan, type RecommendedProperty } from "@/features/landing/affordability";
-import { ghs, ghsCompact } from "@/lib/format";
+import {
+  formatCurrency,
+  formatCurrencyCompact,
+  paymentForLoan,
+  type CurrencyCode,
+  type RecommendedProperty,
+} from "@/features/landing/affordability";
 
 /**
  * The full result set behind the calculator's three cards.
@@ -22,6 +27,7 @@ export function AffordablePropertiesDialog({
   properties,
   budget,
   withinBudget,
+  currency,
   deposit,
   rate,
   months,
@@ -32,6 +38,8 @@ export function AffordablePropertiesDialog({
   /** The home price the slider currently supports, in GHS. */
   budget: number;
   withinBudget: boolean;
+  /** Display currency — every price and monthly figure converts from its canonical GHS value into this. */
+  currency: CurrencyCode;
   /** Deposit share, e.g. 0.2 — kept identical to the calculator's. */
   deposit: number;
   rate: number;
@@ -80,8 +88,8 @@ export function AffordablePropertiesDialog({
               className="text-ink-900 text-[clamp(1.35rem,2.6vw,1.75rem)] leading-[1.15] font-bold tracking-[-0.02em]"
             >
               {withinBudget
-                ? `${n} ${n === 1 ? "home" : "homes"} within ${ghsCompact(budget)}`
-                : `Nothing within ${ghsCompact(budget)} yet`}
+                ? `${n} ${n === 1 ? "home" : "homes"} within ${formatCurrencyCompact(budget, currency)}`
+                : `Nothing within ${formatCurrencyCompact(budget, currency)} yet`}
             </h2>
             <p className="text-ink-500 mt-2 max-w-[52ch] text-[14.5px] leading-relaxed">
               {withinBudget
@@ -102,8 +110,11 @@ export function AffordablePropertiesDialog({
         <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3 sm:px-5 sm:py-4">
           <ul className="space-y-1">
             {properties.map((p) => {
-              const price = ghsCompact(p.priceGhs);
-              const perMonth = `${ghs(Math.round(paymentForLoan(p.priceGhs * (1 - deposit), rate, months)))}/mo`;
+              const price = formatCurrencyCompact(p.priceGhs, currency);
+              const monthlyGhs = Math.round(
+                paymentForLoan(p.priceGhs * (1 - deposit), rate, months),
+              );
+              const perMonth = `${formatCurrency(monthlyGhs, currency)}/mo`;
               return (
                 <li key={p.slug}>
                   <Link

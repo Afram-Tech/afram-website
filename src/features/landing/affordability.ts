@@ -1,3 +1,5 @@
+import { ghs, ghsCompact, usd } from "@/lib/format";
+
 /** Shared math for the affordability calculator, matched to Afram's mortgage amortisation model. */
 export const ANNUAL_RATE = 0.14; // 14% annual interest
 export const TENOR_MONTHS = 10 * 12; // 10-year loan — the comfortable term the home price is solved from
@@ -66,6 +68,36 @@ export function toGhs(amount: number, currency: string): number {
   return currency.toUpperCase() === "USD" ? amount * EXCHANGE_RATE : amount;
 }
 
+/** The currencies the calculator can display in — the two this catalogue actually prices in. */
+export type CurrencyCode = "GHS" | "USD";
+
+export const CURRENCIES: { code: CurrencyCode; label: string }[] = [
+  { code: "GHS", label: "GHS" },
+  { code: "USD", label: "USD" },
+];
+
+/** Convert a canonical GHS amount into `currency`'s units — the inverse of `toGhs`. */
+export function fromGhs(amountGhs: number, currency: CurrencyCode): number {
+  return currency === "USD" ? amountGhs / EXCHANGE_RATE : amountGhs;
+}
+
+/** Format a canonical GHS amount in the given display currency, e.g. formatCurrency(1200, "USD") -> "$100". */
+export function formatCurrency(amountGhs: number, currency: CurrencyCode): string {
+  const converted = fromGhs(amountGhs, currency);
+  return currency === "USD" ? usd(converted) : ghs(converted);
+}
+
+/** Compact form of `formatCurrency`, e.g. formatCurrencyCompact(1_200_000, "USD") -> "$100k". */
+export function formatCurrencyCompact(amountGhs: number, currency: CurrencyCode): string {
+  const converted = fromGhs(amountGhs, currency);
+  if (currency === "GHS") return ghsCompact(converted);
+  if (converted >= 1_000_000) {
+    return `$${(converted / 1_000_000).toFixed(converted % 1_000_000 === 0 ? 0 : 1)}M`;
+  }
+  if (converted >= 1_000) return `$${(converted / 1_000).toFixed(0)}k`;
+  return usd(converted);
+}
+
 export function clampToStep(value: number, min: number, max: number, step: number): number {
   const clamped = Math.min(max, Math.max(min, value));
   return Math.round(clamped / step) * step;
@@ -82,6 +114,45 @@ export function clampToStep(value: number, min: number, max: number, step: numbe
  * pointer moves further out, so the walk stops the moment either side leaves the
  * band — it never re-filters or re-sorts the whole list on a slider move.
  */
+/**
+ * Splits `sorted` (ascending by `priceGhs`) around `target` and picks the
+ * `count` closest to it — in O(log n), not the O(n log n) a filter-then-sort
+ * costs on every slider tick.
+ *
+ * One binary search finds `lo`, the boundary where everything before it is
+ * affordable (`priceGhs <= target`). From there, no further sort is needed
+ * in either branch, because the input is already price-sorted:
+ *  - Within budget: the affordable prefix is ascending by price, so its
+ *    closest entries to `target` are simply its last `count` — the ones
+ *    priced just under budget.
+ *  - Nothing affordable: every remaining entry is over budget, so
+ *    `priceGhs - target` grows in the same order as `priceGhs` itself — the
+ *    list is already sorted by distance too, and the first `count` are the
+ *    nearest.
+ */
+export function matchByBudget(
+  sorted: RecommendedProperty[],
+  target: number,
+  count: number,
+): { matches: RecommendedProperty[]; all: RecommendedProperty[]; withinBudget: boolean } {
+  if (sorted.length === 0) return { matches: [], all: [], withinBudget: false };
+
+  let lo = 0;
+  let hi = sorted.length;
+  while (lo < hi) {
+    const mid = (lo + hi) >>> 1;
+    if (sorted[mid].priceGhs <= target) lo = mid + 1;
+    else hi = mid;
+  }
+
+  if (lo > 0) {
+    const affordable = sorted.slice(0, lo);
+    return { matches: affordable.slice(-count), all: affordable, withinBudget: true };
+  }
+
+  return { matches: sorted.slice(0, count), all: sorted, withinBudget: false };
+}
+
 export function nearestByPrice(
   sorted: RecommendedProperty[],
   target: number,

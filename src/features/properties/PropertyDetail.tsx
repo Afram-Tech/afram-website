@@ -258,7 +258,7 @@ export function PropertyDetail({ property }: { property: Property }) {
             <section>
               <H2>Price history</H2>
               <LockedSection label="price history">
-                <div className="ring-ink-100 mt-4 overflow-hidden rounded-2xl ring-1">
+                <div className="ring-ink-100 mt-4 min-h-[25dvh] overflow-hidden rounded-2xl ring-1">
                   <table className="w-full text-left text-[14px]">
                     <thead>
                       <tr className="bg-ink-50/70 text-ink-400 text-[11px] tracking-wider uppercase">
