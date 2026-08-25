@@ -1,7 +1,16 @@
 "use client";
 
-import { Building2, DollarSign, Home, MapPin, Search, SlidersHorizontal, Tag } from "lucide-react";
-import { useMemo, useState } from "react";
+import {
+  Building2,
+  DollarSign,
+  Home,
+  Loader2,
+  MapPin,
+  Search,
+  SlidersHorizontal,
+  Tag,
+} from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { buttonVariants } from "@/components/ui/button-variants";
 import { FilterDropdown, type FilterOption } from "@/features/properties/FilterDropdown";
@@ -17,6 +26,9 @@ interface Filters {
 }
 
 const DEFAULT_FILTERS: Filters = { status: "all", location: "all", type: "all", price: "all" };
+
+/** How many cards a scroll into view reveals at a time. */
+const PAGE_SIZE = 3;
 
 const PRICE_BANDS = [
   { value: "0-100000", label: "Under $100,000", min: 0, max: 100_000 },
@@ -109,6 +121,39 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
     setFilters(DEFAULT_FILTERS);
     setSearch("");
   };
+
+  // Infinite scroll: reveal PAGE_SIZE cards at a time, resetting to the first
+  // page whenever the filtered result set itself changes (a new search or
+  // filter) rather than every render — adjusted during render, not in an
+  // effect, so a filter change never flashes the old page count first.
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [pagedFor, setPagedFor] = useState(filteredProperties);
+  if (pagedFor !== filteredProperties) {
+    setPagedFor(filteredProperties);
+    setVisibleCount(PAGE_SIZE);
+  }
+
+  const visibleProperties = filteredProperties.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredProperties.length;
+
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = sentinelRef.current;
+    console.log("[DEBUG] effect ran", { el, hasMore });
+    if (!el || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        console.log("[DEBUG] observer fired", entry.isIntersecting, entry.boundingClientRect);
+        if (entry.isIntersecting) {
+          setVisibleCount((count) => Math.min(count + PAGE_SIZE, filteredProperties.length));
+        }
+      },
+      { rootMargin: "600px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore, filteredProperties.length]);
 
   return (
     <>
@@ -208,11 +253,20 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
           </button>
         </div>
       ) : (
-        <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-y-12">
-          {filteredProperties.map((property) => (
-            <PropertyCard key={property.slug} property={property} />
-          ))}
-        </div>
+        <>
+          <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-y-12">
+            {visibleProperties.map((property) => (
+              <PropertyCard key={property.slug} property={property} />
+            ))}
+          </div>
+
+          {hasMore && (
+            <div ref={sentinelRef} className="mt-10 flex items-center justify-center gap-2 py-6">
+              <Loader2 className="text-ink-300 h-5 w-5 animate-spin" />
+              <span className="text-ink-400 text-[13px]">Loading more properties…</span>
+            </div>
+          )}
+        </>
       )}
     </>
   );
