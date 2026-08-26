@@ -9,7 +9,7 @@ export const PAYMENT_TO_INCOME = 0.35; // "comfortable" payment = 35% of take-ho
 export const EXCHANGE_RATE = 12; // GHS per USD, for comparing listings priced in different currencies
 
 export const INCOME_MIN = 2000;
-export const INCOME_MAX = 40000;
+export const INCOME_MAX = 60000;
 export const INCOME_STEP = 500;
 
 export interface RecommendedProperty {
