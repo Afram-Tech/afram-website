@@ -9,7 +9,7 @@ const DEALS = [
   {
     icon: Home,
     type: "Acquisition lending",
-    body: "Finance a verified buyer's purchase of a completed, title-verified home.",
+    body: "Finance a verified member's purchase of a completed, title-verified home.",
     yield: "22–30% p.a.",
     tenure: "1–10 years",
   },

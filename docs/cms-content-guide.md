@@ -94,7 +94,7 @@ time that page is requested. No redeploy, no engineer involved.
 ### Navigation (the header menu, on every page)
 
 - The label on the "Verify a title" link.
-- Every menu group (Buyers / Vendors / Financiers-style items) — its label,
+- Every menu group (Members / Vendors / Financiers-style items) — its label,
   where it links to, its accent color, and its dropdown items (each with a
   label, a short description, and a link).
 
@@ -110,7 +110,7 @@ time that page is requested. No redeploy, no engineer involved.
 ### Home page
 
 - **Hero** — the "Powered by" eyebrow text, the big headline, the hero photo,
-  both buttons (label and link), and the three "For Buyers / For Vendors /
+  both buttons (label and link), and the three "For Members / For Vendors /
   For Financiers" role cards (each card's headline text, link, and photo —
   the card's background color and layout stay fixed, so the row always looks
   intentional no matter what's typed into it).
@@ -177,7 +177,7 @@ real policy text exists, dropping it into a Sanity document is a small job.
 | You want to change…                                     | Where                                                                                         |
 | ------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | The homepage headline, hero photo, or buttons           | `/dashboard/cms` → Home page → Hero                                                           |
-| The three "For Buyers/Vendors/Financiers" cards         | `/dashboard/cms` → Home page → Hero → Role cards                                              |
+| The three "For Members/Vendors/Financiers" cards        | `/dashboard/cms` → Home page → Hero → Role cards                                              |
 | The header menu                                         | `/dashboard/cms` → Navigation                                                                 |
 | Footer links, tagline, or newsletter text               | `/dashboard/cms` → Footer                                                                     |
 | The "How it Works" page copy                            | `/dashboard/cms` → How it Works page                                                          |

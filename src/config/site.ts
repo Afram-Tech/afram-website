@@ -3,7 +3,7 @@ export const siteConfig = {
   legalName: "Afram Technologies",
   tagline: "Liberating Capital.",
   description:
-    "Afram is a blockchain-verified real estate marketplace connecting buyers, vendors, and financiers in Ghana. Buy property with flexible financing, list verified projects to reach ready buyers, or deploy capital into title-verified real estate.",
+    "Afram is a blockchain-verified real estate marketplace connecting members, vendors, and financiers in Ghana. Buy property with flexible financing, list verified projects to reach ready members, or deploy capital into title-verified real estate.",
   url: "https://afram.co",
   ogImage: "/opengraph.png",
   registryUrl: "https://registry.afram.co",

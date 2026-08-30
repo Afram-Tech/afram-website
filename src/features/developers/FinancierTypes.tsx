@@ -8,7 +8,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 const TYPES = [
   {
     name: "Bank & regulated lender",
-    use: "Construction, completion, buyer mortgages",
+    use: "Construction, completion, member mortgages",
     ticket: "GHS 2m – 20m",
     term: "18 mo – 10 yrs",
   },

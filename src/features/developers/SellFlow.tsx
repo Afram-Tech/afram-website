@@ -15,8 +15,8 @@ const STEPS = [
   },
   {
     n: "03",
-    title: "Financed buyers come to you",
-    body: "Buyers arrive Afram-backed — 20% down, the rest paid monthly over up to 10 years.",
+    title: "Financed members come to you",
+    body: "Members arrive Afram-backed — 20% down, the rest paid monthly over up to 10 years.",
   },
   {
     n: "04",
@@ -30,7 +30,7 @@ export function SellFlow() {
     <Section className="bg-ink-50/60">
       <SectionHeading
         title="Four steps from listing to cash."
-        intro="No bank queues for your buyers, no chasing leads for you."
+        intro="No bank queues for your members, no chasing leads for you."
       />
 
       <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">

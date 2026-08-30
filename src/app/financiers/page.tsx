@@ -36,16 +36,16 @@ const FINANCE_PATHS: Path[] = [
     points: [
       ["Verified asset.", "Title confirmed against Lands Commission records."],
       ["First legal charge.", "Registered in the ordinary way, in your name."],
-      ["Repaid from unit sales.", "The same stock buyers are already searching for."],
+      ["Repaid from unit sales.", "The same stock members are already searching for."],
     ],
     cta: { label: "Request a briefing", href: "#briefing" },
   },
   {
-    badge: "Home buyers",
+    badge: "Home members",
     icon: Home,
     title: "Fund the purchase.",
     intro:
-      "A buyer requests financing for a completed unit whose title you have already seen verified.",
+      "A member requests financing for a completed unit whose title you have already seen verified.",
     points: [
       ["Collateral you know.", "Often the same asset you funded during construction."],
       ["Their details reach you direct.", "Your KYC, your affordability call."],
@@ -95,7 +95,7 @@ export default async function FinanciersPage() {
 
       <TwoPaths
         tone="mint"
-        title="Finance the build, or finance the buyer."
+        title="Finance the build, or finance the member."
         paths={FINANCE_PATHS}
       />
       <RecognisedBy />

@@ -8,7 +8,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Browse Verified Properties",
   description:
-    "Browse blockchain-verified properties for sale in Ghana, complete with flexible financing options for qualified buyers.",
+    "Browse blockchain-verified properties for sale in Ghana, complete with flexible financing options for qualified members.",
   path: "/properties",
 });
 

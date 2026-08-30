@@ -1,7 +1,7 @@
 # Afram Website
 
 The public marketing site for [Afram](https://afram.co) — a blockchain-verified real estate
-marketplace connecting buyers, vendors, and financiers in Ghana.
+marketplace connecting members, vendors, and financiers in Ghana.
 
 Built with [Next.js](https://nextjs.org) (App Router), [Tailwind CSS v4](https://tailwindcss.com),
 and TypeScript.

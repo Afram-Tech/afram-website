@@ -13,13 +13,13 @@ export const PERSONAS: Record<string, PersonaContent> = {
     eyebrow: "For individual vendors",
     headline: "Sell faster. Get paid sooner.",
     subhead:
-      "Stop watching capital sit in unsold units. List a verified project, bring it financed buyers, and recover your cash without waiting on slow sales.",
+      "Stop watching capital sit in unsold units. List a verified project, bring it financed members, and recover your cash without waiting on slow sales.",
     image: unsplash("photo-1605276374104-dee2a0ed3cd6"),
     imageBadge: "Verified project",
     stats: [
-      { label: "Buyer defaults today", value: "38%" },
+      { label: "Member defaults today", value: "38%" },
       { label: "Bank rates you skip", value: "20–27%" },
-      { label: "Buyer financing", value: "up to 10 yrs", accent: true },
+      { label: "Member financing", value: "up to 10 yrs", accent: true },
     ],
     blocks: [
       {
@@ -30,7 +30,7 @@ export const PERSONAS: Record<string, PersonaContent> = {
       {
         title: "Your financials stay private",
         icon: "Lock",
-        body: "We publish only what a buyer needs to decide — verified title, permits, unit price. Your costs, margins and funding sources are never disclosed.",
+        body: "We publish only what a member needs to decide — verified title, permits, unit price. Your costs, margins and funding sources are never disclosed.",
       },
       {
         title: "Simple terms, no hidden cut",
@@ -40,12 +40,12 @@ export const PERSONAS: Record<string, PersonaContent> = {
       {
         title: "Start with a few units",
         icon: "Building2",
-        body: "You do not have to commit a whole project. List a handful of units and watch the financed buyers arrive before you scale.",
+        body: "You do not have to commit a whole project. List a handful of units and watch the financed members arrive before you scale.",
       },
       {
         title: "Deposits protected. No more chasing defaulters.",
         icon: "ShieldCheck",
-        body: "Buyer deposits are held by Afram rather than paid straight to you, and buyers arrive with financing already arranged — so the 38% default problem stops being yours to manage.",
+        body: "Member deposits are held by Afram rather than paid straight to you, and members arrive with financing already arranged — so the 38% default problem stops being yours to manage.",
       },
       {
         title: "No formal title yet? Talk to us anyway.",
@@ -57,19 +57,19 @@ export const PERSONAS: Record<string, PersonaContent> = {
     faqs: [
       {
         q: "Do I lose control or hand over a share of my project?",
-        a: "No. You keep full ownership and full control of your project. Afram takes no equity and makes no decisions for you — we verify the title, endorse the project, and bring you buyers who already have financing. The units and the brand stay yours.",
+        a: "No. You keep full ownership and full control of your project. Afram takes no equity and makes no decisions for you — we verify the title, endorse the project, and bring you members who already have financing. The units and the brand stay yours.",
       },
       {
         q: "How does an Afram endorsement help me sell faster?",
-        a: "Buyers in Ghana are cautious for good reason — land disputes and stalled projects are common. An endorsement tells them your title is clean and your project has passed our review, so they spend less time second-guessing and more time deciding. Less hesitation means quicker sales.",
+        a: "Members in Ghana are cautious for good reason — land disputes and stalled projects are common. An endorsement tells them your title is clean and your project has passed our review, so they spend less time second-guessing and more time deciding. Less hesitation means quicker sales.",
       },
       {
-        q: "Are these real buyers, or just more leads to chase?",
-        a: "They are committed buyers, not cold enquiries. Because financing is arranged through Afram — 20% down and the rest paid monthly over up to 10 years — the people we send you can actually afford the unit and are ready to sign. You spend your time closing, not qualifying.",
+        q: "Are these real members, or just more leads to chase?",
+        a: "They are committed members, not cold enquiries. Because financing is arranged through Afram — 20% down and the rest paid monthly over up to 10 years — the people we send you can actually afford the unit and are ready to sign. You spend your time closing, not qualifying.",
       },
       {
         q: "Will my project's financials be exposed?",
-        a: "No. Your pricing, costs, and margins stay private. We only publish what a buyer needs to make a confident decision — verified title, permits, and the unit price. Everything else is shared on your terms, under a partnership agreement.",
+        a: "No. Your pricing, costs, and margins stay private. We only publish what a member needs to make a confident decision — verified title, permits, and the unit price. Everything else is shared on your terms, under a partnership agreement.",
       },
     ],
   },
@@ -79,13 +79,13 @@ export const PERSONAS: Record<string, PersonaContent> = {
     eyebrow: "For vendor firms",
     headline: "Accelerate sales without diluting your brand.",
     subhead:
-      "Reach middle- and high-income buyers who are priced out by 20–27% mortgages — with Afram-backed financing, market intelligence, and an endorsement that protects your name.",
+      "Reach middle- and high-income members who are priced out by 20–27% mortgages — with Afram-backed financing, market intelligence, and an endorsement that protects your name.",
     image: unsplash("photo-1576941089067-2de3c901e126"),
     imageBadge: "Verified project",
     stats: [
       { label: "Units per project", value: "20–500+" },
       { label: "Your brand", value: "protected" },
-      { label: "Buyer financing", value: "built in", accent: true },
+      { label: "Member financing", value: "built in", accent: true },
     ],
     blocks: [
       {
@@ -96,7 +96,7 @@ export const PERSONAS: Record<string, PersonaContent> = {
       {
         title: "No channel conflict",
         icon: "Handshake",
-        body: "Afram works alongside your sales team and your agents, never around them. We bring financed buyers into your existing pipeline and your team closes on your terms. Commission structures are agreed up front.",
+        body: "Afram works alongside your sales team and your agents, never around them. We bring financed members into your existing pipeline and your team closes on your terms. Commission structures are agreed up front.",
       },
       {
         title: "An endorsement, not a co-brand",
@@ -109,9 +109,9 @@ export const PERSONAS: Record<string, PersonaContent> = {
         body: "Our verification and endorsement criteria are designed around REAC and GREDA expectations on title, permits and delivery. Working with Afram reinforces the standards your firm already holds.",
       },
       {
-        title: "Financed buyers, plus the data to guide your pipeline",
+        title: "Financed members, plus the data to guide your pipeline",
         icon: "TrendingUp",
-        body: "Demand signals drawn from real buyer activity — which corridors are heating up, what unit sizes and price bands are moving, where buyers are searching. It tells you what to build next instead of guessing.",
+        body: "Demand signals drawn from real member activity — which corridors are heating up, what unit sizes and price bands are moving, where members are searching. It tells you what to build next instead of guessing.",
       },
     ],
     blocksCta: { label: "Talk to a partner", href: "#talk" },
@@ -122,15 +122,15 @@ export const PERSONAS: Record<string, PersonaContent> = {
       },
       {
         q: "Does Afram financing actually convert to sales, or just interest?",
-        a: "Conversion is the point. The buyers we introduce already have 20%-down, up-to-10-year financing arranged, so they clear the affordability wall that 20–27% mortgages put in front of middle- and high-income households. We measure outcomes by units sold and capital recovered, and we share those figures with partners — not vanity numbers.",
+        a: "Conversion is the point. The members we introduce already have 20%-down, up-to-10-year financing arranged, so they clear the affordability wall that 20–27% mortgages put in front of middle- and high-income households. We measure outcomes by units sold and capital recovered, and we share those figures with partners — not vanity numbers.",
       },
       {
         q: "Will this create channel conflict with our existing agents?",
-        a: "No. Afram works alongside your sales team and agents, not around them. We bring financed buyers to your existing pipeline and let your team close on your terms. Commission structures are agreed up front in the partnership so there are no surprises or competing incentives.",
+        a: "No. Afram works alongside your sales team and agents, not around them. We bring financed members to your existing pipeline and let your team close on your terms. Commission structures are agreed up front in the partnership so there are no surprises or competing incentives.",
       },
       {
         q: "What market intelligence and data do we get access to?",
-        a: "Partners get demand signals from real buyer activity — which corridors are heating up, what unit sizes and price bands are selling, and where buyers are searching. It helps you decide what to build and where, so future phases match real demand instead of guesswork.",
+        a: "Partners get demand signals from real member activity — which corridors are heating up, what unit sizes and price bands are selling, and where members are searching. It helps you decide what to build and where, so future phases match real demand instead of guesswork.",
       },
       {
         q: "Does this align with REAC and GREDA standards?",

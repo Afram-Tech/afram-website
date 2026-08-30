@@ -12,7 +12,7 @@ export interface RoleMetadata {
 }
 
 export const ROLE_METADATA: Record<UserRole, RoleMetadata> = {
-  [UserRole.Buyer]: { role: UserRole.Buyer, label: "Buyer", href: "/properties" },
+  [UserRole.Buyer]: { role: UserRole.Buyer, label: "Member", href: "/properties" },
   [UserRole.Vendor]: { role: UserRole.Vendor, label: "Vendor", href: "/developers" },
   [UserRole.Financier]: { role: UserRole.Financier, label: "Financier", href: "/financiers" },
   [UserRole.Agent]: { role: UserRole.Agent, label: "Agent", href: "/properties" },
