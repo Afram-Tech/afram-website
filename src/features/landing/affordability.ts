@@ -7,6 +7,7 @@ export const SHORT_TENOR_MONTHS = 5 * 12; // 5-year loan — same home, shown at
 export const LTV = 0.8; // financier covers 80% of the property value
 export const PAYMENT_TO_INCOME = 0.35; // "comfortable" payment = 35% of take-home
 export const EXCHANGE_RATE = 12; // GHS per USD, for comparing listings priced in different currencies
+export const RECOMMENDATION_BAND = 0.5; // "closest" listings may be priced up to 50% over budget; further than that, show nothing rather than a misleading match
 
 export const INCOME_MIN = 2000;
 export const INCOME_MAX = 60000;
@@ -104,17 +105,6 @@ export function clampToStep(value: number, min: number, max: number, step: numbe
 }
 
 /**
- * Closest matches to `target` out of a list pre-sorted ascending by `priceGhs`,
- * limited to prices within `band` of it (e.g. `band = 0.4` allows ±40%). Returns
- * an empty list rather than padding with far-off properties when nothing qualifies.
- *
- * Binary-searches for the affordable/over-budget boundary (O(log n)), then walks
- * outward from it so properties just under budget are preferred over ones just
- * over. Because the list is sorted, distance from `target` only grows as each
- * pointer moves further out, so the walk stops the moment either side leaves the
- * band — it never re-filters or re-sorts the whole list on a slider move.
- */
-/**
  * Splits `sorted` (ascending by `priceGhs`) around `target` and picks the
  * `count` closest to it — in O(log n), not the O(n log n) a filter-then-sort
  * costs on every slider tick.
@@ -125,15 +115,19 @@ export function clampToStep(value: number, min: number, max: number, step: numbe
  *  - Within budget: the affordable prefix is ascending by price, so its
  *    closest entries to `target` are simply its last `count` — the ones
  *    priced just under budget.
- *  - Nothing affordable: every remaining entry is over budget, so
- *    `priceGhs - target` grows in the same order as `priceGhs` itself — the
- *    list is already sorted by distance too, and the first `count` are the
- *    nearest.
+ *  - Nothing affordable: the over-budget tail is ascending by price, so it
+ *    is already sorted by distance from `target` too. A second binary search
+ *    finds where that tail leaves `band` (e.g. `band = 0.5` allows up to 50%
+ *    over budget) and only that nearby slice is returned — never padded with
+ *    listings so far over budget that "closest" would be misleading. If
+ *    nothing qualifies, `matches`/`all` come back empty rather than showing
+ *    a mismatched property.
  */
 export function matchByBudget(
   sorted: RecommendedProperty[],
   target: number,
   count: number,
+  band: number = RECOMMENDATION_BAND,
 ): { matches: RecommendedProperty[]; all: RecommendedProperty[]; withinBudget: boolean } {
   if (sorted.length === 0) return { matches: [], all: [], withinBudget: false };
 
@@ -150,43 +144,15 @@ export function matchByBudget(
     return { matches: affordable.slice(-count), all: affordable, withinBudget: true };
   }
 
-  return { matches: sorted.slice(0, count), all: sorted, withinBudget: false };
-}
-
-export function nearestByPrice(
-  sorted: RecommendedProperty[],
-  target: number,
-  count: number,
-  band: number,
-): RecommendedProperty[] {
-  if (target <= 0 || sorted.length === 0) return [];
-
-  const minPrice = target * (1 - band);
   const maxPrice = target * (1 + band);
-
-  let lo = 0;
-  let hi = sorted.length;
-  while (lo < hi) {
-    const mid = (lo + hi) >>> 1;
-    if (sorted[mid].priceGhs <= target) lo = mid + 1;
-    else hi = mid;
+  let hiBound = lo;
+  let hiSearch = sorted.length;
+  while (hiBound < hiSearch) {
+    const mid = (hiBound + hiSearch) >>> 1;
+    if (sorted[mid].priceGhs <= maxPrice) hiBound = mid + 1;
+    else hiSearch = mid;
   }
 
-  const result: RecommendedProperty[] = [];
-  let under = lo - 1;
-  let over = lo;
-  let underInBand = true;
-  let overInBand = true;
-  while (result.length < count && (underInBand || overInBand)) {
-    if (underInBand) {
-      if (under >= 0 && sorted[under].priceGhs >= minPrice) result.push(sorted[under--]);
-      else underInBand = false;
-    }
-    if (result.length >= count) break;
-    if (overInBand) {
-      if (over < sorted.length && sorted[over].priceGhs <= maxPrice) result.push(sorted[over++]);
-      else overInBand = false;
-    }
-  }
-  return result.sort((a, b) => a.priceGhs - b.priceGhs);
+  const nearest = sorted.slice(lo, hiBound);
+  return { matches: nearest.slice(0, count), all: nearest, withinBudget: false };
 }

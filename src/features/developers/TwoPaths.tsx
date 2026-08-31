@@ -27,10 +27,10 @@ export const VENDOR_PATHS: Path[] = [
   {
     badge: "Sell faster",
     icon: TrendingUp,
-    title: "Get access to already financed buyers.",
-    intro: "Buyers arrive approved. Their financier pays you the full price at completion.",
+    title: "Get access to already financed members.",
+    intro: "Members arrive approved. Their financier pays you the full price at completion.",
     points: [
-      ["Paid in full.", "Repayment stays with the buyer and their financier."],
+      ["Paid in full.", "Repayment stays with the member and their financier."],
       ["Verified title.", "The ownership question is answered on the listing."],
       ["Your name, your agents.", "Your team closes every sale."],
     ],

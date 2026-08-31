@@ -8,7 +8,7 @@ test("home page renders the hero section and role cards", async ({ page }) => {
     }),
   ).toBeVisible();
   await expect(page.getByRole("link", { name: "View Properties" })).toBeVisible();
-  await expect(page.getByRole("link", { name: /For Buyers/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /For Members/ })).toBeVisible();
 });
 
 test("nav links to the developers and financiers persona pages", async ({ page }) => {

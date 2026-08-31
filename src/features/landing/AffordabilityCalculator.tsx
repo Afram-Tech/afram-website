@@ -201,7 +201,10 @@ function RecommendationStrip({
     return () => clearTimeout(timer);
   }, []);
 
-  if (!isMatching && matches.length === 0) return null;
+  // Unlike `isMatching`, emptiness is already known synchronously — there's
+  // nothing to simulate loading toward, so skip the skeleton entirely rather
+  // than flashing it before the section disappears.
+  if (matches.length === 0) return null;
 
   return (
     <div className="border-ink-100 mt-8 border-t pt-7">

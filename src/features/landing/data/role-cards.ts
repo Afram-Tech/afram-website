@@ -9,7 +9,7 @@ export interface RoleCard {
 
 export const ROLE_CARDS: RoleCard[] = [
   {
-    eyebrow: "For Buyers",
+    eyebrow: "For Members",
     title: "Buy property with confidence and flexible financing",
     href: "/properties",
     backgroundColor: "#e6faf9",

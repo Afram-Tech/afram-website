@@ -257,7 +257,7 @@ export default function HowItWorksPage() {
           <div>
             <SectionHeading
               title="Questions, answered plainly"
-              intro="The questions buyers and investors actually ask us — with straight answers."
+              intro="The questions members and investors actually ask us — with straight answers."
             />
             <CapitalAtRiskBadge variant="block" className="mt-8 max-w-sm" />
           </div>

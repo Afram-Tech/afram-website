@@ -148,7 +148,7 @@ export const PERSONAS: Record<string, PersonaContent> = {
     faqs: [
       {
         q: "What ESG and impact reporting do you provide?",
-        a: "We report on the outcomes your mandate tracks — first-time buyers funded, locality, ticket size and affordability of the monthly payment — drawn from the underlying loan records. Reports are delivered on your cadence and reference recognised affordable-housing measures rather than headline figures.",
+        a: "We report on the outcomes your mandate tracks — first-time members funded, locality, ticket size and affordability of the monthly payment — drawn from the underlying loan records. Reports are delivered on your cadence and reference recognised affordable-housing measures rather than headline figures.",
       },
       {
         q: "How is cross-border AML and FATF compliance handled?",

@@ -23,7 +23,7 @@ import { buildFaqJsonLd, buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "List Properties — Raise Capital and Accelerate Sales",
   description:
-    "List an Afram-verified project and reach pre-financed, ready buyers. Recover capital faster without waiting on slow sales, whether you're an individual vendor or a development firm.",
+    "List an Afram-verified project and reach pre-financed, ready members. Recover capital faster without waiting on slow sales, whether you're an individual vendor or a development firm.",
   path: "/developers",
 });
 
@@ -64,7 +64,7 @@ export default async function DevelopersPage() {
         image="/for-vendors-hero.webp"
         imageAlt="A vendor reviewing project plans on-site"
         headline={["Raise Capital", "and accelerate sales"]}
-        subhead="List an Afram-verified project and bring it financed buyers who are ready to sign — and recover capital without waiting on slow sales."
+        subhead="List an Afram-verified project and bring it financed members who are ready to sign — and recover capital without waiting on slow sales."
         ctaLabel="Get Started"
         ctaHref="https://app.staging.afram.co/signup?userType=issuer"
       />
@@ -91,7 +91,7 @@ export default async function DevelopersPage() {
 
       <PersonaFinalCta
         title="Turn idle inventory into cash."
-        subtitle="List a verified project and let financed buyers come to you."
+        subtitle="List a verified project and let financed members come to you."
         primary={{ label: "List a project", href: siteConfig.signUpUrl }}
         secondary={{ label: "Talk to a partner", href: "#talk" }}
       />

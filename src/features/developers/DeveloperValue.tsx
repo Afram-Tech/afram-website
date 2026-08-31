@@ -6,12 +6,12 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 const PILLARS = [
   {
     title: "Sell faster",
-    body: "A verified, Afram-endorsed project gives cautious buyers the confidence to decide quickly.",
+    body: "A verified, Afram-endorsed project gives cautious members the confidence to decide quickly.",
     featured: false,
   },
   {
-    title: "Built-in financing for your buyers",
-    body: "Buyers pay 20% upfront and spread the balance over up to 10 years, in Ghana Cedis. No bank queues.",
+    title: "Built-in financing for your members",
+    body: "Members pay 20% upfront and spread the balance over up to 10 years, in Ghana Cedis. No bank queues.",
     featured: true,
   },
   {
@@ -27,7 +27,7 @@ export function DeveloperValue() {
       <SectionHeading
         eyebrow="Why list with Afram"
         title="Sell faster. Get paid sooner."
-        intro="List a verified project and let financed buyers come to you."
+        intro="List a verified project and let financed members come to you."
       />
       <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
         {PILLARS.map((pillar, index) => (
