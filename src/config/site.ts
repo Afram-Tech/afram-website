@@ -10,7 +10,7 @@ export const siteConfig = {
   /** Auth and the buyer dashboard live in the Afram app, not on this marketing site. */
   appUrl: "https://app.staging.afram.co",
   signInUrl: "https://app.staging.afram.co/signin",
-  signUpUrl: "https://app.staging.afram.co/signup",
+  signUpUrl: "https://app.staging.afram.co/get-started",
   social: {
     twitter: "@afram",
     facebook: "https://facebook.com/afram",
