@@ -2,16 +2,22 @@ import { Bath, BedDouble, MapPin, Maximize } from "lucide-react";
 import Link from "next/link";
 
 import { Photo } from "@/components/ui/Photo";
+import { MonthlyEstimate } from "@/features/landing/MonthlyEstimate";
 import type { Property } from "@/features/landing/data/properties";
 import { formatMoney, formatPropertySize, titleCase } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
+/**
+ * The card is an <article>, not a <a>: the monthly breakdown's (i) trigger
+ * and its "Full terms" link cannot sit inside an anchor. The title link is
+ * stretched over the whole card with a ::before overlay instead, so the card
+ * still clicks through everywhere the tooltip does not cover.
+ */
 export function PropertyCard({ property, className }: { property: Property; className?: string }) {
   return (
-    <Link
-      href={`/properties/${property.slug}`}
+    <article
       className={cn(
-        "group flex flex-col transition-transform duration-300 hover:-translate-y-1",
+        "group relative flex flex-col transition-transform duration-300 focus-within:z-20 hover:z-20 hover:-translate-y-1",
         className,
       )}
     >
@@ -36,15 +42,27 @@ export function PropertyCard({ property, className }: { property: Property; clas
       </div>
 
       <h3 className="text-ink-900 group-hover:text-brand-700 mt-3 text-[18px] font-bold tracking-[-0.01em] transition-colors">
-        {property.name}
+        <Link
+          href={`/properties/${property.slug}`}
+          className="before:absolute before:inset-0 before:content-['']"
+        >
+          {property.name}
+        </Link>
       </h3>
       <p className="text-ink-500 mt-1 flex items-center gap-1 text-[13px]">
         <MapPin className="text-brand-500 h-3.5 w-3.5" />
         {property.location}
       </p>
-      <p className="text-brand-500 mt-2 text-[18px] font-bold">
-        From {formatMoney(property.price, property.currency)}
-      </p>
+
+      <div className="mt-3 flex items-end justify-between gap-4">
+        <div>
+          <p className="text-ink-400 text-[11px] font-semibold tracking-[0.1em] uppercase">From</p>
+          <p className="text-ink-900 mt-1 text-[18px] font-bold">
+            {formatMoney(property.price, property.currency)}
+          </p>
+        </div>
+        <MonthlyEstimate price={property.price} currency={property.currency} />
+      </div>
 
       <div className="border-ink-100 text-ink-500 mt-4 flex items-center gap-5 border-t pt-3 text-[13px]">
         <span className="flex items-center gap-1.5">
@@ -60,6 +78,6 @@ export function PropertyCard({ property, className }: { property: Property; clas
           {formatPropertySize(property.sqft)}
         </span>
       </div>
-    </Link>
+    </article>
   );
 }
