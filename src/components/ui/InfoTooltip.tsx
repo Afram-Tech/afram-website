@@ -73,23 +73,23 @@ export function InfoTooltip({
         onFocus={() => setOpen(true)}
         onBlur={() => setOpen(false)}
         className={cn(
-          "text-ink-400 hover:text-brand-500 focus-visible:ring-brand-300 rounded-full transition-colors outline-none focus-visible:ring-2",
-          open && "text-brand-500",
+          "text-brand-500 hover:text-brand-700 focus-visible:ring-brand-300 rounded-full transition-colors outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+          open && "text-brand-700",
         )}
       >
-        <Info className="h-[15px] w-[15px]" />
+        <Info className="h-4 w-4" strokeWidth={1.75} />
       </button>
 
       <div
         id={panelId}
         role="tooltip"
         className={cn(
-          "absolute bottom-full left-1/2 z-30 w-[290px] max-w-[min(290px,calc(100vw-2rem))] -translate-x-1/2 pb-2.5 transition-all duration-150",
+          "absolute bottom-full left-1/2 z-30 w-[280px] max-w-[min(280px,calc(100vw-2rem))] -translate-x-1/2 pb-2 transition-all duration-150",
           open ? "visible opacity-100" : "invisible translate-y-1 opacity-0",
           panelClassName,
         )}
       >
-        <div className="ring-ink-100 rounded-2xl bg-white p-5 text-left shadow-[0_18px_40px_-12px_rgba(2,46,51,0.25)] ring-1">
+        <div className="ring-ink-100/80 rounded-2xl bg-white p-5 text-left font-normal tracking-normal normal-case shadow-[0_22px_55px_-14px_rgba(2,46,51,0.3)] ring-1">
           {children}
         </div>
       </div>
