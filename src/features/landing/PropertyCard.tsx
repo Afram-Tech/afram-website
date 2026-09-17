@@ -54,10 +54,10 @@ export function PropertyCard({ property, className }: { property: Property; clas
         {property.location}
       </p>
 
-      <div className="mt-3 flex items-end justify-between gap-4">
+      <div className="mt-4 flex items-end justify-between gap-4">
         <div>
-          <p className="text-ink-400 text-[11px] font-semibold tracking-[0.1em] uppercase">From</p>
-          <p className="text-ink-900 mt-1 text-[18px] font-bold">
+          <p className="text-ink-400 text-[11px] font-semibold tracking-[0.12em] uppercase">From</p>
+          <p className="text-ink-900 mt-1.5 text-[20px] font-bold tracking-[-0.01em]">
             {formatMoney(property.price, property.currency)}
           </p>
         </div>
