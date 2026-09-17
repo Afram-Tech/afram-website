@@ -8,6 +8,7 @@ export const LTV = 0.8; // financier covers 80% of the property value
 export const PAYMENT_TO_INCOME = 0.35; // "comfortable" payment = 35% of take-home
 export const EXCHANGE_RATE = 12; // GHS per USD, for comparing listings priced in different currencies
 export const RECOMMENDATION_BAND = 0.5; // "closest" listings may be priced up to 50% over budget; further than that, show nothing rather than a misleading match
+export const MARKETPLACE_AVERAGE_RATE = 0.12; // indicative rate shown on listing cards — the average across the financiers on Afram, until per-listing terms come from the backend
 
 export const INCOME_MIN = 2000;
 export const INCOME_MAX = 60000;
@@ -156,3 +157,19 @@ export function matchByBudget(
   const nearest = sorted.slice(lo, hiBound);
   return { matches: nearest.slice(0, count), all: nearest, withinBudget: false };
 }
+
+/**
+ * The indicative monthly repayment shown on a listing card: the buyer puts
+ * down the deposit (1 - LTV) and repays the balance over TENOR_MONTHS at the
+ * marketplace average rate. Placeholder math — the backend does not return
+ * per-listing financing terms yet, so every card is quoted on the same plan.
+ */
+export function indicativeMonthly(price: number): number {
+  return Math.round(paymentForLoan(price * LTV, MARKETPLACE_AVERAGE_RATE, TENOR_MONTHS));
+}
+
+/** The deposit share of a listing price, as a whole percentage — e.g. 20. */
+export const DEPOSIT_PERCENT = Math.round((1 - LTV) * 100);
+
+/** The indicative repayment term, in years — e.g. 10. */
+export const TENOR_YEARS = TENOR_MONTHS / 12;
