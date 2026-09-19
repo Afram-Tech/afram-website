@@ -204,7 +204,15 @@ export function LocationPicker({
         if (e.target === dialogRef.current) dialogRef.current?.close();
       }}
       className={cn(
-        "m-0 flex max-h-none w-full max-w-none flex-col overflow-hidden bg-white p-0 shadow-xl backdrop:bg-black/50",
+        // The browser's own `dialog:not([open]) { display: none }` is a
+        // user-agent–origin rule, which always loses to an author-origin
+        // class — so an unconditional `flex` here would win the cascade
+        // and keep the dialog visible even while closed. Gating display on
+        // the `open` prop directly (not the dialog's own [open] attribute,
+        // which showModal()/close() only toggle a render later) avoids
+        // relying on that UA rule at all.
+        open ? "flex" : "hidden",
+        "m-0 max-h-none w-full max-w-none flex-col overflow-hidden bg-white p-0 shadow-xl backdrop:bg-black/50",
         "fixed inset-x-0 top-[8vh] bottom-0 rounded-t-2xl",
         "sm:inset-auto sm:top-1/2 sm:left-1/2 sm:h-[min(640px,85vh)] sm:w-[min(900px,92vw)] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl",
       )}

@@ -5,6 +5,7 @@ import {
   LocationPicker,
   type LocationPickerSelection,
 } from "@/features/properties/LocationPicker";
+import { __resetRecentLocationsCacheForTest } from "@/features/properties/location-picker/useRecentLocations";
 
 function open(props: Partial<React.ComponentProps<typeof LocationPicker>> = {}) {
   const onOpenChange = vi.fn();
@@ -15,6 +16,7 @@ function open(props: Partial<React.ComponentProps<typeof LocationPicker>> = {}) 
 
 beforeEach(() => {
   localStorage.clear();
+  __resetRecentLocationsCacheForTest();
 });
 
 afterEach(() => {
