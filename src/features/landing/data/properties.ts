@@ -7,7 +7,21 @@ export interface Property {
   id: string;
   slug: string;
   name: string;
+  /** Display string, e.g. "Accra, Greater Accra" — unchanged, for existing
+   *  consumers (cards, the detail page's map embed). Filtering should use
+   *  `city`/`region` below instead: `location` collapses them, so two
+   *  properties in different cities of the same region become unrelated
+   *  strings with no way to filter "the whole region" independent of city —
+   *  see docs/location-search/00-findings.md §A2. */
   location: string;
+  /** Raw city/region text as the API returns it — not resolved against the
+   *  taxonomy at fetch time (see getPropertyLocationTokens in
+   *  property-search.ts, which normalises and matches these against a
+   *  taxonomy node's canonical name at filter time instead, the same
+   *  design afram-web's getProjectLocationTokens uses). Either can be
+   *  null: a listing may have one without the other. */
+  city: string | null;
+  region: string | null;
   tags: string[];
   price: number;
   currency: string;
@@ -113,6 +127,8 @@ function mapProperty(project: RawProject): Property | undefined {
     slug,
     name,
     location: [property.city, property.region].filter(Boolean).join(", ") || "Ghana",
+    city: property.city || null,
+    region: property.region || null,
     tags,
     price: property.price,
     currency: property.currency || "USD",

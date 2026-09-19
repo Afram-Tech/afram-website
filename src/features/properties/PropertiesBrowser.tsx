@@ -10,22 +10,37 @@ import {
   SlidersHorizontal,
   Tag,
 } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { buttonVariants } from "@/components/ui/button-variants";
 import { FilterDropdown, type FilterOption } from "@/features/properties/FilterDropdown";
+import { LocationPicker, type LocationPickerSelection } from "@/features/properties/LocationPicker";
 import type { Property } from "@/features/landing/data/properties";
 import { PropertyCard } from "@/features/landing/PropertyCard";
 import { titleCase } from "@/lib/format";
+import { getBySlug, getPath } from "@/lib/location-taxonomy";
+import { clientSearchProperties } from "@/lib/property-search";
+import {
+  filtersFromSearchParams,
+  filtersToSearchParams,
+  type PropertySearchFilters,
+} from "@/lib/property-search-filters";
 
+/**
+ * Status/type/price stay local component state, never written to the URL —
+ * same scope decision afram-web's BrowseProjects migration made when it
+ * adopted this engine: only what already had a taxonomy-backed picker
+ * (region/city/area) moves to the URL in this pass. See that repo's
+ * BrowseProjects.tsx for the identical split.
+ */
 interface Filters {
   status: string;
-  location: string;
   type: string;
   price: string;
 }
 
-const DEFAULT_FILTERS: Filters = { status: "all", location: "all", type: "all", price: "all" };
+const DEFAULT_FILTERS: Filters = { status: "all", type: "all", price: "all" };
 
 /** How many cards a scroll into view reveals at a time. */
 const PAGE_SIZE = 12;
@@ -36,6 +51,23 @@ const PRICE_BANDS = [
   { value: "300000-600000", label: "$300,000 – $600,000", min: 300_000, max: 600_000 },
   { value: "600000-", label: "Over $600,000", min: 600_000, max: Infinity },
 ];
+
+/** Fixed to what clientSearchProperties' status filter actually understands
+ *  (getPropertyAvailability's available/under_offer split) — not every raw
+ *  PropertyStatus value that happens to appear in the data. The dropdown
+ *  used to list whatever statuses existed verbatim (Listed, Pending, Sold,
+ *  Divided…), but nothing here filtered by "Sold" or "Divided" in a way
+ *  that matched the engine's status semantics; this makes the two agree. */
+const STATUS_OPTIONS: FilterOption[] = [
+  { value: "all", label: "All Status" },
+  { value: "available", label: "Available" },
+  { value: "under_offer", label: "Under Offer" },
+];
+
+/** Params the codec owns — cleared before re-applying a patch, so a patch
+ *  that omits a field actually removes it rather than leaving a stale
+ *  value from a previous selection sitting in the URL. */
+const CODEC_PARAM_KEYS = ["region", "city", "area"];
 
 function uniqueOptions(values: string[], allLabel: string): FilterOption[] {
   const seen = new Map<string, string>();
@@ -53,25 +85,65 @@ function uniqueOptions(values: string[], allLabel: string): FilterOption[] {
 }
 
 export function PropertiesBrowser({ properties }: { properties: Property[] }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
+  const [locationPickerOpen, setLocationPickerOpen] = useState(false);
 
-  const statusOptions = useMemo(
-    () =>
-      uniqueOptions(
-        properties.map((p) => p.status),
-        "All Status",
-      ),
-    [properties],
-  );
-  const locationOptions = useMemo(
-    () =>
-      uniqueOptions(
-        properties.map((p) => p.location),
-        "All Locations",
-      ),
-    [properties],
-  );
+  /* ─── Location (LocationPicker + URL) ───
+     region/city/area are URL-driven, read through the shared codec — the
+     same taxonomy-backed model afram-web's BrowseProjects.tsx uses. Status/
+     type/price stay in local `filters` state (see the Filters comment
+     above). */
+  const urlFilters = useMemo(() => filtersFromSearchParams(searchParams), [searchParams]);
+
+  const selectedLocationNode = urlFilters.city
+    ? getBySlug(urlFilters.city)
+    : urlFilters.region
+      ? getBySlug(urlFilters.region)
+      : null;
+  const selectedLocationLabel = selectedLocationNode
+    ? "displayName" in selectedLocationNode
+      ? selectedLocationNode.displayName
+      : selectedLocationNode.name
+    : null;
+
+  /* Merges a codec-owned patch into the URL without disturbing params the
+     codec doesn't model — filtersToSearchParams on its own builds a
+     URLSearchParams from scratch, which would silently drop anything else
+     a future feature adds to this URL if used directly as the next value. */
+  const applyFilterParams = (patch: PropertySearchFilters) => {
+    const merged = new URLSearchParams(searchParams.toString());
+    for (const key of CODEC_PARAM_KEYS) merged.delete(key);
+    for (const [key, value] of filtersToSearchParams(patch)) merged.set(key, value);
+    const query = merged.toString();
+    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+  };
+
+  const handleLocationSelect = (selection: LocationPickerSelection) => {
+    const next: PropertySearchFilters = { ...urlFilters };
+    delete next.region;
+    delete next.city;
+    delete next.area;
+
+    if (selection.level === "region") {
+      next.region = selection.slug;
+    } else if (selection.level === "city") {
+      next.city = selection.slug;
+      const region = getPath(selection.id)[0];
+      if (region) next.region = region.slug;
+    } else {
+      next.area = selection.slug;
+      const [region, city] = getPath(selection.id);
+      if (region) next.region = region.slug;
+      if (city) next.city = city.slug;
+    }
+    applyFilterParams(next);
+  };
+
   const typeOptions = useMemo(
     () =>
       uniqueOptions(
@@ -85,41 +157,41 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
     ...PRICE_BANDS.map((band) => ({ value: band.value, label: band.label })),
   ];
 
-  const filteredProperties = useMemo(() => {
-    const query = search.trim().toLowerCase();
-    return properties.filter((property) => {
-      if (filters.status !== "all" && property.status.toLowerCase() !== filters.status) {
-        return false;
-      }
-      if (filters.location !== "all" && property.location.toLowerCase() !== filters.location) {
-        return false;
-      }
-      if (filters.type !== "all" && property.type.toLowerCase() !== filters.type) {
-        return false;
-      }
-      if (filters.price !== "all") {
-        const band = PRICE_BANDS.find((b) => b.value === filters.price);
-        if (band && (property.price < band.min || property.price >= band.max)) {
-          return false;
-        }
-      }
-      if (query) {
-        const haystack = `${property.name} ${property.location} ${property.type}`.toLowerCase();
-        if (!haystack.includes(query)) return false;
-      }
-      return true;
-    });
-  }, [properties, filters, search]);
+  const searchFilters = useMemo<PropertySearchFilters>(() => {
+    const band = filters.price !== "all" ? PRICE_BANDS.find((b) => b.value === filters.price) : undefined;
+    return {
+      region: urlFilters.region,
+      city: urlFilters.city,
+      area: urlFilters.area,
+      status: filters.status !== "all" ? (filters.status as PropertySearchFilters["status"]) : undefined,
+      type: filters.type !== "all" ? filters.type : undefined,
+      priceMin: band ? band.min : undefined,
+      priceMax: band && band.max !== Infinity ? band.max : undefined,
+      q: search.trim() || undefined,
+    };
+  }, [urlFilters.region, urlFilters.city, urlFilters.area, filters.status, filters.type, filters.price, search]);
+
+  const filteredProperties = useMemo(
+    () =>
+      clientSearchProperties(
+        searchFilters,
+        { offset: 0, limit: Number.MAX_SAFE_INTEGER },
+        { candidateRows: properties },
+      ).rows,
+    [properties, searchFilters],
+  );
 
   const hasActiveFilters =
     filters.status !== "all" ||
-    filters.location !== "all" ||
     filters.type !== "all" ||
-    filters.price !== "all";
+    filters.price !== "all" ||
+    Boolean(urlFilters.region || urlFilters.city || urlFilters.area) ||
+    search.trim().length > 0;
 
   const clearFilters = () => {
     setFilters(DEFAULT_FILTERS);
     setSearch("");
+    applyFilterParams({});
   };
 
   // Infinite scroll: reveal PAGE_SIZE cards at a time, resetting to the first
@@ -186,16 +258,19 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
             label="Status"
             icon={<Tag className="h-3.5 w-3.5" />}
             value={filters.status}
-            options={statusOptions}
+            options={STATUS_OPTIONS}
             onChange={(value) => setFilters((f) => ({ ...f, status: value }))}
           />
-          <FilterDropdown
-            label="Location"
-            icon={<MapPin className="h-3.5 w-3.5" />}
-            value={filters.location}
-            options={locationOptions}
-            onChange={(value) => setFilters((f) => ({ ...f, location: value }))}
-          />
+          <button
+            type="button"
+            onClick={() => setLocationPickerOpen(true)}
+            className="border-ink-200 text-ink-900 hover:border-brand-300 flex h-11 w-full items-center gap-2.5 rounded-xl border bg-white px-3.5 text-left transition-colors"
+          >
+            <MapPin className="text-brand-500 h-3.5 w-3.5 shrink-0" />
+            <span className="min-w-0 flex-1 truncate text-[14px] font-medium">
+              {selectedLocationLabel ?? "All Locations"}
+            </span>
+          </button>
           <FilterDropdown
             label="Type"
             icon={<Home className="h-3.5 w-3.5" />}
@@ -266,6 +341,13 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
           )}
         </>
       )}
+
+      <LocationPicker
+        open={locationPickerOpen}
+        onOpenChange={setLocationPickerOpen}
+        onSelect={handleLocationSelect}
+        selectedId={selectedLocationNode?.id}
+      />
     </>
   );
 }
