@@ -2,6 +2,7 @@
 
 import {
   Building2,
+  ChevronDown,
   DollarSign,
   Home,
   Loader2,
@@ -14,7 +15,12 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { buttonVariants } from "@/components/ui/button-variants";
-import { FilterDropdown, type FilterOption } from "@/features/properties/FilterDropdown";
+import {
+  FilterDropdown,
+  FilterField,
+  filterTriggerClass,
+  type FilterOption,
+} from "@/features/properties/FilterDropdown";
 import { LocationPicker, type LocationPickerSelection } from "@/features/properties/LocationPicker";
 import type { Property } from "@/features/landing/data/properties";
 import { PropertyCard } from "@/features/landing/PropertyCard";
@@ -158,18 +164,28 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
   ];
 
   const searchFilters = useMemo<PropertySearchFilters>(() => {
-    const band = filters.price !== "all" ? PRICE_BANDS.find((b) => b.value === filters.price) : undefined;
+    const band =
+      filters.price !== "all" ? PRICE_BANDS.find((b) => b.value === filters.price) : undefined;
     return {
       region: urlFilters.region,
       city: urlFilters.city,
       area: urlFilters.area,
-      status: filters.status !== "all" ? (filters.status as PropertySearchFilters["status"]) : undefined,
+      status:
+        filters.status !== "all" ? (filters.status as PropertySearchFilters["status"]) : undefined,
       type: filters.type !== "all" ? filters.type : undefined,
       priceMin: band ? band.min : undefined,
       priceMax: band && band.max !== Infinity ? band.max : undefined,
       q: search.trim() || undefined,
     };
-  }, [urlFilters.region, urlFilters.city, urlFilters.area, filters.status, filters.type, filters.price, search]);
+  }, [
+    urlFilters.region,
+    urlFilters.city,
+    urlFilters.area,
+    filters.status,
+    filters.type,
+    filters.price,
+    search,
+  ]);
 
   const filteredProperties = useMemo(
     () =>
@@ -261,16 +277,18 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
             options={STATUS_OPTIONS}
             onChange={(value) => setFilters((f) => ({ ...f, status: value }))}
           />
-          <button
-            type="button"
-            onClick={() => setLocationPickerOpen(true)}
-            className="border-ink-200 text-ink-900 hover:border-brand-300 flex h-11 w-full items-center gap-2.5 rounded-xl border bg-white px-3.5 text-left transition-colors"
-          >
-            <MapPin className="text-brand-500 h-3.5 w-3.5 shrink-0" />
-            <span className="min-w-0 flex-1 truncate text-[14px] font-medium">
-              {selectedLocationLabel ?? "All Locations"}
-            </span>
-          </button>
+          <FilterField label="Location" icon={<MapPin className="h-3.5 w-3.5" />}>
+            <button
+              type="button"
+              onClick={() => setLocationPickerOpen(true)}
+              aria-haspopup="dialog"
+              aria-expanded={locationPickerOpen}
+              className={filterTriggerClass}
+            >
+              <span className="truncate">{selectedLocationLabel ?? "All Locations"}</span>
+              <ChevronDown className="text-ink-400 h-4 w-4 shrink-0" />
+            </button>
+          </FilterField>
           <FilterDropdown
             label="Type"
             icon={<Home className="h-3.5 w-3.5" />}
