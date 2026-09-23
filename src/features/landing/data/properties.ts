@@ -2,6 +2,7 @@ import { cache } from "react";
 
 import { graphqlFetch } from "@/graphql/client";
 import { GET_PUBLIC_PROPERTIES } from "@/graphql/documents";
+import { centroidOf, extractPointsFromSiteCoordinates } from "@/lib/siteCoordinates";
 
 export interface Property {
   id: string;
@@ -22,6 +23,13 @@ export interface Property {
    *  null: a listing may have one without the other. */
   city: string | null;
   region: string | null;
+  /** Centroid of `siteCoordinates`, resolved defensively — the field carries
+   *  at least 4 different shapes depending on which flow captured it (single
+   *  point, OCR/bulk origin+vertices, raw GeoJSON nesting, Ghana National
+   *  Grid) — see lib/siteCoordinates.ts, ported from afram-web verbatim.
+   *  null when a listing has no usable coordinates at all: the map view
+   *  should skip these rather than plot a wrong/zero point. */
+  coordinates: { lat: number; lng: number } | null;
   tags: string[];
   price: number;
   currency: string;
@@ -69,6 +77,7 @@ interface RawProperty {
   streetAddress?: string | null;
   gpsAddress?: string | null;
   metadata?: unknown;
+  siteCoordinates?: unknown;
 }
 
 interface RawProject {
@@ -129,6 +138,7 @@ function mapProperty(project: RawProject): Property | undefined {
     location: [property.city, property.region].filter(Boolean).join(", ") || "Ghana",
     city: property.city || null,
     region: property.region || null,
+    coordinates: centroidOf(extractPointsFromSiteCoordinates(property.siteCoordinates)),
     tags,
     price: property.price,
     currency: property.currency || "USD",

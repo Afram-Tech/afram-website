@@ -31,6 +31,7 @@ export const GET_PUBLIC_PROPERTIES = /* GraphQL */ `
         streetAddress
         gpsAddress
         metadata
+        siteCoordinates
       }
     }
   }

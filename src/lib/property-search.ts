@@ -106,6 +106,12 @@ function matchesArea(property: Property, areaSlug: string): boolean {
   return getPropertyLocationTokens(property).some((t) => t.includes(wanted));
 }
 
+function matchesBbox(property: Property, bbox: NonNullable<PropertySearchFilters["bbox"]>): boolean {
+  if (!property.coordinates) return false; // can't place it, can't claim it's in the viewport
+  const { lat, lng } = property.coordinates;
+  return lat >= bbox.south && lat <= bbox.north && lng >= bbox.west && lng <= bbox.east;
+}
+
 function sortRows(
   rows: Property[],
   sort: PropertySearchFilters["sort"],
@@ -161,14 +167,7 @@ export function clientSearchProperties(
       if (!getPropertySearchText(property).includes(query)) return false;
     }
 
-    // filters.bbox is deliberately not handled: `Property` carries no
-    // coordinates at all here (afram-web's equivalent falls back to
-    // metadata.centroid, which this repo's GetPublicProperties doesn't
-    // fetch — see 00-findings.md §A3). Ignoring it is a lesser wrong than
-    // excluding every row, which is what afram-web's matchesBbox does when
-    // a row has no centroid — that behaviour is right there because *most*
-    // rows do have one; here *none* do. Wire this once Feature C adds
-    // coordinates to this query.
+    if (filters.bbox && !matchesBbox(property, filters.bbox)) return false;
 
     return true;
   });

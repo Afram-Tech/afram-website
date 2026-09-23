@@ -7347,6 +7347,7 @@ __metadata:
     next-sanity: "npm:^13.2.2"
     prettier: "npm:^3.9.6"
     prettier-plugin-tailwindcss: "npm:^0.8.1"
+    proj4: "npm:^2.19.10"
     react: "npm:19.2.4"
     react-dom: "npm:19.2.4"
     sharp: "npm:^0.35.3"
@@ -11501,6 +11502,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mgrs@npm:1.0.0":
+  version: 1.0.0
+  resolution: "mgrs@npm:1.0.0"
+  checksum: 10/102f4a0decb474db88125a841a6b9eaac75d0efe0b0f84e603a48cf56ec1f53ae5b70a74171c2ce4abfa5d0399f626f038bba9d2ca901d5629192f24a76b09bc
+  languageName: node
+  linkType: hard
+
 "micromatch@npm:^4.0.4, micromatch@npm:^4.0.5, micromatch@npm:^4.0.8":
   version: 4.0.8
   resolution: "micromatch@npm:4.0.8"
@@ -12509,6 +12517,21 @@ __metadata:
   version: 7.0.0
   resolution: "proc-log@npm:7.0.0"
   checksum: 10/97cd9f4a8a0d84e42ee91e106e5ba5edcb954521e8dbe26ee6ad31396e5c12cc2be5e5b6be7b53fa5a69959afbacd32719106e2d6f45802e34b31d9a3a01ec20
+  languageName: node
+  linkType: hard
+
+"proj4@npm:^2.19.10":
+  version: 2.22.0
+  resolution: "proj4@npm:2.22.0"
+  dependencies:
+    mgrs: "npm:1.0.0"
+    wkt-parser: "npm:^1.5.5"
+  peerDependencies:
+    geotiff: "*"
+  peerDependenciesMeta:
+    geotiff:
+      optional: true
+  checksum: 10/10afb35c6e55777f1bdb23c488af18fa2295df4811b11e6573362fe869835fcb2fbaae6698d5cc28a6c8e58a6dd3524734ae0e9df36c852c2c8f0db59c3cf924
   languageName: node
   linkType: hard
 
@@ -14868,6 +14891,13 @@ __metadata:
   bin:
     why-is-node-running: cli.js
   checksum: 10/0de6e6cd8f2f94a8b5ca44e84cf1751eadcac3ebedcdc6e5fbbe6c8011904afcbc1a2777c53496ec02ced7b81f2e7eda61e76bf8262a8bc3ceaa1f6040508051
+  languageName: node
+  linkType: hard
+
+"wkt-parser@npm:^1.5.5":
+  version: 1.5.6
+  resolution: "wkt-parser@npm:1.5.6"
+  checksum: 10/a29d82a875fb91ecf50b73c5105504ea69a4be7cb44891ecfb9945752aaf9239ac14cdc9f6dff2c811d9a7699e7f88d24f6d9b2280f745b53665c452127ae7cd
   languageName: node
   linkType: hard
 
