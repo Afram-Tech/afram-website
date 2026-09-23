@@ -13,6 +13,8 @@ const property = (overrides: Partial<Property> = {}): Property => ({
   location: "Ablekuma Central, Greater Accra",
   city: "Ablekuma Central",
   region: "Greater Accra",
+  coordinates: { lat: 5.6037, lng: -0.187 },
+  boundary: null,
   tags: [],
   price: 400_000,
   currency: "GHS",
@@ -241,6 +243,31 @@ describe("clientSearchProperties — pagination", () => {
     );
     expect(page3.rows).toHaveLength(1);
     expect(page3.hasMore).toBe(false);
+  });
+});
+
+describe("clientSearchProperties — bbox", () => {
+  const inBox = property({ coordinates: { lat: 5.6, lng: -0.2 } });
+  const outOfBox = property({ coordinates: { lat: 6.7, lng: -1.6 } });
+  const noCoordinates = property({ coordinates: null });
+  const bbox = { west: -0.3, south: 5.5, east: -0.1, north: 5.7 };
+
+  it("keeps only rows whose coordinates fall inside the box", () => {
+    const result = clientSearchProperties(
+      filters({ bbox }),
+      { offset: 0, limit: 10 },
+      { candidateRows: [inBox, outOfBox] },
+    );
+    expect(result.rows).toEqual([inBox]);
+  });
+
+  it("excludes a row with no coordinates at all — can't place it, can't claim it's in view", () => {
+    const result = clientSearchProperties(
+      filters({ bbox }),
+      { offset: 0, limit: 10 },
+      { candidateRows: [noCoordinates] },
+    );
+    expect(result.rows).toEqual([]);
   });
 });
 

@@ -14,27 +14,39 @@ export interface FilterOption {
  * The label-over-control shell every filter in the search bar shares. Kept
  * here so a filter that is not a dropdown — the location picker, which opens
  * a dialog — still lines up with the ones that are.
+ *
+ * `compact` drops the label-above-control two-row shape for a single-row
+ * pill instead (icon inline in the trigger, no separate uppercase caption)
+ * — for a bar where every control needs to sit on one baseline next to
+ * plain single-row elements like a search input. Mixing the two shapes in
+ * one flex row with `items-center` is what misaligns: a two-row block's
+ * actual control sits lower than a one-row neighbour's, however you centre
+ * the blocks themselves.
  */
 export function FilterField({
   label,
   icon,
   children,
   className,
+  compact = false,
   ref,
 }: {
   label: string;
   icon: React.ReactNode;
   children: React.ReactNode;
   className?: string;
+  compact?: boolean;
   /** Set by FilterDropdown, which needs the wrapper to detect outside clicks. */
   ref?: React.Ref<HTMLDivElement>;
 }) {
   return (
     <div ref={ref} className={cn("relative", className)}>
-      <span className="text-ink-400 mb-1.5 flex items-center gap-1.5 text-[12px] font-medium tracking-wide uppercase">
-        {icon}
-        {label}
-      </span>
+      {!compact && (
+        <span className="text-ink-400 mb-1.5 flex items-center gap-1.5 text-[12px] font-medium tracking-wide uppercase">
+          {icon}
+          {label}
+        </span>
+      )}
       {children}
     </div>
   );
@@ -44,18 +56,28 @@ export function FilterField({
 export const filterTriggerClass =
   "border-ink-200 text-ink-900 hover:border-brand-300 flex h-11 w-full items-center justify-between gap-2 rounded-xl border bg-white px-3.5 text-[14px] font-medium transition-colors";
 
+/** The single-row pill version of filterTriggerClass — icon inline, rounded
+ *  full, fixed height matching a plain input/button neighbour exactly. */
+export const compactFilterTriggerClass =
+  "border-ink-200 text-ink-900 hover:border-brand-300 flex h-10 items-center gap-2 rounded-full border bg-white px-3.5 text-[13px] font-medium transition-colors";
+
 export function FilterDropdown({
   label,
   icon,
   value,
   options,
   onChange,
+  compact = false,
 }: {
   label: string;
   icon: React.ReactNode;
   value: string;
   options: FilterOption[];
   onChange: (value: string) => void;
+  /** Single-row pill instead of the label-above-control shape — see
+   *  FilterField's own doc for why mixing the two shapes in one row
+   *  misaligns. */
+  compact?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -74,13 +96,14 @@ export function FilterDropdown({
   const selected = options.find((option) => option.value === value);
 
   return (
-    <FilterField ref={ref} label={label} icon={icon}>
+    <FilterField ref={ref} label={label} icon={icon} compact={compact}>
       <button
         type="button"
         onClick={() => setOpen((isOpen) => !isOpen)}
         aria-expanded={open}
-        className={filterTriggerClass}
+        className={compact ? compactFilterTriggerClass : filterTriggerClass}
       >
+        {compact && <span className="text-brand-500 shrink-0">{icon}</span>}
         <span className="truncate">{selected?.label ?? label}</span>
         <ChevronDown
           className={cn("text-ink-400 h-4 w-4 shrink-0 transition-transform", open && "rotate-180")}

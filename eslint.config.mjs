@@ -18,6 +18,10 @@ const eslintConfig = defineConfig([
     "test-results/**",
     "coverage/**",
     "src/types/generated/**",
+    // Vendored maplibre-gl worker bundle — copied verbatim out of
+    // node_modules by scripts/copy-maplibre-worker.mjs (predev/prebuild),
+    // not source anyone edits or should lint.
+    "public/maplibre/**",
   ]),
 ]);
 
