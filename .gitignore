@@ -5,10 +5,10 @@
 /.pnp
 .pnp.*
 
-# generated: scripts/copy-cesium-assets.mjs (postinstall) regenerates this
-# from node_modules/cesium on every install — same convention as
-# node_modules itself, not something to commit.
-/public/cesium
+# generated: scripts/copy-maplibre-worker.mjs (predev/prebuild) regenerates
+# this from node_modules/maplibre-gl on every dev/build start — same
+# convention as node_modules itself, not something to commit.
+/public/maplibre
 .yarn/*
 !.yarn/patches
 !.yarn/plugins

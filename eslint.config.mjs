@@ -18,11 +18,10 @@ const eslintConfig = defineConfig([
     "test-results/**",
     "coverage/**",
     "src/types/generated/**",
-    // Vendored, minified Cesium runtime assets — copied verbatim out of
-    // node_modules by scripts/copy-cesium-assets.mjs on every install
-    // (see that script's own comment), not source anyone edits or should
-    // lint.
-    "public/cesium/**",
+    // Vendored maplibre-gl worker bundle — copied verbatim out of
+    // node_modules by scripts/copy-maplibre-worker.mjs (predev/prebuild),
+    // not source anyone edits or should lint.
+    "public/maplibre/**",
   ]),
 ]);
 

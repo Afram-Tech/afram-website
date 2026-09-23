@@ -5,7 +5,9 @@ import {
   ChevronDown,
   DollarSign,
   Home,
+  LayoutGrid,
   Loader2,
+  Map as MapIcon,
   MapPin,
   Search,
   SlidersHorizontal,
@@ -22,16 +24,21 @@ import {
   type FilterOption,
 } from "@/features/properties/FilterDropdown";
 import { LocationPicker, type LocationPickerSelection } from "@/features/properties/LocationPicker";
+import { PropertyMap } from "@/features/properties/map/PropertyMap";
+import { deriveMapMarkers } from "@/features/properties/map/markers";
 import type { Property } from "@/features/landing/data/properties";
 import { PropertyCard } from "@/features/landing/PropertyCard";
 import { titleCase } from "@/lib/format";
 import { getBySlug, getPath } from "@/lib/location-taxonomy";
 import { clientSearchProperties } from "@/lib/property-search";
+import { cn } from "@/lib/utils";
 import {
   filtersFromSearchParams,
   filtersToSearchParams,
   type PropertySearchFilters,
 } from "@/lib/property-search-filters";
+
+type BrowseView = "grid" | "map";
 
 /**
  * Status/type/price stay local component state, never written to the URL —
@@ -98,6 +105,7 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [locationPickerOpen, setLocationPickerOpen] = useState(false);
+  const [view, setView] = useState<BrowseView>("grid");
 
   /* ─── Location (LocationPicker + URL) ───
      region/city/area are URL-driven, read through the shared codec — the
@@ -196,6 +204,13 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
       ).rows,
     [properties, searchFilters],
   );
+
+  // Markers derive from the same filtered set the grid shows — switching
+  // view is a presentation choice, not a second query, and a property with
+  // no resolved coordinates (Property.coordinates' own doc explains why
+  // that happens) simply has nothing to plot, same as it would for any map.
+  const mapMarkers = useMemo(() => deriveMapMarkers(filteredProperties), [filteredProperties]);
+  const handleMarkerClick = (slug: string) => router.push(`/properties/${slug}`);
 
   const hasActiveFilters =
     filters.status !== "all" ||
@@ -306,7 +321,7 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
         </div>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
         <p className="text-ink-500 text-[14px]">
           {filteredProperties.length} propert{filteredProperties.length === 1 ? "y" : "ies"} found
           {hasActiveFilters && (
@@ -318,6 +333,29 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
             </button>
           )}
         </p>
+
+        <div className="border-ink-200 flex items-center gap-1 rounded-full border bg-white p-1">
+          {(
+            [
+              { key: "grid", label: "Grid", icon: LayoutGrid },
+              { key: "map", label: "Map", icon: MapIcon },
+            ] as const
+          ).map(({ key, label, icon: Icon }) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setView(key)}
+              aria-pressed={view === key}
+              className={cn(
+                "flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-semibold transition-colors",
+                view === key ? "bg-brand-600 text-white" : "text-ink-500 hover:bg-ink-50",
+              )}
+            >
+              <Icon className="h-3.5 w-3.5" />
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {properties.length === 0 ? (
@@ -342,6 +380,10 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
           <button onClick={clearFilters} className={buttonVariants("primary", "sm", "mt-4")}>
             Clear All Filters
           </button>
+        </div>
+      ) : view === "map" ? (
+        <div className="border-ink-100 mt-10 h-[560px] overflow-hidden rounded-[22px] border">
+          <PropertyMap markers={mapMarkers} onMarkerClick={handleMarkerClick} />
         </div>
       ) : (
         <>
