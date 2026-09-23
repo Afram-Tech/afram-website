@@ -10,6 +10,10 @@ const GHANA_ZOOM = 6.3;
 /** How far in the initial fly-to-you goes — neighbourhood level, where the
  *  3D building layer (zoom 14+) is already starting to kick in. */
 const USER_LOCATION_ZOOM = 13.5;
+/** How far in selecting a single property from the list panel goes — close
+ *  enough to see its building/boundary clearly, past the point 3D
+ *  extrusion kicks in. */
+const PROPERTY_FOCUS_ZOOM = 16.5;
 /** Same bounds afram-web's location-resolver uses (GHANA_BBOX) — a touch
  *  wider than Ghana's actual extent. A visitor's browser geolocation is
  *  only used to re-centre the map when it falls inside this box: someone
@@ -113,9 +117,16 @@ export interface PropertyMapProps {
    *  select, etc.), so this component stays a plain rendering surface. */
   onMarkerClick: (slug: string) => void;
   /** The slug to visually emphasise (scaled up, raised above its
-   *  neighbours) — set from the property list panel's hover state, so
-   *  pointing at a list row shows you where it sits on the map. */
+   *  neighbours) — set from the property list panel's hover/selected state,
+   *  so pointing at (or picking) a list row shows you where it sits on the
+   *  map. */
   highlightedSlug?: string | null;
+  /** The slug to fly the camera to — set when a list row is *clicked*
+   *  (selection), not merely hovered, so browsing the list doesn't jerk the
+   *  map around on every mouse move. A ref tracks the last slug actually
+   *  flown to, so clicking the same already-selected row again is a no-op
+   *  rather than re-triggering the same flight. */
+  focusSlug?: string | null;
 }
 
 /**
@@ -136,7 +147,12 @@ export interface PropertyMapProps {
  * scope for the same reason CesiumJS was in this component's predecessor:
  * it touches `window`/WebGL, which SSR has neither of.
  */
-export function PropertyMap({ markers, onMarkerClick, highlightedSlug }: PropertyMapProps) {
+export function PropertyMap({
+  markers,
+  onMarkerClick,
+  highlightedSlug,
+  focusSlug,
+}: PropertyMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const initializingRef = useRef(false);
   const mapRef = useRef<import("maplibre-gl").Map | null>(null);
@@ -300,6 +316,23 @@ export function PropertyMap({ markers, onMarkerClick, highlightedSlug }: Propert
       node.classList.toggle("is-highlighted", Boolean(highlightedSlug) && node.dataset.slug === highlightedSlug);
     });
   }, [highlightedSlug, markers]);
+
+  // Flies to a specific property when it's selected in the list panel.
+  // Keyed on the marker's own lat/lng (not just its slug) so this still
+  // fires correctly if `markers` is swapped out for a same-slug entry with
+  // different coordinates — shouldn't happen in practice, but the effect
+  // should track what it's actually flying to, not just a name.
+  const lastFocusedRef = useRef<string | null>(null);
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady || !focusSlug) return;
+    const marker = markers.find((m) => m.slug === focusSlug);
+    if (!marker) return;
+    const key = `${focusSlug}:${marker.lat}:${marker.lng}`;
+    if (lastFocusedRef.current === key) return;
+    lastFocusedRef.current = key;
+    map.flyTo({ center: [marker.lng, marker.lat], zoom: PROPERTY_FOCUS_ZOOM });
+  }, [focusSlug, markers, mapReady]);
 
   return <div ref={containerRef} className="h-full w-full" data-testid="property-map" />;
 }

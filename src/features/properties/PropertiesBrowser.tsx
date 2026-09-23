@@ -13,6 +13,7 @@ import {
   SlidersHorizontal,
   Tag,
 } from "lucide-react";
+import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -40,6 +41,8 @@ import {
 } from "@/lib/property-search-filters";
 
 type BrowseView = "grid" | "map";
+const GRID_PATH = "/properties";
+const MAP_PATH = "/properties/map";
 
 /**
  * Status/type/price stay local component state, never written to the URL —
@@ -103,10 +106,21 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  /* Grid and Map are separate routes (/properties, /properties/map), not a
+     client-side tab — a route switch is bookmarkable, shareable, and
+     back-button-able on its own; a useState toggle was none of those. Both
+     routes render this exact component (see each page.tsx), so which one
+     is "current" is read from the URL, not held here. */
+  const view: BrowseView = pathname === MAP_PATH ? "map" : "grid";
+  const viewHref = (target: BrowseView) => {
+    const base = target === "map" ? MAP_PATH : GRID_PATH;
+    const query = searchParams.toString();
+    return query ? `${base}?${query}` : base;
+  };
+
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [locationPickerOpen, setLocationPickerOpen] = useState(false);
-  const [view, setView] = useState<BrowseView>("grid");
 
   /* ─── Location (LocationPicker + URL) ───
      region/city/area are URL-driven, read through the shared codec — the
@@ -212,7 +226,14 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
   // that happens) simply has nothing to plot, same as it would for any map.
   const mapMarkers = useMemo(() => deriveMapMarkers(filteredProperties), [filteredProperties]);
   const handleMarkerClick = (slug: string) => router.push(`/properties/${slug}`);
+
+  // Hover previews a pin (transient); selecting a list row flies the map to
+  // it and keeps it marked until another row is picked (sticky) — kept as
+  // two separate pieces of state because they mean different things to
+  // PropertyMap: hover is display-only, selection also drives the camera.
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
+  const handleListSelect = (slug: string) => setSelectedSlug(slug);
 
   const hasActiveFilters =
     filters.status !== "all" ||
@@ -258,6 +279,144 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
     return () => observer.disconnect();
   }, [hasMore, filteredProperties.length]);
 
+  const viewToggle = (
+    <div className="border-ink-200 flex items-center gap-1 rounded-full border bg-white p-1">
+      {(
+        [
+          { key: "grid", label: "Grid", icon: LayoutGrid },
+          { key: "map", label: "Map", icon: MapIcon },
+        ] as const
+      ).map(({ key, label, icon: Icon }) => (
+        <Link
+          key={key}
+          href={viewHref(key)}
+          aria-current={view === key ? "page" : undefined}
+          className={cn(
+            "flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-semibold transition-colors",
+            view === key ? "bg-brand-600 text-white" : "text-ink-500 hover:bg-ink-50",
+          )}
+        >
+          <Icon className="h-3.5 w-3.5" />
+          {label}
+        </Link>
+      ))}
+    </div>
+  );
+
+  const statusFilter = (
+    <FilterDropdown
+      label="Status"
+      icon={<Tag className="h-3.5 w-3.5" />}
+      value={filters.status}
+      options={STATUS_OPTIONS}
+      onChange={(value) => setFilters((f) => ({ ...f, status: value }))}
+    />
+  );
+  const locationFilter = (
+    <FilterField label="Location" icon={<MapPin className="h-3.5 w-3.5" />}>
+      <button
+        type="button"
+        onClick={() => setLocationPickerOpen(true)}
+        aria-haspopup="dialog"
+        aria-expanded={locationPickerOpen}
+        className={filterTriggerClass}
+      >
+        <span className="truncate">{selectedLocationLabel ?? "All Locations"}</span>
+        <ChevronDown className="text-ink-400 h-4 w-4 shrink-0" />
+      </button>
+    </FilterField>
+  );
+  const typeFilter = (
+    <FilterDropdown
+      label="Type"
+      icon={<Home className="h-3.5 w-3.5" />}
+      value={filters.type}
+      options={typeOptions}
+      onChange={(value) => setFilters((f) => ({ ...f, type: value }))}
+    />
+  );
+  const priceFilter = (
+    <FilterDropdown
+      label="Price"
+      icon={<DollarSign className="h-3.5 w-3.5" />}
+      value={filters.price}
+      options={priceOptions}
+      onChange={(value) => setFilters((f) => ({ ...f, price: value }))}
+    />
+  );
+
+  const locationPicker = (
+    <LocationPicker
+      open={locationPickerOpen}
+      onOpenChange={setLocationPickerOpen}
+      onSelect={handleLocationSelect}
+      selectedId={selectedLocationNode?.id}
+    />
+  );
+
+  if (view === "map") {
+    return (
+      <>
+        {/* Thin in-map filter bar, replacing the full heading + Search
+            Properties panel the grid view shows — the map is the point of
+            this route, so the chrome around it stays minimal. */}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="grid flex-1 grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
+            {statusFilter}
+            {locationFilter}
+            {typeFilter}
+            {priceFilter}
+            <div className="relative min-w-[160px] flex-1 sm:max-w-[220px]">
+              <Search className="text-ink-400 absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2" />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search properties..."
+                className="border-ink-200 text-ink-900 placeholder:text-ink-400 focus:border-brand-400 h-11 w-full rounded-xl border bg-white pr-3 pl-9 text-[13px] transition-colors outline-none"
+              />
+            </div>
+          </div>
+          {viewToggle}
+        </div>
+
+        <div className="mt-3 flex items-center justify-between gap-3">
+          <p className="text-ink-500 text-[13px]">
+            {filteredProperties.length} propert{filteredProperties.length === 1 ? "y" : "ies"} found
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className="text-brand-600 hover:text-brand-700 ml-3 font-semibold"
+              >
+                Clear filters
+              </button>
+            )}
+          </p>
+        </div>
+
+        <div className="border-ink-100 mt-3 flex h-[calc(100vh-230px)] min-h-[520px] flex-col overflow-hidden rounded-[22px] border lg:flex-row">
+          <div className="border-ink-100 h-64 shrink-0 overflow-hidden border-b lg:h-full lg:w-[380px] lg:border-r lg:border-b-0">
+            <PropertyListPanel
+              properties={filteredProperties}
+              selectedSlug={selectedSlug}
+              onSelect={handleListSelect}
+              onHoverChange={setHoveredSlug}
+            />
+          </div>
+          <div className="min-h-0 flex-1">
+            <PropertyMap
+              markers={mapMarkers}
+              onMarkerClick={handleMarkerClick}
+              highlightedSlug={selectedSlug ?? hoveredSlug}
+              focusSlug={selectedSlug}
+            />
+          </div>
+        </div>
+
+        {locationPicker}
+      </>
+    );
+  }
+
   return (
     <>
       <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-end sm:justify-between">
@@ -287,39 +446,10 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
           Search Properties
         </h2>
         <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <FilterDropdown
-            label="Status"
-            icon={<Tag className="h-3.5 w-3.5" />}
-            value={filters.status}
-            options={STATUS_OPTIONS}
-            onChange={(value) => setFilters((f) => ({ ...f, status: value }))}
-          />
-          <FilterField label="Location" icon={<MapPin className="h-3.5 w-3.5" />}>
-            <button
-              type="button"
-              onClick={() => setLocationPickerOpen(true)}
-              aria-haspopup="dialog"
-              aria-expanded={locationPickerOpen}
-              className={filterTriggerClass}
-            >
-              <span className="truncate">{selectedLocationLabel ?? "All Locations"}</span>
-              <ChevronDown className="text-ink-400 h-4 w-4 shrink-0" />
-            </button>
-          </FilterField>
-          <FilterDropdown
-            label="Type"
-            icon={<Home className="h-3.5 w-3.5" />}
-            value={filters.type}
-            options={typeOptions}
-            onChange={(value) => setFilters((f) => ({ ...f, type: value }))}
-          />
-          <FilterDropdown
-            label="Price"
-            icon={<DollarSign className="h-3.5 w-3.5" />}
-            value={filters.price}
-            options={priceOptions}
-            onChange={(value) => setFilters((f) => ({ ...f, price: value }))}
-          />
+          {statusFilter}
+          {locationFilter}
+          {typeFilter}
+          {priceFilter}
         </div>
       </div>
 
@@ -336,28 +466,7 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
           )}
         </p>
 
-        <div className="border-ink-200 flex items-center gap-1 rounded-full border bg-white p-1">
-          {(
-            [
-              { key: "grid", label: "Grid", icon: LayoutGrid },
-              { key: "map", label: "Map", icon: MapIcon },
-            ] as const
-          ).map(({ key, label, icon: Icon }) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setView(key)}
-              aria-pressed={view === key}
-              className={cn(
-                "flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-semibold transition-colors",
-                view === key ? "bg-brand-600 text-white" : "text-ink-500 hover:bg-ink-50",
-              )}
-            >
-              <Icon className="h-3.5 w-3.5" />
-              {label}
-            </button>
-          ))}
-        </div>
+        {viewToggle}
       </div>
 
       {properties.length === 0 ? (
@@ -383,23 +492,6 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
             Clear All Filters
           </button>
         </div>
-      ) : view === "map" ? (
-        <div className="border-ink-100 mt-10 flex h-[640px] flex-col overflow-hidden rounded-[22px] border lg:flex-row">
-          <div className="border-ink-100 h-56 shrink-0 overflow-hidden border-b lg:h-full lg:w-[360px] lg:border-r lg:border-b-0">
-            <PropertyListPanel
-              properties={filteredProperties}
-              onSelect={handleMarkerClick}
-              onHoverChange={setHoveredSlug}
-            />
-          </div>
-          <div className="min-h-0 flex-1">
-            <PropertyMap
-              markers={mapMarkers}
-              onMarkerClick={handleMarkerClick}
-              highlightedSlug={hoveredSlug}
-            />
-          </div>
-        </div>
       ) : (
         <>
           <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-y-12">
@@ -417,12 +509,7 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
         </>
       )}
 
-      <LocationPicker
-        open={locationPickerOpen}
-        onOpenChange={setLocationPickerOpen}
-        onSelect={handleLocationSelect}
-        selectedId={selectedLocationNode?.id}
-      />
+      {locationPicker}
     </>
   );
 }
