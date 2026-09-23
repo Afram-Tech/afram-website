@@ -24,13 +24,15 @@
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
-    "prepare": "husky"
+    "prepare": "husky",
+    "postinstall": "node scripts/copy-cesium-assets.mjs"
   },
   "dependencies": {
     "@portabletext/react": "^7.0.1",
     "@sanity/client": "^7.25.0",
     "@sanity/image-url": "^2.1.1",
     "@tailwindcss/postcss": "^4.3.3",
+    "cesium": "^1.145.0",
     "clsx": "^2.1.1",
     "lucide-react": "^1.27.0",
     "next": "^16.2.12",

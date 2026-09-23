@@ -4,6 +4,11 @@
 /node_modules
 /.pnp
 .pnp.*
+
+# generated: scripts/copy-cesium-assets.mjs (postinstall) regenerates this
+# from node_modules/cesium on every install — same convention as
+# node_modules itself, not something to commit.
+/public/cesium
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
