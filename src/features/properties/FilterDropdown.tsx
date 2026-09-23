@@ -10,6 +10,40 @@ export interface FilterOption {
   label: string;
 }
 
+/**
+ * The label-over-control shell every filter in the search bar shares. Kept
+ * here so a filter that is not a dropdown — the location picker, which opens
+ * a dialog — still lines up with the ones that are.
+ */
+export function FilterField({
+  label,
+  icon,
+  children,
+  className,
+  ref,
+}: {
+  label: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+  /** Set by FilterDropdown, which needs the wrapper to detect outside clicks. */
+  ref?: React.Ref<HTMLDivElement>;
+}) {
+  return (
+    <div ref={ref} className={cn("relative", className)}>
+      <span className="text-ink-400 mb-1.5 flex items-center gap-1.5 text-[12px] font-medium tracking-wide uppercase">
+        {icon}
+        {label}
+      </span>
+      {children}
+    </div>
+  );
+}
+
+/** Trigger styling shared by the dropdowns and the location picker's button. */
+export const filterTriggerClass =
+  "border-ink-200 text-ink-900 hover:border-brand-300 flex h-11 w-full items-center justify-between gap-2 rounded-xl border bg-white px-3.5 text-[14px] font-medium transition-colors";
+
 export function FilterDropdown({
   label,
   icon,
@@ -40,16 +74,12 @@ export function FilterDropdown({
   const selected = options.find((option) => option.value === value);
 
   return (
-    <div ref={ref} className="relative">
-      <span className="text-ink-400 mb-1.5 flex items-center gap-1.5 text-[12px] font-medium tracking-wide uppercase">
-        {icon}
-        {label}
-      </span>
+    <FilterField ref={ref} label={label} icon={icon}>
       <button
         type="button"
         onClick={() => setOpen((isOpen) => !isOpen)}
         aria-expanded={open}
-        className="border-ink-200 text-ink-900 hover:border-brand-300 flex h-11 w-full items-center justify-between rounded-xl border bg-white px-3.5 text-[14px] font-medium transition-colors"
+        className={filterTriggerClass}
       >
         <span className="truncate">{selected?.label ?? label}</span>
         <ChevronDown
@@ -79,6 +109,6 @@ export function FilterDropdown({
           ))}
         </div>
       )}
-    </div>
+    </FilterField>
   );
 }
