@@ -10,6 +10,7 @@ const property = (overrides: Partial<Property> = {}): Property => ({
   city: "Ablekuma Central",
   region: "Greater Accra",
   coordinates: { lat: 5.6037, lng: -0.187 },
+  boundary: null,
   tags: [],
   price: 400_000,
   currency: "GHS",
@@ -42,6 +43,7 @@ describe("deriveMapMarkers", () => {
       {
         id: "prop1",
         slug: "test-property-abc123",
+        name: "Test Property",
         lat: 5.6037,
         lng: -0.187,
         price: 400_000,
@@ -51,6 +53,7 @@ describe("deriveMapMarkers", () => {
         status: "listed",
         region: "Greater Accra",
         city: "Ablekuma Central",
+        boundary: null,
       },
     ]);
   });
@@ -70,5 +73,15 @@ describe("deriveMapMarkers", () => {
   it("thumbnail is null when the property has no image", () => {
     const p = property({ image: "" });
     expect(deriveMapMarkers([p])[0].thumbnail).toBeNull();
+  });
+
+  it("passes the boundary through when the property has one", () => {
+    const boundary = [
+      { lat: 5.6, lng: -0.2 },
+      { lat: 5.601, lng: -0.201 },
+      { lat: 5.602, lng: -0.199 },
+    ];
+    const p = property({ boundary });
+    expect(deriveMapMarkers([p])[0].boundary).toEqual(boundary);
   });
 });

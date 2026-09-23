@@ -30,6 +30,11 @@ export interface Property {
    *  null when a listing has no usable coordinates at all: the map view
    *  should skip these rather than plot a wrong/zero point. */
   coordinates: { lat: number; lng: number } | null;
+  /** The full site boundary, only when it's a real shape — 3+ points, same
+   *  threshold afram-web's LiveMapEdit/PropertyMap use before drawing a
+   *  polygon at all (1-2 points there render a pin only, never a fill).
+   *  null below that threshold, including when there are no coordinates. */
+  boundary: { lat: number; lng: number }[] | null;
   tags: string[];
   price: number;
   currency: string;
@@ -131,6 +136,8 @@ function mapProperty(project: RawProject): Property | undefined {
     (property.metadata as Record<string, unknown> | null | undefined)?.isFeatured,
   );
 
+  const sitePoints = extractPointsFromSiteCoordinates(property.siteCoordinates);
+
   return {
     id: property.id,
     slug,
@@ -138,7 +145,8 @@ function mapProperty(project: RawProject): Property | undefined {
     location: [property.city, property.region].filter(Boolean).join(", ") || "Ghana",
     city: property.city || null,
     region: property.region || null,
-    coordinates: centroidOf(extractPointsFromSiteCoordinates(property.siteCoordinates)),
+    coordinates: centroidOf(sitePoints),
+    boundary: sitePoints.length > 2 ? sitePoints : null,
     tags,
     price: property.price,
     currency: property.currency || "USD",

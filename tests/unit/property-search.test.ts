@@ -14,6 +14,7 @@ const property = (overrides: Partial<Property> = {}): Property => ({
   city: "Ablekuma Central",
   region: "Greater Accra",
   coordinates: { lat: 5.6037, lng: -0.187 },
+  boundary: null,
   tags: [],
   price: 400_000,
   currency: "GHS",

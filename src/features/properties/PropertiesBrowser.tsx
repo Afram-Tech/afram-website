@@ -25,6 +25,7 @@ import {
 } from "@/features/properties/FilterDropdown";
 import { LocationPicker, type LocationPickerSelection } from "@/features/properties/LocationPicker";
 import { PropertyMap } from "@/features/properties/map/PropertyMap";
+import { PropertyListPanel } from "@/features/properties/map/PropertyListPanel";
 import { deriveMapMarkers } from "@/features/properties/map/markers";
 import type { Property } from "@/features/landing/data/properties";
 import { PropertyCard } from "@/features/landing/PropertyCard";
@@ -211,6 +212,7 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
   // that happens) simply has nothing to plot, same as it would for any map.
   const mapMarkers = useMemo(() => deriveMapMarkers(filteredProperties), [filteredProperties]);
   const handleMarkerClick = (slug: string) => router.push(`/properties/${slug}`);
+  const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
 
   const hasActiveFilters =
     filters.status !== "all" ||
@@ -382,8 +384,21 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
           </button>
         </div>
       ) : view === "map" ? (
-        <div className="border-ink-100 mt-10 h-[560px] overflow-hidden rounded-[22px] border">
-          <PropertyMap markers={mapMarkers} onMarkerClick={handleMarkerClick} />
+        <div className="border-ink-100 mt-10 flex h-[640px] flex-col overflow-hidden rounded-[22px] border lg:flex-row">
+          <div className="border-ink-100 h-56 shrink-0 overflow-hidden border-b lg:h-full lg:w-[360px] lg:border-r lg:border-b-0">
+            <PropertyListPanel
+              properties={filteredProperties}
+              onSelect={handleMarkerClick}
+              onHoverChange={setHoveredSlug}
+            />
+          </div>
+          <div className="min-h-0 flex-1">
+            <PropertyMap
+              markers={mapMarkers}
+              onMarkerClick={handleMarkerClick}
+              highlightedSlug={hoveredSlug}
+            />
+          </div>
         </div>
       ) : (
         <>
