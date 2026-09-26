@@ -11,7 +11,9 @@ const node = (id: string): LocationPickerNode => ({
   slug: id.toLowerCase(),
   label: id,
   aliases: [],
+  level: "region",
   hasChildren: true,
+  childCount: 1,
 });
 
 describe("navigationReducer", () => {
@@ -45,6 +47,23 @@ describe("navigationReducer", () => {
   it("BACK at the root is a no-op, not an error", () => {
     const state = navigationReducer(INITIAL_NAVIGATION_STATE, { type: "BACK" });
     expect(state.path).toEqual([]);
+  });
+
+  it("GO_TO jumps back to a breadcrumb, keeping the path above it", () => {
+    const [a, b, c] = [node("A"), node("B"), node("C")];
+    expect(navigationReducer({ path: [a, b, c] }, { type: "GO_TO", depth: 1 })).toEqual({
+      path: [a],
+    });
+    expect(navigationReducer({ path: [a, b, c] }, { type: "GO_TO", depth: 0 })).toEqual({
+      path: [],
+    });
+  });
+
+  it("SET_PATH opens at an arbitrary depth", () => {
+    const path = [node("A"), node("B")];
+    expect(navigationReducer(INITIAL_NAVIGATION_STATE, { type: "SET_PATH", path })).toEqual({
+      path,
+    });
   });
 
   it("RESET returns to the root regardless of depth", () => {

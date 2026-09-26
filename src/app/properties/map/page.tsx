@@ -27,9 +27,8 @@ function PropertiesBrowserFallback() {
  * A sibling route to /properties, not a tab within it — PropertiesBrowser
  * reads which one it's rendering from the URL (usePathname), and the
  * Grid/Map toggle is a pair of <Link>s between the two, not local state.
- * Both routes fetch and render the same way; only the map one skips the
- * page heading/full filter panel in favour of the thin in-map filter bar
- * and a much taller map, since a route switch (not a client-only toggle)
+ * Both routes fetch and render the same way and share one filter bar; only
+ * the map one skips the page heading in favour of a much taller map, since a route switch (not a client-only toggle)
  * makes "Map" bookmarkable/shareable and back-button-able on its own.
  */
 export default async function PropertiesMapPage() {

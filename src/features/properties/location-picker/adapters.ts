@@ -6,7 +6,28 @@ import {
   type DistrictNode,
   type RegionNode,
 } from "@/lib/location-taxonomy";
-import type { LocationPickerNode } from "./types";
+import type { LocationPickerLevel, LocationPickerNode } from "./types";
+
+/** A node's level from its own shape: regions have no parent, districts carry
+ *  a displayName, areas are what's left. */
+export function levelOf(node: RegionNode | DistrictNode | AreaNode): LocationPickerLevel {
+  if (!("parentId" in node)) return "region";
+  return "displayName" in node ? "city" : "area";
+}
+
+const LEVEL_NOUN: Record<LocationPickerLevel, [string, string]> = {
+  region: ["region", "regions"],
+  city: ["district", "districts"],
+  area: ["area", "areas"],
+};
+
+/** "29 districts", "1 area" — what browsing inside a place will show. */
+export function childSummary(node: LocationPickerNode): string | null {
+  if (!node.hasChildren) return null;
+  const childLevel: LocationPickerLevel = node.level === "region" ? "city" : "area";
+  const [one, many] = LEVEL_NOUN[childLevel];
+  return `${node.childCount} ${node.childCount === 1 ? one : many}`;
+}
 
 function label(node: RegionNode | DistrictNode | AreaNode): string {
   return "displayName" in node ? node.displayName : node.name;
@@ -34,14 +55,18 @@ function toPickerNode(
   node: RegionNode | DistrictNode | AreaNode,
   counts: Record<string, number> | undefined,
 ): LocationPickerNode {
+  const childCount = getChildren(node.id).length;
   return {
     id: node.id,
     slug: node.slug,
     label: label(node),
     aliases: aliasesFor(node),
-    count: counts?.[node.id],
+    // Known counts make absence meaningful: a place missing from them has 0.
+    count: counts ? (counts[node.id] ?? 0) : undefined,
     parentLabel: breadcrumbFor(node.id),
-    hasChildren: getChildren(node.id).length > 0,
+    level: levelOf(node),
+    hasChildren: childCount > 0,
+    childCount,
   };
 }
 
@@ -49,6 +74,12 @@ function toPickerNode(
  *  order (not alphabetical — grouping.ts re-sorts for display). */
 export function getRootNodes(counts?: Record<string, number>): LocationPickerNode[] {
   return REGIONS.map((r) => toPickerNode(r, counts));
+}
+
+/** Region → … → the node itself, as picker nodes — for opening the picker
+ *  already browsing where the current selection lives. */
+export function getPathNodes(id: string, counts?: Record<string, number>): LocationPickerNode[] {
+  return getPath(id).map((n) => toPickerNode(n, counts));
 }
 
 /** parentId's children, mapped to picker nodes — [] when parentId has none

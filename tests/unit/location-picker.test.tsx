@@ -1,18 +1,43 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, within, fireEvent, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {
-  LocationPicker,
-  type LocationPickerSelection,
-} from "@/features/properties/LocationPicker";
+import { LocationPicker } from "@/features/properties/LocationPicker";
+import type { LocationPickerSelection } from "@/features/properties/location-picker/types";
 import { __resetRecentLocationsCacheForTest } from "@/features/properties/location-picker/useRecentLocations";
+
+const GREATER_ACCRA: LocationPickerSelection = {
+  level: "region",
+  id: "GH07",
+  slug: "greater-accra",
+  label: "Greater Accra",
+};
+const ABLEKUMA_CENTRAL: LocationPickerSelection = {
+  level: "city",
+  id: "GH0701",
+  slug: "ablekuma-central",
+  label: "Ablekuma Central",
+};
 
 function open(props: Partial<React.ComponentProps<typeof LocationPicker>> = {}) {
   const onOpenChange = vi.fn();
   const onSelect = vi.fn();
-  render(<LocationPicker open onOpenChange={onOpenChange} onSelect={onSelect} {...props} />);
-  return { onOpenChange, onSelect };
+  const onClear = vi.fn();
+  render(
+    <LocationPicker
+      open
+      onOpenChange={onOpenChange}
+      onSelect={onSelect}
+      onClear={onClear}
+      {...props}
+    />,
+  );
+  return { onOpenChange, onSelect, onClear };
 }
+
+const options = () => within(screen.getByRole("listbox")).getAllByRole("option");
+const option = (name: string | RegExp) =>
+  within(screen.getByRole("listbox")).getByRole("option", { name });
+const browseInto = (id: string) => screen.getByTestId(`location-browse-${id}`);
 
 beforeEach(() => {
   localStorage.clear();
@@ -29,96 +54,111 @@ describe("LocationPicker — closed vs open", () => {
     expect(screen.queryByRole("dialog")).toBeNull();
   });
 
-  it("renders the dialog with a listbox of all 16 regions when open", () => {
+  it("lists 'Anywhere in Ghana' then all 16 regions", () => {
     open();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
-    const listbox = screen.getByRole("listbox");
-    expect(within(listbox).getAllByRole("option")).toHaveLength(16);
-  });
-
-  it("shows 'All Ghana' as the title at the root", () => {
-    open();
-    expect(screen.getByText("All Ghana")).toBeInTheDocument();
+    expect(options()).toHaveLength(17);
+    expect(options()[0]).toHaveTextContent("Anywhere in Ghana");
   });
 });
 
-describe("LocationPicker — drill-down", () => {
-  it("clicking a region with children drills into its districts, not a final selection", async () => {
+describe("LocationPicker — a region is one tap", () => {
+  it("clicking a region filters to it straight away", async () => {
     const { onSelect, onOpenChange } = open();
-    await userEvent.click(screen.getByText("Greater Accra"));
+    await userEvent.click(option(/^Greater Accra/));
 
-    expect(onSelect).not.toHaveBeenCalled();
-    expect(onOpenChange).not.toHaveBeenCalled();
-    expect(screen.getByText("Back")).toBeInTheDocument();
-    // Title switches to the region name once drilled in.
-    expect(
-      screen.getByText("Greater Accra", { selector: "[id='location-picker-title']" }),
-    ).toBeInTheDocument();
-    // Districts now populate the listbox — 260 across the whole taxonomy,
-    // Greater Accra alone has a real, non-trivial subset.
-    const listbox = screen.getByRole("listbox");
-    expect(within(listbox).getAllByRole("option").length).toBeGreaterThan(10);
-  });
-
-  it("clicking a leaf district calls onSelect with level 'city' and closes", async () => {
-    const { onSelect, onOpenChange } = open();
-    await userEvent.click(screen.getByText("Greater Accra"));
-    await userEvent.click(screen.getByText("Ablekuma Central"));
-
-    expect(onSelect).toHaveBeenCalledWith<[LocationPickerSelection]>({
-      level: "city",
-      id: "GH0701",
-      slug: "ablekuma-central",
-      label: "Ablekuma Central",
-    });
+    expect(onSelect).toHaveBeenCalledWith(GREATER_ACCRA);
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it("the 'All {region}' row selects the region itself at level 'region'", async () => {
-    const { onSelect } = open();
-    await userEvent.click(screen.getByText("Greater Accra"));
-    await userEvent.click(screen.getByText("All Greater Accra"));
+  it("'Anywhere in Ghana' clears the location", async () => {
+    const { onClear, onSelect } = open({ selectedId: "GH07" });
+    await userEvent.click(option(/^Anywhere in Ghana/));
 
-    expect(onSelect).toHaveBeenCalledWith<[LocationPickerSelection]>({
-      level: "region",
-      id: "GH07",
-      slug: "greater-accra",
-      label: "Greater Accra",
-    });
+    expect(onClear).toHaveBeenCalledTimes(1);
+    expect(onSelect).not.toHaveBeenCalled();
+  });
+});
+
+describe("LocationPicker — browsing inside a place", () => {
+  it("the district count browses in without selecting anything", async () => {
+    const { onSelect } = open();
+    await userEvent.click(browseInto("GH07"));
+
+    expect(onSelect).not.toHaveBeenCalled();
+    expect(screen.getByRole("navigation", { name: "Location breadcrumb" })).toHaveTextContent(
+      "GhanaGreater Accra",
+    );
+    expect(options()[0]).toHaveTextContent("All of Greater Accra");
+    expect(options().length).toBeGreaterThan(10);
   });
 
-  it("Back returns to the region list", async () => {
-    open();
-    await userEvent.click(screen.getByText("Greater Accra"));
-    await userEvent.click(screen.getByText("Back"));
+  it("a district filters at the district level", async () => {
+    const { onSelect } = open();
+    await userEvent.click(browseInto("GH07"));
+    await userEvent.click(option(/^Ablekuma Central/));
 
-    expect(screen.getByText("All Ghana")).toBeInTheDocument();
-    expect(within(screen.getByRole("listbox")).getAllByRole("option")).toHaveLength(16);
+    expect(onSelect).toHaveBeenCalledWith(ABLEKUMA_CENTRAL);
+  });
+
+  it("'All of {region}' filters to the region itself", async () => {
+    const { onSelect } = open();
+    await userEvent.click(browseInto("GH07"));
+    await userEvent.click(option(/^All of Greater Accra/));
+
+    expect(onSelect).toHaveBeenCalledWith(GREATER_ACCRA);
+  });
+
+  it("the breadcrumb and Back both return to the regions", async () => {
+    open();
+    await userEvent.click(browseInto("GH07"));
+    await userEvent.click(screen.getByRole("button", { name: "Ghana" }));
+    expect(options()).toHaveLength(17);
+
+    await userEvent.click(browseInto("GH07"));
+    await userEvent.click(screen.getByRole("button", { name: "Back" }));
+    expect(options()).toHaveLength(17);
+  });
+
+  it("a leaf offers nothing to browse into", async () => {
+    open();
+    await userEvent.click(browseInto("GH07"));
+    expect(screen.queryByTestId("location-browse-GH0701")).toBeNull();
   });
 });
 
 describe("LocationPicker — search", () => {
-  it("typing filters to matches with a breadcrumb, across levels", async () => {
+  it("finds places at every level, each with its breadcrumb", async () => {
     open();
     await userEvent.type(screen.getByRole("combobox"), "ablekuma");
 
-    const listbox = screen.getByRole("listbox");
-    const options = within(listbox).getAllByRole("option");
-    expect(options.length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Greater Accra").length).toBeGreaterThan(0); // breadcrumb(s)
+    expect(options().length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Greater Accra").length).toBeGreaterThan(0);
   });
 
-  it("selecting a searched leaf result calls onSelect and closes", async () => {
+  it("a searched district filters to it", async () => {
     const { onSelect } = open();
     await userEvent.type(screen.getByRole("combobox"), "ablekuma central");
-    await userEvent.click(screen.getByText("Ablekuma Central"));
+    await userEvent.click(option(/^Ablekuma Central/));
 
-    expect(onSelect).toHaveBeenCalledWith<[LocationPickerSelection]>({
-      level: "city",
-      id: "GH0701",
-      slug: "ablekuma-central",
-      label: "Ablekuma Central",
-    });
+    expect(onSelect).toHaveBeenCalledWith(ABLEKUMA_CENTRAL);
+  });
+
+  it("a searched region filters to it too — no forced drill-in", async () => {
+    const { onSelect } = open();
+    await userEvent.type(screen.getByRole("combobox"), "greater accra");
+    await userEvent.click(option(/^Greater Accra/));
+
+    expect(onSelect).toHaveBeenCalledWith(GREATER_ACCRA);
+  });
+
+  it("browsing into a searched region lands inside it with a real breadcrumb", async () => {
+    open();
+    await userEvent.type(screen.getByRole("combobox"), "greater accra");
+    await userEvent.click(browseInto("GH07"));
+
+    expect(screen.getByRole("combobox")).toHaveValue("");
+    expect(options()[0]).toHaveTextContent("All of Greater Accra");
   });
 
   it("shows an empty state for a query with no matches", async () => {
@@ -126,61 +166,77 @@ describe("LocationPicker — search", () => {
     await userEvent.type(screen.getByRole("combobox"), "zzzznotarealplacezzzz");
     expect(screen.getByText(/no matches/i)).toBeInTheDocument();
   });
+});
 
-  it("selecting a searched region drills in rather than selecting it outright", async () => {
-    const { onSelect } = open();
-    await userEvent.type(screen.getByRole("combobox"), "greater accra");
-    await userEvent.click(screen.getByText("Greater Accra"));
+describe("LocationPicker — opens where the selection lives", () => {
+  it("a selected district opens inside its region, marked selected", () => {
+    open({ selectedId: "GH0701" });
 
-    expect(onSelect).not.toHaveBeenCalled();
-    expect(screen.getByText("Back")).toBeInTheDocument();
+    expect(options()[0]).toHaveTextContent("All of Greater Accra");
+    expect(option(/^Ablekuma Central/)).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("a selected region opens at the top, marked selected", () => {
+    open({ selectedId: "GH07" });
+    expect(option(/^Greater Accra/)).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("the region holding a selected district says so", async () => {
+    open({ selectedId: "GH0701" });
+    await userEvent.click(screen.getByRole("button", { name: "Ghana" }));
+    expect(screen.getByLabelText("includes your selection")).toBeInTheDocument();
   });
 });
 
 describe("LocationPicker — keyboard", () => {
-  it("ArrowDown moves focus to the next option (roving tabindex)", () => {
+  it("ArrowDown moves focus to the next option", () => {
     open();
     const listbox = screen.getByRole("listbox");
-    const optionsBefore = within(listbox).getAllByRole("option");
-    expect(optionsBefore[0]).toHaveAttribute("tabIndex", "0");
+    expect(options()[0]).toHaveAttribute("tabIndex", "0");
 
     fireEvent.keyDown(listbox, { key: "ArrowDown" });
-
-    const optionsAfter = within(listbox).getAllByRole("option");
-    expect(optionsAfter[0]).toHaveAttribute("tabIndex", "-1");
-    expect(optionsAfter[1]).toHaveAttribute("tabIndex", "0");
+    expect(options()[0]).toHaveAttribute("tabIndex", "-1");
+    expect(options()[1]).toHaveAttribute("tabIndex", "0");
   });
 
-  it("Enter activates the focused option", async () => {
-    const { onSelect } = open();
+  it("Enter selects the focused region; ArrowRight browses into it instead", () => {
+    const first = open();
     const search = screen.getByRole("combobox");
-    fireEvent.keyDown(search, { key: "ArrowDown" }); // focus index 1
+    fireEvent.keyDown(search, { key: "ArrowDown" });
+    const focusedLabel = options()[1].textContent;
     fireEvent.keyDown(search, { key: "Enter" });
+    expect(first.onSelect).toHaveBeenCalledWith(expect.objectContaining({ level: "region" }));
+    cleanup();
 
-    // Index 1's region has children, so Enter drills in rather than
-    // selecting — proves Enter reached the currently-focused option at all.
-    expect(screen.getByText("Back")).toBeInTheDocument();
-    expect(onSelect).not.toHaveBeenCalled();
+    const second = open();
+    const search2 = screen.getByRole("combobox");
+    fireEvent.keyDown(search2, { key: "ArrowDown" });
+    fireEvent.keyDown(search2, { key: "ArrowRight" });
+    expect(second.onSelect).not.toHaveBeenCalled();
+    expect(options()[0].textContent).toContain(`All of ${focusedLabel}`);
+
+    fireEvent.keyDown(search2, { key: "ArrowLeft" });
+    expect(options()).toHaveLength(17);
+  });
+});
+
+describe("LocationPicker — counts", () => {
+  it("shows how many listings each place holds, including none", () => {
+    open({ counts: { GH07: 3 } });
+    expect(option(/^Greater Accra/)).toHaveTextContent("3 listings");
+    expect(option(/^Ashanti/)).toHaveTextContent("no listings");
   });
 });
 
 describe("LocationPicker — recent locations", () => {
   it("a selection is offered as Recent the next time the picker opens", async () => {
     const first = open();
-    await userEvent.click(screen.getByText("Greater Accra"));
-    await userEvent.click(screen.getByText("Ablekuma Central"));
+    await userEvent.click(browseInto("GH07"));
+    await userEvent.click(option(/^Ablekuma Central/));
     cleanup();
 
     open({ onSelect: first.onSelect });
     expect(screen.getByText("Recent")).toBeInTheDocument();
     expect(screen.getByText("Ablekuma Central", { selector: "button" })).toBeInTheDocument();
-  });
-});
-
-describe("LocationPicker — selected highlight", () => {
-  it("marks the matching option aria-selected", () => {
-    open({ selectedId: "GH07" });
-    const option = screen.getByText("Greater Accra").closest('[role="option"]');
-    expect(option).toHaveAttribute("aria-selected", "true");
   });
 });

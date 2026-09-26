@@ -20,9 +20,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { buttonVariants } from "@/components/ui/button-variants";
 import {
-  compactFilterTriggerClass,
   FilterDropdown,
-  FilterField,
   filterTriggerClass,
   type FilterOption,
 } from "@/features/properties/FilterDropdown";
@@ -36,6 +34,7 @@ import { PropertyCard } from "@/features/landing/PropertyCard";
 import { titleCase } from "@/lib/format";
 import { getBySlug, getPath } from "@/lib/location-taxonomy";
 import { clientSearchProperties } from "@/lib/property-search";
+import { countPropertiesByLocation } from "@/lib/location-match";
 import { cn } from "@/lib/utils";
 import {
   filtersFromSearchParams,
@@ -133,11 +132,9 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
      above). */
   const urlFilters = useMemo(() => filtersFromSearchParams(searchParams), [searchParams]);
 
-  const selectedLocationNode = urlFilters.city
-    ? getBySlug(urlFilters.city)
-    : urlFilters.region
-      ? getBySlug(urlFilters.region)
-      : null;
+  // The most specific level the URL names — area, then city, then region.
+  const selectedLocationSlug = urlFilters.area ?? urlFilters.city ?? urlFilters.region;
+  const selectedLocationNode = selectedLocationSlug ? getBySlug(selectedLocationSlug) : null;
   const selectedLocationLabel = selectedLocationNode
     ? "displayName" in selectedLocationNode
       ? selectedLocationNode.displayName
@@ -221,6 +218,20 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
         { offset: 0, limit: Number.MAX_SAFE_INTEGER },
         { candidateRows: properties },
       ).rows,
+    [properties, searchFilters],
+  );
+
+  // How many listings each place holds under the other active filters —
+  // location itself left out, or every place but the selected one would read 0.
+  const locationCounts = useMemo(
+    () =>
+      countPropertiesByLocation(
+        clientSearchProperties(
+          { ...searchFilters, region: undefined, city: undefined, area: undefined },
+          { offset: 0, limit: Number.MAX_SAFE_INTEGER },
+          { candidateRows: properties },
+        ).rows,
+      ),
     [properties, searchFilters],
   );
 
@@ -310,169 +321,125 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
     </div>
   );
 
-  const statusFilter = (
-    <FilterDropdown
-      label="Status"
-      icon={<Tag className="h-3.5 w-3.5" />}
-      value={filters.status}
-      options={STATUS_OPTIONS}
-      onChange={(value) => setFilters((f) => ({ ...f, status: value }))}
-    />
-  );
-  const locationFilter = (
-    <FilterField label="Location" icon={<MapPin className="h-3.5 w-3.5" />}>
+  /* One filter bar for both routes — a single row of pills, all the same
+     height as the search input beside them, so every control sits on one
+     baseline.
+
+     Mobile (<sm): the pills collapse to one "Filters" button — there's no
+     room for four dropdowns plus search on a phone width without wrapping
+     into a mess — which opens MobileFilterSheet, an Apple Settings–style
+     sheet: one row per filter, its options hidden until that row is tapped
+     (progressive disclosure), so a visitor sees one decision at a time
+     instead of every option for every filter competing for the same small
+     screen at once. */
+  const filterBar = (
+    <div className="flex items-center gap-3">
+      <div className="hidden flex-1 flex-wrap items-center gap-2 sm:flex">
+        <FilterDropdown
+          label="Status"
+          icon={<Tag className="h-3.5 w-3.5" />}
+          value={filters.status}
+          options={STATUS_OPTIONS}
+          onChange={(value) => setFilters((f) => ({ ...f, status: value }))}
+        />
+        <button
+          type="button"
+          onClick={() => setLocationPickerOpen(true)}
+          aria-haspopup="dialog"
+          aria-expanded={locationPickerOpen}
+          className={filterTriggerClass}
+        >
+          <MapPin className="text-brand-500 h-3.5 w-3.5 shrink-0" />
+          <span className="truncate">{selectedLocationLabel ?? "All Locations"}</span>
+          <ChevronDown className="text-ink-400 h-4 w-4 shrink-0" />
+        </button>
+        <FilterDropdown
+          label="Type"
+          icon={<Home className="h-3.5 w-3.5" />}
+          value={filters.type}
+          options={typeOptions}
+          onChange={(value) => setFilters((f) => ({ ...f, type: value }))}
+        />
+        <FilterDropdown
+          label="Price"
+          icon={<DollarSign className="h-3.5 w-3.5" />}
+          value={filters.price}
+          options={priceOptions}
+          onChange={(value) => setFilters((f) => ({ ...f, price: value }))}
+        />
+        <div className="relative max-w-[220px] min-w-[160px] flex-1">
+          <Search className="text-ink-400 absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2" />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search properties..."
+            className="border-ink-200 text-ink-900 placeholder:text-ink-400 focus:border-brand-400 h-10 w-full rounded-full border bg-white pr-3 pl-9 text-[13px] transition-colors outline-none"
+          />
+        </div>
+      </div>
+
       <button
         type="button"
-        onClick={() => setLocationPickerOpen(true)}
-        aria-haspopup="dialog"
-        aria-expanded={locationPickerOpen}
-        className={filterTriggerClass}
+        onClick={() => setMobileFilterOpen(true)}
+        className="border-ink-200 text-ink-900 flex h-10 flex-1 items-center justify-center gap-2 rounded-full border bg-white px-4 text-[14px] font-semibold sm:hidden"
       >
-        <span className="truncate">{selectedLocationLabel ?? "All Locations"}</span>
-        <ChevronDown className="text-ink-400 h-4 w-4 shrink-0" />
+        <SlidersHorizontal className="h-4 w-4" />
+        Filters
+        {hasActiveFilters && <span className="bg-brand-600 h-2 w-2 rounded-full" />}
       </button>
-    </FilterField>
-  );
-  const typeFilter = (
-    <FilterDropdown
-      label="Type"
-      icon={<Home className="h-3.5 w-3.5" />}
-      value={filters.type}
-      options={typeOptions}
-      onChange={(value) => setFilters((f) => ({ ...f, type: value }))}
-    />
-  );
-  const priceFilter = (
-    <FilterDropdown
-      label="Price"
-      icon={<DollarSign className="h-3.5 w-3.5" />}
-      value={filters.price}
-      options={priceOptions}
-      onChange={(value) => setFilters((f) => ({ ...f, price: value }))}
-    />
+
+      {viewToggle}
+    </div>
   );
 
-  /* The map route's thin bar (tablet/desktop) — single-row pills, not the
-     label-above-control shape the grid view's full panel uses above. See
-     FilterField's own doc for why mixing the two shapes misaligns a row. */
-  const statusFilterCompact = (
-    <FilterDropdown
-      compact
-      label="Status"
-      icon={<Tag className="h-3.5 w-3.5" />}
-      value={filters.status}
-      options={STATUS_OPTIONS}
-      onChange={(value) => setFilters((f) => ({ ...f, status: value }))}
-    />
-  );
-  const locationFilterCompact = (
-    <FilterField compact label="Location" icon={<MapPin className="h-3.5 w-3.5" />}>
-      <button
-        type="button"
-        onClick={() => setLocationPickerOpen(true)}
-        aria-haspopup="dialog"
-        aria-expanded={locationPickerOpen}
-        className={compactFilterTriggerClass}
-      >
-        <MapPin className="text-brand-500 h-3.5 w-3.5 shrink-0" />
-        <span className="truncate">{selectedLocationLabel ?? "All Locations"}</span>
-        <ChevronDown className="text-ink-400 h-4 w-4 shrink-0" />
-      </button>
-    </FilterField>
-  );
-  const typeFilterCompact = (
-    <FilterDropdown
-      compact
-      label="Type"
-      icon={<Home className="h-3.5 w-3.5" />}
-      value={filters.type}
-      options={typeOptions}
-      onChange={(value) => setFilters((f) => ({ ...f, type: value }))}
-    />
-  );
-  const priceFilterCompact = (
-    <FilterDropdown
-      compact
-      label="Price"
-      icon={<DollarSign className="h-3.5 w-3.5" />}
-      value={filters.price}
-      options={priceOptions}
-      onChange={(value) => setFilters((f) => ({ ...f, price: value }))}
-    />
+  const resultSummary = (
+    <p className="text-ink-500 text-[13px]">
+      {filteredProperties.length} propert{filteredProperties.length === 1 ? "y" : "ies"} found
+      {hasActiveFilters && (
+        <button
+          onClick={clearFilters}
+          className="text-brand-600 hover:text-brand-700 ml-3 font-semibold"
+        >
+          Clear filters
+        </button>
+      )}
+    </p>
   );
 
-  const locationPicker = (
-    <LocationPicker
-      open={locationPickerOpen}
-      onOpenChange={setLocationPickerOpen}
-      onSelect={handleLocationSelect}
-      selectedId={selectedLocationNode?.id}
-    />
+  const filterDialogs = (
+    <>
+      <LocationPicker
+        open={locationPickerOpen}
+        onOpenChange={setLocationPickerOpen}
+        onSelect={handleLocationSelect}
+        onClear={() => applyFilterParams({})}
+        counts={locationCounts}
+        selectedId={selectedLocationNode?.id}
+      />
+      <MobileFilterSheet
+        open={mobileFilterOpen}
+        onOpenChange={setMobileFilterOpen}
+        filters={filters}
+        onFiltersChange={setFilters}
+        statusOptions={STATUS_OPTIONS}
+        typeOptions={typeOptions}
+        priceOptions={priceOptions}
+        locationLabel={selectedLocationLabel ?? "All Locations"}
+        onLocationClick={() => setLocationPickerOpen(true)}
+        resultCount={filteredProperties.length}
+        hasActiveFilters={hasActiveFilters}
+        onClear={clearFilters}
+      />
+    </>
   );
 
   if (view === "map") {
     return (
       <>
-        {/* Thin in-map filter bar, replacing the full heading + Search
-            Properties panel the grid view shows — the map is the point of
-            this route, so the chrome around it stays minimal.
-
-            Tablet/desktop (sm+): a single row of compact pills, all the
-            same height as the search input beside them (see
-            compactFilterTriggerClass's own doc for why the grid view's
-            label-above-control shape can't just be reused here).
-
-            Mobile (<sm): the pills collapse to one "Filters" button —
-            there's no room for four dropdowns plus search on a phone
-            width without wrapping into a mess — which opens
-            MobileFilterSheet, an Apple Settings–style sheet: one row per
-            filter, its options hidden until that row is tapped
-            (progressive disclosure), so a visitor sees one decision at a
-            time instead of every option for every filter competing for
-            the same small screen at once. */}
-        <div className="flex items-center gap-3">
-          <div className="hidden flex-1 flex-wrap items-center gap-2 sm:flex">
-            {statusFilterCompact}
-            {locationFilterCompact}
-            {typeFilterCompact}
-            {priceFilterCompact}
-            <div className="relative max-w-[220px] min-w-[160px] flex-1">
-              <Search className="text-ink-400 absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2" />
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search properties..."
-                className="border-ink-200 text-ink-900 placeholder:text-ink-400 focus:border-brand-400 h-10 w-full rounded-full border bg-white pr-3 pl-9 text-[13px] transition-colors outline-none"
-              />
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setMobileFilterOpen(true)}
-            className="border-ink-200 text-ink-900 flex h-10 flex-1 items-center justify-center gap-2 rounded-full border bg-white px-4 text-[14px] font-semibold sm:hidden"
-          >
-            <SlidersHorizontal className="h-4 w-4" />
-            Filters
-            {hasActiveFilters && <span className="bg-brand-600 h-2 w-2 rounded-full" />}
-          </button>
-
-          {viewToggle}
-        </div>
-
-        <div className="mt-3 flex items-center justify-between gap-3">
-          <p className="text-ink-500 text-[13px]">
-            {filteredProperties.length} propert{filteredProperties.length === 1 ? "y" : "ies"} found
-            {hasActiveFilters && (
-              <button
-                onClick={clearFilters}
-                className="text-brand-600 hover:text-brand-700 ml-3 font-semibold"
-              >
-                Clear filters
-              </button>
-            )}
-          </p>
-        </div>
+        {/* No heading here — the map is the point of this route, so the
+            chrome around it stays minimal: just the shared filter bar. */}
+        {filterBar}
+        <div className="mt-3">{resultSummary}</div>
 
         {/* One PropertyMap, always — it owns a real WebGL context, a
             geolocation request, and a MapLibre worker, so two instances
@@ -550,76 +517,25 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
           </div>
         </div>
 
-        {locationPicker}
-        <MobileFilterSheet
-          open={mobileFilterOpen}
-          onOpenChange={setMobileFilterOpen}
-          filters={filters}
-          onFiltersChange={setFilters}
-          statusOptions={STATUS_OPTIONS}
-          typeOptions={typeOptions}
-          priceOptions={priceOptions}
-          locationLabel={selectedLocationLabel ?? "All Locations"}
-          onLocationClick={() => setLocationPickerOpen(true)}
-          resultCount={filteredProperties.length}
-          hasActiveFilters={hasActiveFilters}
-          onClear={clearFilters}
-        />
+        {filterDialogs}
       </>
     );
   }
 
   return (
     <>
-      <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-end sm:justify-between">
-        <div className="max-w-2xl">
-          <h1 className="text-ink-900 text-[clamp(2rem,4vw,2.75rem)] leading-[1.15] font-bold tracking-[-0.02em]">
-            Browse verified properties
-          </h1>
-          <p className="text-ink-500 mt-3 text-[16px] leading-relaxed">
-            Every listing below is title-verified against Ghana&apos;s Lands Commission records and
-            recorded on-chain.
-          </p>
-        </div>
-
-        <div className="relative w-full shrink-0 sm:w-[280px]">
-          <Search className="text-ink-400 absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search properties, locations..."
-            className="border-ink-200 text-ink-900 placeholder:text-ink-400 focus:border-brand-400 h-11 w-full rounded-full border bg-white pr-4 pl-10 text-[14px] transition-colors outline-none"
-          />
-        </div>
-      </div>
-
-      <div className="bg-brand-50 mt-8 rounded-[22px] px-6 py-5 sm:px-7">
-        <h2 className="text-brand-700 text-[18px] font-semibold sm:text-[20px]">
-          Search Properties
-        </h2>
-        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {statusFilter}
-          {locationFilter}
-          {typeFilter}
-          {priceFilter}
-        </div>
-      </div>
-
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-ink-500 text-[14px]">
-          {filteredProperties.length} propert{filteredProperties.length === 1 ? "y" : "ies"} found
-          {hasActiveFilters && (
-            <button
-              onClick={clearFilters}
-              className="text-brand-600 hover:text-brand-700 ml-3 font-semibold"
-            >
-              Clear filters
-            </button>
-          )}
+      <div className="max-w-2xl">
+        <h1 className="text-ink-900 text-[clamp(2rem,4vw,2.75rem)] leading-[1.15] font-bold tracking-[-0.02em]">
+          Browse verified properties
+        </h1>
+        <p className="text-ink-500 mt-3 text-[16px] leading-relaxed">
+          Every listing below is title-verified against Ghana&apos;s Lands Commission records and
+          recorded on-chain.
         </p>
-
-        {viewToggle}
       </div>
+
+      <div className="mt-8">{filterBar}</div>
+      <div className="mt-3">{resultSummary}</div>
 
       {properties.length === 0 ? (
         <div className="py-16 text-center">
@@ -661,7 +577,7 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
         </>
       )}
 
-      {locationPicker}
+      {filterDialogs}
     </>
   );
 }

@@ -21,13 +21,18 @@ export interface LocationPickerNode {
    *  once drilled below the top level — e.g. "Greater Accra" for a
    *  district, "Dansoman / Greater Accra" for an area. */
   parentLabel?: string;
-  /** Whether selecting this row drills down (true) or is a final
-   *  selection (false) — a district currently has no children (AREAS is
-   *  empty), so every district is a leaf today even though the taxonomy
-   *  supports a third level. */
+  /** Which level of the taxonomy this place is — read off the node itself,
+   *  never inferred from drill depth or breadcrumbs, so a level added later
+   *  is selectable the moment the taxonomy has it. */
+  level: LocationPickerLevel;
+  /** Whether there are places inside this one to browse. Selecting a row
+   *  always filters to it; browsing inside is a separate action. */
   hasChildren: boolean;
+  /** How many places are directly inside ("29 districts") — 0 for a leaf. */
+  childCount: number;
 }
 
+/** "city" is the URL codec's name for the district (MMDA) level. */
 export type LocationPickerLevel = "region" | "city" | "area";
 
 /** What the picker hands back on a final selection. */

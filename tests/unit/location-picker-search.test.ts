@@ -8,7 +8,9 @@ const node = (label: string, aliases: string[] = []): LocationPickerNode => ({
   slug: label.toLowerCase(),
   label,
   aliases,
+  level: "city",
   hasChildren: false,
+  childCount: 0,
 });
 
 describe("searchLocationNodes — ranking", () => {

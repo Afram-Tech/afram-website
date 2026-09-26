@@ -1,19 +1,24 @@
 import { useMemo, useReducer } from "react";
 import { getChildNodes, getRootNodes } from "./adapters";
-import type { LocationPickerLevel, LocationPickerNode } from "./types";
+import type { LocationPickerNode } from "./types";
 
 export interface NavigationState {
-  /** Drilled-into nodes, root first — [] at the region level. */
+  /** Places browsed into, root first — [] when listing the regions. */
   path: LocationPickerNode[];
 }
 
 export type NavigationAction =
-  { type: "DRILL_INTO"; node: LocationPickerNode } | { type: "BACK" } | { type: "RESET" };
+  | { type: "DRILL_INTO"; node: LocationPickerNode }
+  | { type: "BACK" }
+  /** Jump to a breadcrumb: keep the first `depth` entries (0 = the root). */
+  | { type: "GO_TO"; depth: number }
+  /** Open somewhere specific, e.g. inside the current selection's parent. */
+  | { type: "SET_PATH"; path: LocationPickerNode[] }
+  | { type: "RESET" };
 
 export const INITIAL_NAVIGATION_STATE: NavigationState = { path: [] };
 
-/** Pure — exported separately from the hook so the state machine itself is
- *  testable without mounting anything. */
+/** Pure — exported separately so the state machine is testable on its own. */
 export function navigationReducer(
   state: NavigationState,
   action: NavigationAction,
@@ -23,25 +28,27 @@ export function navigationReducer(
       return { path: [...state.path, action.node] };
     case "BACK":
       return { path: state.path.slice(0, -1) };
+    case "GO_TO":
+      return { path: state.path.slice(0, Math.max(action.depth, 0)) };
+    case "SET_PATH":
+      return { path: action.path };
     case "RESET":
       return INITIAL_NAVIGATION_STATE;
   }
 }
 
-export const LEVEL_BY_DEPTH: LocationPickerLevel[] = ["region", "city", "area"];
-
 export interface UseLocationPickerNavigation {
   path: LocationPickerNode[];
-  level: LocationPickerLevel;
-  /** This level's option list — all 16 regions at the root, or the
-   *  current path's last node's children otherwise. */
+  /** The places listed at this depth — the regions at the root, otherwise
+   *  what's inside the last place browsed into. */
   nodes: LocationPickerNode[];
-  /** The node a click on "All {parentLabel}" would select — undefined at
-   *  the root, where there is nothing to fall back to. */
+  /** The place being browsed inside — undefined at the root. */
   parent: LocationPickerNode | undefined;
   canGoBack: boolean;
   drillInto: (node: LocationPickerNode) => void;
   back: () => void;
+  goTo: (depth: number) => void;
+  setPath: (path: LocationPickerNode[]) => void;
   reset: () => void;
 }
 
@@ -49,20 +56,22 @@ export function useLocationPickerNavigation(
   counts?: Record<string, number>,
 ): UseLocationPickerNavigation {
   const [state, dispatch] = useReducer(navigationReducer, INITIAL_NAVIGATION_STATE);
+  const parent = state.path[state.path.length - 1];
 
-  const nodes = useMemo(() => {
-    const parent = state.path[state.path.length - 1];
-    return parent ? getChildNodes(parent.id, counts) : getRootNodes(counts);
-  }, [state.path, counts]);
+  const nodes = useMemo(
+    () => (parent ? getChildNodes(parent.id, counts) : getRootNodes(counts)),
+    [parent, counts],
+  );
 
   return {
     path: state.path,
-    level: LEVEL_BY_DEPTH[Math.min(state.path.length, LEVEL_BY_DEPTH.length - 1)],
     nodes,
-    parent: state.path[state.path.length - 1],
+    parent,
     canGoBack: state.path.length > 0,
     drillInto: (node) => dispatch({ type: "DRILL_INTO", node }),
     back: () => dispatch({ type: "BACK" }),
+    goTo: (depth) => dispatch({ type: "GO_TO", depth }),
+    setPath: (path) => dispatch({ type: "SET_PATH", path }),
     reset: () => dispatch({ type: "RESET" }),
   };
 }

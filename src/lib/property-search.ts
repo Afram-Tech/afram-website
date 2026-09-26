@@ -2,10 +2,9 @@
  * searchProperties(filters, pagination) — client-side fallback over an
  * already-fetched page of rows, using the PropertySearchFilters shape the
  * URL codec (property-search-filters.ts) produces. Mirrors afram-web's
- * src/utils/search-properties.ts one-to-one in design (matching by
- * normalised location token, not a resolved taxonomy id — see that file's
- * own comment for why), adapted to this repo's `Property` type in place of
- * afram-web's `ProjectFromQuery`.
+ * src/utils/search-properties.ts one-to-one in design, adapted to this repo's
+ * `Property` type in place of afram-web's `ProjectFromQuery`. Location
+ * matching is by containment — see lib/location-match.
  *
  * No server-side implementation exists here either — fetchPublicProperties
  * still pulls a flat, unfiltered 200-row page (00-findings.md §A4); this
@@ -16,7 +15,10 @@
  */
 import type { Property } from "@/features/landing/data/properties";
 import { getBySlug, normalizeLocationName } from "@/lib/location-taxonomy";
+import { getPropertyLocationTokens, propertyIsInLocation } from "@/lib/location-match";
 import type { PropertySearchFilters } from "@/lib/property-search-filters";
+
+export { getPropertyLocationTokens };
 
 export interface SearchPropertiesPagination {
   offset: number;
@@ -41,15 +43,6 @@ export interface SearchPropertiesDeps {
 }
 
 const identityConvert = (amount: number) => amount;
-
-/** city, region, and the street address — the free-text surface a listing's
- *  place name can appear in, same fields PropertiesBrowser's search box
- *  already reads via `location`. */
-export function getPropertyLocationTokens(property: Property): string[] {
-  return [property.city, property.region, property.address.street]
-    .filter((v): v is string => Boolean(v))
-    .map(normalizeLocationName);
-}
 
 export function getPropertySearchText(property: Property): string {
   return [property.name, ...getPropertyLocationTokens(property), property.type]
@@ -78,35 +71,18 @@ export function getPropertyAvailability(property: Property): {
   };
 }
 
-function matchesRegion(property: Property, regionSlug: string): boolean {
-  const node = getBySlug(regionSlug);
-  // RegionNode: has `name`, has no `parentId` (DistrictNode and AreaNode both do).
-  if (!node || !("name" in node) || "parentId" in node) return false;
-  const wanted = normalizeLocationName(node.name);
-  return getPropertyLocationTokens(property).some((t) => t.includes(wanted));
+/** A location slug (?region= / ?city= / ?area=) → is the listing in that
+ *  place or anywhere inside it (see lib/location-match). An unknown slug
+ *  matches nothing rather than everything. */
+function matchesLocationSlug(property: Property, slug: string): boolean {
+  const node = getBySlug(slug);
+  return node ? propertyIsInLocation(property, node) : false;
 }
 
-function matchesCity(property: Property, citySlug: string): boolean {
-  const city = getBySlug(citySlug);
-  if (!city || !("displayName" in city)) return false;
-  const wanted = normalizeLocationName(city.displayName);
-  return getPropertyLocationTokens(property).some((t) => t.includes(wanted));
-}
-
-function matchesArea(property: Property, areaSlug: string): boolean {
-  // AREAS is empty until the candidate list is curated (see afram-web's
-  // AREA_CANDIDATES.md) — getBySlug can never resolve an area today, so
-  // this always excludes every row while that's true. Written for when it
-  // isn't, matching afram-web's own matchesArea exactly.
-  const node = getBySlug(areaSlug);
-  // AreaNode: has both `name` and `parentId` (DistrictNode has `parentId`
-  // but no `name`; RegionNode has `name` but no `parentId`).
-  if (!node || !("name" in node) || !("parentId" in node)) return false;
-  const wanted = normalizeLocationName(node.name);
-  return getPropertyLocationTokens(property).some((t) => t.includes(wanted));
-}
-
-function matchesBbox(property: Property, bbox: NonNullable<PropertySearchFilters["bbox"]>): boolean {
+function matchesBbox(
+  property: Property,
+  bbox: NonNullable<PropertySearchFilters["bbox"]>,
+): boolean {
   if (!property.coordinates) return false; // can't place it, can't claim it's in the viewport
   const { lat, lng } = property.coordinates;
   return lat >= bbox.south && lat <= bbox.north && lng >= bbox.west && lng <= bbox.east;
@@ -138,9 +114,10 @@ export function clientSearchProperties(
   const convert = deps.convert ?? identityConvert;
 
   let rows = deps.candidateRows.filter((property) => {
-    if (filters.region && !matchesRegion(property, filters.region)) return false;
-    if (filters.city && !matchesCity(property, filters.city)) return false;
-    if (filters.area && !matchesArea(property, filters.area)) return false;
+    // Each named level must hold; a city inside its region satisfies both.
+    for (const slug of [filters.region, filters.city, filters.area]) {
+      if (slug && !matchesLocationSlug(property, slug)) return false;
+    }
 
     if (filters.type) {
       const wanted = normalizeLocationName(filters.type);

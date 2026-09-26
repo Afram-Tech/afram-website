@@ -8,7 +8,9 @@ const node = (label: string, count?: number): LocationPickerNode => ({
   label,
   aliases: [],
   count,
+  level: "city",
   hasChildren: false,
+  childCount: 0,
 });
 
 describe("groupLocationNodes — popular", () => {

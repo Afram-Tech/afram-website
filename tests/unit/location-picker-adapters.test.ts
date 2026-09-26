@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { getAllNodes, getChildNodes, getRootNodes } from "@/features/properties/location-picker/adapters";
+import {
+  childSummary,
+  getAllNodes,
+  getChildNodes,
+  getRootNodes,
+} from "@/features/properties/location-picker/adapters";
 
 describe("getRootNodes", () => {
   it("returns all 16 real regions", () => {
@@ -20,7 +25,26 @@ describe("getRootNodes", () => {
     const greaterAccra = nodes.find((n) => n.slug === "greater-accra")!;
     const ashanti = nodes.find((n) => n.slug === "ashanti")!;
     expect(greaterAccra.count).toBe(42);
-    expect(ashanti.count).toBeUndefined();
+    // Once counts are known, a place missing from them holds nothing.
+    expect(ashanti.count).toBe(0);
+  });
+
+  it("leaves counts unknown when none are supplied", () => {
+    expect(getRootNodes().every((n) => n.count === undefined)).toBe(true);
+  });
+
+  it("reads each node's level off the taxonomy, with its child count", () => {
+    const greaterAccra = getRootNodes().find((n) => n.slug === "greater-accra")!;
+    expect(greaterAccra).toMatchObject({ level: "region", hasChildren: true });
+    expect(greaterAccra.childCount).toBeGreaterThan(10);
+    const [district] = getChildNodes(greaterAccra.id);
+    expect(district).toMatchObject({ level: "city", hasChildren: false, childCount: 0 });
+  });
+
+  it("describes what browsing inside a place will show", () => {
+    const greaterAccra = getRootNodes().find((n) => n.slug === "greater-accra")!;
+    expect(childSummary(greaterAccra)).toBe(`${greaterAccra.childCount} districts`);
+    expect(childSummary(getChildNodes(greaterAccra.id)[0])).toBeNull();
   });
 
   it("carries the HDX alias where one exists", () => {
