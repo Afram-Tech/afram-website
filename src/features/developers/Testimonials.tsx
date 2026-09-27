@@ -13,7 +13,7 @@ export function Testimonials({ title }: { title: string }) {
   return (
     <Section className="pt-0">
       <SectionHeading title={title} />
-      <div className="mt-10 grid gap-6 lg:mt-12 lg:grid-cols-3">
+      <div className="gap-card mt-10 grid lg:mt-12 lg:grid-cols-3">
         {TESTIMONIALS.map((t) => (
           <figure
             key={t.name}

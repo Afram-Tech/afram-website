@@ -64,7 +64,7 @@ export function TwoPaths({
   return (
     <Section id="paths" className={cn("scroll-mt-24", tone === "mint" && "bg-brand-50/50")}>
       <SectionHeading title={title} />
-      <div className="mt-10 grid gap-6 lg:mt-12 lg:grid-cols-2 lg:gap-8">
+      <div className="gap-card mt-10 grid lg:mt-12 lg:grid-cols-2">
         {paths.map((p) => (
           <div
             key={p.badge}

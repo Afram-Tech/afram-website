@@ -24,7 +24,7 @@ function PropertiesBrowserFallback() {
       <div className="bg-ink-100 h-10 w-2/3 max-w-md rounded-full" />
       <div className="bg-ink-100 mt-3 h-4 w-1/2 max-w-sm rounded-full" />
       <div className="bg-brand-50 mt-8 h-40 rounded-[22px]" />
-      <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="gap-x-card mt-10 grid grid-cols-1 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 6 }, (_, i) => (
           <div key={i} className="bg-ink-100 h-64 rounded-xl" />
         ))}

@@ -54,6 +54,10 @@
   --color-ink-100: #e8eaed;
   --color-ink-50: #f6f7f8;
 
+  /* Gap between sibling cards in a row — the property grid's spacing, used
+     for every card collection on the site so they all read the same. */
+  --spacing-card: 2rem;
+
   --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
 
   --font-sans: var(--font-montserrat), sans-serif;

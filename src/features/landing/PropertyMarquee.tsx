@@ -35,7 +35,7 @@ export function PropertyMarquee({ properties }: { properties: Property[] }) {
         {properties.map((property, index) => (
           <div
             key={`${property.slug}-${index}`}
-            className="mr-7 w-[290px] shrink-0 sm:w-[330px]"
+            className="mr-card w-[290px] shrink-0 sm:w-[330px]"
             aria-hidden={index >= properties.length ? true : undefined}
           >
             <PropertyCard property={property} />

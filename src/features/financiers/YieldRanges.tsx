@@ -27,7 +27,7 @@ export function YieldRanges() {
     <Section id="yield" className="wash-mint scroll-mt-24">
       <SectionHeading title="Transparent ranges." intro="Two ways capital is put to work." />
 
-      <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2">
+      <div className="gap-card mt-12 grid grid-cols-1 md:grid-cols-2">
         {DEALS.map((deal, index) => (
           <Reveal key={deal.type} delay={index * 0.07}>
             <div className="border-ink-100 flex h-full flex-col rounded-[1.75rem] border bg-white p-7 shadow-sm">
