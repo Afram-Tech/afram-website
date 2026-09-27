@@ -3,6 +3,15 @@ import type { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
 import { getAllArticles } from "@/features/landing/data/articles";
 import { getAllProperties } from "@/features/landing/data/properties";
+import {
+  locationPath,
+  locationsWithListings,
+  PROPERTY_TYPE_PAGES,
+  propertiesOfType,
+  typeLocationPairs,
+  typeLocationPath,
+  typePath,
+} from "@/lib/property-seo";
 
 const STATIC_ROUTES = [
   { path: "/", priority: 1, changeFrequency: "weekly" as const },
@@ -27,7 +36,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${siteConfig.url}/properties/${property.slug}`,
     lastModified: new Date(),
     changeFrequency: "weekly",
-    priority: 0.6,
+    priority: 0.7,
+    // Google's image sitemap extension — lets listing photos surface in
+    // image search and beside the result, the way marketplace listings do.
+    images: property.images,
+  }));
+
+  // The crawlable collection pages — only those with listings, same as the
+  // routes themselves build.
+  const collectionPaths = [
+    ...PROPERTY_TYPE_PAGES.filter((type) => propertiesOfType(properties, type).length > 0).map(
+      typePath,
+    ),
+    ...locationsWithListings(properties).map(({ node }) => locationPath(node)),
+    ...typeLocationPairs(properties).map(({ type, node }) => typeLocationPath(type, node)),
+  ];
+  const collectionEntries: MetadataRoute.Sitemap = collectionPaths.map((path) => ({
+    url: `${siteConfig.url}${path}`,
+    lastModified: new Date(),
+    changeFrequency: "daily",
+    priority: 0.8,
   }));
 
   const articles = await getAllArticles();
@@ -38,5 +66,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }));
 
-  return [...staticEntries, ...propertyEntries, ...articleEntries];
+  return [...staticEntries, ...collectionEntries, ...propertyEntries, ...articleEntries];
 }
