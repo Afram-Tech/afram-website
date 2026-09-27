@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { JsonLd } from "@/components/JsonLd";
 import { findPropertyBySlug, getAllProperties } from "@/features/landing/data/properties";
 import { PropertyDetail } from "@/features/properties/PropertyDetail";
-import { formatPropertySize } from "@/lib/format";
-import { buildMetadata } from "@/lib/seo";
+import {
+  buildPropertyJsonLd,
+  locationName,
+  locationPath,
+  locationTrail,
+  propertyDescription,
+  propertyHeadline,
+} from "@/lib/property-seo";
+import { buildBreadcrumbJsonLd, buildMetadata } from "@/lib/seo";
 
 interface PropertyPageProps {
   params: Promise<{ slug: string }>;
@@ -27,10 +35,13 @@ export async function generateMetadata({ params }: PropertyPageProps): Promise<M
     });
   }
 
+  // The search phrase leads ("2 Bedroom Apartment for Sale in Adenta…"), the
+  // listing's own name follows — people search for the former, not the latter.
   return buildMetadata({
-    title: `${property.name} — ${property.location}`,
-    description: `${property.name} in ${property.location}. ${property.beds} bed, ${property.baths} bath, ${formatPropertySize(property.sqft)}. Title-verified on Afram.`,
+    title: `${propertyHeadline(property)} | ${property.name}`,
+    description: propertyDescription(property),
     path: `/properties/${property.slug}`,
+    images: property.images.slice(0, 4),
   });
 }
 
@@ -42,5 +53,20 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
     notFound();
   }
 
-  return <PropertyDetail property={property} />;
+  const trail = locationTrail(property);
+
+  return (
+    <>
+      <JsonLd data={buildPropertyJsonLd(property)} />
+      <JsonLd
+        data={buildBreadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Properties", path: "/properties" },
+          ...trail.map((node) => ({ name: locationName(node), path: locationPath(node) })),
+          { name: property.name, path: `/properties/${property.slug}` },
+        ])}
+      />
+      <PropertyDetail property={property} />
+    </>
+  );
 }
