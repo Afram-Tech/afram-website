@@ -43,9 +43,9 @@ export function LocationRowList({ nodes, ctx }: { nodes: LocationPickerNode[]; c
 }
 
 interface LocationPickerBrowseProps extends LocationPickerGroups {
-  /** The "whole of here" row: all of Ghana at the top, or all of the place
-   *  being browsed. Always first, so widening back out is one tap. */
-  scopeNode: LocationPickerNode;
+  /** The "whole of here" row for the place being browsed — always first, so
+   *  widening back out is one tap. Null at the top level. */
+  scopeNode: LocationPickerNode | null;
   scopeHint: string;
   scopeSelected: boolean;
   onSelectScope: () => void;
@@ -68,16 +68,18 @@ export function LocationPickerBrowse({
 }: LocationPickerBrowseProps) {
   return (
     <div>
-      <div className="mb-3">
-        <LocationPickerRow
-          node={scopeNode}
-          selected={scopeSelected}
-          focused={ctx.isFocused(scopeNode)}
-          optionId={`location-option-${scopeNode.id}`}
-          onSelect={onSelectScope}
-          hint={scopeHint}
-        />
-      </div>
+      {scopeNode && (
+        <div className="mb-3">
+          <LocationPickerRow
+            node={scopeNode}
+            selected={scopeSelected}
+            focused={ctx.isFocused(scopeNode)}
+            optionId={`location-option-${scopeNode.id}`}
+            onSelect={onSelectScope}
+            hint={scopeHint}
+          />
+        </div>
+      )}
 
       {recent.length > 0 && (
         <div className="mb-4">

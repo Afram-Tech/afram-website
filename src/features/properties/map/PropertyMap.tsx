@@ -96,15 +96,18 @@ function buildBoundaryGeoJSON(markers: PropertyMapMarker[]): GeoJSON.FeatureColl
   return {
     type: "FeatureCollection",
     features: markers
-      .filter((m): m is PropertyMapMarker & { boundary: NonNullable<PropertyMapMarker["boundary"]> } =>
-        Boolean(m.boundary),
+      .filter(
+        (m): m is PropertyMapMarker & { boundary: NonNullable<PropertyMapMarker["boundary"]> } =>
+          Boolean(m.boundary),
       )
       .map((m) => ({
         type: "Feature",
         properties: { id: m.id },
         geometry: {
           type: "Polygon",
-          coordinates: [[...m.boundary.map((p) => [p.lng, p.lat]), [m.boundary[0].lng, m.boundary[0].lat]]],
+          coordinates: [
+            [...m.boundary.map((p) => [p.lng, p.lat]), [m.boundary[0].lng, m.boundary[0].lat]],
+          ],
         },
       })),
   };
@@ -262,8 +265,7 @@ export function PropertyMap({
 
       const boundaryGeoJSON = buildBoundaryGeoJSON(markers);
       const existingSource = current.getSource(BOUNDARY_SOURCE_ID) as
-        | import("maplibre-gl").GeoJSONSource
-        | undefined;
+        import("maplibre-gl").GeoJSONSource | undefined;
       if (existingSource) {
         existingSource.setData(boundaryGeoJSON);
       } else {
@@ -313,7 +315,10 @@ export function PropertyMap({
     if (!container) return;
     const nodes = container.querySelectorAll<HTMLElement>(".afram-map-marker");
     nodes.forEach((node) => {
-      node.classList.toggle("is-highlighted", Boolean(highlightedSlug) && node.dataset.slug === highlightedSlug);
+      node.classList.toggle(
+        "is-highlighted",
+        Boolean(highlightedSlug) && node.dataset.slug === highlightedSlug,
+      );
     });
   }, [highlightedSlug, markers]);
 

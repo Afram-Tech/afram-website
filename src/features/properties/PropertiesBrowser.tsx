@@ -4,7 +4,6 @@ import {
   Building2,
   ChevronDown,
   ChevronUp,
-  DollarSign,
   Home,
   LayoutGrid,
   Loader2,
@@ -183,7 +182,7 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
     [properties],
   );
   const priceOptions: FilterOption[] = [
-    { value: "all", label: "Any Price" },
+    { value: "all", label: "Price" },
     ...PRICE_BANDS.map((band) => ({ value: band.value, label: band.label })),
   ];
 
@@ -362,7 +361,6 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
         />
         <FilterDropdown
           label="Price"
-          icon={<DollarSign className="h-3.5 w-3.5" />}
           value={filters.price}
           options={priceOptions}
           onChange={(value) => setFilters((f) => ({ ...f, price: value }))}
@@ -412,7 +410,6 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
         open={locationPickerOpen}
         onOpenChange={setLocationPickerOpen}
         onSelect={handleLocationSelect}
-        onClear={() => applyFilterParams({})}
         counts={locationCounts}
         selectedId={selectedLocationNode?.id}
       />
