@@ -52,7 +52,7 @@ export function PersonaProof({
       )}
 
       {properties.length > 0 && (
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 sm:gap-7 lg:mt-10 lg:grid-cols-3">
+        <div className="gap-card mt-8 grid sm:grid-cols-2 lg:mt-10 lg:grid-cols-3">
           {properties.map((property) => (
             <PropertyCard key={property.slug} property={property} />
           ))}
