@@ -24,7 +24,7 @@ export function FilterDropdown({
   onChange,
 }: {
   label: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   value: string;
   options: FilterOption[];
   onChange: (value: string) => void;
@@ -53,7 +53,7 @@ export function FilterDropdown({
         aria-expanded={open}
         className={filterTriggerClass}
       >
-        <span className="text-brand-500 shrink-0">{icon}</span>
+        {icon && <span className="text-brand-500 shrink-0">{icon}</span>}
         <span className="truncate">{selected?.label ?? label}</span>
         <ChevronDown
           className={cn("text-ink-400 h-4 w-4 shrink-0 transition-transform", open && "rotate-180")}

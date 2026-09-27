@@ -38,8 +38,6 @@ export interface LocationPickerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSelect: (selection: LocationPickerSelection) => void;
-  /** "Anywhere in Ghana" — drop the location filter altogether. */
-  onClear?: () => void;
   /** Listing counts by taxonomy id. Omit to hide counts and the Popular
    *  section — there is nothing honest to call popular without real numbers. */
   counts?: Record<string, number>;
@@ -51,17 +49,6 @@ export interface LocationPickerProps {
 const LISTBOX_ID = "location-picker-listbox";
 const TITLE_ID = "location-picker-title";
 
-/** The top level's "whole of here" row. Not a taxonomy node — it clears. */
-const ANYWHERE: LocationPickerNode = {
-  id: "__anywhere__",
-  slug: "",
-  label: "Anywhere in Ghana",
-  aliases: [],
-  level: "region",
-  hasChildren: false,
-  childCount: 0,
-};
-
 function toSelection(node: LocationPickerNode): LocationPickerSelection {
   return { level: node.level, id: node.id, slug: node.slug, label: node.label };
 }
@@ -70,7 +57,6 @@ export function LocationPicker({
   open,
   onOpenChange,
   onSelect,
-  onClear,
   counts,
   selectedId,
 }: LocationPickerProps) {
@@ -98,14 +84,19 @@ export function LocationPicker({
   );
   const groups = useMemo(() => groupLocationNodes(nav.nodes), [nav.nodes]);
 
-  const scopeNode: LocationPickerNode = nav.parent
+  /** "All of <place>" while browsing inside one; none at the top level. */
+  const scopeNode: LocationPickerNode | null = nav.parent
     ? { ...nav.parent, label: `All of ${nav.parent.label}`, hasChildren: false, childCount: 0 }
-    : ANYWHERE;
+    : null;
 
   /** The order ArrowUp/ArrowDown walk — must match what renders. */
   const flatOptions: LocationPickerNode[] = isSearching
     ? searchResults
-    : [scopeNode, ...groups.popular, ...groups.alphabetical.flatMap((g) => g.nodes)];
+    : [
+        ...(scopeNode ? [scopeNode] : []),
+        ...groups.popular,
+        ...groups.alphabetical.flatMap((g) => g.nodes),
+      ];
   const focused = flatOptions[focusedIndex];
 
   const resetState = () => {
@@ -123,16 +114,11 @@ export function LocationPicker({
   };
 
   const selectScope = () => {
-    if (nav.parent) {
-      finalize(toSelection(nav.parent));
-    } else {
-      onClear?.();
-      close();
-    }
+    if (nav.parent) finalize(toSelection(nav.parent));
   };
 
   const select = (node: LocationPickerNode) =>
-    node.id === scopeNode.id && !isSearching ? selectScope() : finalize(toSelection(node));
+    node.id === scopeNode?.id && !isSearching ? selectScope() : finalize(toSelection(node));
 
   /** Browse inside a place. From search, the breadcrumb is rebuilt from the
    *  taxonomy so Back leads somewhere real. */
@@ -314,10 +300,8 @@ export function LocationPicker({
           <LocationPickerBrowse
             {...groups}
             scopeNode={scopeNode}
-            scopeHint={
-              nav.parent ? `Every listing in ${nav.parent.label}` : "Don't filter by location"
-            }
-            scopeSelected={nav.parent ? selectedId === nav.parent.id : !selectedId}
+            scopeHint={nav.parent ? `Every listing in ${nav.parent.label}` : ""}
+            scopeSelected={!!nav.parent && selectedId === nav.parent.id}
             onSelectScope={selectScope}
             recent={nav.canGoBack ? [] : recent.filter((r) => r.id !== selectedId)}
             onSelectRecent={finalize}

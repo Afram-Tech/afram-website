@@ -83,7 +83,10 @@ export function HeroSection({ content }: HeroSectionProps) {
         </div>
       </div>
 
-      <div className="mx-auto mt-2 w-full max-w-[1600px] shrink-0 px-6 pb-4 sm:px-8 sm:pb-6 lg:px-6">
+      {/* Same column as the nav, the hero copy above and every Section
+          (max-w-[1536px], px-6 → px-16), so the cards' outer edges line up
+          with everything else on the page. */}
+      <div className="mx-auto mt-2 w-full max-w-[1536px] shrink-0 px-6 pb-4 sm:px-8 sm:pb-6 lg:px-16">
         <div className="gap-card grid grid-cols-1 sm:grid-cols-3">
           {roleCards.map((card, index) => (
             <Link

@@ -21,17 +21,8 @@ const ABLEKUMA_CENTRAL: LocationPickerSelection = {
 function open(props: Partial<React.ComponentProps<typeof LocationPicker>> = {}) {
   const onOpenChange = vi.fn();
   const onSelect = vi.fn();
-  const onClear = vi.fn();
-  render(
-    <LocationPicker
-      open
-      onOpenChange={onOpenChange}
-      onSelect={onSelect}
-      onClear={onClear}
-      {...props}
-    />,
-  );
-  return { onOpenChange, onSelect, onClear };
+  render(<LocationPicker open onOpenChange={onOpenChange} onSelect={onSelect} {...props} />);
+  return { onOpenChange, onSelect };
 }
 
 const options = () => within(screen.getByRole("listbox")).getAllByRole("option");
@@ -54,11 +45,11 @@ describe("LocationPicker — closed vs open", () => {
     expect(screen.queryByRole("dialog")).toBeNull();
   });
 
-  it("lists 'Anywhere in Ghana' then all 16 regions", () => {
+  it("lists all 16 regions, with no 'whole of Ghana' row", () => {
     open();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
-    expect(options()).toHaveLength(17);
-    expect(options()[0]).toHaveTextContent("Anywhere in Ghana");
+    expect(options()).toHaveLength(16);
+    expect(screen.queryByText(/Anywhere in Ghana/)).toBeNull();
   });
 });
 
@@ -69,14 +60,6 @@ describe("LocationPicker — a region is one tap", () => {
 
     expect(onSelect).toHaveBeenCalledWith(GREATER_ACCRA);
     expect(onOpenChange).toHaveBeenCalledWith(false);
-  });
-
-  it("'Anywhere in Ghana' clears the location", async () => {
-    const { onClear, onSelect } = open({ selectedId: "GH07" });
-    await userEvent.click(option(/^Anywhere in Ghana/));
-
-    expect(onClear).toHaveBeenCalledTimes(1);
-    expect(onSelect).not.toHaveBeenCalled();
   });
 });
 
@@ -113,11 +96,11 @@ describe("LocationPicker — browsing inside a place", () => {
     open();
     await userEvent.click(browseInto("GH07"));
     await userEvent.click(screen.getByRole("button", { name: "Ghana" }));
-    expect(options()).toHaveLength(17);
+    expect(options()).toHaveLength(16);
 
     await userEvent.click(browseInto("GH07"));
     await userEvent.click(screen.getByRole("button", { name: "Back" }));
-    expect(options()).toHaveLength(17);
+    expect(options()).toHaveLength(16);
   });
 
   it("a leaf offers nothing to browse into", async () => {
@@ -216,7 +199,7 @@ describe("LocationPicker — keyboard", () => {
     expect(options()[0].textContent).toContain(`All of ${focusedLabel}`);
 
     fireEvent.keyDown(search2, { key: "ArrowLeft" });
-    expect(options()).toHaveLength(17);
+    expect(options()).toHaveLength(16);
   });
 });
 
