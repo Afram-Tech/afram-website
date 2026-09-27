@@ -6,11 +6,22 @@ interface BuildMetadataOptions {
   title: string;
   description: string;
   path?: string;
+  /** Page-specific share images (e.g. a listing's photos) — the site-wide
+   *  Open Graph image when omitted. */
+  images?: string[];
 }
 
-export function buildMetadata({ title, description, path = "" }: BuildMetadataOptions): Metadata {
+export function buildMetadata({
+  title,
+  description,
+  path = "",
+  images,
+}: BuildMetadataOptions): Metadata {
   const url = `${siteConfig.url}${path}`;
   const fullTitle = `${title} — ${siteConfig.name}`;
+  const ogImages = images?.length
+    ? images.map((src) => ({ url: src, alt: fullTitle }))
+    : [{ url: siteConfig.ogImage, width: 1200, height: 630, alt: fullTitle }];
 
   return {
     title,
@@ -22,13 +33,13 @@ export function buildMetadata({ title, description, path = "" }: BuildMetadataOp
       url,
       siteName: siteConfig.name,
       type: "website",
-      images: [{ url: siteConfig.ogImage, width: 1200, height: 630, alt: fullTitle }],
+      images: ogImages,
     },
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
       description,
-      images: [siteConfig.ogImage],
+      images: ogImages.map((image) => image.url),
       site: siteConfig.social.twitter,
       creator: siteConfig.social.twitter,
     },

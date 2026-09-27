@@ -25,6 +25,7 @@ import { siteConfig } from "@/config/site";
 import type { Property } from "@/features/landing/data/properties";
 import { PropertyGallery } from "@/features/properties/PropertyGallery";
 import { formatMoney, formatPropertySize, titleCase } from "@/lib/format";
+import { locationName, locationPath, locationTrail } from "@/lib/property-seo";
 
 const DEPOSIT_RATE = 0.1;
 const ASSUMED_RATE = 0.12;
@@ -92,13 +93,24 @@ export function PropertyDetail({ property }: { property: Property }) {
             <ArrowLeft className="h-4 w-4" />
             Back
           </Link>
-          <p className="text-ink-400 hidden items-center gap-2 text-[13px] sm:flex">
+          <nav
+            aria-label="Breadcrumb"
+            className="text-ink-400 hidden min-w-0 items-center gap-2 text-[13px] sm:flex"
+          >
             <Link href="/properties" className="hover:text-ink-700">
               Properties
             </Link>
+            {locationTrail(property).map((node) => (
+              <span key={node.id} className="contents">
+                <span>›</span>
+                <Link href={locationPath(node)} className="hover:text-ink-700 truncate">
+                  {locationName(node)}
+                </Link>
+              </span>
+            ))}
             <span>›</span>
-            <span className="text-ink-700">{property.name}</span>
-          </p>
+            <span className="text-ink-700 truncate">{property.name}</span>
+          </nav>
           <button className="text-ink-500 hover:text-ink-900 inline-flex items-center gap-2 text-[14px] font-medium transition-colors">
             <Share2 className="h-4 w-4" />
             Share
