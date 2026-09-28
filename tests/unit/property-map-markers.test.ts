@@ -53,6 +53,11 @@ describe("deriveMapMarkers", () => {
         status: "listed",
         region: "Greater Accra",
         city: "Ablekuma Central",
+        location: "Ablekuma Central, Greater Accra",
+        images: ["https://example.com/img.jpg"],
+        beds: 2,
+        baths: 1,
+        sqft: 1200,
         boundary: null,
       },
     ]);
@@ -61,9 +66,7 @@ describe("deriveMapMarkers", () => {
   it("drops a property with no coordinates — nothing honest to plot", () => {
     const withCoords = property({ id: "a", coordinates: { lat: 5.6, lng: -0.2 } });
     const without = property({ id: "b", coordinates: null });
-    expect(deriveMapMarkers([withCoords, without])).toEqual([
-      expect.objectContaining({ id: "a" }),
-    ]);
+    expect(deriveMapMarkers([withCoords, without])).toEqual([expect.objectContaining({ id: "a" })]);
   });
 
   it("returns [] for an empty list", () => {

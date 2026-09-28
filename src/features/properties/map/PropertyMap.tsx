@@ -1,7 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "maplibre-gl/dist/maplibre-gl.css";
+
+import {
+  MAP_PREVIEW_CARET,
+  MAP_PREVIEW_HEIGHT,
+  MAP_PREVIEW_WIDTH,
+  MapPreviewCard,
+} from "./MapPreviewCard";
 import { markerColorFor, type PropertyMapMarker } from "./markers";
 
 /** Roughly centres Ghana at a zoom where the whole country is visible. */
@@ -31,6 +38,15 @@ const GHANA_BOUNDS = { west: -3.5, south: 4.5, east: 1.5, north: 11.5 };
  * See https://openfreemap.org.
  */
 const STYLE_URL = "https://tiles.openfreemap.org/styles/liberty";
+
+/** Pin height above its coordinate (photo + ring + tail, hover-scaled) —
+ *  the preview card sits this far above the point so it clears the pin. */
+const PIN_HEIGHT = 64;
+/** Gap between pin and card, and the card's minimum inset from map edges. */
+const PREVIEW_GAP = 10;
+/** Grace period for moving the pointer from a pin onto its card (or back)
+ *  without the card vanishing in between. */
+const PREVIEW_HIDE_DELAY_MS = 150;
 
 const BOUNDARY_SOURCE_ID = "property-boundaries";
 const BOUNDARY_FILL_LAYER_ID = "property-boundaries-fill";
@@ -176,6 +192,38 @@ export function PropertyMap({
   // map actually exists.
   const [mapReady, setMapReady] = useState(false);
 
+  // The hovered (or, on touch, tapped) pin's preview card, with the pin's
+  // position in map-container pixels — re-projected on every camera move so
+  // the card rides along with its pin while the map pans or zooms.
+  const [preview, setPreview] = useState<{
+    marker: PropertyMapMarker;
+    x: number;
+    y: number;
+    /** The map's width then — for clamping the card inside it. */
+    width: number;
+  } | null>(null);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const cancelHide = useCallback(() => {
+    if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+    hideTimerRef.current = null;
+  }, []);
+  const showPreview = useCallback(
+    (marker: PropertyMapMarker) => {
+      cancelHide();
+      const map = mapRef.current;
+      if (!map) return;
+      const { x, y } = map.project([marker.lng, marker.lat]);
+      setPreview({ marker, x, y, width: map.getContainer().clientWidth });
+    },
+    [cancelHide],
+  );
+  const scheduleHide = useCallback(() => {
+    cancelHide();
+    hideTimerRef.current = setTimeout(() => setPreview(null), PREVIEW_HIDE_DELAY_MS);
+  }, [cancelHide]);
+  useEffect(() => cancelHide, [cancelHide]);
+
   // Mount once: create the map.
   useEffect(() => {
     const container = containerRef.current;
@@ -289,8 +337,18 @@ export function PropertyMap({
       for (const marker of markerHandlesRef.current) marker.remove();
       markerHandlesRef.current = markers.map((marker) => {
         const el = createMarkerElement(marker);
+        el.addEventListener("mouseenter", () => showPreview(marker));
+        el.addEventListener("mouseleave", scheduleHide);
+        el.addEventListener("focus", () => showPreview(marker));
+        el.addEventListener("blur", scheduleHide);
         el.addEventListener("click", (e) => {
           e.stopPropagation();
+          // No hover on touch screens: the first tap previews, and the
+          // card itself is what opens the listing.
+          if (window.matchMedia("(hover: none)").matches) {
+            showPreview(marker);
+            return;
+          }
           onMarkerClickRef.current(marker.slug);
         });
 
@@ -304,7 +362,27 @@ export function PropertyMap({
     return () => {
       cancelled = true;
     };
-  }, [markers, mapReady]);
+  }, [markers, mapReady, showPreview, scheduleHide]);
+
+  // Keep the open card pinned to its marker while the camera moves, close it
+  // and on a tap on bare map (touch has no mouseleave to close it otherwise).
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+    const follow = () =>
+      setPreview((current) => {
+        if (!current) return current;
+        const { x, y } = map.project([current.marker.lng, current.marker.lat]);
+        return { ...current, x, y, width: map.getContainer().clientWidth };
+      });
+    const close = () => setPreview(null);
+    map.on("move", follow);
+    map.on("click", close);
+    return () => {
+      map.off("move", follow);
+      map.off("click", close);
+    };
+  }, [mapReady]);
 
   // Toggles the highlight class on the matching marker's DOM element
   // directly, rather than rebuilding markers — this runs on every hover in
@@ -339,5 +417,52 @@ export function PropertyMap({
     map.flyTo({ center: [marker.lng, marker.lat], zoom: PROPERTY_FOCUS_ZOOM });
   }, [focusSlug, markers, mapReady]);
 
-  return <div ref={containerRef} className="h-full w-full" data-testid="property-map" />;
+  // Above the pin by default; below it when there isn't room above. Clamped
+  // horizontally so a pin near the edge doesn't push the card off the map.
+  // A filter change can remove the previewed pin — then there's no card.
+  const activePreview =
+    preview && markers.some((m) => m.slug === preview.marker.slug) ? preview : null;
+  let layout:
+    { style: React.CSSProperties; placement: "above" | "below"; caretX: number } | undefined;
+  if (activePreview) {
+    const { x, y, width } = activePreview;
+    const offsetAbove = PIN_HEIGHT + PREVIEW_GAP + MAP_PREVIEW_CARET;
+    const placement =
+      y - offsetAbove - MAP_PREVIEW_HEIGHT >= PREVIEW_GAP ? ("above" as const) : ("below" as const);
+    const left = Math.min(
+      Math.max(x - MAP_PREVIEW_WIDTH / 2, PREVIEW_GAP),
+      width - MAP_PREVIEW_WIDTH - PREVIEW_GAP,
+    );
+    layout = {
+      placement,
+      // Keep the caret off the rounded corners even when the card is clamped.
+      caretX: Math.min(Math.max(x - left, 24), MAP_PREVIEW_WIDTH - 24),
+      style:
+        placement === "above"
+          ? { left, top: y - offsetAbove, transform: "translateY(-100%)" }
+          : { left, top: y + PREVIEW_GAP + MAP_PREVIEW_CARET },
+    };
+  }
+
+  return (
+    <div className="relative h-full w-full">
+      <div ref={containerRef} className="h-full w-full" data-testid="property-map" />
+      {activePreview && layout && (
+        <div
+          className="absolute z-20"
+          style={layout.style}
+          onMouseEnter={cancelHide}
+          onMouseLeave={scheduleHide}
+        >
+          <MapPreviewCard
+            key={activePreview.marker.slug}
+            marker={activePreview.marker}
+            placement={layout.placement}
+            caretX={layout.caretX}
+            onClose={() => setPreview(null)}
+          />
+        </div>
+      )}
+    </div>
+  );
 }
