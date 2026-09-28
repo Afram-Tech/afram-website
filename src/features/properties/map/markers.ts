@@ -22,6 +22,14 @@ export interface PropertyMapMarker {
   status: string;
   region: string | null;
   city: string | null;
+  /** Display string ("Adenta, Greater Accra") and headline specs — for the
+   *  hover preview card, not in backend-requirements.md §3's shape yet. */
+  location: string;
+  /** Every photo, for the preview card's carousel. */
+  images: string[];
+  beds: number;
+  baths: number;
+  sqft: number;
   /** The site boundary, only when it's a real 3+ point shape — see
    *  Property.boundary's own doc. */
   boundary: { lat: number; lng: number }[] | null;
@@ -65,6 +73,11 @@ export function deriveMapMarkers(properties: Property[]): PropertyMapMarker[] {
       status: property.status,
       region: property.region,
       city: property.city,
+      location: property.location,
+      images: property.images,
+      beds: property.beds,
+      baths: property.baths,
+      sqft: property.sqft,
       boundary: property.boundary,
     });
   }
