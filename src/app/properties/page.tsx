@@ -54,7 +54,7 @@ export default async function PropertiesPage() {
       <Suspense fallback={<PropertiesBrowserFallback properties={allProperties} />}>
         <PropertiesBrowser properties={allProperties} />
       </Suspense>
-      <PropertyBrowseLinks allProperties={allProperties} />
+      {/* <PropertyBrowseLinks allProperties={allProperties} /> */}
     </Section>
   );
 }

@@ -27,7 +27,7 @@ export function HeroSection({ content }: HeroSectionProps) {
   });
 
   const heroEyebrow = content?.heroEyebrow ?? "Powered by";
-  const heroImage = content?.heroImage ?? "/hero-townhouses-v5.webp";
+  const heroImage = content?.heroImage ?? "/town-house-image.png";
   const primaryCtaLabel = content?.heroPrimaryCtaLabel ?? "View Properties";
   const primaryCtaLink = content?.heroPrimaryCtaLink ?? "/properties";
   const secondaryCtaLabel = content?.heroSecondaryCtaLabel ?? "How it works";
@@ -36,7 +36,7 @@ export function HeroSection({ content }: HeroSectionProps) {
   return (
     <section className="flex min-h-[calc(100dvh-72px)] flex-col bg-white pt-4">
       <div className="relative min-h-140 flex-1 overflow-hidden bg-[linear-gradient(to_bottom,#c0f8f5_0%,#eafcfb_45%,#f7fefe_100%)] sm:min-h-90">
-        <div className="pointer-events-none absolute inset-x-0 top-[68%] bottom-0 select-none sm:top-[44%] lg:top-[33%] xl:top-[30%] 2xl:top-[27%]">
+        <div className="pointer-events-none absolute inset-x-0 top-[68%] bottom-0 select-none sm:top-[44%] lg:top-[15%] xl:top-[17%] 2xl:top-[-2%]">
           <Image
             src={heroImage}
             alt="A row of modern verified homes"
@@ -87,7 +87,9 @@ export function HeroSection({ content }: HeroSectionProps) {
           (max-w-[1536px], px-6 → px-16), so the cards' outer edges line up
           with everything else on the page. */}
       <div className="mx-auto mt-2 w-full max-w-[1536px] shrink-0 px-6 pb-4 sm:px-8 sm:pb-6 lg:px-16">
-        <div className="gap-card grid grid-cols-1 sm:grid-cols-3">
+        {/* Stacked until lg: three across a tablet leaves each card ~210px,
+            too narrow for its title beside the illustration. */}
+        <div className="gap-card grid grid-cols-1 lg:grid-cols-3">
           {roleCards.map((card, index) => (
             <Link
               key={index}
@@ -95,7 +97,7 @@ export function HeroSection({ content }: HeroSectionProps) {
               style={{
                 background: `linear-gradient(to bottom, ${card.backgroundColor}, ${lighten(card.backgroundColor, 0.6)})`,
               }}
-              className="group relative h-[135px] overflow-hidden rounded-[18px] px-5 pt-4 transition-shadow duration-300 hover:shadow-[0_18px_40px_-26px_rgba(0,45,48,0.45)] sm:h-[160px] lg:h-[175px]"
+              className="group relative h-[135px] overflow-hidden rounded-[18px] px-5 pt-4 transition-shadow duration-300 hover:shadow-[0_18px_40px_-26px_rgba(0,45,48,0.45)] sm:h-[160px] lg:h-[185px] xl:h-[175px]"
             >
               <Image
                 src={card.art.src}
@@ -105,7 +107,7 @@ export function HeroSection({ content }: HeroSectionProps) {
                 className={`pointer-events-none transition-transform duration-500 ease-out select-none group-hover:scale-[1.03] ${card.art.class}`}
               />
 
-              <div className="relative z-10 flex h-full max-w-57.5 flex-col lg:max-w-95">
+              <div className="relative z-10 flex h-full max-w-57.5 flex-col sm:max-w-80 lg:max-w-[66%] xl:max-w-[72%] 2xl:max-w-95">
                 <span
                   style={{ backgroundColor: card.pillColor }}
                   className="inline-flex w-fit items-center rounded-full px-3 py-1 text-[12px] font-medium tracking-[-0.02em] text-[#002d30] sm:text-[13px]"
@@ -113,7 +115,7 @@ export function HeroSection({ content }: HeroSectionProps) {
                   {card.eyebrow}
                 </span>
 
-                <h3 className="mt-2 max-w-87.5 text-[1rem] leading-[1.2] font-semibold tracking-[-0.03em] text-[#002d30] sm:mt-2.5 sm:text-[1.15rem] sm:leading-[1.22] lg:text-[1.25rem]">
+                <h3 className="mt-2 max-w-87.5 text-[1rem] leading-[1.2] font-semibold tracking-[-0.03em] text-[#002d30] sm:mt-2.5 sm:text-[1.15rem] sm:leading-[1.22] lg:text-[1.05rem] xl:text-[1.15rem] 2xl:text-[1.25rem]">
                   {card.title}
                 </h3>
 
