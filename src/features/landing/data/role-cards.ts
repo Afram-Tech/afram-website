@@ -18,7 +18,7 @@ export const ROLE_CARDS: RoleCard[] = [
       src: "/role-couple.webp",
       alt: "A couple holding the keys to their new home",
       class:
-        "absolute bottom-[-40px] right-1 h-[70%] w-auto max-w-none sm:bottom-[-80px] sm:right-2 sm:h-[92%]",
+        "absolute bottom-[-40px] right-1 h-[70%] w-auto max-w-none sm:bottom-[-80px] sm:right-2 sm:h-[92%] lg:bottom-[-70px] lg:h-[80%] xl:bottom-[-80px] xl:h-[92%]",
     },
   },
   {

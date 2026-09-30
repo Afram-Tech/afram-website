@@ -97,7 +97,7 @@ export function PropertyCollection({
     .sort(
       (a, b) =>
         Number(REGIONS.some((r) => r.id === b.node.id)) -
-          Number(REGIONS.some((r) => r.id === a.node.id)) ||
+        Number(REGIONS.some((r) => r.id === a.node.id)) ||
         b.properties.length - a.properties.length,
     )
     .slice(0, 16)
@@ -175,9 +175,6 @@ export function PropertyCollection({
   );
 }
 
-/** Every type and place with listings, as plain links — for /properties,
- *  whose own results are filtered client-side and so give a crawler nothing
- *  to follow on their own. */
 export function PropertyBrowseLinks({ allProperties }: { allProperties: Property[] }) {
   const typeLinks = PROPERTY_TYPE_PAGES.map((type) => ({
     href: typePath(type),
