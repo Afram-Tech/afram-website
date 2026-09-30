@@ -36,7 +36,7 @@ export function HeroSection({ content }: HeroSectionProps) {
   return (
     <section className="flex min-h-[calc(100dvh-72px)] flex-col bg-white pt-4">
       <div className="relative min-h-140 flex-1 overflow-hidden bg-[linear-gradient(to_bottom,#c0f8f5_0%,#eafcfb_45%,#f7fefe_100%)] sm:min-h-90">
-        <div className="pointer-events-none absolute inset-x-0 top-[68%] bottom-0 select-none sm:top-[44%] lg:top-[15%] xl:top-[17%] 2xl:top-[-2%]">
+        <div className="pointer-events-none absolute inset-x-0 top-[60%] bottom-0 select-none sm:top-[30%] lg:top-[15%] xl:top-[17%] 2xl:top-[-2%]">
           <Image
             src={heroImage}
             alt="A row of modern verified homes"
