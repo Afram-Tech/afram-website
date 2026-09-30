@@ -11,8 +11,11 @@ import { NAV_GROUPS, type NavGroup } from "@/config/navigation";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
+/** The full menu plus both account buttons need ~1,110px, so the desktop
+ *  bar starts at xl (1280px) — the hamburger covers everything below it.
+ *  Tighter from xl, where it only just fits; roomier again from 2xl. */
 const navLinkClassName =
-  "rounded-lg px-3 py-2 text-[15px] font-medium text-ink-700 transition-colors hover:text-brand-600";
+  "whitespace-nowrap rounded-lg px-2 py-2 text-[14px] font-medium text-ink-700 transition-colors hover:text-brand-600 2xl:px-3 2xl:text-[15px]";
 
 interface SiteNavProps {
   /** Overrides from the Sanity `navigation` singleton — falls back to the static config when unset. */
@@ -58,7 +61,7 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
             />
           </Link>
 
-          <nav className="hidden items-center gap-1 lg:flex">
+          <nav className="hidden items-center gap-0.5 xl:flex 2xl:gap-1">
             <Link href="/properties" className={navLinkClassName}>
               View Properties
             </Link>
@@ -71,7 +74,7 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
               >
                 <Link
                   href={group.href}
-                  className="text-ink-700 inline-flex items-center gap-1 rounded-lg px-3 py-2 text-[15px] font-medium transition-colors hover:[color:var(--role)]"
+                  className="text-ink-700 inline-flex items-center gap-1 rounded-lg px-2 py-2 text-[14px] font-medium whitespace-nowrap transition-colors hover:[color:var(--role)] 2xl:px-3 2xl:text-[15px]"
                 >
                   {group.label}
                   <ChevronDown className="text-ink-300 h-3.5 w-3.5 transition-transform group-hover:rotate-180 group-hover:[color:var(--role)]" />
@@ -119,10 +122,10 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
             </Link>
           </nav>
 
-          <div className="hidden items-center gap-3 lg:flex">
+          <div className="hidden shrink-0 items-center gap-2 xl:flex 2xl:gap-3">
             <Link
               href={siteConfig.signUpUrl}
-              className="text-ink-800 hover:text-brand-600 rounded-lg px-3.5 py-2 text-[15px] font-semibold transition-colors"
+              className="text-ink-800 hover:text-brand-600 rounded-lg px-2.5 py-2 text-[14px] font-semibold whitespace-nowrap transition-colors 2xl:px-3.5 2xl:text-[15px]"
             >
               Create Account
             </Link>
@@ -134,7 +137,7 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
           <button
             type="button"
             onClick={() => setMobileMenuOpen((open) => !open)}
-            className="text-ink-900 hover:bg-brand-50 inline-flex h-10 w-10 items-center justify-center rounded-full lg:hidden"
+            className="text-ink-900 hover:bg-brand-50 inline-flex h-10 w-10 items-center justify-center rounded-full xl:hidden"
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileMenuOpen}
           >
@@ -144,7 +147,7 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
       </header>
 
       {mobileMenuOpen ? (
-        <div className="fixed inset-x-0 top-[72px] bottom-0 z-40 overflow-y-auto bg-white px-5 pt-3 pb-10 lg:hidden">
+        <div className="fixed inset-x-0 top-[72px] bottom-0 z-40 overflow-y-auto bg-white px-5 pt-3 pb-10 xl:hidden">
           <div className="divide-ink-100 divide-y">
             <Link
               href="/properties"

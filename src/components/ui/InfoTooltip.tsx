@@ -1,7 +1,7 @@
 "use client";
 
 import { Info } from "lucide-react";
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -13,8 +13,16 @@ import { cn } from "@/lib/utils";
  * with padding rather than a margin, so moving the cursor onto it does not
  * count as leaving.
  *
+ * The panel only exists while open — a hidden-but-rendered panel still takes
+ * up layout, and one centred over a trigger near the right edge of the page
+ * widened the whole document on every page with a listing card. While open,
+ * it's nudged sideways to stay on screen.
+ *
  * Stops click events from reaching an enclosing card link.
  */
+
+/** Minimum gap between the panel and either edge of the viewport. */
+const VIEWPORT_MARGIN = 12;
 export function InfoTooltip({
   label,
   children,
@@ -28,8 +36,22 @@ export function InfoTooltip({
   panelClassName?: string;
 }) {
   const [open, setOpen] = useState(false);
+  const [shift, setShift] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
+
+  // Measured before paint, from the panel's centred position, so it never
+  // flashes off-screen first.
+  useLayoutEffect(() => {
+    const panel = panelRef.current;
+    if (!open || !panel) return;
+    const { left, right } = panel.getBoundingClientRect();
+    const viewport = document.documentElement.clientWidth;
+    if (right > viewport - VIEWPORT_MARGIN) setShift(viewport - VIEWPORT_MARGIN - right);
+    else if (left < VIEWPORT_MARGIN) setShift(VIEWPORT_MARGIN - left);
+    return () => setShift(0);
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -80,19 +102,22 @@ export function InfoTooltip({
         <Info className="h-4 w-4" strokeWidth={1.75} />
       </button>
 
-      <div
-        id={panelId}
-        role="tooltip"
-        className={cn(
-          "absolute bottom-full left-1/2 z-30 w-[280px] max-w-[min(280px,calc(100vw-2rem))] -translate-x-1/2 pb-2 transition-all duration-150",
-          open ? "visible opacity-100" : "invisible translate-y-1 opacity-0",
-          panelClassName,
-        )}
-      >
-        <div className="ring-ink-100/80 rounded-2xl bg-white p-5 text-left font-normal tracking-normal normal-case shadow-[0_22px_55px_-14px_rgba(2,46,51,0.3)] ring-1">
-          {children}
+      {open && (
+        <div
+          ref={panelRef}
+          id={panelId}
+          role="tooltip"
+          style={{ marginLeft: shift }}
+          className={cn(
+            "absolute bottom-full left-1/2 z-30 w-[280px] max-w-[calc(100vw-1.5rem)] -translate-x-1/2 pb-2 transition-opacity duration-150 starting:opacity-0",
+            panelClassName,
+          )}
+        >
+          <div className="ring-ink-100/80 rounded-2xl bg-white p-5 text-left font-normal tracking-normal normal-case shadow-[0_22px_55px_-14px_rgba(2,46,51,0.3)] ring-1">
+            {children}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
