@@ -98,7 +98,7 @@ export default async function FinanciersPage() {
         title="Finance the build, or finance the member."
         paths={FINANCE_PATHS}
       />
-      <RecognisedBy />
+      {/* <RecognisedBy /> */}
       {/* <PartnerLogos /> */}
       <PersonaProof
         title="Assets already verified on Afram."
