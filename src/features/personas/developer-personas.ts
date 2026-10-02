@@ -16,10 +16,11 @@ export const PERSONAS: Record<string, PersonaContent> = {
       "Stop watching capital sit in unsold units. List a verified project, bring it financed members, and recover your cash without waiting on slow sales.",
     image: unsplash("photo-1605276374104-dee2a0ed3cd6"),
     imageBadge: "Verified project",
+    // Removed per vendor-page copy review — stat panel deleted.
     stats: [
-      { label: "Member defaults today", value: "38%" },
-      { label: "Bank rates you skip", value: "20–27%" },
-      { label: "Member financing", value: "up to 10 yrs", accent: true },
+      // { label: "Member defaults today", value: "38%" },
+      // { label: "Bank rates you skip", value: "20–27%" },
+      // { label: "Member financing", value: "up to 10 yrs", accent: true },
     ],
     blocks: [
       {
@@ -82,10 +83,11 @@ export const PERSONAS: Record<string, PersonaContent> = {
       "Reach middle- and high-income members who are priced out by 20–27% mortgages — with Afram-backed financing, market intelligence, and an endorsement that protects your name.",
     image: unsplash("photo-1576941089067-2de3c901e126"),
     imageBadge: "Verified project",
+    // Removed per vendor-page copy review — stat panel deleted.
     stats: [
-      { label: "Units per project", value: "20–500+" },
-      { label: "Your brand", value: "protected" },
-      { label: "Member financing", value: "built in", accent: true },
+      // { label: "Units per project", value: "20–500+" },
+      // { label: "Your brand", value: "protected" },
+      // { label: "Member financing", value: "built in", accent: true },
     ],
     blocks: [
       {
