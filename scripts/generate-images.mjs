@@ -36,7 +36,7 @@ async function generateOgImage() {
       <text x="80" y="280" font-family="Arial, sans-serif" font-size="34" fill="#a7dde1">Liberating Capital.</text>
       <foreignObject x="80" y="340" width="960" height="220">
         <p xmlns="http://www.w3.org/1999/xhtml" style="font-family: Arial, sans-serif; font-size: 27px; color: #d3ecee; margin: 0; line-height: 1.5;">
-          A transparent real estate marketplace for buyers, vendors, and financiers — powered by blockchain.
+          A transparent real estate marketplace for members, vendors, and financiers — powered by blockchain.
         </p>
       </foreignObject>
     </svg>
