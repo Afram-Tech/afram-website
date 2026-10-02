@@ -8,7 +8,7 @@ import { PersonaProof } from "@/components/persona/PersonaProof";
 import { PersonaQuickLinks } from "@/components/persona/PersonaQuickLinks";
 import { PersonaSwitcher } from "@/components/persona/PersonaSwitcher";
 import { PartnerLogos } from "@/components/home/PartnerLogos";
-import { FinancierTypes } from "@/features/developers/FinancierTypes";
+// import { FinancierTypes } from "@/features/developers/FinancierTypes";
 import { Requirements } from "@/features/developers/Requirements";
 import { SellFlow } from "@/features/developers/SellFlow";
 import { TalkToPartner } from "@/features/developers/TalkToPartner";
@@ -81,7 +81,8 @@ export default async function DevelopersPage() {
         ctaLabel="Browse all listings"
         ctaHref="/properties"
       />
-      <FinancierTypes />
+      {/* Removed per vendor-page copy review — "Two kinds of capital" section deleted. */}
+      {/* <FinancierTypes /> */}
       <Requirements />
       <SellFlow />
       <Testimonials title="Developers already selling on Afram." />
