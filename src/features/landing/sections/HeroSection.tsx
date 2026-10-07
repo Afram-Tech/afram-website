@@ -61,7 +61,7 @@ export function HeroSection({ content }: HeroSectionProps) {
             ) : (
               <h1 className="mt-4 text-[clamp(1.75rem,2.9vw,2.375rem)] leading-[1.16] font-semibold tracking-[-0.035em] text-[#002d30]">
                 A Transparent Real Estate Marketplace For <br className="hidden sm:block" />
-                Buyers, Developers, and Financiers <br className="hidden sm:block" />
+                Members, Vendors, and Financiers <br className="hidden sm:block" />
                 Powered by Blockchain
               </h1>
             )}
