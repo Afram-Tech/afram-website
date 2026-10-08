@@ -1,16 +1,19 @@
 import { ContactSplit } from "@/components/shell/ContactSplit";
 import { Section } from "@/components/ui/Section";
 
+/** Generic on purpose: anyone landing here — member, vendor or financier —
+ *  can use it, so the topics cover all three. */
 export function TalkToPartner() {
   return (
     <Section id="talk" className="scroll-mt-24 bg-white">
       <ContactSplit
-        title="List a project, or talk to a partner."
-        subtitle="Tell us about your project and a partner will reach out, no obligation."
-        formTitle="Tell us about your project"
-        formSubtitle="Leave your details and a partner will get back to you."
-        topics={["List a project", "Talk to a partner", "Project financing"]}
+        title="Talk to us."
+        subtitle="For more enquiries, fill in this form."
+        formTitle="Send us a message"
+        formSubtitle="Leave your details. A partner will reply."
+        topics={["Buy a property", "List a property", "Deploy capital"]}
         cta="Talk to a partner"
+        showContacts={false}
       />
     </Section>
   );

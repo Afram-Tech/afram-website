@@ -115,10 +115,15 @@ export function PersonaBlocks({
 
   // The register should never end on a ragged row.
   const n = blocks.length;
+  // Four reads best as two by two.
+  const twoByTwo = n === 4;
   const lastSpan = cn(
     n % 2 === 1 && "sm:col-span-2",
-    n % 3 === 1 && "lg:col-span-3",
-    n % 3 === 2 && "lg:col-span-2",
+    // A full row of three at lg: undo the sm span above, or the last card
+    // wraps onto its own row and leaves a gap.
+    !twoByTwo && n % 3 === 0 && "lg:col-span-1",
+    !twoByTwo && n % 3 === 1 && "lg:col-span-3",
+    !twoByTwo && n % 3 === 2 && "lg:col-span-2",
   );
 
   const active = open === null ? null : blocks[open];
@@ -126,7 +131,7 @@ export function PersonaBlocks({
   return (
     <>
       <div className="border-ink-100 bg-ink-100 ring-ink-100 overflow-hidden rounded-[1.5rem] ring-1">
-        <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-3">
+        <div className={cn("grid gap-px sm:grid-cols-2", !twoByTwo && "lg:grid-cols-3")}>
           {blocks.map((b, i) => {
             const Icon = iconFor(b.icon);
             const lead = i === 0;

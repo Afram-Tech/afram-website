@@ -5,6 +5,7 @@ import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import type { Property } from "@/features/landing/data/properties";
 import { PropertyCard } from "@/features/landing/PropertyCard";
+import { cn } from "@/lib/utils";
 
 export type ProofStat = { value: string; label: string };
 
@@ -38,7 +39,13 @@ export function PersonaProof({
       </div>
 
       {stats.length > 0 && (
-        <dl className="bg-ink-100 ring-ink-100 mt-8 grid gap-px overflow-hidden rounded-[1.5rem] ring-1 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
+        <dl
+          className={cn(
+            "bg-ink-100 ring-ink-100 mt-8 grid gap-px overflow-hidden rounded-[1.5rem] ring-1 sm:mt-10",
+            // One column per stat, so three stats don't leave an empty cell.
+            stats.length === 3 ? "sm:grid-cols-3" : "sm:grid-cols-2 lg:grid-cols-4",
+          )}
+        >
           {stats.map((s) => (
             <div key={s.label} className="bg-white px-6 py-7">
               <dt className="sr-only">{s.label}</dt>

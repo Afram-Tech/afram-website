@@ -17,7 +17,7 @@ export function PersonaFinalCta({
   secondary?: { label: string; href: string };
 }) {
   return (
-    <Section className="pt-0">
+    <Section className="pt-0 lg:pt-0">
       <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] lg:min-h-[440px]">
         <DuotonePhoto
           src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1600&q=68"

@@ -23,14 +23,14 @@ export function PersonaFaq({
   const [openKey, setOpenKey] = useState<string | null>(null);
 
   return (
-    <div className="from-brand-50 via-ink-50/30 ring-brand-100/50 grid grid-cols-1 gap-10 rounded-[2rem] bg-gradient-to-br to-white p-8 ring-1 sm:p-12 lg:grid-cols-[0.8fr_1.2fr] lg:p-14 mx-auto max-w-[1536px] px-6 sm:px-8 lg:px-16">
+    <div className="from-brand-50 via-ink-50/30 ring-brand-100/50 mx-auto grid max-w-[1536px] grid-cols-1 gap-10 rounded-[2rem] bg-gradient-to-br to-white p-8 px-6 ring-1 sm:p-12 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:p-14 lg:px-16">
       <div>
         <div className="max-w-2xl">
           <span className="text-brand-600 inline-flex items-center gap-2 text-[13px] font-semibold">
             <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden />
             FAQ
           </span>
-          <h2 className="text-ink-900 mt-4 text-[clamp(1.9rem,3.4vw,2.6rem)] leading-[1.12] font-bold tracking-[-0.02em]">
+          <h2 className="text-ink-900 mt-4 text-[clamp(1.6rem,2.4vw,2rem)] leading-[1.18] font-bold tracking-[-0.02em]">
             {title}
           </h2>
           <p className="text-ink-500 mt-3.5 text-[16px] leading-relaxed">{intro}</p>

@@ -15,7 +15,7 @@ export type QuickLink = {
  */
 export function PersonaQuickLinks({ links }: { links: QuickLink[] }) {
   return (
-    <Section className="pt-0">
+    <Section className="pt-0 lg:pt-0">
       <div className="border-ink-100 flex flex-col gap-x-8 gap-y-3 border-t pt-6 sm:flex-row sm:flex-wrap sm:items-center">
         <span className="text-ink-400 text-[12px] font-semibold tracking-[0.14em] uppercase">
           More

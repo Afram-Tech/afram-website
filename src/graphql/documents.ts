@@ -36,3 +36,13 @@ export const GET_PUBLIC_PROPERTIES = /* GraphQL */ `
     }
   }
 `;
+
+/** Public — the Afram web app's contact form sends it signed out too. */
+export const CONTACT_US = /* GraphQL */ `
+  mutation ContactUs($input: ContactUsInput!) {
+    contactUs(input: $input) {
+      success
+      message
+    }
+  }
+`;
