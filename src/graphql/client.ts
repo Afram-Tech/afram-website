@@ -5,15 +5,20 @@
 export const graphqlEndpoint =
   process.env.GRAPHQL_API_URL || "https://afram-core-staging.fly.dev/graph";
 
+/**
+ * Queries are cached for an hour. Pass `{ mutation: true }` for anything that
+ * changes data (e.g. contactUs) — those must reach the API every time.
+ */
 export async function graphqlFetch<TData, TVariables extends object = object>(
   query: string,
   variables?: TVariables,
+  { mutation = false }: { mutation?: boolean } = {},
 ): Promise<TData> {
   const res = await fetch(graphqlEndpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, variables }),
-    next: { revalidate: 3600 },
+    ...(mutation ? { cache: "no-store" as const } : { next: { revalidate: 3600 } }),
   });
 
   const json = await res.json();

@@ -27,32 +27,23 @@ export const VENDOR_PATHS: Path[] = [
   {
     badge: "Sell faster",
     icon: TrendingUp,
-    title: "Get access to already financed members.",
-    intro: "Members arrive approved. Their financier pays you the full price at completion.",
-    points: [
-      ["Paid in full.", "Repayment stays with the member and their financier."],
-      ["Verified title.", "The ownership question is answered on the listing."],
-      ["Your name, your agents.", "Your team closes every sale."],
-    ],
+    title: "Sell to members who already have financing.",
+    intro: "Members arrive approved. Their financier pays you in full.",
+    points: [],
     cta: { label: "Get Started", href: SIGN_UP_AS_ISSUER },
   },
   {
     badge: "Raise capital",
     icon: Coins,
-    title: "List your property to access financing.",
-    intro:
-      "Afram does not lend. The financiers on Afram do, and a verified title is what they price.",
-    points: [
-      ["Break ground or finish a phase.", "Capital for either."],
-      ["Verified once.", "Both kinds of lender review the same pack."],
-      ["You negotiate.", "Afram takes no share of the project."],
-    ],
-    cta: { label: "Talk to a partner", href: "#talk" },
+    title: "List your project to raise capital.",
+    intro: "Land or unfinished project? Get it financed and sold on Afram.",
+    points: [],
+    cta: { label: "Get Started", href: SIGN_UP_AS_ISSUER },
   },
 ];
 
 export function TwoPaths({
-  title = "Sell what you built. Fund what you have not.",
+  title = "Sell what you built. Fund what you haven’t.",
   paths = VENDOR_PATHS,
   tone,
 }: {
@@ -80,16 +71,18 @@ export function TwoPaths({
             </h3>
             <p className="text-ink-500 mt-3 text-[15px] leading-relaxed">{p.intro}</p>
 
-            <ul className="mt-7 space-y-3.5">
-              {p.points.map(([lead, rest]) => (
-                <li key={lead} className="flex gap-3 text-[15px] leading-relaxed">
-                  <span className="bg-accent-400 mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full" />
-                  <span className="text-ink-500">
-                    <b className="text-ink-900 font-semibold">{lead}</b> {rest}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            {p.points.length > 0 && (
+              <ul className="mt-7 space-y-3.5">
+                {p.points.map(([lead, rest]) => (
+                  <li key={lead} className="flex gap-3 text-[15px] leading-relaxed">
+                    <span className="bg-accent-400 mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full" />
+                    <span className="text-ink-500">
+                      <b className="text-ink-900 font-semibold">{lead}</b> {rest}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
 
             <Link
               href={p.cta.href}

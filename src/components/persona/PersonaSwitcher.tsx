@@ -16,7 +16,19 @@ import { cn } from "@/lib/utils";
  * corner. The persona ids stay in the URL hash so links elsewhere on the
  * site can land directly on the right audience.
  */
-export function PersonaSwitcher({ personas }: { personas: PersonaContent[] }) {
+/** Fired when the audience changes, so sections further down the page
+ *  (see PersonaAnswers) can follow the toggle. */
+export const PERSONA_EVENT = "afram:persona";
+
+export function PersonaSwitcher({
+  personas,
+  blocksInPanel = true,
+}: {
+  personas: PersonaContent[];
+  /** false when the page shows each audience's blocks further down instead
+   *  (PersonaAnswers) rather than inside this panel. */
+  blocksInPanel?: boolean;
+}) {
   const [active, setActive] = useState(0);
 
   useEffect(() => {
@@ -33,6 +45,7 @@ export function PersonaSwitcher({ personas }: { personas: PersonaContent[] }) {
   const select = (i: number) => {
     setActive(i);
     window.history.replaceState(null, "", `#${personas[i].id}`);
+    window.dispatchEvent(new CustomEvent(PERSONA_EVENT, { detail: personas[i].id }));
   };
 
   const p = personas[active];
@@ -75,7 +88,11 @@ export function PersonaSwitcher({ personas }: { personas: PersonaContent[] }) {
         <div
           id="audience-panel"
           role="tabpanel"
-          className="mt-8 grid gap-8 sm:mt-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14"
+          className={cn(
+            "mt-8 grid gap-8 sm:mt-10 lg:gap-14",
+            // No stats panel → the pitch takes the full width.
+            metrics.length > 0 && "lg:grid-cols-[1.1fr_0.9fr]",
+          )}
         >
           <div className="flex flex-col justify-center">
             <h2 className="text-ink-900 text-[clamp(1.8rem,3.2vw,2.6rem)] leading-[1.08] font-semibold tracking-[-0.025em]">
@@ -112,7 +129,7 @@ export function PersonaSwitcher({ personas }: { personas: PersonaContent[] }) {
           )}
         </div>
 
-        {p.blocks && p.blocks.length > 0 && (
+        {blocksInPanel && p.blocks && p.blocks.length > 0 && (
           <div className="border-accent-100/80 mt-9 border-t pt-8 sm:mt-10 sm:pt-10">
             <PersonaBlocks key={p.id} blocks={p.blocks} cta={p.blocksCta} />
           </div>

@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 
 import { JsonLd } from "@/components/JsonLd";
+import { PersonaAnswers } from "@/components/persona/PersonaAnswers";
 import { PersonaFaq } from "@/components/persona/PersonaFaq";
 import { PersonaFinalCta } from "@/components/persona/PersonaFinalCta";
 import { PersonaPhotoHero } from "@/components/persona/PersonaPhotoHero";
 import { PersonaProof } from "@/components/persona/PersonaProof";
 import { PersonaQuickLinks } from "@/components/persona/PersonaQuickLinks";
 import { PersonaSwitcher } from "@/components/persona/PersonaSwitcher";
-import { PartnerLogos } from "@/components/home/PartnerLogos";
-// import { FinancierTypes } from "@/features/developers/FinancierTypes";
+import { FinancierTypes } from "@/features/developers/FinancierTypes";
 import { Requirements } from "@/features/developers/Requirements";
-import { SellFlow } from "@/features/developers/SellFlow";
+import { CapitalFlow, SellFlow } from "@/features/developers/SellFlow";
 import { TalkToPartner } from "@/features/developers/TalkToPartner";
 import { Testimonials } from "@/features/developers/Testimonials";
 import { TwoPaths } from "@/features/developers/TwoPaths";
@@ -64,35 +64,38 @@ export default async function DevelopersPage() {
         image="/for-vendors-hero.webp"
         imageAlt="A vendor reviewing project plans on-site"
         headline={["Raise Capital", "and accelerate sales"]}
-        subhead="List an Afram-verified project and bring it financed members who are ready to sign — and recover capital without waiting on slow sales."
+        subhead="List a project on Afram. We verify and validate every project, so financiers fund it and you reach members with financing."
         ctaLabel="Get Started"
         ctaHref="https://app.staging.afram.co/signup?userType=issuer"
       />
 
-      <PersonaSwitcher personas={ordered} />
+      {/* Each audience's question cards render further down, in
+          <PersonaAnswers>, rather than inside the switcher panel. */}
+      <PersonaSwitcher personas={ordered} blocksInPanel={false} />
 
-      <TwoPaths />
-      {/* <PartnerLogos /> */}
+      {/* Order follows the vendors page doc (Oct 2026). */}
+      <TwoPaths tone="mint" />
+      <CapitalFlow />
       <PersonaProof
         title="Projects already listed on Afram."
-        intro="Every listing here cleared a title check before it went live. Browse what is on the platform today."
+        intro="Every listing passed a title check before going live. See what vendors have listed."
         stats={PROOF_STATS}
         properties={proofProperties}
         ctaLabel="Browse all listings"
         ctaHref="/properties"
       />
-      {/* Removed per vendor-page copy review — "Two kinds of capital" section deleted. */}
-      {/* <FinancierTypes /> */}
+      <FinancierTypes />
       <Requirements />
       <SellFlow />
       <Testimonials title="Developers already selling on Afram." />
       <TalkToPartner />
 
-      <PersonaFaq title="Questions vendors ask…" groups={faqGroups} />
+      <PersonaAnswers personas={ordered} title="Before you list." />
+      <PersonaFaq title="Questions vendors ask." groups={faqGroups} />
 
       <PersonaFinalCta
-        title="Turn idle inventory into cash."
-        subtitle="List a verified project and let financed members come to you."
+        title="Turn unsold units into capital."
+        subtitle="List a verified project to access financed members or raise capital."
         primary={{ label: "List a project", href: siteConfig.signUpUrl }}
         secondary={{ label: "Talk to a partner", href: "#talk" }}
       />

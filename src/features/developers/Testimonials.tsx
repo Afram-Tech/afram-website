@@ -11,7 +11,7 @@ export function Testimonials({ title }: { title: string }) {
   if (TESTIMONIALS.length === 0) return null;
 
   return (
-    <Section className="pt-0">
+    <Section className="pt-0 lg:pt-0">
       <SectionHeading title={title} />
       <div className="gap-card mt-10 grid lg:mt-12 lg:grid-cols-3">
         {TESTIMONIALS.map((t) => (

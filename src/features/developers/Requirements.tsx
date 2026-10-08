@@ -6,22 +6,10 @@ import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 /**
- * What a financier will ask you for. This is the highest-intent block on the
- * page: a vendor who reads it either has the pack or learns exactly what is
- * missing, and the last row invites the ones who don't rather than filtering
- * them out.
+ * What a financier will ask you for. The on-page list of nine documents was
+ * cut (vendors page doc, Oct 2026); the downloadable checklist still carries
+ * every item and why it matters.
  */
-const DOCS = [
-  "Title document or indenture",
-  "Site and cadastral plan",
-  "Building permit",
-  "Company registration",
-  "Bills of quantities",
-  "Unit schedule and pricing",
-  "Independent valuation",
-  "Financial statements",
-  "Track record of delivery",
-];
 
 const CHECKLIST = `AFRAM — FINANCING REQUIREMENTS CHECKLIST
 For property developers in Ghana
@@ -50,10 +38,8 @@ WHO WANTS WHAT
   Private credit fund       Title, unit schedule, build programme
 
 MISSING A DOCUMENT?
-Most developers are. Talk to us before you assemble the whole pack.
-
-WhatsApp  +233 24 545 2066
-Email     support@afram.co
+Most developers are. Talk to us before you assemble the whole pack,
+using the form on the Afram vendors page.
 `;
 
 export function Requirements() {
@@ -68,31 +54,21 @@ export function Requirements() {
 
   return (
     <Section id="requirements" className="scroll-mt-24">
-      <SectionHeading title="What a financier will ask you for." />
-
-      <div className="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-[1.25fr_0.75fr] lg:gap-16">
-        <ol className="grid gap-x-10 sm:grid-cols-2">
-          {DOCS.map((d, i) => (
-            <li
-              key={d}
-              className="border-ink-100 text-ink-700 flex items-baseline gap-3.5 border-b py-4 text-[15.5px]"
-            >
-              <span className="tnum text-accent-400 w-5 shrink-0 text-[12px] font-bold">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              {d}
-            </li>
-          ))}
-          <li className="border-ink-100 text-accent-700 flex items-baseline gap-3.5 border-b py-4 text-[15.5px] font-semibold">
-            <span className="w-5 shrink-0" />
+      <div className="grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-16">
+        <div>
+          <SectionHeading title="What a financier will ask you for." />
+          <a
+            href="#talk"
+            className="text-accent-700 mt-4 inline-block text-[17px] font-semibold underline-offset-4 hover:underline"
+          >
             Missing one? Talk to us.
-          </li>
-        </ol>
+          </a>
+        </div>
 
-        <aside className="bg-brand-700 h-fit rounded-[1.5rem] p-8 text-white lg:sticky lg:top-28">
+        <aside className="bg-brand-700 h-fit rounded-[1.5rem] p-8 text-white">
           <h3 className="text-[1.35rem] font-bold tracking-[-0.02em]">The full checklist</h3>
           <p className="mt-3 text-[14.5px] leading-relaxed text-white/70">
-            Why each document matters, and what to do when one is missing.
+            Why each document matters, and what to do if one is missing.
           </p>
           <button
             type="button"

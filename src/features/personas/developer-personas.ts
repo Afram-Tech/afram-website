@@ -11,66 +11,54 @@ export const PERSONAS: Record<string, PersonaContent> = {
     id: "individual",
     tab: "Individual",
     eyebrow: "For individual vendors",
-    headline: "Sell faster. Get paid sooner.",
+    headline: "Sell units faster.",
     subhead:
-      "Stop watching capital sit in unsold units. List a verified project, bring it financed members, and recover your cash without waiting on slow sales.",
+      "Unsold units lock up your capital. List your project or portfolio on Afram. Members arrive with financing in place. You recover your money, make profit, and start the next build.",
     image: unsplash("photo-1605276374104-dee2a0ed3cd6"),
     imageBadge: "Verified project",
-    // Removed per vendor-page copy review — stat panel deleted.
-    stats: [
-      // { label: "Member defaults today", value: "38%" },
-      // { label: "Bank rates you skip", value: "20–27%" },
-      // { label: "Member financing", value: "up to 10 yrs", accent: true },
-    ],
+    // The stat panel was cut (vendors page doc, Oct 2026).
+    stats: [],
+    // Shown in <PersonaAnswers> ("Before you list.") above the FAQ, not in
+    // the tab panel — vendors page doc, Oct 2026.
     blocks: [
       {
         title: "You keep control",
         icon: "KeyRound",
-        body: "Afram takes no equity and makes no decisions for you. You set the price, you set the terms, and the units and the brand stay yours.",
+        body: "Afram takes no equity. You set the price and the terms. The units and the brand stay yours.",
       },
       {
         title: "Your financials stay private",
         icon: "Lock",
-        body: "We publish only what a member needs to decide — verified title, permits, unit price. Your costs, margins and funding sources are never disclosed.",
+        body: "Members see your title, permits, and unit prices. Your costs, margins, and funding sources stay private.",
       },
       {
-        title: "Simple terms, no hidden cut",
-        icon: "FileText",
-        body: "One page. What we do, what it costs you, what you keep. Nothing buried in an appendix.",
-      },
-      {
-        title: "Start with a few units",
-        icon: "Building2",
-        body: "You do not have to commit a whole project. List a handful of units and watch the financed members arrive before you scale.",
-      },
-      {
-        title: "Deposits protected. No more chasing defaulters.",
+        title: "Deposits protected",
         icon: "ShieldCheck",
-        body: "Member deposits are held by Afram rather than paid straight to you, and members arrive with financing already arranged — so the 38% default problem stops being yours to manage.",
+        body: "Afram holds member deposits. Members arrive with financing arranged. You stop chasing defaulters.",
       },
       {
-        title: "No formal title yet? Talk to us anyway.",
+        title: "No formal title yet? Talk to us.",
         icon: "MessageCircle",
-        body: "Some completed projects were never formally titled. That does not automatically rule you out — we will tell you what is missing and what it takes to get the project listable, rather than turning you away at the door.",
+        body: "Finished a project without a formal title? That may not rule you out. We’ll tell you what is missing and what it takes to fix it.",
       },
     ],
     blocksCta: { label: "Get Started", href: SIGN_UP_AS_ISSUER },
     faqs: [
       {
-        q: "Do I lose control or hand over a share of my project?",
-        a: "No. You keep full ownership and full control of your project. Afram takes no equity and makes no decisions for you — we verify the title, endorse the project, and bring you members who already have financing. The units and the brand stay yours.",
+        q: "Do I give up control or a share of my project?",
+        a: "No. You keep full ownership and control. Afram takes no equity and makes no decisions for you.",
       },
       {
         q: "How does an Afram endorsement help me sell faster?",
-        a: "Members in Ghana are cautious for good reason — land disputes and stalled projects are common. An endorsement tells them your title is clean and your project has passed our review, so they spend less time second-guessing and more time deciding. Less hesitation means quicker sales.",
+        a: "Members in Ghana are careful, and for good reason. Land disputes and stalled projects are common. Since every asset on Afram is verified, it serves as an endorsement that your title has been checked.",
       },
       {
-        q: "Are these real members, or just more leads to chase?",
-        a: "They are committed members, not cold enquiries. Because financing is arranged through Afram — 20% down and the rest paid monthly over up to 10 years — the people we send you can actually afford the unit and are ready to sign. You spend your time closing, not qualifying.",
+        q: "Are these real members or just leads?",
+        a: "They are serious members. Financing is arranged through Afram. They are ready to buy.",
       },
       {
-        q: "Will my project's financials be exposed?",
-        a: "No. Your pricing, costs, and margins stay private. We only publish what a member needs to make a confident decision — verified title, permits, and the unit price. Everything else is shared on your terms, under a partnership agreement.",
+        q: "Will my project’s financials be exposed?",
+        a: "No. Your pricing, costs and margins stay private. We publish only what a member needs to decide.",
       },
     ],
   },
@@ -78,65 +66,46 @@ export const PERSONAS: Record<string, PersonaContent> = {
     id: "corporate",
     tab: "Corporate",
     eyebrow: "For vendor firms",
-    headline: "Accelerate sales without diluting your brand.",
+    headline: "Build or sell more units faster.",
     subhead:
-      "Reach middle- and high-income members who are priced out by 20–27% mortgages — with Afram-backed financing, market intelligence, and an endorsement that protects your name.",
+      "List your unit or portfolio to get access to financed members; list your projects to raise capital for completion.",
     image: unsplash("photo-1576941089067-2de3c901e126"),
     imageBadge: "Verified project",
-    // Removed per vendor-page copy review — stat panel deleted.
-    stats: [
-      // { label: "Units per project", value: "20–500+" },
-      // { label: "Your brand", value: "protected" },
-      // { label: "Member financing", value: "built in", accent: true },
-    ],
+    stats: [],
     blocks: [
       {
-        title: "Proof before scale",
-        icon: "LineChart",
-        body: "Run a pilot on one project. Measure the conversion against your own direct channel. Then decide whether it scales.",
-      },
-      {
-        title: "No channel conflict",
+        title: "No clash with your sales team",
         icon: "Handshake",
-        body: "Afram works alongside your sales team and your agents, never around them. We bring financed members into your existing pipeline and your team closes on your terms. Commission structures are agreed up front.",
+        body: "Your account on Afram works with your sales team. Afram’s user management lets multiple users review requests.",
       },
       {
-        title: "An endorsement, not a co-brand",
+        title: "An endorsement",
         icon: "BadgeCheck",
-        body: "Your name stays front and centre. The Afram mark sits alongside it as a title-verification signal — and because we only endorse projects that clear our title and delivery checks, it adds credibility rather than competing for it.",
+        body: "Listing a property on Afram tells members your title is verified.",
       },
       {
-        title: "Built to sit with REAC and GREDA",
-        icon: "Landmark",
-        body: "Our verification and endorsement criteria are designed around REAC and GREDA expectations on title, permits and delivery. Working with Afram reinforces the standards your firm already holds.",
-      },
-      {
-        title: "Financed members, plus the data to guide your pipeline",
+        title: "Financed members, plus market data",
         icon: "TrendingUp",
-        body: "Demand signals drawn from real member activity — which corridors are heating up, what unit sizes and price bands are moving, where members are searching. It tells you what to build next instead of guessing.",
+        body: "You get members with financing ready. You also see demand: which areas are heating up, and which unit sizes and prices sell.",
       },
     ],
-    blocksCta: { label: "Talk to a partner", href: "#talk" },
+    blocksCta: { label: "Get Started", href: SIGN_UP_AS_ISSUER },
     faqs: [
       {
-        q: "How does an endorsement protect our brand rather than dilute it?",
-        a: "We endorse your project, we never co-brand over you. Your name stays front and centre; the Afram mark sits alongside it as a quality signal — like a clean-title stamp. Because we only endorse projects that clear our title and delivery checks, the endorsement adds credibility to your name instead of competing with it.",
+        q: "Does an endorsement dilute our brand?",
+        a: "No. We endorse your project. We never co-brand over you. Your name stays first.",
       },
       {
-        q: "Does Afram financing actually convert to sales, or just interest?",
-        a: "Conversion is the point. The members we introduce already have 20%-down, up-to-10-year financing arranged, so they clear the affordability wall that 20–27% mortgages put in front of middle- and high-income households. We measure outcomes by units sold and capital recovered, and we share those figures with partners — not vanity numbers.",
+        q: "Does this turn into sales, or just interest?",
+        a: "Sales are the point. The members we send already have financing arranged.",
       },
       {
-        q: "Will this create channel conflict with our existing agents?",
-        a: "No. Afram works alongside your sales team and agents, not around them. We bring financed members to your existing pipeline and let your team close on your terms. Commission structures are agreed up front in the partnership so there are no surprises or competing incentives.",
+        q: "Will this clash with our agents?",
+        a: "No. Afram works with your sales team and agents, and user management lets your whole team work from one account.",
       },
       {
-        q: "What market intelligence and data do we get access to?",
-        a: "Partners get demand signals from real member activity — which corridors are heating up, what unit sizes and price bands are selling, and where members are searching. It helps you decide what to build and where, so future phases match real demand instead of guesswork.",
-      },
-      {
-        q: "Does this align with REAC and GREDA standards?",
-        a: "Yes. Our verification and endorsement criteria are built to sit comfortably with REAC and GREDA expectations on title, permits, and delivery. Working with Afram reinforces the professional standards your firm already holds itself to — it does not ask you to work around them.",
+        q: "What market data do we get?",
+        a: "You see demand from real member activity. Which areas are heating up. Which unit sizes and prices sell.",
       },
     ],
   },
