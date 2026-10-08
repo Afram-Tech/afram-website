@@ -12,11 +12,11 @@ export const graphqlEndpoint =
 export async function graphqlFetch<TData, TVariables extends object = object>(
   query: string,
   variables?: TVariables,
-  { mutation = false }: { mutation?: boolean } = {},
+  { mutation = false, headers }: { mutation?: boolean; headers?: Record<string, string> } = {},
 ): Promise<TData> {
   const res = await fetch(graphqlEndpoint, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...headers },
     body: JSON.stringify({ query, variables }),
     ...(mutation ? { cache: "no-store" as const } : { next: { revalidate: 3600 } }),
   });

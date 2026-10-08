@@ -37,6 +37,18 @@ export const GET_PUBLIC_PROPERTIES = /* GraphQL */ `
   }
 `;
 
+/** Public — Afram is invite-only; this files a request staff review in the
+ *  admin dashboard. Answers `success: true` even for an email that already has
+ *  an account or a waiting request, so it never reveals who is registered. */
+export const REQUEST_ACCESS = /* GraphQL */ `
+  mutation RequestAccess($input: RequestAccessInput!) {
+    requestAccess(input: $input) {
+      success
+      message
+    }
+  }
+`;
+
 /** Public — the Afram web app's contact form sends it signed out too. */
 export const CONTACT_US = /* GraphQL */ `
   mutation ContactUs($input: ContactUsInput!) {
