@@ -4,6 +4,7 @@ import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
 
 import { DisableDraftMode } from "@/components/DisableDraftMode";
+import { RequestAccess } from "@/components/access/RequestAccess";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteNav } from "@/components/layout/SiteNav";
@@ -63,6 +64,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <SiteNav verifyLabel={navigation?.verifyLabel} navGroups={navigation?.navGroups} />
         <main className="flex-1">{children}</main>
         <SiteFooter content={footer} />
+        <RequestAccess />
         <SanityLive />
         {isDraftMode && (
           <>

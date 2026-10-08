@@ -205,12 +205,52 @@ body {
       background-color: rgb(22 24 28 / 0%);
     }
   }
+  /* .modal-sheet: on phones the modal rises from the bottom edge as a sheet
+     instead of popping in the middle (desktop keeps .modal-pop). */
+  @media (max-width: 639.98px) {
+    .modal-pop.modal-sheet {
+      transform: translateY(100%);
+    }
+    .modal-pop.modal-sheet[open] {
+      transform: translateY(0);
+    }
+    @starting-style {
+      .modal-pop.modal-sheet[open] {
+        transform: translateY(100%);
+      }
+    }
+  }
+
+  /* A confirmation icon that pops in with a little overshoot. */
+  @keyframes afram-check-pop {
+    0% {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    60% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  .check-pop {
+    animation: afram-check-pop 0.5s var(--ease-out-soft) both;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .modal-pop {
+    .modal-pop,
+    .modal-pop.modal-sheet {
       transition: none;
+      transform: none;
     }
     .modal-pop::backdrop {
       transition: none;
+    }
+    .check-pop {
+      animation: none;
     }
   }
 }

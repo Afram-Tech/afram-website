@@ -9,6 +9,7 @@ import { VerifyTitleDialog } from "@/components/VerifyTitleDialog";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { NAV_GROUPS, type NavGroup } from "@/config/navigation";
 import { siteConfig } from "@/config/site";
+import { REQUEST_ACCESS_ATTR } from "@/features/access/roles";
 import { cn } from "@/lib/utils";
 
 /** The full menu plus both account buttons need ~1,110px, so the desktop
@@ -125,11 +126,17 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
           <div className="hidden shrink-0 items-center gap-2 xl:flex 2xl:gap-3">
             <Link
               href={siteConfig.signUpUrl}
+              aria-haspopup="dialog"
               className="text-ink-800 hover:text-brand-600 rounded-lg px-2.5 py-2 text-[14px] font-semibold whitespace-nowrap transition-colors 2xl:px-3.5 2xl:text-[15px]"
             >
               Create Account
             </Link>
-            <Link href={siteConfig.signInUrl} className={buttonVariants("primary", "sm")}>
+            <Link
+              href={siteConfig.signInUrl}
+              {...{ [REQUEST_ACCESS_ATTR]: "" }}
+              aria-haspopup="dialog"
+              className={buttonVariants("primary", "sm")}
+            >
               Log In
             </Link>
           </div>
@@ -200,7 +207,9 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
           <div className="mt-6 flex flex-col gap-2.5">
             <Link
               href={siteConfig.signInUrl}
+              {...{ [REQUEST_ACCESS_ATTR]: "" }}
               onClick={() => setMobileMenuOpen(false)}
+              aria-haspopup="dialog"
               className={buttonVariants("primary", "lg", "w-full")}
             >
               Log In
@@ -208,6 +217,7 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
             <Link
               href={siteConfig.signUpUrl}
               onClick={() => setMobileMenuOpen(false)}
+              aria-haspopup="dialog"
               className="bg-brand-50 text-brand-700 flex items-center justify-center rounded-xl px-4 py-3 text-base font-semibold"
             >
               Create Account
