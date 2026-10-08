@@ -1,21 +1,18 @@
 "use server";
 
+import { headers } from "next/headers";
 import { z } from "zod";
 
 import { graphqlFetch } from "@/graphql/client";
-import { CONTACT_US } from "@/graphql/documents";
+import { REQUEST_ACCESS } from "@/graphql/documents";
 
 import { ACCESS_ROLES, type AccessRole } from "./roles";
 
 /**
  * Afram is invite-only for now: "Create Account" and "Log In" open a request
- * form instead of the app's sign-up.
- *
- * The API has no access-request mutation yet, so a request is delivered to
- * the team through the existing public contactUs mutation, with a subject
- * they can filter on ("Access request: Vendor"). The team approves it and
- * sends the invite from the app. When a dedicated mutation exists, only
- * `deliver` below needs to change.
+ * form instead of the app's sign-up. The request goes to the API's
+ * `requestAccess`; staff approve or decline it in the admin dashboard, and an
+ * approved person gets an email with a temporary password and a set-up link.
  */
 
 const Request = z.object({
@@ -33,30 +30,39 @@ export type AccessState =
   | { status: "error"; message: string; field?: "role" | "name" | "email" | "phone" }
   | { status: "received"; email: string; role: AccessRole };
 
+/** The API stores the app's wire values; this site says "Member" for a buyer. */
+const WIRE_ROLE: Record<AccessRole, "buyer" | "issuer" | "financier"> = {
+  Member: "buyer",
+  Vendor: "issuer",
+  Financier: "financier",
+};
+
+/** The visitor's IP, from the request this server action is answering. The API
+ *  rate-limits requestAccess per IP; without this every visitor would share the
+ *  website server's IP, and so one limit. */
+async function visitorIp(): Promise<string | undefined> {
+  const h = await headers();
+  return h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip") || undefined;
+}
+
 async function deliver({ role, name, email, phone }: z.infer<typeof Request>) {
+  const ip = await visitorIp();
   const data = await graphqlFetch<
-    { contactUs: { success: boolean; message?: string | null } },
-    { input: { name: string; email: string; subject: string; message: string } }
-  >(
-    CONTACT_US,
+    { requestAccess: { success: boolean; message: string } },
     {
       input: {
-        name,
-        email,
-        subject: `Access request: ${role}`,
-        message: [
-          "New access request from the Afram website.",
-          "",
-          `Role:  ${role}`,
-          `Name:  ${name}`,
-          `Email: ${email}`,
-          `Phone: ${phone}`,
-        ].join("\n"),
-      },
-    },
-    { mutation: true },
+        role: "buyer" | "issuer" | "financier";
+        fullName: string;
+        email: string;
+        phone: string;
+      };
+    }
+  >(
+    REQUEST_ACCESS,
+    { input: { role: WIRE_ROLE[role], fullName: name, email, phone } },
+    { mutation: true, headers: ip ? { "X-Forwarded-For": ip } : undefined },
   );
-  if (!data.contactUs.success) throw new Error(data.contactUs.message ?? "not accepted");
+  if (!data.requestAccess.success) throw new Error(data.requestAccess.message || "not accepted");
 }
 
 export async function requestAccess(_prev: AccessState, form: FormData): Promise<AccessState> {
