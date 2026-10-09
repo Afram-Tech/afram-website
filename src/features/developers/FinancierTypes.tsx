@@ -15,7 +15,9 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 const PROVIDERS: { name: string; src?: string }[] = [
   { name: "Affinity" },
   { name: "Ecobank", src: "/partners/ecobank.svg" },
-  { name: "Origen" },
+  // Trimmed from OrigenLogo.png (a square with wide margins) so the wordmark
+  // fills its tile like the other logos.
+  { name: "Origen", src: "/partners/origen-logo-trimmed.png" },
 ];
 
 export function FinancierTypes() {

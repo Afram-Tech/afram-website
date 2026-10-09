@@ -3,7 +3,7 @@ export const appUrl = process.env.NEXT_PUBLIC_CLIENT_APP;
 export const siteConfig = {
   name: "Afram",
   legalName: "Afram Technologies",
-  tagline: "Liberating Capital.",
+  tagline: "",
   description:
     "Afram is a blockchain-verified real estate marketplace connecting members, vendors, and financiers in Ghana. Buy property with flexible financing, list verified projects to reach ready members, or deploy capital into title-verified real estate.",
   url: "https://afram.co",
