@@ -30,4 +30,29 @@
       "database_id": "91ab0162-0f9e-4645-88c1-b36d69a4f9e8",
     },
   ],
+  // Staging: the "afram-website-staging" Worker. Wrangler names an
+  // environment's Worker "<name>-<env>", and Workers Builds accepts that as a
+  // match — so one config serves both Workers. The staging Worker's deploy
+  // command must pass the environment:
+  //   npx opennextjs-cloudflare deploy --env staging
+  // Bindings aren't inherited by environments, so they're repeated here.
+  // These share production's cache stores; give staging its own KV namespace
+  // and D1 database if its cache must never mix with production's.
+  "env": {
+    "staging": {
+      "kv_namespaces": [
+        {
+          "binding": "NEXT_INC_CACHE_KV",
+          "id": "d401b3613d3a4ed4bb27f4eb95ddd736",
+        },
+      ],
+      "d1_databases": [
+        {
+          "binding": "NEXT_TAG_CACHE_D1",
+          "database_name": "afram-website-tag-cache",
+          "database_id": "91ab0162-0f9e-4645-88c1-b36d69a4f9e8",
+        },
+      ],
+    },
+  },
 }
