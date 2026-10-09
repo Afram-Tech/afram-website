@@ -2,15 +2,16 @@ import { Hammer, Home } from "lucide-react";
 import type { Metadata } from "next";
 
 import { JsonLd } from "@/components/JsonLd";
+import { PersonaAnswers } from "@/components/persona/PersonaAnswers";
 import { PersonaFaq } from "@/components/persona/PersonaFaq";
 import { PersonaFinalCta } from "@/components/persona/PersonaFinalCta";
 import { PersonaPhotoHero } from "@/components/persona/PersonaPhotoHero";
 import { PersonaProof } from "@/components/persona/PersonaProof";
 import { PersonaQuickLinks } from "@/components/persona/PersonaQuickLinks";
 import { PersonaSwitcher } from "@/components/persona/PersonaSwitcher";
-import { PartnerLogos } from "@/components/home/PartnerLogos";
+import { ProductPreview } from "@/components/persona/ProductPreview";
+import { siteConfig } from "@/config/site";
 import { BriefingForm } from "@/features/financiers/BriefingForm";
-import { RecognisedBy } from "@/features/financiers/RecognisedBy";
 import { WhereOurJobEnds } from "@/features/financiers/WhereOurJobEnds";
 import { YieldRanges } from "@/features/financiers/YieldRanges";
 import { TwoPaths, type Path } from "@/features/developers/TwoPaths";
@@ -27,41 +28,36 @@ const FINANCIER_CTA = accessCta({ label: "Get Started", href: signUpHref("financ
 export const metadata: Metadata = buildMetadata({
   title: "Financiers — Deploy Capital into Verified Real Estate",
   description:
-    "Deploy capital into title-verified Ghanaian real estate — secured by a first legal charge, on your own terms, with full KYC. For banks, private credit, and impact/diaspora capital.",
+    "Secured, compliant exposure to Ghanaian real estate: verified title, documented security, full KYC, and terms you set.",
   path: "/financiers",
 });
 
-/** What you can finance. */
+/** What you can finance — kept to a line each, like the vendors page. */
 const FINANCE_PATHS: Path[] = [
   {
     badge: "Developers",
     icon: Hammer,
-    title: "Fund the build.",
-    intro: "A developer requests financing to construct, or to finish a phase that ran short.",
-    points: [
-      ["Verified asset.", "Title confirmed against Lands Commission records."],
-      ["First legal charge.", "Registered in the ordinary way, in your name."],
-      ["Repaid from unit sales.", "The same stock members are already searching for."],
-    ],
+    title: "Lend to developers to build or finish a phase.",
+    intro: "Verified projects, repaid from unit sales.",
+    points: [],
     cta: { label: "Request a briefing", href: "#briefing" },
   },
   {
     badge: "Home members",
     icon: Home,
-    title: "Fund the purchase.",
-    intro:
-      "A member requests financing for a completed unit whose title you have already seen verified.",
-    points: [
-      ["Collateral you know.", "Often the same asset you funded during construction."],
-      ["Their details reach you direct.", "Your KYC, your affordability call."],
-      ["Collections tracked.", "Arrears surfaced on the platform, not buried."],
-    ],
+    title: "Lend to members of verified homes.",
+    intro: "Often the same asset you funded during construction.",
+    points: [],
     cta: { label: "Request a briefing", href: "#briefing" },
   },
 ];
 
 const LINKS = [
-  { label: "Yield and tenure", href: "#yield" },
+  { label: "Pricing and tenure", href: "#yield" },
+  // No dedicated key-risks page on this site yet — same destination as the
+  // "Key risks" link on every capital-at-risk note.
+  { label: "Key risks", href: "/privacy-policy" },
+  { label: "Verify a title", href: siteConfig.registryUrl, external: true, on: "Afram Verify" },
   { label: "Request a briefing", href: "#briefing" },
 ];
 
@@ -76,10 +72,10 @@ export default async function FinanciersPage() {
   const stats = catalogueStats(properties);
   const proofProperties = sampleProperties(properties);
 
+  // The page's standing terms. Rates are agreed with the borrower, so no yield stat.
   const PROOF_STATS = [
-    { value: "22–45%", label: "Target yield per annum, by mandate" },
-    { value: "1st", label: "Legal charge registered on every loan" },
-    { value: "≤5 days", label: "From agreed mandate to live deals" },
+    { value: "Secured", label: "Security pack prepared for every loan" },
+    { value: "≤5 days", label: "From agreed mandate and completed KYC to live deals" },
     { value: `${stats.listings}`, label: "Title-verified assets on platform" },
   ];
 
@@ -89,25 +85,25 @@ export default async function FinanciersPage() {
       <PersonaPhotoHero
         image="/for-financiers-hero.webp"
         imageAlt="Two financiers shaking hands over a deal"
-        headline={["Deploy Capital into", "Verified Real Estate"]}
-        subhead="Every loan sits behind a first legal charge on title-verified Ghanaian real estate, with full KYC and terms you control."
+        headline={["Deploy capital into verified Ghanaian real estate."]}
+        subhead="Every loan is secured against title-verified Ghanaian real estate, with full KYC and terms you control."
         ctaLabel={FINANCIER_CTA.label}
         ctaHref={FINANCIER_CTA.href}
         overlay
       />
 
-      <PersonaSwitcher personas={ordered} />
+      {/* Each audience's question cards render further down, in
+          <PersonaAnswers>, rather than inside the switcher panel. */}
+      <PersonaSwitcher personas={ordered} blocksInPanel={false} />
 
       <TwoPaths
         tone="mint"
         title="Finance the build, or finance the member."
         paths={FINANCE_PATHS}
       />
-      {/* <RecognisedBy /> */}
-      {/* <PartnerLogos /> */}
       <PersonaProof
         title="Assets already verified on Afram."
-        intro="Every asset is reconciled against Lands Commission records before a loan is written against it. Look at the book yourself."
+        intro="Every asset is reconciled against Lands Commission records before it can receive a financing request. Look at the book yourself."
         stats={PROOF_STATS}
         properties={proofProperties}
         ctaLabel="Browse the catalogue"
@@ -116,11 +112,16 @@ export default async function FinanciersPage() {
       <YieldRanges />
       <WhereOurJobEnds />
       <BriefingForm />
+      <ProductPreview
+        title="Your book, your rules, one dashboard."
+        intro="Positions, collateral records and documentation in one place."
+      />
 
-      <PersonaFaq title="Questions financiers ask…" groups={faqGroups} />
+      <PersonaAnswers personas={ordered} title="Before you lend." />
+      <PersonaFaq title="Questions financiers ask." groups={faqGroups} riskKind="lending" />
 
       <PersonaFinalCta
-        title="Put capital to work, safely."
+        title="Put capital to work."
         subtitle="Verified collateral, your own rules, and a clear enforcement path."
         primary={{ label: "Request a briefing", href: "#briefing" }}
         secondary={{ label: "How it works", href: "/how-it-works" }}

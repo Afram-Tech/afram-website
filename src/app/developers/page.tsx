@@ -18,6 +18,7 @@ import { getAllProperties } from "@/features/landing/data/properties";
 import { catalogueStats, sampleProperties } from "@/features/personas/catalogue";
 import { ORDER, PERSONAS } from "@/features/personas/developer-personas";
 import { accessCta, signUpHref } from "@/features/access/cta";
+import { siteConfig } from "@/config/site";
 import { buildFaqJsonLd, buildMetadata } from "@/lib/seo";
 
 /* Both read "Request Access" while the site is invite-only. The hero href also
@@ -39,8 +40,10 @@ export const metadata: Metadata = buildMetadata({
  */
 const FINANCIERS_FUNDING = 4;
 
+// V2 also links "What it costs" (/fees); this site has no fees page yet.
 const LINKS = [
   { label: "How selling works", href: "/how-it-works" },
+  { label: "Verify a title", href: siteConfig.registryUrl, external: true, on: "Afram Verify" },
   { label: "Insights", href: "/insights" },
 ];
 

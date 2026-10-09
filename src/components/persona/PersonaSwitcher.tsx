@@ -52,7 +52,10 @@ export function PersonaSwitcher({
   const metrics = p.stats.slice(0, 3);
 
   return (
-    <section id="audience" className="mx-auto max-w-[1536px] scroll-mt-24 px-6 sm:px-8 lg:px-16">
+    <section
+      id="audience"
+      className="mx-auto mb-10 max-w-[1536px] scroll-mt-24 px-6 sm:mb-14 sm:px-8 lg:mb-20 lg:px-16"
+    >
       <div className="from-accent-50 via-accent-50/40 ring-accent-100/70 overflow-hidden rounded-[2rem] bg-gradient-to-br to-white p-6 ring-1 sm:p-10 lg:p-12">
         <div className="flex flex-col gap-3">
           <p className="text-accent-700 text-[12px] font-semibold tracking-[0.18em] uppercase">

@@ -18,7 +18,7 @@ const AFRAM_DOES = [
   "Hold the master deed and indenture",
   "Check the building permit",
   "Check the surveyor-signed site plan",
-  "Commission an independent valuation",
+  "Arrange an independent valuation",
   "Structure the escrow and the charge",
   "Track repayments on the platform",
 ];
@@ -101,10 +101,10 @@ export function WhereOurJobEnds() {
   const panel = TABS[active];
 
   return (
-    <Section id="verify" className="scroll-mt-24" container={false}>
+    <Section id="verify" className="scroll-mt-24 pb-0 sm:pb-0 lg:pb-0" container={false}>
       <div className="mx-auto max-w-[1536px] px-6 sm:px-8 lg:px-16">
         <div className="bg-brand-900 rounded-[2rem] p-8 text-white sm:p-12 lg:p-14">
-          <h2 className="max-w-[22ch] text-[clamp(1.7rem,3vw,2.4rem)] leading-[1.12] font-bold tracking-[-0.02em]">
+          <h2 className="max-w-[24ch] text-[clamp(1.6rem,2.4vw,2rem)] leading-[1.18] font-bold tracking-[-0.02em]">
             We verify the records. You make the credit decision.
           </h2>
           <p className="mt-4 max-w-[52ch] text-[16px] leading-relaxed text-white/70">
@@ -112,7 +112,7 @@ export function WhereOurJobEnds() {
             lending decision stays entirely yours.
           </p>
 
-          <div className="mt-9 grid gap-8 lg:mt-10 lg:grid-cols-[1.55fr_0.85fr] lg:gap-12">
+          <div className="mt-8 grid gap-8 lg:grid-cols-[1.55fr_0.85fr] lg:items-center lg:gap-12">
             <div>
               <div
                 role="tablist"
@@ -161,7 +161,7 @@ export function WhereOurJobEnds() {
                 tabIndex={0}
                 /* min-height holds the frame steady so switching tabs does not
                    shunt the pack card up and down */
-                className="mt-7 grid gap-x-8 gap-y-3.5 focus-visible:outline-none sm:grid-cols-2 lg:min-h-[230px]"
+                className="mt-5 grid gap-x-8 gap-y-2.5 focus-visible:outline-none sm:grid-cols-2 lg:min-h-[132px] lg:content-start"
               >
                 {panel.items.map((t) => (
                   <p

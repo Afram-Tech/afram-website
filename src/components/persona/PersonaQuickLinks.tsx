@@ -6,6 +6,9 @@ import { Section } from "@/components/ui/Section";
 export type QuickLink = {
   label: string;
   href: string;
+  /** An Afram surface on its own domain — say so rather than just leaving. */
+  external?: boolean;
+  on?: string;
 };
 
 /**
@@ -15,21 +18,38 @@ export type QuickLink = {
  */
 export function PersonaQuickLinks({ links }: { links: QuickLink[] }) {
   return (
-    <Section className="pt-0 lg:pt-0">
+    <Section className="pt-0 sm:pt-0 lg:pt-0">
       <div className="border-ink-100 flex flex-col gap-x-8 gap-y-3 border-t pt-6 sm:flex-row sm:flex-wrap sm:items-center">
         <span className="text-ink-400 text-[12px] font-semibold tracking-[0.14em] uppercase">
           More
         </span>
-        {links.map((l) => (
-          <Link
-            key={l.label}
-            href={l.href}
-            className="text-ink-700 hover:text-brand-700 group focus-visible:outline-brand-500 inline-flex items-center gap-1.5 text-[15px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
-          >
-            {l.label}
-            <ArrowUpRight className="text-ink-300 group-hover:text-brand-600 h-3.5 w-3.5 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </Link>
-        ))}
+        {links.map((l) => {
+          const inner = (
+            <>
+              {l.label}
+              {l.on && <span className="text-ink-400 text-[13px] font-normal">on {l.on}</span>}
+              <ArrowUpRight className="text-ink-300 group-hover:text-brand-600 h-3.5 w-3.5 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </>
+          );
+          const className =
+            "text-ink-700 hover:text-brand-700 group focus-visible:outline-brand-500 inline-flex items-center gap-1.5 text-[15px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2";
+          return l.external ? (
+            <a
+              key={l.label}
+              href={l.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={l.on ? `Opens ${l.on} in a new tab` : undefined}
+              className={className}
+            >
+              {inner}
+            </a>
+          ) : (
+            <Link key={l.label} href={l.href} className={className}>
+              {inner}
+            </Link>
+          );
+        })}
       </div>
     </Section>
   );

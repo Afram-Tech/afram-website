@@ -5,7 +5,7 @@ import { Section } from "@/components/ui/Section";
  *  can use it, so the topics cover all three. */
 export function TalkToPartner() {
   return (
-    <Section id="talk" className="scroll-mt-24 bg-white">
+    <Section id="talk" className="scroll-mt-24 bg-white pb-0 sm:pb-0 lg:pb-0">
       <ContactSplit
         title="Talk to us."
         subtitle="For more enquiries, fill in this form."
@@ -14,6 +14,7 @@ export function TalkToPartner() {
         topics={["Buy a property", "List a property", "Deploy capital"]}
         cta="Talk to a partner"
         showContacts={false}
+        simpleForm
       />
     </Section>
   );
