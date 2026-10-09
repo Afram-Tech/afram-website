@@ -3,6 +3,8 @@ import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/button-variants";
 import { siteConfig } from "@/config/site";
+import { INVITE_ONLY, REQUEST_ACCESS_LABEL } from "@/features/access/invite-only";
+import { REQUEST_ACCESS_ATTR } from "@/features/access/roles";
 
 export function LockedSection({
   children,
@@ -21,10 +23,18 @@ export function LockedSection({
           <Lock className="h-[18px] w-[18px]" />
         </span>
         <p className="text-ink-900 max-w-[240px] text-[14px] leading-snug font-semibold">
-          Log in to view {label}
+          {INVITE_ONLY ? `Request access to view ${label}` : `Log in to view ${label}`}
         </p>
-        <Link href={siteConfig.signInUrl} className={`${buttonVariants("primary", "sm")} py-4`}>
-          Log in or create account
+        {/* Invitation-only: this sent people to a sign-in they have no account
+            for. The request form is the honest destination. */}
+        <Link
+          href={INVITE_ONLY ? siteConfig.signUpUrl : siteConfig.signInUrl}
+          {...(INVITE_ONLY
+            ? { [REQUEST_ACCESS_ATTR]: "", "aria-haspopup": "dialog" as const }
+            : {})}
+          className={`${buttonVariants("primary", "sm")} py-4`}
+        >
+          {INVITE_ONLY ? REQUEST_ACCESS_LABEL : "Log in or create account"}
         </Link>
       </div>
     </div>

@@ -7,6 +7,7 @@ import { useActionState, useEffect, useRef, useState } from "react";
 
 import { siteConfig } from "@/config/site";
 import { requestAccess, type AccessState } from "@/features/access/actions";
+import { INVITE_ONLY } from "@/features/access/invite-only";
 import {
   OPEN_REQUEST_ACCESS,
   REQUEST_ACCESS_ATTR,
@@ -42,8 +43,11 @@ const ROLES: { id: AccessRole; icon: LucideIcon }[] = [
   { id: "Financier", icon: Landmark },
 ];
 
-/** A link to the app's sign-up page, or one marked to open this dialog. */
+/** A link to the app's sign-up page, or one marked to open this dialog.
+ *  Nothing is intercepted once INVITE_ONLY is off — otherwise opting out would
+ *  still trap every sign-up link in this dialog. */
 function isAccessLink(link: HTMLAnchorElement): boolean {
+  if (!INVITE_ONLY) return false;
   if (link.hasAttribute(REQUEST_ACCESS_ATTR)) return true;
   try {
     const url = new URL(link.href);

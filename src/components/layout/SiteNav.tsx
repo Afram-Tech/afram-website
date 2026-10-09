@@ -9,6 +9,7 @@ import { VerifyTitleDialog } from "@/components/VerifyTitleDialog";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { NAV_GROUPS, type NavGroup } from "@/config/navigation";
 import { siteConfig } from "@/config/site";
+import { INVITE_ONLY, REQUEST_ACCESS_LABEL } from "@/features/access/invite-only";
 import { REQUEST_ACCESS_ATTR } from "@/features/access/roles";
 import { cn } from "@/lib/utils";
 
@@ -124,21 +125,39 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
           </nav>
 
           <div className="hidden shrink-0 items-center gap-2 xl:flex 2xl:gap-3">
-            <Link
-              href={siteConfig.signUpUrl}
-              aria-haspopup="dialog"
-              className="text-ink-800 hover:text-brand-600 rounded-lg px-2.5 py-2 text-[14px] font-semibold whitespace-nowrap transition-colors 2xl:px-3.5 2xl:text-[15px]"
-            >
-              Create Account
-            </Link>
-            <Link
-              href={siteConfig.signInUrl}
-              {...{ [REQUEST_ACCESS_ATTR]: "" }}
-              aria-haspopup="dialog"
-              className={buttonVariants("primary", "sm")}
-            >
-              Log In
-            </Link>
+            {INVITE_ONLY ? (
+              /* One control, not two. "Create Account" and "Log In" both opened
+                 the request form anyway while access is by invitation, so the
+                 labels were promising a door that isn't there. Still a link to
+                 the app's sign-up, so a visitor without JS lands somewhere
+                 sensible instead of on a dead button. */
+              <Link
+                href={siteConfig.signUpUrl}
+                {...{ [REQUEST_ACCESS_ATTR]: "" }}
+                aria-haspopup="dialog"
+                className={buttonVariants("primary", "sm")}
+              >
+                {REQUEST_ACCESS_LABEL}
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href={siteConfig.signUpUrl}
+                  aria-haspopup="dialog"
+                  className="text-ink-800 hover:text-brand-600 rounded-lg px-2.5 py-2 text-[14px] font-semibold whitespace-nowrap transition-colors 2xl:px-3.5 2xl:text-[15px]"
+                >
+                  Create Account
+                </Link>
+                <Link
+                  href={siteConfig.signInUrl}
+                  {...{ [REQUEST_ACCESS_ATTR]: "" }}
+                  aria-haspopup="dialog"
+                  className={buttonVariants("primary", "sm")}
+                >
+                  Log In
+                </Link>
+              </>
+            )}
           </div>
 
           <button
@@ -205,23 +224,37 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
             </Link>
           </div>
           <div className="mt-6 flex flex-col gap-2.5">
-            <Link
-              href={siteConfig.signInUrl}
-              {...{ [REQUEST_ACCESS_ATTR]: "" }}
-              onClick={() => setMobileMenuOpen(false)}
-              aria-haspopup="dialog"
-              className={buttonVariants("primary", "lg", "w-full")}
-            >
-              Log In
-            </Link>
-            <Link
-              href={siteConfig.signUpUrl}
-              onClick={() => setMobileMenuOpen(false)}
-              aria-haspopup="dialog"
-              className="bg-brand-50 text-brand-700 flex items-center justify-center rounded-xl px-4 py-3 text-base font-semibold"
-            >
-              Create Account
-            </Link>
+            {INVITE_ONLY ? (
+              <Link
+                href={siteConfig.signUpUrl}
+                {...{ [REQUEST_ACCESS_ATTR]: "" }}
+                onClick={() => setMobileMenuOpen(false)}
+                aria-haspopup="dialog"
+                className={buttonVariants("primary", "lg", "w-full")}
+              >
+                {REQUEST_ACCESS_LABEL}
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href={siteConfig.signInUrl}
+                  {...{ [REQUEST_ACCESS_ATTR]: "" }}
+                  onClick={() => setMobileMenuOpen(false)}
+                  aria-haspopup="dialog"
+                  className={buttonVariants("primary", "lg", "w-full")}
+                >
+                  Log In
+                </Link>
+                <Link
+                  href={siteConfig.signUpUrl}
+                  onClick={() => setMobileMenuOpen(false)}
+                  aria-haspopup="dialog"
+                  className="bg-brand-50 text-brand-700 flex items-center justify-center rounded-xl px-4 py-3 text-base font-semibold"
+                >
+                  Create Account
+                </Link>
+              </>
+            )}
             <VerifyTitleDialog className="bg-brand-50 text-brand-700 flex items-center justify-center rounded-xl px-4 py-3 text-base font-semibold">
               {verifyLabel}
             </VerifyTitleDialog>
