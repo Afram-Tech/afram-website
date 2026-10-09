@@ -23,11 +23,14 @@ import { cn } from "@/lib/utils";
  * team gets back to you with an invite. People who already have access
  * continue to the app from the "Sign in" link at the bottom.
  *
+ * While INVITE_ONLY is on, the sign-up controls READ "Request Access" rather
+ * than "Get Started" or "Create Account" (features/access/cta does the swap) —
+ * a button should say what clicking it does. This catches the clicks:
+ *
  * Mounted once in the root layout. It opens for:
- * - any click on a link to the app's sign-up page (every "Get Started",
- *   "Create Account", "List a project"…) — caught here rather than on each
- *   button, so new sign-up links are covered automatically;
- * - any link marked `data-request-access` (the nav's "Log In");
+ * - any click on a link to the app's sign-up page — caught here rather than
+ *   wired onto each button, so a new sign-up link is covered automatically;
+ * - any link marked `data-request-access` (the nav's account control);
  * - openRequestAccess() (features/access/roles), from code.
  * Cmd/Ctrl/Shift-clicks and pages without JS still follow the link.
  *

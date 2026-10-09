@@ -18,7 +18,11 @@ import { getAllProperties } from "@/features/landing/data/properties";
 import { catalogueStats, sampleProperties } from "@/features/personas/catalogue";
 import { ORDER, PERSONAS } from "@/features/personas/financier-personas";
 import { buildFaqJsonLd, buildMetadata } from "@/lib/seo";
-import { appUrl } from "@/config/site";
+import { accessCta, signUpHref } from "@/features/access/cta";
+
+/* Reads "Request Access" while the site is invite-only. The href also loses a
+   stray double slash it carried while nothing navigated through it. */
+const FINANCIER_CTA = accessCta({ label: "Get Started", href: signUpHref("financier") });
 
 export const metadata: Metadata = buildMetadata({
   title: "Financiers — Deploy Capital into Verified Real Estate",
@@ -87,8 +91,8 @@ export default async function FinanciersPage() {
         imageAlt="Two financiers shaking hands over a deal"
         headline={["Deploy Capital into", "Verified Real Estate"]}
         subhead="Every loan sits behind a first legal charge on title-verified Ghanaian real estate, with full KYC and terms you control."
-        ctaLabel="Get Started"
-        ctaHref={`${appUrl!}//signup?userType=financier`}
+        ctaLabel={FINANCIER_CTA.label}
+        ctaHref={FINANCIER_CTA.href}
         overlay
       />
 
