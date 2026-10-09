@@ -1,3 +1,5 @@
+export const appUrl = process.env.NEXT_PUBLIC_CLIENT_APP;
+
 export const siteConfig = {
   name: "Afram",
   legalName: "Afram Technologies",
@@ -8,9 +10,9 @@ export const siteConfig = {
   ogImage: "/opengraph.png",
   registryUrl: "https://registry.afram.co",
   /** Auth and the buyer dashboard live in the Afram app, not on this marketing site. */
-  appUrl: "https://app.staging.afram.co",
-  signInUrl: "https://app.staging.afram.co/signin",
-  signUpUrl: "https://app.staging.afram.co/get-started",
+  appUrl: appUrl,
+  signInUrl: `${appUrl}/signin`,
+  signUpUrl: `${appUrl}/get-started`,
   social: {
     twitter: "@afram",
     facebook: "https://facebook.com/afram",
