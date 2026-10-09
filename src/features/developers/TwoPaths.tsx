@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { siteConfig } from "@/config/site";
+import { accessCta, signUpHref } from "@/features/access/cta";
 import { cn } from "@/lib/utils";
 
 export type Path = {
@@ -16,7 +16,8 @@ export type Path = {
   cta: { label: string; href: string };
 };
 
-const SIGN_UP_AS_ISSUER = `${siteConfig.signUpUrl}?userType=issuer`;
+/** "Request Access" while the site is invite-only — see features/access/cta. */
+const SIGN_UP_CTA = accessCta({ label: "Get Started", href: signUpHref("issuer") });
 
 /**
  * The second path — a vendor raising capital against their own project — is
@@ -30,7 +31,7 @@ export const VENDOR_PATHS: Path[] = [
     title: "Sell to members who already have financing.",
     intro: "Members arrive approved. Their financier pays you in full.",
     points: [],
-    cta: { label: "Get Started", href: SIGN_UP_AS_ISSUER },
+    cta: SIGN_UP_CTA,
   },
   {
     badge: "Raise capital",
@@ -38,7 +39,7 @@ export const VENDOR_PATHS: Path[] = [
     title: "List your project to raise capital.",
     intro: "Land or unfinished project? Get it financed and sold on Afram.",
     points: [],
-    cta: { label: "Get Started", href: SIGN_UP_AS_ISSUER },
+    cta: SIGN_UP_CTA,
   },
 ];
 

@@ -17,8 +17,13 @@ import { TwoPaths } from "@/features/developers/TwoPaths";
 import { getAllProperties } from "@/features/landing/data/properties";
 import { catalogueStats, sampleProperties } from "@/features/personas/catalogue";
 import { ORDER, PERSONAS } from "@/features/personas/developer-personas";
-import { appUrl, siteConfig } from "@/config/site";
+import { accessCta, signUpHref } from "@/features/access/cta";
 import { buildFaqJsonLd, buildMetadata } from "@/lib/seo";
+
+/* Both read "Request Access" while the site is invite-only. The hero href also
+   loses a stray double slash it carried while nothing navigated through it. */
+const VENDOR_CTA = accessCta({ label: "Get Started", href: signUpHref("issuer") });
+const LIST_A_PROJECT = accessCta({ label: "List a project", href: signUpHref() });
 
 export const metadata: Metadata = buildMetadata({
   title: "List Properties — Raise Capital and Accelerate Sales",
@@ -65,8 +70,8 @@ export default async function DevelopersPage() {
         imageAlt="A vendor reviewing project plans on-site"
         headline={["Raise Capital", "and accelerate sales"]}
         subhead="List a project on Afram. We verify and validate every project, so financiers fund it and you reach members with financing."
-        ctaLabel="Get Started"
-        ctaHref={`${appUrl!}//signup?userType=issuer`}
+        ctaLabel={VENDOR_CTA.label}
+        ctaHref={VENDOR_CTA.href}
       />
 
       {/* Each audience's question cards render further down, in
@@ -96,7 +101,7 @@ export default async function DevelopersPage() {
       <PersonaFinalCta
         title="Turn unsold units into capital."
         subtitle="List a verified project to access financed members or raise capital."
-        primary={{ label: "List a project", href: siteConfig.signUpUrl }}
+        primary={LIST_A_PROJECT}
         secondary={{ label: "Talk to a partner", href: "#talk" }}
       />
 

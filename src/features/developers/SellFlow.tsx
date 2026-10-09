@@ -4,11 +4,12 @@ import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { siteConfig } from "@/config/site";
+import { accessCta, signUpHref } from "@/features/access/cta";
 
 type Step = { n: string; title: string; body: string };
 
-const SIGN_UP_AS_ISSUER = `${siteConfig.signUpUrl}?userType=issuer`;
+/** "Request Access" while the site is invite-only — see features/access/cta. */
+const SIGN_UP_CTA = accessCta({ label: "Get Started", href: signUpHref("issuer") });
 
 const SALE_STEPS: Step[] = [
   {
@@ -91,10 +92,10 @@ function Steps({
 
       {cta && (
         <Link
-          href={SIGN_UP_AS_ISSUER}
+          href={SIGN_UP_CTA.href}
           className="bg-brand-500 hover:bg-brand-600 focus-visible:outline-brand-500 mt-10 inline-flex h-12 w-fit items-center justify-center gap-2 rounded-full px-6 text-[15px] font-semibold text-white shadow-sm transition-all focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98]"
         >
-          Get Started
+          {SIGN_UP_CTA.label}
           <ArrowRight className="h-4 w-4" />
         </Link>
       )}

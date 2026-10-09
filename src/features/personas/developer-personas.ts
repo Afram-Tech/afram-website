@@ -1,10 +1,11 @@
 import type { PersonaContent } from "@/features/personas/types";
-import { siteConfig } from "@/config/site";
+import { accessCta, signUpHref } from "@/features/access/cta";
 
 const unsplash = (id: string, width = 1200, quality = 68) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=${quality}`;
 
-const SIGN_UP_AS_ISSUER = `${siteConfig.signUpUrl}?userType=issuer`;
+/** "Request Access" while the site is invite-only — see features/access/cta. */
+const SIGN_UP_CTA = accessCta({ label: "Get Started", href: signUpHref("issuer") });
 
 export const PERSONAS: Record<string, PersonaContent> = {
   individual: {
@@ -42,7 +43,7 @@ export const PERSONAS: Record<string, PersonaContent> = {
         body: "Finished a project without a formal title? That may not rule you out. We’ll tell you what is missing and what it takes to fix it.",
       },
     ],
-    blocksCta: { label: "Get Started", href: SIGN_UP_AS_ISSUER },
+    blocksCta: SIGN_UP_CTA,
     faqs: [
       {
         q: "Do I give up control or a share of my project?",
@@ -89,7 +90,7 @@ export const PERSONAS: Record<string, PersonaContent> = {
         body: "You get members with financing ready. You also see demand: which areas are heating up, and which unit sizes and prices sell.",
       },
     ],
-    blocksCta: { label: "Get Started", href: SIGN_UP_AS_ISSUER },
+    blocksCta: SIGN_UP_CTA,
     faqs: [
       {
         q: "Does an endorsement dilute our brand?",
