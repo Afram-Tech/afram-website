@@ -12,7 +12,9 @@ import {
   OPEN_REQUEST_ACCESS,
   REQUEST_ACCESS_ATTR,
   ROLE_FOR_PATH,
+  REQUEST_ACCESS_PARAM,
   ROLE_FOR_USER_TYPE,
+  USER_TYPE_PARAM,
   type AccessRole,
 } from "@/features/access/roles";
 import { cn } from "@/lib/utils";
@@ -31,7 +33,9 @@ import { cn } from "@/lib/utils";
  * - any click on a link to the app's sign-up page — caught here rather than
  *   wired onto each button, so a new sign-up link is covered automatically;
  * - any link marked `data-request-access` (the nav's account control);
- * - openRequestAccess() (features/access/roles), from code.
+ * - openRequestAccess() (features/access/roles), from code;
+ * - `?request-access=1` on arrival, which is how the app hands someone over
+ *   from its own gated signup screens.
  * Cmd/Ctrl/Shift-clicks and pages without JS still follow the link.
  *
  * A native <dialog> gives the
@@ -97,6 +101,25 @@ export function RequestAccess() {
       open(ROLE_FOR_USER_TYPE[userType]);
     };
 
+    /* Arriving from the app's own "Request access" — it links to
+       `…/?request-access=1&userType=issuer`. Open the form on the role it
+       names, then strip both params so a refresh, a back-button return or a
+       copied link is the plain page again rather than a modal that will not
+       stay shut. Honoured whatever INVITE_ONLY says: it is an explicit
+       request, not an interception. */
+    const params = new URLSearchParams(window.location.search);
+    if (params.has(REQUEST_ACCESS_PARAM)) {
+      open(ROLE_FOR_USER_TYPE[params.get(USER_TYPE_PARAM) ?? ""]);
+      params.delete(REQUEST_ACCESS_PARAM);
+      params.delete(USER_TYPE_PARAM);
+      const query = params.toString();
+      window.history.replaceState(
+        null,
+        "",
+        window.location.pathname + (query ? `?${query}` : "") + window.location.hash,
+      );
+    }
+
     window.addEventListener(OPEN_REQUEST_ACCESS, onOpen);
     document.addEventListener("click", onClick, true);
     return () => {
@@ -105,8 +128,16 @@ export function RequestAccess() {
     };
   }, []);
 
-  // Navigating away closes it.
+  /* Navigating away closes it. Skipping the mount pass matters: this effect
+     runs after the one above, so on a `?request-access=1` arrival it would
+     close the dialog that had just been opened — the hand-off from the app
+     would flash a modal and swallow it. */
+  const mounted = useRef(false);
   useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+      return;
+    }
     dialogRef.current?.close();
   }, [pathname]);
 
