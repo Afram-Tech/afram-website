@@ -17,7 +17,7 @@ import { TwoPaths } from "@/features/developers/TwoPaths";
 import { getAllProperties } from "@/features/landing/data/properties";
 import { catalogueStats, sampleProperties } from "@/features/personas/catalogue";
 import { ORDER, PERSONAS } from "@/features/personas/developer-personas";
-import { siteConfig } from "@/config/site";
+import { appUrl, siteConfig } from "@/config/site";
 import { buildFaqJsonLd, buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -66,7 +66,7 @@ export default async function DevelopersPage() {
         headline={["Raise Capital", "and accelerate sales"]}
         subhead="List a project on Afram. We verify and validate every project, so financiers fund it and you reach members with financing."
         ctaLabel="Get Started"
-        ctaHref="https://app.staging.afram.co/signup?userType=issuer"
+        ctaHref={`${appUrl!}//signup?userType=issuer`}
       />
 
       {/* Each audience's question cards render further down, in

@@ -18,6 +18,7 @@ import { getAllProperties } from "@/features/landing/data/properties";
 import { catalogueStats, sampleProperties } from "@/features/personas/catalogue";
 import { ORDER, PERSONAS } from "@/features/personas/financier-personas";
 import { buildFaqJsonLd, buildMetadata } from "@/lib/seo";
+import { appUrl } from "@/config/site";
 
 export const metadata: Metadata = buildMetadata({
   title: "Financiers — Deploy Capital into Verified Real Estate",
@@ -87,7 +88,7 @@ export default async function FinanciersPage() {
         headline={["Deploy Capital into", "Verified Real Estate"]}
         subhead="Every loan sits behind a first legal charge on title-verified Ghanaian real estate, with full KYC and terms you control."
         ctaLabel="Get Started"
-        ctaHref="https://app.staging.afram.co/signup?userType=financier"
+        ctaHref={`${appUrl!}//signup?userType=financier`}
         overlay
       />
 
