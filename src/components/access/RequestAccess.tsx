@@ -48,7 +48,7 @@ function isAccessLink(link: HTMLAnchorElement): boolean {
   try {
     const url = new URL(link.href);
     return (
-      url.origin === new URL(siteConfig.appUrl).origin &&
+      url.origin === new URL(siteConfig.appUrl!).origin &&
       /^\/(signup|get-started)\/?$/.test(url.pathname)
     );
   } catch {
