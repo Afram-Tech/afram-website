@@ -3,7 +3,7 @@
  * production endpoint exists.
  */
 export const graphqlEndpoint =
-  process.env.GRAPHQL_API_URL || "https://afram-core-staging.fly.dev/graph";
+  process.env.NEXT_PUBLIC_GRAPHQL_API_URL || "https://backend.afram.co/graph";
 
 /**
  * Queries are cached for an hour. Pass `{ mutation: true }` for anything that
