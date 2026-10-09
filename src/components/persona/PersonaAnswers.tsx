@@ -35,7 +35,7 @@ export function PersonaAnswers({ personas, title }: { personas: PersonaContent[]
   if (!p?.blocks?.length) return null;
 
   return (
-    <Section id="answers" className="scroll-mt-24 pb-0 lg:pb-0">
+    <Section id="answers" className="scroll-mt-24 pb-0 sm:pb-0 lg:pb-0">
       <p className="text-accent-700 text-[12px] font-semibold tracking-[0.18em] uppercase">
         {p.eyebrow}
       </p>

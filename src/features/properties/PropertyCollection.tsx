@@ -118,7 +118,7 @@ export function PropertyCollection({
     : "";
 
   return (
-    <Section className="py-10 lg:py-14">
+    <Section className="py-10 sm:py-10 lg:py-14">
       <JsonLd data={buildItemListJsonLd(properties, heading, path)} />
       <JsonLd data={buildBreadcrumbJsonLd([{ name: "Home", path: "/" }, ...breadcrumbs])} />
 

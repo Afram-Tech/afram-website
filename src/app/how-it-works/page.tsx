@@ -143,7 +143,7 @@ export default function HowItWorksPage() {
       </section>
 
       {/* 2 · Steps — copy paired with real platform screens */}
-      <Section className="pb-10">
+      <Section className="pb-10 sm:pb-10">
         <SectionHeading
           title="See it on the platform."
           intro="Each step removes a real risk — opaque titles, financing out of reach, and developers who can disappear with a deposit. This is what it looks like inside Afram."

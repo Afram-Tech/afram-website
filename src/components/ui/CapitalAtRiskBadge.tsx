@@ -8,12 +8,19 @@ export function CapitalAtRiskBadge({
   variant = "inline",
   withLink = true,
   tone = "default",
+  kind = "investment",
 }: {
   className?: string;
   variant?: "inline" | "block";
   withLink?: boolean;
   tone?: "default" | "light";
+  /** "lending" for pages about lending, where the investment wording is wrong. */
+  kind?: "investment" | "lending";
 }) {
+  const sentence =
+    kind === "lending"
+      ? "Lending carries risk, including borrower default and delays in enforcement. Your capital is at risk."
+      : "Investments can go down as well as up. Your capital is at risk.";
   const light = tone === "light";
 
   if (variant === "block") {
@@ -26,7 +33,7 @@ export function CapitalAtRiskBadge({
       >
         <Info className="text-ink-400 mt-0.5 h-4 w-4 shrink-0" />
         <p className="text-ink-500 text-[13px] leading-relaxed">
-          Investments can go down as well as up. Your capital is at risk.{" "}
+          {sentence}{" "}
           {withLink && (
             <Link
               href="/privacy-policy"
@@ -49,7 +56,7 @@ export function CapitalAtRiskBadge({
       )}
     >
       <Info className={cn("h-3.5 w-3.5 shrink-0", light ? "text-white/45" : "text-ink-400")} />
-      Investments can go down as well as up. Your capital is at risk.
+      {sentence}
       {withLink && (
         <Link
           href="/privacy-policy"

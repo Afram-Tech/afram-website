@@ -30,14 +30,18 @@ export async function sendContactMessage(
   const email = field(form, "email");
   const topic = field(form, "topic");
   const message = field(form, "message");
+  const phone = field(form, "phone");
 
   if (!name || name.length > 120) return { status: "error", error: "Please enter your name." };
   if (!EMAIL.test(email) || email.length > 200) {
     return { status: "error", error: "Please enter a valid email address." };
   }
-  if (!message || message.length > 5000) {
-    return { status: "error", error: "Please write a message (up to 5,000 characters)." };
+  if (message.length > 5000) {
+    return { status: "error", error: "Please keep your message under 5,000 characters." };
   }
+  if (phone.length > 40) return { status: "error", error: "That phone number is too long." };
+  // The API has no phone field, so it rides along in the message body.
+  const body = [message || "(No message)", phone ? `\nPhone: ${phone}` : ""].join("");
 
   try {
     const data = await graphqlFetch<
@@ -50,7 +54,7 @@ export async function sendContactMessage(
           name,
           email,
           subject: topic ? `Website enquiry: ${topic.slice(0, 80)}` : "Website enquiry",
-          message,
+          message: body,
         },
       },
       { mutation: true },

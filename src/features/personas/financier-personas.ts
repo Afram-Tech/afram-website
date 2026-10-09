@@ -3,21 +3,31 @@ import type { PersonaContent } from "@/features/personas/types";
 const unsplash = (id: string, width = 1200, quality = 68) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=${quality}`;
 
+/**
+ * Financier personas for /financiers.
+ * Afram works WITH and verifies against institutions (Lands Commission,
+ * NIA / Ghana Card). It does not itself hold a banking licence — copy here
+ * is careful never to claim one.
+ */
 export const PERSONAS: Record<string, PersonaContent> = {
   bank: {
     id: "bank",
     tab: "Bank",
     eyebrow: "For regulated lenders",
-    headline: "Deploy capital into verified Ghanaian real estate.",
+    headline: "Lend Against Title-Searched Ghanaian Property",
     subhead:
-      "Secured, compliant exposure to real-estate lending — with verified title, a first legal charge, and standardised credit documentation.",
+      "Secured, compliant exposure to real-estate lending, with verified title, documented security, and standardised credit documentation.",
     image: unsplash("photo-1605276374104-dee2a0ed3cd6"),
     imageBadge: "Verified collateral",
     stats: [
-      { label: "Target yield", value: "22–30% p.a.", accent: true },
-      { label: "Security", value: "first legal charge" },
+      { label: "Pricing", value: "Your pricing, your terms", accent: true },
+      { label: "Security", value: "Documented security" },
       { label: "KYC", value: "Ghana Card · Act 1044" },
     ],
+    // Content doc §6.3. Two further blocks are held: data protection (pending
+    // the Act 843 confirmation, doc §4.4) and real-time portfolio visibility
+    // (pending §4.3). The "A session for your credit and risk team" callout is
+    // held until someone is confirmed to deliver those sessions.
     blocks: [
       {
         title: "The instrument behind the record",
@@ -25,7 +35,7 @@ export const PERSONAS: Record<string, PersonaContent> = {
         body: "Every verified record reconciles to a Lands Commission instrument. The digital record sits alongside the deed, it does not replace it — your security rests on the statutory register, not on our record alone.",
       },
       {
-        title: "Enforceability, proven before you scale",
+        title: "Enforceability, backed by a legal opinion",
         icon: "Scale",
         body: "Start with a controlled pilot at limited exposure. Test the charge, test the recall process, and see the enforcement path in practice before it goes to credit committee at size.",
       },
@@ -49,11 +59,11 @@ export const PERSONAS: Record<string, PersonaContent> = {
     faqs: [
       {
         q: "What is the legal standing of the verified record versus paper title?",
-        a: "The verified record is a digital reconciliation of the underlying paper title against Lands Commission data — it sits alongside the deed, it does not replace it. Every loan is secured by a registered first legal charge over the same parcel, so your security rests on the statutory register, not on our record alone.",
+        a: "The verified record is a digital reconciliation of the underlying paper title against Lands Commission data. It sits alongside the deed rather than replacing it. Development loans are secured by a registered first legal charge over the same parcel, so your security rests on the statutory register, not on our record alone. Home purchase loans are secured by the package agreed for that transaction.",
       },
       {
         q: "How does the first legal charge work in practice?",
-        a: "Each loan is documented with a charge registered against the title at the Lands Commission, ranking ahead of later interests. On default, the charge is enforceable through the courts under Ghanaian law in the ordinary way. We prepare the standardised security pack; your counsel reviews and you hold the charge.",
+        a: "Each development loan is documented with a charge registered against the title at the Lands Commission, ranking ahead of later interests. Home purchase loans use a different security package. On default, the charge is enforceable through the courts under Ghanaian law in the ordinary way. We prepare the standardised security pack; your counsel reviews and you hold the charge.",
       },
       {
         q: "What does the KYC and AML stack look like?",
@@ -61,7 +71,7 @@ export const PERSONAS: Record<string, PersonaContent> = {
       },
       {
         q: "Can this integrate with our core banking and credit systems?",
-        a: "Yes. Loan tapes, collateral records and the document pack are available by API or structured export, so positions can be booked and monitored in your existing systems. We work to your onboarding and reporting formats rather than asking you to adopt ours.",
+        a: "Loan tapes, collateral records and the document pack are available by structured export today, with API access on request, so positions can be booked and monitored in your existing systems. We will discuss your onboarding and reporting formats with you.",
       },
     ],
   },
@@ -69,16 +79,21 @@ export const PERSONAS: Record<string, PersonaContent> = {
     id: "private-credit",
     tab: "Private credit",
     eyebrow: "For private credit",
-    headline: "Yield above treasury — on your own terms.",
+    headline: "Your pricing, your terms.",
     subhead:
       "Set your own rate, term and ticket. Onboard in days, not months, against clean, verified collateral.",
     image: unsplash("photo-1600047509807-ba8f99d2cdde"),
     imageBadge: "Verified collateral",
     stats: [
-      { label: "Target yield", value: "30–45% p.a.", accent: true },
+      { label: "Pricing", value: "Your pricing, your terms", accent: true },
       { label: "Onboard in", value: "≤5 business days" },
       { label: "Your rules", value: "rate · term · ticket" },
     ],
+    // Content doc §6.4. Block one claims Ghana Card / NIA verification only.
+    // The stronger "no ghost borrowers — a human check on top of the digital
+    // one" version is the highest-value line on this page, but it ships only
+    // once human verification is confirmed to happen (doc §4.3). A
+    // confidentiality block is held for the same reason.
     blocks: [
       {
         title: "Borrowers verified against the national register",
@@ -86,9 +101,12 @@ export const PERSONAS: Record<string, PersonaContent> = {
         body: "Every borrower is verified against the Ghana Card through the National Identification Authority before a deal reaches you, with source-of-funds and sanctions checks documented per loan.",
       },
       {
+        // "the public registry" is intentionally not a link: the brief requires
+        // it to route through a "You are leaving Afram" interstitial, and no
+        // such interstitial exists in this codebase yet.
         title: "Title you can verify yourself",
         icon: "Search",
-        body: "Run your own solicitor's search against the public registry before you commit. We expect you to, and nothing here depends on you taking our word for it.",
+        body: "Run your own solicitor’s search against the public registry before you commit. We expect you to, and nothing here depends on you taking our word for it.",
       },
       {
         title: "Your terms, your box",
@@ -109,6 +127,8 @@ export const PERSONAS: Record<string, PersonaContent> = {
     callout: {
       title: "Do one deal first",
       body: "Start with a single deal and test the process end to end — verification, documentation, disbursement, the charge — before you concentrate capital here.",
+      // #briefing is the form on this page. It must not point at /properties,
+      // which is the residential buyer marketplace.
       cta: { label: "Request a briefing", href: "#briefing" },
     },
     blocksCta: { label: "Request a briefing", href: "#briefing" },
@@ -119,11 +139,11 @@ export const PERSONAS: Record<string, PersonaContent> = {
       },
       {
         q: "How fast is onboarding, really?",
-        a: "Once KYC and your mandate are agreed, most lenders are ready to review live deals within five business days. The slow part of private credit is usually documentation and collateral diligence — both are standardised here, which is where the time is saved.",
+        a: "Once KYC and your mandate are agreed, most lenders are ready to review live deals within five business days. The slow part of private credit is usually documentation and collateral diligence. Both are standardised here, which is where the time is saved.",
       },
       {
-        q: "How am I protected against document fraud?",
-        a: "Every parcel is reconciled against Lands Commission records before it reaches you, and the loan is secured by a registered first legal charge. You see the verified title result and the full paper trail, so you are not relying on a borrower's photocopy.",
+        q: "How does Afram reduce document fraud risk?",
+        a: "Every parcel is reconciled against Lands Commission records before it reaches you, and the loan is secured by documented security. You see the verified title result and the full paper trail, so you are not relying on a borrower’s photocopy.",
       },
       {
         q: "Is there an exit or secondary market?",
@@ -148,7 +168,7 @@ export const PERSONAS: Record<string, PersonaContent> = {
     faqs: [
       {
         q: "What ESG and impact reporting do you provide?",
-        a: "We report on the outcomes your mandate tracks — first-time members funded, locality, ticket size and affordability of the monthly payment — drawn from the underlying loan records. Reports are delivered on your cadence and reference recognised affordable-housing measures rather than headline figures.",
+        a: "We report on the outcomes your mandate tracks: first-time members funded, locality, ticket size, and affordability of the monthly payment, drawn from the underlying loan records. Reports are delivered on your cadence and reference recognised affordable-housing measures rather than headline figures.",
       },
       {
         q: "How is cross-border AML and FATF compliance handled?",
@@ -156,7 +176,7 @@ export const PERSONAS: Record<string, PersonaContent> = {
       },
       {
         q: "How do FX and repatriation work?",
-        a: "Capital can be committed in USD, EUR or GHS. Conversion and any repatriation run through licensed banking partners under Bank of Ghana foreign-exchange rules — we facilitate against that framework rather than operate outside it, and the FX terms are set out before you commit.",
+        a: "Capital can be committed in USD, EUR or GHS. Conversion and any repatriation run through licensed banking partners under Bank of Ghana foreign-exchange rules. We work within that framework rather than around it, and the FX terms are set out before you commit.",
       },
       {
         q: "What governance and audit do you offer?",
@@ -167,8 +187,9 @@ export const PERSONAS: Record<string, PersonaContent> = {
 };
 
 /**
- * Impact / Diaspora is intentionally not rendered for now. The persona
- * content is kept above so it can be restored by adding "impact" back here.
+ * Impact / Diaspora is intentionally not rendered. The persona content is kept
+ * below so it can be restored by adding "impact" back to this list.
  */
 export const ORDER: string[] = ["bank", "private-credit"];
+
 export const DEFAULT = "bank";

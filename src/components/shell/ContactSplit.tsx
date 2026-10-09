@@ -1,6 +1,15 @@
 "use client";
 
-import { ArrowRight, CheckCircle2, Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import {
+  CheckCircle2,
+  ChevronDown,
+  Clock,
+  Loader2,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Phone,
+} from "lucide-react";
 import type { ReactNode } from "react";
 import { useActionState } from "react";
 
@@ -47,13 +56,30 @@ function ContactRow({
   );
 }
 
-/** Sends through the API's contactUs mutation (see features/contact/actions). */
-function MessageForm({ topics, cta }: { topics?: string[]; cta: string }) {
+const fieldClass =
+  "h-12 w-full rounded-xl bg-brand-50 px-4 text-[15px] text-ink-900 ring-1 ring-brand-100 transition placeholder:text-ink-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-400";
+
+function FieldLabel({ children }: { children: ReactNode }) {
+  return <span className="text-ink-600 mb-1.5 block text-[13px] font-medium">{children}</span>;
+}
+
+/**
+ * Sends through the API's contactUs mutation (see features/contact/actions).
+ * `simple` drops the phone field and the WhatsApp line, as on the vendors
+ * page's "Talk to us".
+ */
+function MessageForm({
+  topics = ["Book a site visit", "Talk to a partner", "Speak to a lawyer"],
+  cta,
+  simple,
+}: {
+  topics?: string[];
+  cta: string;
+  simple: boolean;
+}) {
   const [state, action, pending] = useActionState<ContactFormState, FormData>(sendContactMessage, {
     status: "idle",
   });
-  const inputClass =
-    "h-12 w-full rounded-xl border border-ink-200 bg-white px-4 text-[15px] text-ink-900 placeholder:text-ink-400 focus:border-brand-500 focus:outline-none";
 
   if (state.status === "sent") {
     return (
@@ -68,50 +94,71 @@ function MessageForm({ topics, cta }: { topics?: string[]; cta: string }) {
   }
 
   return (
-    <form className="space-y-3" action={action}>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <input
-          className={inputClass}
-          name="name"
-          placeholder="Full name"
-          aria-label="Full name"
-          autoComplete="name"
-          maxLength={120}
-          required
-        />
-        <input
-          className={inputClass}
-          name="email"
-          type="email"
-          placeholder="Email address"
-          aria-label="Email"
-          autoComplete="email"
-          maxLength={200}
-          required
-        />
+    <form action={action} className="space-y-4">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label className="block">
+          <FieldLabel>{simple ? "Full name" : "Your name"}</FieldLabel>
+          <input
+            name="name"
+            required
+            placeholder="Ama Mensah"
+            autoComplete="name"
+            maxLength={120}
+            className={fieldClass}
+          />
+        </label>
+        <label className="block">
+          <FieldLabel>{simple ? "Email address" : "Email"}</FieldLabel>
+          <input
+            name="email"
+            type="email"
+            required
+            placeholder="ama@email.com"
+            autoComplete="email"
+            maxLength={200}
+            className={fieldClass}
+          />
+        </label>
       </div>
-      {topics && topics.length > 0 ? (
-        <select
-          className={cn(inputClass, "appearance-none")}
-          name="topic"
-          aria-label="Topic"
-          defaultValue={topics[0]}
-        >
-          {topics.map((topic) => (
-            <option key={topic} value={topic}>
-              {topic}
-            </option>
-          ))}
-        </select>
-      ) : null}
-      <textarea
-        className="border-ink-200 text-ink-900 placeholder:text-ink-400 focus:border-brand-500 min-h-[120px] w-full rounded-xl border bg-white px-4 py-3 text-[15px] focus:outline-none"
-        name="message"
-        placeholder="How can we help?"
-        aria-label="Message"
-        maxLength={5000}
-        required
-      />
+
+      <div className={cn("grid gap-4", !simple && "sm:grid-cols-2")}>
+        {!simple && (
+          <label className="block">
+            <FieldLabel>Phone (optional)</FieldLabel>
+            <input
+              name="phone"
+              inputMode="tel"
+              placeholder="024 000 0000"
+              autoComplete="tel"
+              maxLength={40}
+              className={fieldClass}
+            />
+          </label>
+        )}
+        <label className="block">
+          <FieldLabel>{simple ? "Topic" : "What is it about?"}</FieldLabel>
+          <div className="relative">
+            <select name="topic" className={cn(fieldClass, "appearance-none pr-10")}>
+              {topics.map((topic) => (
+                <option key={topic}>{topic}</option>
+              ))}
+            </select>
+            <ChevronDown className="text-ink-400 pointer-events-none absolute top-1/2 right-3.5 h-4 w-4 -translate-y-1/2" />
+          </div>
+        </label>
+      </div>
+
+      <label className="block">
+        <FieldLabel>Message</FieldLabel>
+        <textarea
+          name="message"
+          rows={4}
+          maxLength={5000}
+          placeholder="Tell us a little about what you need…"
+          className={cn(fieldClass, "h-auto min-h-[120px] resize-none py-3 leading-relaxed")}
+        />
+      </label>
+
       {/* Spam trap — hidden from people, filled in by bots. */}
       <input
         type="text"
@@ -121,19 +168,25 @@ function MessageForm({ topics, cta }: { topics?: string[]; cta: string }) {
         aria-hidden="true"
         className="absolute -left-[9999px] h-px w-px opacity-0"
       />
+
       {state.status === "error" && (
-        <p role="alert" className="text-[14px] font-medium text-red-600">
+        <p role="alert" className="text-[13px] font-medium text-red-600">
           {state.error}
         </p>
       )}
+
       <button
         type="submit"
         disabled={pending}
-        className="bg-brand-500 hover:bg-brand-600 inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-full px-6 text-[15px] font-semibold text-white transition-all active:scale-[0.98] disabled:cursor-wait disabled:opacity-70 sm:w-auto"
+        className="bg-accent-500 hover:bg-accent-600 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-white transition-all active:scale-[0.99] disabled:opacity-70"
       >
-        {pending ? "Sending…" : cta}
-        {!pending && <ArrowRight className="h-4 w-4" />}
+        {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : cta}
       </button>
+
+      <p className="text-ink-400 text-[12px] leading-relaxed">
+        We will never share your details.
+        {!simple && " Prefer WhatsApp? Mention it and we will message you there."}
+      </p>
     </form>
   );
 }
@@ -147,6 +200,7 @@ export function ContactSplit({
   topics,
   cta = "Send a message",
   showContacts = true,
+  simpleForm = false,
 }: {
   eyebrow?: string;
   title: string;
@@ -157,6 +211,8 @@ export function ContactSplit({
   cta?: string;
   /** false hides the phone / WhatsApp / email / address rows. */
   showContacts?: boolean;
+  /** Name, email, topic and message only — no phone, no WhatsApp line. */
+  simpleForm?: boolean;
 }) {
   return (
     <div className="ring-ink-100 -mx-2 overflow-hidden rounded-[2rem] shadow-[0_40px_100px_-50px_rgba(0,45,48,0.45)] ring-1 lg:grid lg:grid-cols-[0.95fr_1.05fr]">
@@ -217,7 +273,7 @@ export function ContactSplit({
         <h3 className="text-ink-900 text-xl font-bold tracking-[-0.01em]">{formTitle}</h3>
         <p className="text-ink-500 mt-2 text-[15px] leading-relaxed">{formSubtitle}</p>
         <div className="mt-6">
-          <MessageForm topics={topics} cta={cta} />
+          <MessageForm topics={topics} cta={cta} simple={simpleForm} />
         </div>
       </div>
     </div>

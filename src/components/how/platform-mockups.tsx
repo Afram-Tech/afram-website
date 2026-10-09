@@ -73,7 +73,7 @@ export function VerifyMock() {
       <ul className="mt-4 space-y-2.5">
         <CheckRow>Lands Commission record on file</CheckRow>
         <CheckRow>Master title deed on file</CheckRow>
-        <CheckRow>No pending disputes or caveats</CheckRow>
+        <CheckRow>No disputes or caveats found at search date</CheckRow>
       </ul>
 
       <div className="bg-ink-50 mt-4 flex items-center justify-between rounded-xl px-3 py-2.5">

@@ -35,7 +35,7 @@ export default async function PropertiesMapPage() {
   const allProperties = await getAllProperties();
 
   return (
-    <Section className="py-6 lg:py-8">
+    <Section className="py-6 sm:py-6 lg:py-8">
       <Suspense fallback={<PropertiesBrowserFallback />}>
         <PropertiesBrowser properties={allProperties} />
       </Suspense>
