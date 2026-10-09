@@ -125,6 +125,14 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
           </nav>
 
           <div className="hidden shrink-0 items-center gap-2 xl:flex 2xl:gap-3">
+            <Link
+              href={siteConfig.signInUrl}
+              // {...{ [REQUEST_ACCESS_ATTR]: "" }}
+              aria-haspopup="dialog"
+              className={buttonVariants("primary", "sm")}
+            >
+              Log In
+            </Link>
             {INVITE_ONLY ? (
               /* One control, not two. "Create Account" and "Log In" both opened
                  the request form anyway while access is by invitation, so the
@@ -135,7 +143,7 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
                 href={siteConfig.signUpUrl}
                 {...{ [REQUEST_ACCESS_ATTR]: "" }}
                 aria-haspopup="dialog"
-                className={buttonVariants("primary", "sm")}
+                className={buttonVariants("secondary", "sm")}
               >
                 {REQUEST_ACCESS_LABEL}
               </Link>
@@ -147,14 +155,6 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
                   className="text-ink-800 hover:text-brand-600 rounded-lg px-2.5 py-2 text-[14px] font-semibold whitespace-nowrap transition-colors 2xl:px-3.5 2xl:text-[15px]"
                 >
                   Create Account
-                </Link>
-                <Link
-                  href={siteConfig.signInUrl}
-                  {...{ [REQUEST_ACCESS_ATTR]: "" }}
-                  aria-haspopup="dialog"
-                  className={buttonVariants("primary", "sm")}
-                >
-                  Log In
                 </Link>
               </>
             )}
