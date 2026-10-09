@@ -1,6 +1,8 @@
 "use client";
 
+import { LoaderCircle, LocateFixed, LocateOff } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import {
@@ -27,6 +29,8 @@ const PROPERTY_FOCUS_ZOOM = 16.5;
  *  Browse from outside Ghana gets the country-wide default view instead of
  *  a confusing fly-to-nowhere-relevant. */
 const GHANA_BOUNDS = { west: -3.5, south: 4.5, east: 1.5, north: 11.5 };
+/** How long the locate button's feedback message stays on the map. */
+const LOCATE_NOTICE_MS = 6000;
 
 /**
  * OpenFreeMap's hosted "Liberty" style — free, no API key or account,
@@ -157,10 +161,14 @@ export interface PropertyMapProps {
  * when it has a real site boundary, the same teal/cyan polygon fill
  * afram-web's LiveMapEdit/PropertyMap draw during listing (brand colour
  * `#007481`, confirmed against that codebase rather than invented here).
- * On mount, a one-time best-effort browser geolocation re-centres the map
- * on the visitor if they're within Ghana; declining the permission prompt
- * or being elsewhere in the world just leaves the country-wide default
- * view in place.
+ * A locate control in the map's top-right stack re-centres the map on the
+ * visitor when they ask for it (see runLocate) — never on mount, which is
+ * what kept Safari re-prompting for location on every page load: unlike
+ * Chrome, Safari scopes a geolocation grant to the current page session,
+ * so an automatic request is a fresh permission prompt on every refresh.
+ * The map does still locate automatically when (and only when) the
+ * Permissions API confirms the grant is already in place, which is
+ * precisely the case where no prompt can appear.
  *
  * MapLibre is dynamically imported inside the effect rather than at module
  * scope for the same reason CesiumJS was in this component's predecessor:
@@ -176,7 +184,7 @@ export function PropertyMap({
   const initializingRef = useRef(false);
   const mapRef = useRef<import("maplibre-gl").Map | null>(null);
   const markerHandlesRef = useRef<import("maplibre-gl").Marker[]>([]);
-  const hasCenteredOnUserRef = useRef(false);
+  const hasAutoLocatedRef = useRef(false);
   const onMarkerClickRef = useRef(onMarkerClick);
   useEffect(() => {
     onMarkerClickRef.current = onMarkerClick;
@@ -203,6 +211,28 @@ export function PropertyMap({
     width: number;
   } | null>(null);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // The locate control's host element: MapLibre owns where it sits (the
+  // top-right control stack, lined up with the zoom buttons, no pixel
+  // offsets hard-coded here), while React renders the button into it via a
+  // portal — which is what lets the button reflect `locateState` the way
+  // any other component would.
+  const [locateHost, setLocateHost] = useState<HTMLDivElement | null>(null);
+  const [locateState, setLocateState] = useState<"idle" | "locating" | "blocked">("idle");
+  const [locateNotice, setLocateNotice] = useState<string | null>(null);
+  const noticeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showNotice = useCallback((message: string) => {
+    if (noticeTimerRef.current) clearTimeout(noticeTimerRef.current);
+    setLocateNotice(message);
+    noticeTimerRef.current = setTimeout(() => setLocateNotice(null), LOCATE_NOTICE_MS);
+  }, []);
+  useEffect(
+    () => () => {
+      if (noticeTimerRef.current) clearTimeout(noticeTimerRef.current);
+    },
+    [],
+  );
 
   const cancelHide = useCallback(() => {
     if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
@@ -248,6 +278,18 @@ export function PropertyMap({
         center: GHANA_CENTER,
         zoom: GHANA_ZOOM,
       });
+      // Added before the NavigationControl so it stacks above the zoom
+      // buttons in the same corner. Intentionally an empty, MapLibre-
+      // classed shell: the portal below fills it with the real button.
+      const locateContainer = document.createElement("div");
+      locateContainer.className = "maplibregl-ctrl maplibregl-ctrl-group";
+      created.addControl({
+        onAdd: () => locateContainer,
+        onRemove: () => locateContainer.remove(),
+        getDefaultPosition: () => "top-right",
+      });
+      setLocateHost(locateContainer);
+
       created.addControl(new NavigationControl({ visualizePitch: true }), "top-right");
       created.once("load", () => {
         if (!cancelled) setMapReady(true);
@@ -265,37 +307,85 @@ export function PropertyMap({
       map?.remove();
       mapRef.current = null;
       initializingRef.current = false;
-      hasCenteredOnUserRef.current = false;
+      hasAutoLocatedRef.current = false;
+      setLocateHost(null);
       setMapReady(false);
     };
   }, []);
 
-  // One-time best-effort re-centre on the visitor, once the map exists.
-  // Never blocks or delays anything else here — a slow/declined/absent
-  // geolocation just leaves the default Ghana-wide view standing.
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !mapReady || hasCenteredOnUserRef.current) return;
-    if (typeof navigator === "undefined" || !("geolocation" in navigator)) return;
-    hasCenteredOnUserRef.current = true;
+  /**
+   * Fly to the visitor's own position, if they're in Ghana at all.
+   * `silent` suppresses the on-map feedback below and is used only by the
+   * automatic path: nobody asked for anything there, so nobody should be
+   * told anything when it doesn't work out.
+   */
+  const runLocate = useCallback(
+    ({ silent }: { silent: boolean }) => {
+      if (typeof navigator === "undefined" || !("geolocation" in navigator)) {
+        if (!silent) showNotice("This browser can't share your location.");
+        return;
+      }
+      setLocateState("locating");
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        const withinGhana =
-          latitude >= GHANA_BOUNDS.south &&
-          latitude <= GHANA_BOUNDS.north &&
-          longitude >= GHANA_BOUNDS.west &&
-          longitude <= GHANA_BOUNDS.east;
-        if (!withinGhana || !mapRef.current) return;
-        mapRef.current.flyTo({ center: [longitude, latitude], zoom: USER_LOCATION_ZOOM });
-      },
-      () => {
-        // Denied, unavailable, or timed out — no-op, default view stands.
-      },
-      { maximumAge: 5 * 60 * 1000, timeout: 8000 },
-    );
-  }, [mapReady]);
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocateState("idle");
+          const { latitude, longitude } = position.coords;
+          const withinGhana =
+            latitude >= GHANA_BOUNDS.south &&
+            latitude <= GHANA_BOUNDS.north &&
+            longitude >= GHANA_BOUNDS.west &&
+            longitude <= GHANA_BOUNDS.east;
+          if (!withinGhana) {
+            // Flying to, say, London would just show empty map: every
+            // listing is in Ghana. Say so rather than silently doing
+            // nothing to a button someone deliberately pressed.
+            if (!silent) showNotice("You're outside Ghana — showing the whole country instead.");
+            return;
+          }
+          mapRef.current?.flyTo({ center: [longitude, latitude], zoom: USER_LOCATION_ZOOM });
+        },
+        (error) => {
+          const denied = error.code === error.PERMISSION_DENIED;
+          setLocateState(denied ? "blocked" : "idle");
+          if (silent) return;
+          showNotice(
+            denied
+              ? "Location is blocked for this site — allow it in your browser settings to use this."
+              : "Couldn't get your location. Try again in a moment.",
+          );
+        },
+        { maximumAge: 5 * 60 * 1000, timeout: 8000 },
+      );
+    },
+    [showNotice],
+  );
+
+  // Locate without being asked in the one case where that costs the
+  // visitor nothing: the Permissions API reporting an existing grant, so
+  // the position comes back with no prompt at all. Anything else —
+  // "prompt", "denied", no Permissions API, or a browser that (like
+  // Safari) won't report a session-scoped grant as granted — waits for the
+  // button. A ref, not just the `mapReady` dep, keeps this to once per
+  // mounted map.
+  useEffect(() => {
+    if (!mapReady || hasAutoLocatedRef.current) return;
+    hasAutoLocatedRef.current = true;
+    if (typeof navigator === "undefined" || !navigator.permissions?.query) return;
+
+    let cancelled = false;
+    void navigator.permissions
+      .query({ name: "geolocation" })
+      .then((status) => {
+        if (!cancelled && status.state === "granted") runLocate({ silent: true });
+      })
+      .catch(() => {
+        // Descriptor unsupported — treat as "unknown" and stay quiet.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [mapReady, runLocate]);
 
   // Re-sync markers and boundaries whenever the set changes (a filter
   // change, a new page of results) or the map becomes ready — independent
@@ -447,6 +537,48 @@ export function PropertyMap({
   return (
     <div className="relative h-full w-full">
       <div ref={containerRef} className="h-full w-full" data-testid="property-map" />
+
+      {/* Inline layout styles, not Tailwind classes: maplibre-gl.css is
+          imported unlayered and sets `display: block` (plus a fixed 29px
+          box) on any button inside a .maplibregl-ctrl-group, and unlayered
+          CSS beats Tailwind v4's layered utilities regardless of
+          specificity. Colour is safe to leave to Tailwind — MapLibre sets
+          none. */}
+      {locateHost &&
+        createPortal(
+          <button
+            type="button"
+            onClick={() => runLocate({ silent: false })}
+            disabled={locateState === "locating"}
+            aria-label="Show my location"
+            title={
+              locateState === "blocked" ? "Location is blocked for this site" : "Show my location"
+            }
+            style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+            data-testid="map-locate-button"
+          >
+            {locateState === "locating" ? (
+              <LoaderCircle className="h-[17px] w-[17px] animate-spin text-[#007481]" aria-hidden />
+            ) : locateState === "blocked" ? (
+              <LocateOff className="text-ink-400 h-[17px] w-[17px]" aria-hidden />
+            ) : (
+              <LocateFixed className="text-ink-700 h-[17px] w-[17px]" aria-hidden />
+            )}
+          </button>,
+          locateHost,
+        )}
+
+      {/* Top-centre so it clears both the control stack on the right and
+          the mobile list sheet at the bottom. */}
+      {locateNotice && (
+        <div
+          className="text-ink-700 pointer-events-none absolute top-3 left-1/2 z-20 max-w-[min(320px,calc(100%-96px))] -translate-x-1/2 rounded-full bg-white/95 px-3.5 py-2 text-center text-[12.5px] leading-snug font-medium shadow-[0_4px_16px_-4px_rgba(10,13,20,0.35)]"
+          role="status"
+          aria-live="polite"
+        >
+          {locateNotice}
+        </div>
+      )}
       {activePreview && layout && (
         <div
           className="absolute z-20"
