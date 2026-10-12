@@ -2,12 +2,7 @@ import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from "@apollo/clien
 import { registerApolloClient } from "@apollo/client-integration-nextjs";
 import { OperationTypeNode } from "graphql";
 
-/**
- * Falls back to Afram's production backend. Set NEXT_PUBLIC_GRAPHQL_API_URL
- * to point at staging or a local API.
- */
-export const graphqlEndpoint =
-  process.env.NEXT_PUBLIC_GRAPHQL_API_URL || "https://backend.afram.co/graph";
+import { graphqlEndpoint } from "./endpoint";
 
 /**
  * Queries are cached by Next for an hour. Mutations (requestAccess,

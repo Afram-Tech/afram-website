@@ -13,7 +13,12 @@ import {
 import type { ReactNode } from "react";
 import { useActionState } from "react";
 
-import { sendContactMessage, type ContactFormState } from "@/features/contact/actions";
+import {
+  isSpam,
+  parseContactMessage,
+  type ContactFormState,
+} from "@/features/contact/contact-message";
+import { useContactUs } from "@/hooks/data";
 import { cn } from "@/lib/utils";
 
 function ContactRow({
@@ -68,6 +73,8 @@ function FieldLabel({ children }: { children: ReactNode }) {
  * `simple` drops the phone field and the WhatsApp line, as on the vendors
  * page's "Talk to us".
  */
+const SEND_FAILED = "We couldn’t send your message just now. Please try again in a moment.";
+
 function MessageForm({
   topics = ["Book a site visit", "Talk to a partner", "Speak to a lawyer"],
   cta,
@@ -77,9 +84,24 @@ function MessageForm({
   cta: string;
   simple: boolean;
 }) {
-  const [state, action, pending] = useActionState<ContactFormState, FormData>(sendContactMessage, {
-    status: "idle",
-  });
+  const { contactUs } = useContactUs();
+
+  const submit = async (_previous: ContactFormState, form: FormData): Promise<ContactFormState> => {
+    if (isSpam(form)) return { status: "sent" };
+
+    const message = parseContactMessage(form);
+    if (!message.ok) return { status: "error", error: message.error };
+
+    try {
+      const { data } = await contactUs({ variables: { input: message.input } });
+      if (!data?.contactUs.success) return { status: "error", error: SEND_FAILED };
+      return { status: "sent" };
+    } catch {
+      return { status: "error", error: SEND_FAILED };
+    }
+  };
+
+  const [state, action, pending] = useActionState(submit, { status: "idle" });
 
   if (state.status === "sent") {
     return (

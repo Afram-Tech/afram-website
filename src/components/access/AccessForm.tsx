@@ -4,17 +4,27 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { useActionState, useState, type ChangeEvent } from "react";
 
 import { siteConfig } from "@/config/site";
-import { requestAccess, type AccessState } from "@/features/access/actions";
+import {
+  isSpam,
+  parseAccessRequest,
+  type AccessField,
+  type AccessState,
+} from "@/features/access/request-access";
 import type { AccessRole } from "@/features/access/roles";
+import { useRequestAccess } from "@/hooks/data";
 
 import { AccessReceived } from "./AccessReceived";
 import { FormField, fieldClass } from "./FormField";
 import { RoleOptions } from "./RoleOptions";
 
-type ContactField = "name" | "email" | "phone";
+type ContactField = Exclude<AccessField, "role">;
 
 const INITIAL_STATE: AccessState = { status: "idle" };
 const EMPTY_VALUES: Record<ContactField, string> = { name: "", email: "", phone: "" };
+const SEND_FAILED: AccessState = {
+  status: "error",
+  message: "We couldn’t send your request just now. Please try again in a moment.",
+};
 
 interface AccessFormProps {
   role: AccessRole;
@@ -23,7 +33,26 @@ interface AccessFormProps {
 }
 
 export function AccessForm({ role, onRoleChange, onDone }: AccessFormProps) {
-  const [state, action, pending] = useActionState(requestAccess, INITIAL_STATE);
+  const { requestAccess } = useRequestAccess();
+
+  const submit = async (_previous: AccessState, form: FormData): Promise<AccessState> => {
+    if (isSpam(form)) {
+      return { status: "received", email: String(form.get("email") ?? ""), role: "Member" };
+    }
+
+    const request = parseAccessRequest(form);
+    if (!request.ok) return request.state;
+
+    try {
+      const { data } = await requestAccess({ variables: { input: request.input } });
+      if (!data?.requestAccess.success) return SEND_FAILED;
+      return { status: "received", email: request.email, role: request.role };
+    } catch {
+      return SEND_FAILED;
+    }
+  };
+
+  const [state, action, pending] = useActionState(submit, INITIAL_STATE);
   const [values, setValues] = useState(EMPTY_VALUES);
 
   if (state.status === "received") {
