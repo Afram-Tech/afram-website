@@ -1,11 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-// The dialog is a client component; the form posts to a server action and
+// The dialog is a client component; the form sends its mutation through a hook and
 // reads the pathname from Next's router. Neither is what's under test here.
 vi.mock("next/navigation", () => ({ usePathname: () => "/" }));
-vi.mock("@/features/access/actions", () => ({
-  requestAccess: vi.fn(async () => ({ status: "idle" })),
+vi.mock("@/hooks/data", () => ({
+  useRequestAccess: () => ({ requestAccess: vi.fn() }),
 }));
 
 import { RequestAccess } from "@/components/access/RequestAccess";
