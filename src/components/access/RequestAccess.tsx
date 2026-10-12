@@ -23,7 +23,7 @@ export function RequestAccess() {
       onClose={handleClosed}
       className={cn(
         "modal-pop modal-sheet overflow-visible bg-transparent p-0 backdrop:backdrop-blur-[3px]",
-        "mx-0 mt-auto mb-0 h-auto max-h-none w-full max-w-none",
+        "mx-0 mt-auto mb-0 h-fit max-h-none w-full max-w-none",
         "sm:m-auto sm:w-[calc(100%-3rem)] sm:max-w-[640px]",
       )}
     >
