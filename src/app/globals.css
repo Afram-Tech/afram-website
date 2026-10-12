@@ -205,19 +205,38 @@ body {
       background-color: rgb(22 24 28 / 0%);
     }
   }
-  /* .modal-sheet: on phones the modal rises from the bottom edge as a sheet
-     instead of popping in the middle (desktop keeps .modal-pop). */
-  @media (max-width: 639.98px) {
-    .modal-pop.modal-sheet {
-      transform: translateY(100%);
-    }
-    .modal-pop.modal-sheet[open] {
-      transform: translateY(0);
-    }
-    @starting-style {
-      .modal-pop.modal-sheet[open] {
-        transform: translateY(100%);
-      }
+  .modal-stagger > * {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 0.18s ease-in,
+      transform 0.18s ease-in;
+  }
+  [data-state="open"] .modal-stagger > * {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.5s var(--ease-out-soft),
+      transform 0.6s var(--ease-out-soft);
+  }
+  [data-state="open"] .modal-stagger > :nth-child(1) {
+    transition-delay: 90ms;
+  }
+  [data-state="open"] .modal-stagger > :nth-child(2) {
+    transition-delay: 140ms;
+  }
+  [data-state="open"] .modal-stagger > :nth-child(3) {
+    transition-delay: 190ms;
+  }
+  [data-state="open"] .modal-stagger > :nth-child(n + 4) {
+    transition-delay: 240ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .modal-stagger > *,
+    [data-state="open"] .modal-stagger > * {
+      opacity: 1;
+      transform: none;
+      transition: none;
     }
   }
 
