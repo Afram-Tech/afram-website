@@ -76,21 +76,21 @@ export function AccessForm({ role, onRoleChange, onDone }: AccessFormProps) {
     <>
       <h2
         id="access-title"
-        className="text-ink-900 pr-8 text-[1.75rem] leading-[1.15] font-bold tracking-[-0.02em]"
+        className="text-ink-900 pr-10 text-[1.75rem] leading-[1.15] font-bold tracking-[-0.02em] sm:text-[2.25rem]"
       >
         Request access
       </h2>
-      <p className="text-ink-500 mt-2 text-[15px]">
+      <p className="text-ink-500 mt-2 text-[15px] leading-relaxed sm:mt-3 sm:text-[16.5px]">
         Afram is invite-only for now. Tell us who you are and we&apos;ll be in touch.
       </p>
 
-      <form action={action} className="mt-8 space-y-5" noValidate>
+      <form action={action} className="mt-7 space-y-5 sm:mt-9 sm:space-y-6" noValidate>
         <RoleOptions value={role} onChange={onRoleChange} />
 
         <FormField label="Full name" error={errorFor("name")}>
           <input {...bind("name")} autoComplete="name" placeholder="Ama Mensah" autoFocus />
         </FormField>
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-5 sm:grid-cols-2 sm:gap-6">
           <FormField label="Email" error={errorFor("email")}>
             <input
               {...bind("email")}
@@ -128,7 +128,7 @@ export function AccessForm({ role, onRoleChange, onDone }: AccessFormProps) {
         <SubmitButton pending={pending} />
       </form>
 
-      <p className="text-ink-500 mt-6 text-center text-[13.5px]">
+      <p className="text-ink-500 mt-6 text-center text-[14px] sm:mt-7 sm:text-[15px]">
         Already have access?{" "}
         <a
           href={siteConfig.signInUrl}
@@ -146,7 +146,7 @@ function SubmitButton({ pending }: { pending: boolean }) {
     <button
       type="submit"
       disabled={pending}
-      className="bg-brand-500 hover:bg-brand-600 !mt-7 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-white transition-all active:scale-[0.99] disabled:cursor-wait disabled:opacity-70"
+      className="bg-brand-500 hover:bg-brand-600 !mt-8 inline-flex h-13 w-full items-center justify-center gap-2 rounded-full text-base font-semibold text-white transition-all active:scale-[0.99] disabled:cursor-wait disabled:opacity-70 sm:h-14"
     >
       {pending ? (
         <>
