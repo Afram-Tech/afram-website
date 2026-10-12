@@ -1,7 +1,7 @@
 import { cache } from "react";
 
-import { graphqlFetch } from "@/graphql/client";
-import { GET_PUBLIC_PROPERTIES } from "@/graphql/documents";
+import { getClient } from "@/graphql/client";
+import { GET_PUBLIC_PROPERTIES } from "@/graphql/queries";
 import { centroidOf, extractPointsFromSiteCoordinates } from "@/lib/siteCoordinates";
 
 export interface Property {
@@ -189,11 +189,11 @@ function mapProperty(project: RawProject): Property | undefined {
  */
 const fetchPublicProperties = cache(async function fetchPublicProperties(): Promise<Property[]> {
   try {
-    const data = await graphqlFetch<
-      GetPublicPropertiesResponse,
-      { pagination: { offset: number; limit: number } }
-    >(GET_PUBLIC_PROPERTIES, { pagination: { offset: 0, limit: 200 } });
-    return data.getPublicProjects
+    const { data } = await getClient().query<GetPublicPropertiesResponse>({
+      query: GET_PUBLIC_PROPERTIES,
+      variables: { pagination: { offset: 0, limit: 200 } },
+    });
+    return (data?.getPublicProjects ?? [])
       .filter((project) => (project.projectType ?? "").toLowerCase() !== "multiple units")
       .map(mapProperty)
       .filter((property): property is Property => Boolean(property));

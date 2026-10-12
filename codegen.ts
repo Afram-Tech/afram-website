@@ -7,7 +7,7 @@ const config: CodegenConfig = {
   documents: ["src/graphql/**/*.ts"],
   generates: {
     "./src/types/generated/graphql.ts": {
-      plugins: ["typescript", "typescript-operations"],
+      plugins: ["typescript", "typescript-operations", "typed-document-node"],
       config: {
         scalars: {
           Date: "string",

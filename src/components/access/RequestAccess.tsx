@@ -19,30 +19,6 @@ import {
 } from "@/features/access/roles";
 import { cn } from "@/lib/utils";
 
-/**
- * Afram is invite-only for now. Sign-up and log-in links open this instead
- * of the app: pick a role, leave name, email and phone, and the
- * team gets back to you with an invite. People who already have access
- * continue to the app from the "Sign in" link at the bottom.
- *
- * While INVITE_ONLY is on, the sign-up controls READ "Request Access" rather
- * than "Get Started" or "Create Account" (features/access/cta does the swap) —
- * a button should say what clicking it does. This catches the clicks:
- *
- * Mounted once in the root layout. It opens for:
- * - any click on a link to the app's sign-up page — caught here rather than
- *   wired onto each button, so a new sign-up link is covered automatically;
- * - any link marked `data-request-access` (the nav's account control);
- * - openRequestAccess() (features/access/roles), from code;
- * - `?request-access=1` on arrival, which is how the app hands someone over
- *   from its own gated signup screens.
- * Cmd/Ctrl/Shift-clicks and pages without JS still follow the link.
- *
- * A native <dialog> gives the
- * focus trap, Esc-to-close and the top layer for free; `.modal-pop` animates
- * it in and out (a spring-y pop on desktop, a bottom sheet on phones —
- * `.modal-sheet`), see globals.css.
- */
 
 const ROLES: { id: AccessRole; icon: LucideIcon }[] = [
   { id: "Member", icon: Home },
@@ -101,12 +77,6 @@ export function RequestAccess() {
       open(ROLE_FOR_USER_TYPE[userType]);
     };
 
-    /* Arriving from the app's own "Request access" — it links to
-       `…/?request-access=1&userType=issuer`. Open the form on the role it
-       names, then strip both params so a refresh, a back-button return or a
-       copied link is the plain page again rather than a modal that will not
-       stay shut. Honoured whatever INVITE_ONLY says: it is an explicit
-       request, not an interception. */
     const params = new URLSearchParams(window.location.search);
     if (params.has(REQUEST_ACCESS_PARAM)) {
       open(ROLE_FOR_USER_TYPE[params.get(USER_TYPE_PARAM) ?? ""]);
@@ -128,10 +98,6 @@ export function RequestAccess() {
     };
   }, []);
 
-  /* Navigating away closes it. Skipping the mount pass matters: this effect
-     runs after the one above, so on a `?request-access=1` arrival it would
-     close the dialog that had just been opened — the hand-off from the app
-     would flash a modal and swallow it. */
   const mounted = useRef(false);
   useEffect(() => {
     if (!mounted.current) {

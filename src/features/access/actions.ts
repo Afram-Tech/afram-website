@@ -3,8 +3,12 @@
 import { headers } from "next/headers";
 import { z } from "zod";
 
-import { graphqlFetch } from "@/graphql/client";
-import { REQUEST_ACCESS } from "@/graphql/documents";
+import { getClient } from "@/graphql/client";
+import { requestAccess as requestAccessMutation } from "@/graphql/mutations";
+import type {
+  RequestAccessMutation,
+  RequestAccessMutationVariables,
+} from "@/types/generated/graphql";
 
 import { ACCESS_ROLES, type AccessRole } from "./roles";
 
@@ -47,22 +51,12 @@ async function visitorIp(): Promise<string | undefined> {
 
 async function deliver({ role, name, email, phone }: z.infer<typeof Request>) {
   const ip = await visitorIp();
-  const data = await graphqlFetch<
-    { requestAccess: { success: boolean; message: string } },
-    {
-      input: {
-        role: "buyer" | "issuer" | "financier";
-        fullName: string;
-        email: string;
-        phone: string;
-      };
-    }
-  >(
-    REQUEST_ACCESS,
-    { input: { role: WIRE_ROLE[role], fullName: name, email, phone } },
-    { mutation: true, headers: ip ? { "X-Forwarded-For": ip } : undefined },
-  );
-  if (!data.requestAccess.success) throw new Error(data.requestAccess.message || "not accepted");
+  const { data } = await getClient().mutate<RequestAccessMutation, RequestAccessMutationVariables>({
+    mutation: requestAccessMutation,
+    variables: { input: { role: WIRE_ROLE[role], fullName: name, email, phone } },
+    context: { headers: ip ? { "X-Forwarded-For": ip } : undefined },
+  });
+  if (!data?.requestAccess.success) throw new Error(data?.requestAccess.message || "not accepted");
 }
 
 export async function requestAccess(_prev: AccessState, form: FormData): Promise<AccessState> {

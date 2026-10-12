@@ -1,29 +1,43 @@
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from "@apollo/client";
+import { registerApolloClient } from "@apollo/client-integration-nextjs";
+import { OperationTypeNode } from "graphql";
+
 /**
- * Falls back to Afram's staging backend. Set GRAPHQL_API_URL once a
- * production endpoint exists.
+ * Falls back to Afram's production backend. Set NEXT_PUBLIC_GRAPHQL_API_URL
+ * to point at staging or a local API.
  */
 export const graphqlEndpoint =
   process.env.NEXT_PUBLIC_GRAPHQL_API_URL || "https://backend.afram.co/graph";
 
 /**
- * Queries are cached for an hour. Pass `{ mutation: true }` for anything that
- * changes data (e.g. contactUs) — those must reach the API every time.
+ * Queries are cached by Next for an hour. Mutations (requestAccess,
+ * contactUs) change data and must reach the API every time. Next rejects a
+ * fetch that sets both `cache: "no-store"` and `revalidate`, so the choice is
+ * made here per operation, not as one HttpLink default.
  */
-export async function graphqlFetch<TData, TVariables extends object = object>(
-  query: string,
-  variables?: TVariables,
-  { mutation = false, headers }: { mutation?: boolean; headers?: Record<string, string> } = {},
-): Promise<TData> {
-  const res = await fetch(graphqlEndpoint, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...headers },
-    body: JSON.stringify({ query, variables }),
-    ...(mutation ? { cache: "no-store" as const } : { next: { revalidate: 3600 } }),
-  });
+const fetchCachingLink = new ApolloLink((operation, forward) => {
+  const isMutation = operation.operationType === OperationTypeNode.MUTATION;
+  operation.setContext(({ fetchOptions }: { fetchOptions?: RequestInit }) => ({
+    fetchOptions: {
+      ...(isMutation ? { cache: "no-store" } : { next: { revalidate: 3600 } }),
+      ...fetchOptions,
+    },
+  }));
+  return forward(operation);
+});
 
-  const json = await res.json();
-  if (json.errors?.length) {
-    throw new Error(json.errors[0].message);
-  }
-  return json.data;
-}
+/**
+ * One Apollo client per server request, for server components and server
+ * actions. Every call to the API runs on the server, so the browser never
+ * talks to the GraphQL endpoint and there is no client-side provider.
+ *
+ * GraphQL errors throw (Apollo's default `errorPolicy: "none"`), so callers
+ * can keep a plain try/catch around each request.
+ */
+export const { getClient, query } = registerApolloClient(
+  () =>
+    new ApolloClient({
+      link: ApolloLink.from([fetchCachingLink, new HttpLink({ uri: graphqlEndpoint })]),
+      cache: new InMemoryCache(),
+    }),
+);
