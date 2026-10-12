@@ -28,11 +28,14 @@
     "postinstall": "node scripts/copy-maplibre-worker.mjs"
   },
   "dependencies": {
+    "@apollo/client": "^4.2.12",
+    "@apollo/client-integration-nextjs": "^0.14.5",
     "@portabletext/react": "^7.0.1",
     "@sanity/client": "^7.25.0",
     "@sanity/image-url": "^2.1.1",
     "@tailwindcss/postcss": "^4.3.3",
     "clsx": "^2.1.1",
+    "graphql": "^16.14.2",
     "lucide-react": "^1.27.0",
     "maplibre-gl": "^6.11.0",
     "next": "^16.2.12",
@@ -40,6 +43,7 @@
     "proj4": "^2.19.10",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "rxjs": "^7.8.2",
     "sharp": "^0.35.3",
     "styled-components": "^6.4.4",
     "tailwind-merge": "^3.6.0",
@@ -47,6 +51,7 @@
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^6.3.1",
+    "@graphql-codegen/typed-document-node": "^7.1.1",
     "@graphql-codegen/typescript": "^5.0.10",
     "@graphql-codegen/typescript-operations": "^5.1.0",
     "@opennextjs/cloudflare": "^1.20.2",
@@ -64,7 +69,6 @@
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.2.12",
     "eslint-config-prettier": "^10.1.8",
-    "graphql": "^16.14.2",
     "husky": "^9.1.7",
     "jsdom": "^30.0.0",
     "lint-staged": "^17.2.0",

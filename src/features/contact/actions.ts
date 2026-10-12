@@ -1,7 +1,8 @@
 "use server";
 
-import { graphqlFetch } from "@/graphql/client";
-import { CONTACT_US } from "@/graphql/documents";
+import { getClient } from "@/graphql/client";
+import { CONTACT_US } from "@/graphql/mutations";
+import type { ContactUsMutation, ContactUsMutationVariables } from "@/types/generated/graphql";
 
 export interface ContactFormState {
   status: "idle" | "sent" | "error";
@@ -44,12 +45,9 @@ export async function sendContactMessage(
   const body = [message || "(No message)", phone ? `\nPhone: ${phone}` : ""].join("");
 
   try {
-    const data = await graphqlFetch<
-      { contactUs: { success: boolean; message?: string | null } },
-      { input: { name: string; email: string; subject?: string; message: string } }
-    >(
-      CONTACT_US,
-      {
+    const { data } = await getClient().mutate<ContactUsMutation, ContactUsMutationVariables>({
+      mutation: CONTACT_US,
+      variables: {
         input: {
           name,
           email,
@@ -57,9 +55,8 @@ export async function sendContactMessage(
           message: body,
         },
       },
-      { mutation: true },
-    );
-    if (!data.contactUs.success) throw new Error(data.contactUs.message ?? "not accepted");
+    });
+    if (!data?.contactUs.success) throw new Error(data?.contactUs.message ?? "not accepted");
     return { status: "sent" };
   } catch (error) {
     console.error("contactUs failed:", error instanceof Error ? error.message : error);
