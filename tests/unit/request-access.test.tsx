@@ -1,7 +1,7 @@
-import { render, screen } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-// The dialog is a client component; the form sends its mutation through a hook and
+// The modal is a client component; the form sends its mutation through a hook and
 // reads the pathname from Next's router. Neither is what's under test here.
 vi.mock("next/navigation", () => ({ usePathname: () => "/" }));
 vi.mock("@/hooks/data", () => ({
@@ -11,7 +11,7 @@ vi.mock("@/hooks/data", () => ({
 import { RequestAccess } from "@/components/access/RequestAccess";
 
 const visit = (url: string) => window.history.replaceState(null, "", url);
-const dialog = () => document.querySelector("dialog")!;
+const dialog = () => screen.queryByRole("dialog");
 
 /**
  * The hand-off from the app: its gated signup screens link to
@@ -19,33 +19,21 @@ const dialog = () => document.querySelector("dialog")!;
  * on arrival rather than leaving someone to find it.
  */
 describe("RequestAccess — arriving from the app", () => {
-  /* This jsdom carries a non-functional showModal stub, so the setup file's
-     polyfill never installs and the real call leaves the dialog shut. Stand in
-     for it here and the open state becomes observable. */
-  beforeEach(() => {
-    visit("/");
-    vi.spyOn(HTMLDialogElement.prototype, "showModal").mockImplementation(function (
-      this: HTMLDialogElement,
-    ) {
-      this.setAttribute("open", "");
-    });
-  });
+  beforeEach(() => visit("/"));
 
-  afterEach(() => vi.restoreAllMocks());
-
-  it("opens the form, on the role the link names", () => {
+  it("opens the form, on the role the link names", async () => {
     visit("/?request-access=1&userType=issuer");
     render(<RequestAccess />);
 
-    expect(dialog()).toHaveAttribute("open");
+    expect(await screen.findByRole("dialog")).toBeInTheDocument();
     expect(screen.getByRole("radio", { name: "Vendor" })).toBeChecked();
   });
 
-  it("defaults to Member when the link names no role", () => {
+  it("defaults to Member when the link names no role", async () => {
     visit("/?request-access=1");
     render(<RequestAccess />);
 
-    expect(dialog()).toHaveAttribute("open");
+    expect(await screen.findByRole("dialog")).toBeInTheDocument();
     expect(screen.getByRole("radio", { name: "Member" })).toBeChecked();
   });
 
@@ -61,7 +49,31 @@ describe("RequestAccess — arriving from the app", () => {
     visit("/?utm_source=email");
     render(<RequestAccess />);
 
-    expect(dialog()).not.toHaveAttribute("open");
+    expect(dialog()).not.toBeInTheDocument();
     expect(window.location.search).toBe("?utm_source=email");
+  });
+});
+
+describe("RequestAccess — closing", () => {
+  beforeEach(() => visit("/?request-access=1"));
+
+  it("closes on Escape", async () => {
+    render(<RequestAccess />);
+    await screen.findByRole("dialog");
+
+    fireEvent.keyDown(document, { key: "Escape" });
+
+    await waitFor(() => expect(dialog()).not.toBeInTheDocument());
+  });
+
+  it("closes from the backdrop but not from inside the panel", async () => {
+    render(<RequestAccess />);
+    const panel = await screen.findByRole("dialog");
+
+    fireEvent.click(panel);
+    expect(dialog()).toBeInTheDocument();
+
+    fireEvent.click(panel.previousElementSibling!);
+    await waitFor(() => expect(dialog()).not.toBeInTheDocument());
   });
 });

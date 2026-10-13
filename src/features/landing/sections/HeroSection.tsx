@@ -26,7 +26,7 @@ export function HeroSection({ content }: HeroSectionProps) {
     };
   });
 
-  const heroEyebrow = content?.heroEyebrow ?? "Powered by";
+  const heroEyebrow = content?.heroEyebrow ?? "Regulated and licensed by the SEC";
   const heroImage = content?.heroImage ?? "/town-house-image.png";
   const primaryCtaLabel = content?.heroPrimaryCtaLabel ?? "View Properties";
   const primaryCtaLink = content?.heroPrimaryCtaLink ?? "/properties";
@@ -49,9 +49,15 @@ export function HeroSection({ content }: HeroSectionProps) {
 
         <div className="relative z-10 mx-auto h-full max-w-[1536px] px-6 sm:px-8 lg:px-16">
           <div className="max-w-[840px] pt-8 sm:pt-10 lg:pt-12">
-            <div className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.14em] text-[#002d30]/60 uppercase">
+            <div className="inline-flex items-center gap-2 text-[11px] bg-[#B2E9F0] py-[8px] px-[7.72px] rounded-full font-semibold tracking-[0.14em] text-[#002D30]">
+              <Image
+                src="/SEC_logo.png"
+                alt="SEC Logo"
+                width={30}
+                height={30}
+                className="shrink-0 rounded-full bg-white object-contain p-[3px]"
+              />
               {heroEyebrow}
-              <PolygonWordmark className="h-[12px] w-auto text-[#002D30]" />
             </div>
 
             {content?.heroHeading ? (

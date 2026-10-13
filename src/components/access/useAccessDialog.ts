@@ -76,38 +76,27 @@ function useCloseOnNavigation(close: () => void) {
   }, [pathname, close]);
 }
 
-function useScrollLock(locked: boolean) {
-  useEffect(() => {
-    if (!locked) return;
-    const root = document.documentElement;
-    root.style.overflow = "hidden";
-    return () => {
-      root.style.overflow = "";
-    };
-  }, [locked]);
-}
-
 export function useAccessDialog() {
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const isOpenRef = useRef(false);
   const [isOpen, setIsOpen] = useState(false);
   const [role, setRole] = useState<AccessRole>("Member");
   const [formKey, setFormKey] = useState(0);
 
   const open = useCallback((requestedRole?: AccessRole) => {
-    const dialog = dialogRef.current;
-    if (!dialog || dialog.open) return;
+    if (isOpenRef.current) return;
+    isOpenRef.current = true;
     setRole(requestedRole ?? ROLE_FOR_PATH[window.location.pathname] ?? "Member");
     setFormKey((key) => key + 1);
     setIsOpen(true);
-    dialog.showModal();
   }, []);
 
-  const close = useCallback(() => dialogRef.current?.close(), []);
-  const handleClosed = useCallback(() => setIsOpen(false), []);
+  const close = useCallback(() => {
+    isOpenRef.current = false;
+    setIsOpen(false);
+  }, []);
 
   useAccessTriggers(open);
   useCloseOnNavigation(close);
-  useScrollLock(isOpen);
 
-  return { dialogRef, role, setRole, formKey, close, handleClosed };
+  return { isOpen, role, setRole, formKey, close };
 }
