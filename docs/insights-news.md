@@ -9,7 +9,9 @@ The Insights page (`/insights`) has two parts:
    feeds. This doc covers that second part.
 
 There are no API keys, accounts or environment variables involved. The
-"APIs" are the publishers' own public RSS feeds.
+"APIs" are the publishers' own public RSS feeds. For the full catalogue of
+sources (in use, candidates and paid APIs) and their data points, see
+[`news-sources.md`](./news-sources.md).
 
 ## The flow
 
@@ -63,10 +65,10 @@ There are no API keys, accounts or environment variables involved. The
 
 All are WordPress tag feeds, in the form `https://<site>/tag/<tag>/feed/`.
 
-| Source | Tags read |
-|---|---|
-| MyJoyOnline (`https://www.myjoyonline.com`) | `real-estate`, `land`, `lands-commission`, `housing`, `property`, `mortgage`, `affordable-housing`, `land-guards` |
-| The High Street Journal (`https://thehighstreetjournal.com`) | `real-estate`, `land`, `lands-commission`, `housing`, `property`, `affordable-housing`, `land-guards` |
+| Source                                                       | Tags read                                                                                                         |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| MyJoyOnline (`https://www.myjoyonline.com`)                  | `real-estate`, `land`, `lands-commission`, `housing`, `property`, `mortgage`, `affordable-housing`, `land-guards` |
+| The High Street Journal (`https://thehighstreetjournal.com`) | `real-estate`, `land`, `lands-commission`, `housing`, `property`, `affordable-housing`, `land-guards`             |
 
 That's 15 feed requests per refresh. Each MyJoyOnline tag feed returns up to
 50 stories and each High Street Journal feed up to 10.
@@ -136,6 +138,7 @@ Links use `target="_blank" rel="noopener noreferrer"`.
    ```
 
    An empty result usually means the tag doesn't exist on that site.
+
 2. Add the tag slug (or a new source with its `name`, `origin` and `tags`)
    to `NEWS_SOURCES` in
    [`news.ts`](../src/features/landing/data/news.ts).
@@ -145,12 +148,9 @@ Links use `target="_blank" rel="noopener noreferrer"`.
 4. To show more or fewer than 12 stories, change the `limit` passed to
    `getPropertyNews()` (its default is 12).
 
-### Sources that didn't work (October 2026)
-
-- **Citi Newsroom** (`citinewsroom.com/feed/`) — blocks feed requests with
-  a 403.
-- **Graphic Online** and **GhanaWeb** — their usual feed addresses returned
-  a page with no stories. Their feeds may have moved; worth retrying.
+For other sources, see [`news-sources.md`](./news-sources.md). It
+covers every Ghanaian outlet and news API we've checked, with the data
+points each one returns, and lists which feeds are blocked or stale.
 
 ## Testing
 
@@ -171,18 +171,9 @@ This covers:
 To see live output, run the dev server and open `/insights`. The news
 section is below the articles.
 
-## Paid alternatives considered
+## Other sources and paid APIs
 
-If the RSS approach ever proves too thin, a paid news API with a Ghana
-filter can replace the feeds behind `getPropertyNews()` without changing
-the page. Pricing as checked in October 2026:
-
-| Service | Cost for commercial use | Notes |
-|---|---|---|
-| [GNews](https://gnews.io/pricing) | €49.99/month (Essential) | Ghana filter, real-time, 1,000 requests/day. Free plan is non-commercial only. The cheapest legitimate paid option. |
-| [NewsData.io](https://newsdata.io/blog/pricing-plan-in-newsdata-io/) | From $199.99/month | Ghana supported. Free tier has a 12-hour delay; whether it allows commercial use couldn't be confirmed on their own pages. |
-| [NewsAPI.org](https://newsapi.org/pricing) | $449/month (Business) | Free plan is development-only. |
-| Google News RSS | Free | Returns plenty of Ghana results, but its terms don't clearly allow commercial use, so it wasn't used. |
-
-A paid API would need its key stored as an environment variable. The RSS
-approach needs none.
+[`news-sources.md`](./news-sources.md) catalogues every other feed and news
+API considered: the Ministry of Lands and Lands Commission feeds, GDELT, and
+paid APIs (GNews, World News API, NewsData.io, Mediastack, NewsAPI.org).
+For each it lists cost, Ghana coverage and the exact fields returned.
