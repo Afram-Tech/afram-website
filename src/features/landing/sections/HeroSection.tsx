@@ -49,7 +49,7 @@ export function HeroSection({ content }: HeroSectionProps) {
 
         <div className="relative z-10 mx-auto h-full max-w-[1536px] px-6 sm:px-8 lg:px-16">
           <div className="max-w-[840px] pt-8 sm:pt-10 lg:pt-12">
-            <div className="inline-flex items-center gap-2 text-[11px] bg-[#B2E9F0] py-[8px] px-[7.72px] rounded-full font-semibold tracking-[0.14em] text-[#002D30]">
+            <div className="inline-flex items-center gap-2 text-[11px] bg-[#B2E9F0] py-[8px] px-[8px] rounded-full font-semibold text-[#002D30]">
               <Image
                 src="/SEC_logo.png"
                 alt="SEC Logo"
