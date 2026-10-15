@@ -11,6 +11,10 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Explore blockchain-verified properties for sale in Ghana on an interactive map, complete with flexible financing options for qualified members.",
   path: "/properties/map",
+  // The same listings as /properties, drawn on a client-side map: nothing
+  // here that /properties doesn't already give search engines, so it stays
+  // out of the index while its links are still followed.
+  noindex: true,
 });
 
 /** Same fallback shape as /properties' — see that page for why this exists
@@ -36,6 +40,7 @@ export default async function PropertiesMapPage() {
 
   return (
     <Section className="py-6 sm:py-6 lg:py-8">
+      <h1 className="sr-only">Map of verified properties for sale in Ghana</h1>
       <Suspense fallback={<PropertiesBrowserFallback />}>
         <PropertiesBrowser properties={allProperties} />
       </Suspense>

@@ -27,7 +27,7 @@ export function HeroSection({ content }: HeroSectionProps) {
   });
 
   const heroEyebrow = content?.heroEyebrow ?? "Regulated and licensed by the SEC";
-  const heroImage = content?.heroImage ?? "/town-house-image.png";
+  const heroImage = content?.heroImage ?? "/town-house-image.webp";
   const primaryCtaLabel = content?.heroPrimaryCtaLabel ?? "View Properties";
   const primaryCtaLink = content?.heroPrimaryCtaLink ?? "/properties";
   const secondaryCtaLabel = content?.heroSecondaryCtaLabel ?? "How it works";
@@ -49,9 +49,9 @@ export function HeroSection({ content }: HeroSectionProps) {
 
         <div className="relative z-10 mx-auto h-full max-w-[1536px] px-6 sm:px-8 lg:px-16">
           <div className="max-w-[840px] pt-8 sm:pt-10 lg:pt-12">
-            <div className="inline-flex items-center gap-2 text-[11px] bg-[#B2E9F0] py-[8px] px-[8px] rounded-full font-semibold text-[#002D30]">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#B2E9F0] px-[8px] py-[8px] text-[11px] font-semibold text-[#002D30]">
               <Image
-                src="/SEC_logo.png"
+                src="/SEC_logo-96.png"
                 alt="SEC Logo"
                 width={30}
                 height={30}

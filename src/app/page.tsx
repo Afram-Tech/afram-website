@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
+import { JsonLd } from "@/components/JsonLd";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { siteConfig } from "@/config/site";
 import { AffordabilityCalculatorSection } from "@/features/landing/sections/AffordabilityCalculatorSection";
 import { FeaturedArticlesSection } from "@/features/landing/sections/FeaturedArticlesSection";
 import { FeaturedPropertiesSection } from "@/features/landing/sections/FeaturedPropertiesSection";
@@ -10,11 +10,12 @@ import { HeroSection } from "@/features/landing/sections/HeroSection";
 import { MorePropertiesSection } from "@/features/landing/sections/MorePropertiesSection";
 import { PartnerLogosSection } from "@/features/landing/sections/PartnerLogosSection";
 import { getHomePageContent } from "@/features/landing/data/home";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, buildWebSiteJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "Blockchain-Verified Real Estate Marketplace in Ghana",
-  description: siteConfig.description,
+  description:
+    "Buy title-verified homes and land in Ghana with flexible financing. Afram connects buyers, vendors and financiers on one verified marketplace.",
   path: "/",
 });
 
@@ -23,6 +24,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <JsonLd data={buildWebSiteJsonLd()} />
       <HeroSection content={content ?? undefined} />
       {/* <PartnerLogosSection heading={content?.partnerLogosHeading} partners={content?.partners} /> */}
       <FeaturedPropertiesSection

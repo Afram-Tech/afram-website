@@ -33,6 +33,7 @@ const property = (overrides: Partial<Property> = {}): Property => ({
   developer: "Afram Marketplace",
   priceHistory: [],
   isFeatured: false,
+  updatedAt: null,
   ...overrides,
 });
 

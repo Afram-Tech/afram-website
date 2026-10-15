@@ -29,6 +29,8 @@ export const GET_PUBLIC_PROPERTIES = gql`
         gpsAddress
         metadata
         siteCoordinates
+        createdAt
+        updatedAt
       }
     }
   }

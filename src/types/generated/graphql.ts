@@ -136,6 +136,17 @@ export type ApproachDiligenceItem = {
   hint: Scalars["String"]["output"];
   id: Scalars["ID"]["output"];
   label: Scalars["String"]["output"];
+  /**
+   * The buyer's own documents already on file that answer this ask — verified in
+   * their readiness assessment, or accepted by a seller on an earlier deal. Offer
+   * them on the buyer's rail; submitting one goes through the ordinary submit
+   * mutation and is recorded with that provenance.
+   *
+   * Buyer only: always empty for the seller. Also empty on a request the buyer
+   * makes, on a category not yet opened, once the item is accepted or waived, and
+   * for any file already submitted here.
+   */
+  onFile: Array<HeldDocument>;
   /** What the requester said needs addressing. Set while status is `queried`. */
   query?: Maybe<Scalars["String"]["output"]>;
   /** not_requested | requested | submitted | queried | accepted | waived */
@@ -1462,7 +1473,6 @@ export type CreateAssessmentDocumentInput = {
   fileUrl?: InputMaybe<Scalars["String"]["input"]>;
   notes?: InputMaybe<Scalars["String"]["input"]>;
   requirement?: InputMaybe<AssessmentDocumentRequirement>;
-  status?: InputMaybe<AssessmentDocumentStatus>;
 };
 
 export type CreateAssessmentInput = {
@@ -1945,8 +1955,11 @@ export type DiligenceDocument = {
   id: Scalars["ID"]["output"];
   /**
    * Where the file came from: `upload` when someone supplied it against this
-   * request, or `listing` / `approach` / `compliance` when the platform attached
-   * one it already held so the issuer was not asked twice.
+   * request, or `listing` / `portfolio` / `approach` / `compliance` when the
+   * platform attached
+   * one it already held so the issuer was not asked twice. `readiness` or
+   * `diligence` when the buyer submitted a file of theirs Afram already held —
+   * verified in their readiness assessment, or accepted on an earlier deal.
    *
    * Show it. A requester deciding whether to accept is entitled to know whether
    * they are looking at a document produced for them or one carried over.
@@ -1992,6 +2005,17 @@ export type DiligenceItem = {
   hint: Scalars["String"]["output"];
   id: Scalars["ID"]["output"];
   label: Scalars["String"]["output"];
+  /**
+   * The buyer's own documents already on file that answer this ask — verified in
+   * their readiness assessment, or accepted by a seller on an earlier deal. Offer
+   * them on the buyer's rail; submitting one goes through the ordinary submit
+   * mutation and is recorded with that provenance.
+   *
+   * Buyer only: always empty for the seller. Also empty on a request the buyer
+   * makes, on a category not yet opened, once the item is accepted or waived, and
+   * for any file already submitted here.
+   */
+  onFile: Array<HeldDocument>;
   /** What the requester said needs addressing. Set while status is `queried`. */
   query?: Maybe<Scalars["String"]["output"]>;
   /** requested | submitted | queried | accepted | waived */
@@ -2505,9 +2529,15 @@ export type HeldDocument = {
   fileName: Scalars["String"]["output"];
   /** When we came by it, so the age shown is the real age. Null where unknown. */
   heldSince?: Maybe<Scalars["DateTime"]["output"]>;
-  /** listing | approach | compliance */
+  /**
+   * listing | portfolio | approach | compliance on a property; readiness |
+   * diligence on a person (`getMyHeldDocuments`). `portfolio` is a document filed
+   * on the development the unit belongs to (its master title, say) rather than one
+   * belonging to this unit alone. A development's document is never offered for a
+   * category the unit answers with its own.
+   */
   source: Scalars["String"]["output"];
-  /** One line saying where it came from, for the vendor to read. */
+  /** One line saying where it came from, for whoever is deciding whether to use it. */
   sourceNote: Scalars["String"]["output"];
 };
 
@@ -2516,6 +2546,25 @@ export type IdOperator = {
   in?: InputMaybe<Array<Scalars["ID"]["input"]>>;
   notIn?: InputMaybe<Array<Scalars["ID"]["input"]>>;
 };
+
+export type IdentityAttestation = {
+  __typename?: "IdentityAttestation";
+  status: IdentityAttestationStatus;
+  /** When the NIA confirmed it. Set only on VERIFIED. */
+  verifiedAt?: Maybe<Scalars["DateTime"]["output"]>;
+};
+
+/**
+ * What a counterparty may know about an identity check: the outcome, never the
+ * record. NONE is no check at all — every account predating NIA verification,
+ * which is not gated — and must read as "not checked", not as a failure.
+ */
+export type IdentityAttestationStatus =
+  | "FAILED"
+  | "NONE"
+  /** Requested and not yet settled, including a check waiting on a human. */
+  | "PENDING"
+  | "VERIFIED";
 
 export type IdentityDocumentInput = {
   country?: InputMaybe<Scalars["String"]["input"]>;
@@ -2688,6 +2737,17 @@ export type InstallmentFilter = {
   refNo?: InputMaybe<Scalars["String"]["input"]>;
   repaymentId?: InputMaybe<Scalars["ID"]["input"]>;
   status?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** A revised figure for one installment. Its due date stays as it is. */
+export type InstallmentRevisionInput = {
+  amount: Scalars["Float"]["input"];
+  /** Annual effective interest rate, in percent (24.5 = 24.5% a year). Zero or more. */
+  effectiveInterestRate: Scalars["Float"]["input"];
+  fees?: InputMaybe<Scalars["Float"]["input"]>;
+  interest?: InputMaybe<Scalars["Float"]["input"]>;
+  /** Optional split; when given, principal, interest and fees must add up to amount. */
+  principal?: InputMaybe<Scalars["Float"]["input"]>;
 };
 
 export type InterestRate = {
@@ -3488,7 +3548,15 @@ export type Mutation = {
   grantAssessmentShare: Scalars["ID"]["output"];
   grantOfferRequest: OfferRequest;
   importAssessmentTemplate: AssessmentTemplate;
-  /** Spec §5.1 — creates the advisory pending deposit txn. Does NOT move money. */
+  /**
+   * Spec §5.1 — creates the advisory pending deposit txn. Does NOT move money.
+   *
+   * `idempotencyKey` is optional: a UUID the client generates once per tap and
+   * sends unchanged with every retry of that tap. A repeat returns the same
+   * pending line instead of adding a second. Scoped to the caller — another
+   * user's identical key never matches. 1–128 characters of `A–Z a–z 0–9 - _`;
+   * anything else is refused (`INVALID_IDEMPOTENCY_KEY`).
+   */
   initiateWalletDeposit: InitiateDepositResult;
   /**
    * Buyer — request_submitted → commitment_deposit_paid, in one call. Pays
@@ -3612,6 +3680,18 @@ export type Mutation = {
   login: AuthPayload;
   loginAframSearch: AuthPayload;
   loginSupportUser: SupportAuthPayload;
+  /**
+   * End this session by retiring its refresh token. Needs no bearer — holding the
+   * refresh token is the authority — so it works after the access token has
+   * expired. Always true. The session's access token is not revoked; it expires
+   * within the hour, and the client should discard it now.
+   */
+  logout: Scalars["Boolean"]["output"];
+  /**
+   * End every session the caller has, on every device, including the one making
+   * this call: every access and refresh token already issued stops working.
+   */
+  logoutAllSessions: Scalars["Boolean"]["output"];
   markAllNotificationsAsRead: MarkAllAsReadResponse;
   markAsPaid: Scalars["Boolean"]["output"];
   /**
@@ -3902,6 +3982,7 @@ export type Mutation = {
   removeRentDiligenceDocument: RentToBuyTxn;
   removeRepayment: Scalars["Boolean"]["output"];
   removeReview: Scalars["Boolean"]["output"];
+  /** The draft's owner, or platform staff. */
   removeTempProject: Scalars["Boolean"]["output"];
   removeTermSheet: Scalars["Boolean"]["output"];
   removeTicketComment: Scalars["Boolean"]["output"];
@@ -4028,6 +4109,15 @@ export type Mutation = {
    * the entity's payout account and needs the `wallet:withdraw` company
    * permission; it defaults to the caller's own. The destination is never taken
    * from the request.
+   *
+   * `idempotencyKey` is optional: a UUID the client generates once per tap and
+   * sends unchanged with every retry of that tap — a timeout, a flaky
+   * connection. A repeat returns the first withdrawal's line, whatever state it
+   * has reached since, instead of starting a second or refusing with a 409.
+   * Scoped to the wallet owner the request acts for (the caller, or their active
+   * entity), so another owner's identical key never matches. 1–128 characters of
+   * `A–Z a–z 0–9 - _`; anything else is refused (`INVALID_IDEMPOTENCY_KEY`).
+   * Without it, every call is a new withdrawal, as before.
    */
   requestWalletWithdrawal: WalletTxn;
   resetPassword: Scalars["Boolean"]["output"];
@@ -4068,6 +4158,18 @@ export type Mutation = {
   returnAssessment: Scalars["Boolean"]["output"];
   /** Financier: approve or reject submitted documents on an offer request */
   reviewOfferDocuments: Array<OfferRequestDocument>;
+  /**
+   * Financier revises one installment's amount or rate ahead of its due date —
+   * a rate change — without restating the whole schedule. Edited in place: its
+   * id, reference and due date are kept. Only an installment not yet being
+   * collected, with nothing paid against it, can be revised; amend the schedule
+   * for anything else. Its pending declaration is retired; within 7 days of the
+   * due date a new one is issued already approved, otherwise the usual one is
+   * generated later. The borrower is told the new figure and `reason`, which is
+   * required. Revising to the same figures changes nothing. Refused while a
+   * payment on the loan is still being confirmed by the bank.
+   */
+  reviseRepaymentInstallment: RepaymentInstallment;
   /** @deprecated Use revokeAssessmentShare. */
   revokeAssessmentFinancierShare: Scalars["Boolean"]["output"];
   revokeAssessmentShare: Scalars["Boolean"]["output"];
@@ -4283,6 +4385,11 @@ export type Mutation = {
   toggleOfferFavorite: Scalars["Boolean"]["output"];
   togglePropertyFavorite: ToggleFavoriteResult;
   toggleSuspendUser: ToggleSuspendPayload;
+  /**
+   * Deploy the property's token and mint its whole supply to the issuer. The
+   * issuer's wallet is the owning entity's, found on the server (d17); supply is
+   * the property's price (d18). Both are permanent.
+   */
   tokenizeProperty: Scalars["Boolean"]["output"];
   /**
    * Vendor — option_exercised → title_transferred. Records titleTransferredAt.
@@ -4329,6 +4436,11 @@ export type Mutation = {
   updateSupportRole: SupportRole;
   updateTailoringRule: TailoringRuleResponse;
   updateTempProject: Scalars["Boolean"]["output"];
+  /**
+   * `id` is the session id. The draft's owner may set pending, processing,
+   * failed or cancelled; only platform staff may set paid — nothing on the server
+   * confirms the listing fee yet, so a client cannot attest to its own payment.
+   */
   updateTempProjectPaymentStatus: Scalars["Boolean"]["output"];
   updateTermSheet: TermSheet;
   updateTicketStatus: Ticket;
@@ -4467,6 +4579,21 @@ export type Mutation = {
    */
   waiveRentDiligenceItem: RentToBuyTxn;
   waiveRentInspection: RentToBuyTxn;
+  /**
+   * Financier waives what is left on a loan's installments — after a write-off,
+   * or for money settled outside Afram. Omit `installmentIds` to waive every
+   * installment still owing; pass ids to waive just those (an empty list is
+   * refused). Only installments still owing can be waived: one partly paid keeps
+   * what was paid and only its remainder is waived. `reason` is required and is
+   * recorded on each installment. Declarations generated from a waived
+   * installment are retired, so nothing is collected against it.
+   *
+   * Allowed while the loan is in repayment or its discharge has been issued (a
+   * written-off loan's unpaid installments are what hold its discharge up), not
+   * once it is closed. Refused while a payment on the loan is still being
+   * confirmed by the bank. Returns the loan's installments after the waiver.
+   */
+  waiveRepaymentInstallments: Array<RepaymentInstallment>;
   waiveSellerInspection: SellerFinancingTxn;
   /** Buyer walks, any time before conversion. Deposit returned → `withdrawn`. */
   withdrawApproach: SellerApproach;
@@ -5109,6 +5236,7 @@ export type MutationImportAssessmentTemplateArgs = {
 
 export type MutationInitiateWalletDepositArgs = {
   amount: Scalars["Float"]["input"];
+  idempotencyKey?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type MutationInstructCommitmentDepositArgs = {
@@ -5203,6 +5331,10 @@ export type MutationLoginAframSearchArgs = {
 export type MutationLoginSupportUserArgs = {
   email: Scalars["String"]["input"];
   password: Scalars["String"]["input"];
+};
+
+export type MutationLogoutArgs = {
+  refreshToken: Scalars["String"]["input"];
 };
 
 export type MutationMarkAsPaidArgs = {
@@ -5632,6 +5764,7 @@ export type MutationRequestTermSheetChangesArgs = {
 
 export type MutationRequestWalletWithdrawalArgs = {
   amount: Scalars["Float"]["input"];
+  idempotencyKey?: InputMaybe<Scalars["String"]["input"]>;
   ownerType?: InputMaybe<PayoutAccountOwner>;
 };
 
@@ -5675,6 +5808,12 @@ export type MutationReturnAssessmentArgs = {
 export type MutationReviewOfferDocumentsArgs = {
   documents: Array<ReviewOfferDocumentItem>;
   offerRequestId: Scalars["ID"]["input"];
+};
+
+export type MutationReviseRepaymentInstallmentArgs = {
+  installmentId: Scalars["ID"]["input"];
+  reason: Scalars["String"]["input"];
+  revision: InstallmentRevisionInput;
 };
 
 export type MutationRevokeAssessmentFinancierShareArgs = {
@@ -5953,7 +6092,6 @@ export type MutationToggleSuspendUserArgs = {
 
 export type MutationTokenizePropertyArgs = {
   metadata?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  to: Scalars["ID"]["input"];
   uri: Scalars["String"]["input"];
 };
 
@@ -6275,6 +6413,12 @@ export type MutationWaiveRentDiligenceItemArgs = {
 export type MutationWaiveRentInspectionArgs = {
   acknowledgement: Scalars["String"]["input"];
   transactionId: Scalars["ID"]["input"];
+};
+
+export type MutationWaiveRepaymentInstallmentsArgs = {
+  installmentIds?: InputMaybe<Array<Scalars["ID"]["input"]>>;
+  offerRequestId: Scalars["ID"]["input"];
+  reason: Scalars["String"]["input"];
 };
 
 export type MutationWaiveSellerInspectionArgs = {
@@ -6628,7 +6772,7 @@ export type OfferRequestDocument = {
   reviewerNotes?: Maybe<Scalars["String"]["output"]>;
   /**
    * Set when the platform answered this request from documents it already held —
-   * `listing`, `approach` or `compliance`. Null on every row the borrower filled
+   * `listing`, `portfolio`, `approach` or `compliance`. Null on every row the borrower filled
    * in themselves.
    *
    * ⚠ Check this before labelling `files` as the applicant's submission. A
@@ -7393,35 +7537,35 @@ export type Project = {
 
 export type ProjectCost = {
   __typename?: "ProjectCost";
-  adminAndOther?: Maybe<Scalars["Int"]["output"]>;
-  construction?: Maybe<Scalars["Int"]["output"]>;
-  contingency?: Maybe<Scalars["Int"]["output"]>;
-  depositRequired?: Maybe<Scalars["Int"]["output"]>;
-  designAndEng?: Maybe<Scalars["Int"]["output"]>;
+  adminAndOther?: Maybe<Scalars["Float"]["output"]>;
+  construction?: Maybe<Scalars["Float"]["output"]>;
+  contingency?: Maybe<Scalars["Float"]["output"]>;
+  depositRequired?: Maybe<Scalars["Float"]["output"]>;
+  designAndEng?: Maybe<Scalars["Float"]["output"]>;
   financingAvailable?: Maybe<Scalars["Boolean"]["output"]>;
-  land?: Maybe<Scalars["Int"]["output"]>;
-  marketingOrSales?: Maybe<Scalars["Int"]["output"]>;
-  maxAmountAvailable?: Maybe<Scalars["Int"]["output"]>;
+  land?: Maybe<Scalars["Float"]["output"]>;
+  marketingOrSales?: Maybe<Scalars["Float"]["output"]>;
+  maxAmountAvailable?: Maybe<Scalars["Float"]["output"]>;
   paymentTerms?: Maybe<Scalars["String"]["output"]>;
   paymentType?: Maybe<Scalars["String"]["output"]>;
-  price?: Maybe<Scalars["Int"]["output"]>;
-  serviceFee?: Maybe<Scalars["Int"]["output"]>;
+  price?: Maybe<Scalars["Float"]["output"]>;
+  serviceFee?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type ProjectCostInput = {
-  adminAndOther?: InputMaybe<Scalars["Int"]["input"]>;
-  construction?: InputMaybe<Scalars["Int"]["input"]>;
-  contingency?: InputMaybe<Scalars["Int"]["input"]>;
-  depositRequired?: InputMaybe<Scalars["Int"]["input"]>;
-  designAndEng?: InputMaybe<Scalars["Int"]["input"]>;
+  adminAndOther?: InputMaybe<Scalars["Float"]["input"]>;
+  construction?: InputMaybe<Scalars["Float"]["input"]>;
+  contingency?: InputMaybe<Scalars["Float"]["input"]>;
+  depositRequired?: InputMaybe<Scalars["Float"]["input"]>;
+  designAndEng?: InputMaybe<Scalars["Float"]["input"]>;
   financingAvailable?: InputMaybe<Scalars["Boolean"]["input"]>;
-  land?: InputMaybe<Scalars["Int"]["input"]>;
-  marketingOrSales?: InputMaybe<Scalars["Int"]["input"]>;
-  maxAmountAvailable?: InputMaybe<Scalars["Int"]["input"]>;
+  land?: InputMaybe<Scalars["Float"]["input"]>;
+  marketingOrSales?: InputMaybe<Scalars["Float"]["input"]>;
+  maxAmountAvailable?: InputMaybe<Scalars["Float"]["input"]>;
   paymentTerms?: InputMaybe<Scalars["String"]["input"]>;
   paymentType?: InputMaybe<Scalars["String"]["input"]>;
-  price?: InputMaybe<Scalars["Int"]["input"]>;
-  serviceFee?: InputMaybe<Scalars["Int"]["input"]>;
+  price?: InputMaybe<Scalars["Float"]["input"]>;
+  serviceFee?: InputMaybe<Scalars["Float"]["input"]>;
 };
 
 export type ProjectFilter = {
@@ -7717,6 +7861,29 @@ export type PropertyPipelineBucket = {
 
 export type PropertyPipelineStage = "ACTIVE" | "CLOSED" | "DRAFT" | "IN_REVIEW" | "TOKENIZED";
 
+/**
+ * One price a property was set to, and when (#450). A newly listed property has
+ * exactly one: the price it was listed at. Properties listed before price history
+ * existed have none until their price is next set — show the current
+ * `Property.price` alone, not invented earlier points.
+ */
+export type PropertyPrice = {
+  __typename?: "PropertyPrice";
+  /** When the property took this price. */
+  createdAt: Scalars["DateTime"]["output"];
+  currency?: Maybe<Scalars["String"]["output"]>;
+  id: Scalars["ID"]["output"];
+  price: Scalars["Float"]["output"];
+  propertyId: Scalars["ID"]["output"];
+};
+
+export type PropertyPriceFilter = {
+  /** When the price was set — e.g. `{ after: ... }` for the last year's chart. */
+  createdAt?: InputMaybe<DateOperator>;
+  id?: InputMaybe<IdOperator>;
+  propertyId?: InputMaybe<IdOperator>;
+};
+
 export type PropertyStatus =
   | "delisted"
   | "divided"
@@ -7754,10 +7921,10 @@ export type PropertyStatusOperator = {
 export type PropertyTypes = {
   __typename?: "PropertyTypes";
   currency?: Maybe<Scalars["String"]["output"]>;
-  estimatedPrice?: Maybe<Scalars["Int"]["output"]>;
+  estimatedPrice?: Maybe<Scalars["Float"]["output"]>;
   floorArea?: Maybe<FloorArea>;
-  maxPrice?: Maybe<Scalars["Int"]["output"]>;
-  minPrice?: Maybe<Scalars["Int"]["output"]>;
+  maxPrice?: Maybe<Scalars["Float"]["output"]>;
+  minPrice?: Maybe<Scalars["Float"]["output"]>;
   numOfUnits?: Maybe<Scalars["Int"]["output"]>;
   propertyDescription?: Maybe<Scalars["String"]["output"]>;
   propertyImages?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
@@ -7766,10 +7933,10 @@ export type PropertyTypes = {
 
 export type PropertyTypesInput = {
   currency?: InputMaybe<Scalars["String"]["input"]>;
-  estimatedPrice?: InputMaybe<Scalars["Int"]["input"]>;
+  estimatedPrice?: InputMaybe<Scalars["Float"]["input"]>;
   floorArea?: InputMaybe<FloorAreaInput>;
-  maxPrice?: InputMaybe<Scalars["Int"]["input"]>;
-  minPrice?: InputMaybe<Scalars["Int"]["input"]>;
+  maxPrice?: InputMaybe<Scalars["Float"]["input"]>;
+  minPrice?: InputMaybe<Scalars["Float"]["input"]>;
   numOfUnits?: InputMaybe<Scalars["Int"]["input"]>;
   propertyDescription?: InputMaybe<Scalars["String"]["input"]>;
   propertyImages?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
@@ -7841,6 +8008,17 @@ export type PropertyViewingStatus =
 
 export type Query = {
   __typename?: "Query";
+  /**
+   * Whether the buyer on this deal has passed Afram's NIA identity check, for
+   * the issuer or financier on the same deal. Scoped to a request both parties
+   * are on — not a general lookup. Returns the status and when it was confirmed,
+   * never the Ghana Card number, the selfie, or any field off the register.
+   *
+   * Null once the request is rejected, revoked, declined or closed, and to the
+   * buyer themselves (their own status is `getMyIdentityVerification`). A request
+   * the caller is not party to is NOT_FOUND.
+   */
+  counterpartyIdentity?: Maybe<IdentityAttestation>;
   /** Whether an entity may perform a gated action, and what is blocking it. */
   evaluateEntityGate: EntityGate;
   /** Public. Null when the token matches no approved invite. */
@@ -8078,6 +8256,28 @@ export type Query = {
   getMyAssessmentEntryState: AssessmentEntryState;
   /** The buyer's list — the 'Purchases' section at the top of /buyer/offers. */
   getMyCashPurchases: Array<CashPurchaseTxn>;
+  /**
+   * Documents on file for the authenticated person — from their readiness
+   * assessment and from diligence they have already satisfied elsewhere.
+   * Scoped to the caller: a person's documents are never readable by a
+   * counterparty, the same rule `User.identityVerification` follows.
+   *
+   * "One Document, One Name" §4. A buyer was asked for the payslips and bank
+   * statements their readiness assessment already holds on every deal they
+   * opened; this is what lets the buyer's rail offer them instead. Readiness
+   * documents count once an officer has VERIFIED them, deal documents once a
+   * seller has ACCEPTED them — nothing still under review is offered as on file.
+   *
+   * No user argument, deliberately: the person is whoever holds the token, so the
+   * answer is the same on every deal they are party to and unreachable from the
+   * other side of any of them.
+   *
+   * `categoryId` narrows to one buyer-side diligence category (`identity`,
+   * `income_evidence`, `bank_statements`, …). Readiness codes are translated to
+   * these on the server; a readiness document with no buyer-side equivalent is
+   * not offered.
+   */
+  getMyHeldDocuments: Array<HeldDocument>;
   /** The caller's own verification. The page-load read, and the fallback when the socket is down. */
   getMyIdentityVerification?: Maybe<IdentityVerification>;
   /** The caller's own viewings, as the member who asked for them. */
@@ -8151,6 +8351,10 @@ export type Query = {
    */
   getPropertyHeldDocuments: Array<HeldDocument>;
   getPropertyPipeline: Array<PropertyPipelineBucket>;
+  getPropertyPrice?: Maybe<PropertyPrice>;
+  /** Oldest first. */
+  getPropertyPrices: Array<PropertyPrice>;
+  getPropertyPricesLength: Scalars["Int"]["output"];
   /** One viewing. Either party to it may read it; nobody else. */
   getPropertyViewing?: Maybe<PropertyViewing>;
   /** Every viewing across the units the caller's entity owns. */
@@ -8265,6 +8469,10 @@ export type Query = {
    */
   myOnboardingProgress?: Maybe<OnboardingProgress>;
   vapidPublicKey: VapidPublicKeyResponse;
+};
+
+export type QueryCounterpartyIdentityArgs = {
+  offerRequestId: Scalars["ID"]["input"];
 };
 
 export type QueryEvaluateEntityGateArgs = {
@@ -8787,6 +8995,10 @@ export type QueryGetMyAssessmentEntryStateArgs = {
   subjectEntityId?: InputMaybe<Scalars["ID"]["input"]>;
 };
 
+export type QueryGetMyHeldDocumentsArgs = {
+  categoryId?: InputMaybe<Scalars["String"]["input"]>;
+};
+
 export type QueryGetMyPropertyViewingsArgs = {
   statuses?: InputMaybe<Array<PropertyViewingStatus>>;
 };
@@ -8954,6 +9166,19 @@ export type QueryGetPropertyHeldDocumentsArgs = {
 
 export type QueryGetPropertyPipelineArgs = {
   range?: InputMaybe<DashboardRange>;
+};
+
+export type QueryGetPropertyPriceArgs = {
+  filter: PropertyPriceFilter;
+};
+
+export type QueryGetPropertyPricesArgs = {
+  filter?: InputMaybe<PropertyPriceFilter>;
+  pagination?: InputMaybe<Pagination>;
+};
+
+export type QueryGetPropertyPricesLengthArgs = {
+  filter?: InputMaybe<PropertyPriceFilter>;
 };
 
 export type QueryGetPropertyViewingArgs = {
@@ -9718,6 +9943,10 @@ export type RepaymentInstallment = {
   sequenceNo: Scalars["Int"]["output"];
   status: Scalars["String"]["output"];
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  /** Set when the lender waived what was left on the installment (status `waived`). What was waived is amountTotal less amountPaidToDate. */
+  waivedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  /** The lender's reason for the waiver. */
+  waivedReason?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type RepaymentTermChange = {
@@ -10034,9 +10263,11 @@ export type SellerDiligenceDocument = {
   fileName: Scalars["String"]["output"];
   id: Scalars["ID"]["output"];
   /**
-   * `upload` when someone supplied it against this request; `listing`, `approach`
-   * or `compliance` when the platform attached a document it already held rather
-   * than ask the issuer for it again.
+   * `upload` when someone supplied it against this request; `listing`,
+   * `portfolio`, `approach` or `compliance` when the platform attached a document it already held rather
+   * than ask the issuer for it again. `readiness` or `diligence` when the buyer
+   * submitted a file of theirs Afram already held — verified in their readiness
+   * assessment, or accepted on an earlier deal.
    */
   source: Scalars["String"]["output"];
   /** One line saying where a carried-over file came from. Null on an upload. */
@@ -10066,6 +10297,17 @@ export type SellerDiligenceItem = {
   documents?: Maybe<Array<SellerDiligenceDocument>>;
   documentsCount?: Maybe<Scalars["Int"]["output"]>;
   id: Scalars["ID"]["output"];
+  /**
+   * The buyer's own documents already on file that answer this ask — verified in
+   * their readiness assessment, or accepted by a seller on an earlier deal. Offer
+   * them on the buyer's rail; submitting one goes through the ordinary submit
+   * mutation and is recorded with that provenance.
+   *
+   * Buyer only: always empty for the seller. Also empty on a request the buyer
+   * makes, on a category not yet opened, once the item is accepted or waived, and
+   * for any file already submitted here.
+   */
+  onFile: Array<HeldDocument>;
   /** What the requester said needs addressing. Set while status is `queried`. */
   query?: Maybe<Scalars["String"]["output"]>;
   /** not_requested | requested | submitted | queried | accepted | waived */
@@ -11413,9 +11655,20 @@ export type UpdateAssessmentCategoryInput = {
 
 export type UpdateAssessmentDocumentInput = {
   fileUrl?: InputMaybe<Scalars["String"]["input"]>;
+  /**
+   * true marks the slot `not_applicable`, false puts it back to `pending`.
+   * The applicant may do this only on an `advisory` or `if_applicable` slot
+   * with no file on it, while the assessment is draft or returned; staff on
+   * any slot with no file. Never on a verified document. Omit to leave it.
+   */
+  notApplicable?: InputMaybe<Scalars["Boolean"]["input"]>;
   notes?: InputMaybe<Scalars["String"]["input"]>;
+  /**
+   * Staff only once the slot exists — an applicant could otherwise turn a
+   * mandatory slot into an optional one and then mark it not applicable.
+   * Resending the stored value is accepted.
+   */
   requirement?: InputMaybe<AssessmentDocumentRequirement>;
-  status?: InputMaybe<AssessmentDocumentStatus>;
 };
 
 export type UpdateAssessmentInput = {
@@ -11692,6 +11945,11 @@ export type UpdateTailoringRuleInput = {
 /**
  * The extractor's answer for a session (`id` is the session id): `result` with
  * the fields it read, or `error` when it could not read the document.
+ *
+ * Accepted only from the extractor: the request must carry EXTRACTOR_API_KEY in
+ * the `x-extractor-key` header. A user session is neither needed nor sufficient.
+ * Keys in `result` outside the extracted listing fields (address, title and unit
+ * details — EXTRACTED_FIELDS in temp-project.broker) are dropped.
  */
 export type UpdateTempProjectInput = {
   /** Why the document could not be read. Marks extraction failed. */
@@ -12100,6 +12358,8 @@ export type GetPublicPropertiesQuery = {
       gpsAddress?: string | null;
       metadata?: any | null;
       siteCoordinates?: any | null;
+      createdAt?: any | null;
+      updatedAt?: any | null;
     } | null;
   }>;
 };
@@ -12251,6 +12511,8 @@ export const GetPublicPropertiesDocument = {
                       { kind: "Field", name: { kind: "Name", value: "gpsAddress" } },
                       { kind: "Field", name: { kind: "Name", value: "metadata" } },
                       { kind: "Field", name: { kind: "Name", value: "siteCoordinates" } },
+                      { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                      { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
                     ],
                   },
                 },

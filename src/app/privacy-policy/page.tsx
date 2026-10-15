@@ -5,7 +5,7 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "Privacy Policy",
-  description: `How ${siteConfig.legalName} collects, uses, and protects your data.`,
+  description: `How ${siteConfig.legalName} collects, uses, shares and protects your personal data when you browse, request access or use the Afram marketplace in Ghana.`,
   path: "/privacy-policy",
 });
 
