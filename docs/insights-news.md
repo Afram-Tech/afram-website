@@ -4,9 +4,18 @@ The Insights page (`/insights`) has two parts:
 
 1. **Articles** — written by the Afram team in Sanity. Unchanged by this
    feature; see [`sanity-cms.md`](./sanity-cms.md).
-2. **"Property & land news in Ghana"** — headlines about real estate, land
-   and housing, pulled automatically from Ghanaian news sites' public RSS
-   feeds. This doc covers that second part.
+2. **"Property & land news in Ghana"** — real estate, land and housing
+   stories pulled automatically from Ghanaian news sites' public RSS feeds.
+   Clicking one opens the full story in a side drawer, the "reader", where
+   visitors can move through every story without leaving Afram. This doc
+   covers that second part.
+
+> **Before this goes live:** the reader shows publishers' full articles,
+> text and images, on afram.co. That's republishing their content, so it
+> needs written permission from MyJoyOnline and The High Street Journal, or
+> a content licence. Until then, set `READ_IN_DRAWER = false` in
+> [`news.ts`](../src/features/landing/data/news.ts). See
+> [What we show](#what-we-show-and-the-switch).
 
 There are no API keys, accounts or environment variables involved. The
 "APIs" are the publishers' own public RSS feeds. For the full catalogue of
@@ -27,7 +36,8 @@ sources (in use, candidates and paid APIs) and their data points, see
         │       • cached by Next.js for 1 hour
         │       • 8-second timeout; a failed or slow feed is skipped
         │     parseRss(xml)  → src/lib/rss.ts
-        │       • keeps title, link, publish date (and categories)
+        │       • keeps title, link, publish date, categories, summary,
+        │         author, featured image and the article HTML
         │       • drops any item without a valid date or http(s) link
         │
         ├─ mergeNews()
@@ -36,30 +46,105 @@ sources (in use, candidates and paid APIs) and their data points, see
         │     • sorted newest first
         │
         └─ first 12 stories
-              │
+              │  only these have their article HTML turned into safe
+              │  blocks → src/lib/article-blocks.ts
               ▼
-        <NewsHeadlines> → src/features/landing/NewsHeadlines.tsx
-          • a card per story: source · date, headline, "Read on <source> ↗"
-          • links open the publisher's article in a new tab
-          • the whole section is hidden if there are no stories
+        <NewsReader> → src/features/landing/news/NewsReader.tsx
+          │  (or plain <NewsHeadlines> when READ_IN_DRAWER is false)
+          ├─ a card per story: source · date, headline, "Read story · 2 min →"
+          │    • each card is still a real link to the publisher, so
+          │      crawlers, Ctrl/⌘-click and middle-click open the original
+          │    • a plain click opens the story in the drawer instead
+          └─ <Drawer> → src/components/ui/drawer/Drawer.tsx
+               └─ <NewsStory> → src/features/landing/news/NewsStory.tsx
+                    • typeset as news: kicker, serif headline, standfirst,
+                      byline, full-width lead photo, drop cap, end mark
+                    • a source note with "Read the original ↗";
+                      "More stories" (next 3)
 ```
+
+## The reader drawer
+
+- **Opening:** clicking a card opens the drawer on that story. Pressing
+  Enter on a focused card does the same. The URL doesn't change.
+- **Moving between stories:** the ‹ › buttons in the header, the ← → keys,
+  or the numbered "More stories" list at the bottom. The header shows the position
+  ("6 of 12"). Each new story starts scrolled to the top, with focus on its
+  heading so screen readers announce it.
+- **Leaving:** the × button, Escape, or clicking the dimmed page. Focus
+  returns to the card that opened the drawer. The ↗ button in the header,
+  and "Read on <source>" at the end of each story, open the original in a
+  new tab.
+- **Layout:** full width on phones; on wider screens a square-cornered
+  680px panel sliding in from the right, over a blurred backdrop. While it's open the page
+  behind doesn't scroll and can't be tabbed into. With reduced motion
+  turned on there's no slide animation.
+- **Typesetting:** each story reads like a news article:
+  - the publisher as a kicker, then the headline in Source Serif 4 (loaded
+    only for the reader, through `news/fonts.ts`; the rest of the site
+    stays Montserrat);
+  - a standfirst, which is the feed's summary, shown only when it isn't
+    just the opening paragraph again;
+  - a byline row between rules (author, date, reading time);
+  - a full-width lead photo credited to the publisher;
+  - serif body text with a drop cap, pull-quote styling, captioned
+    inline photos and an end mark;
+  - then the source note and a numbered "More stories" list.
+- **Stories without a body** (a feed item with no `content:encoded`) show
+  their summary and the "Read on" link. Their cards link straight out.
+- **Search engines:** the story text only reaches the browser inside the
+  page's data; it isn't in the HTML Google indexes, and the drawer is
+  marked `data-nosnippet`, so publishers' articles can't appear in results
+  as Afram content.
+
+### How article HTML is made safe
+
+Publisher HTML is never rendered as HTML. `parseArticleHtml()` in
+[`src/lib/article-blocks.ts`](../src/lib/article-blocks.ts) turns it into
+plain data, and React renders that data:
+
+- **Kept:** paragraphs, headings, quotes, bulleted and numbered lists,
+  figures with captions, and inline bold, italic and line breaks.
+- **Links:** kept only when they point to `http(s)`. They open in a new tab
+  with `rel="noopener noreferrer nofollow"`.
+- **Images:** kept only over `https`. They're loaded from the publisher's
+  server with `referrerPolicy="no-referrer"` and hidden if they fail.
+- **Dropped:** everything else, along with its contents. That includes
+  scripts, styles, iframes, embeds, SVG, forms, buttons, video, audio, every
+  attribute (`class`, `style`, `onclick`…) and every `javascript:` URL.
+
+Checked against the live feeds in October 2026, all 24 recent articles from
+both publishers converted cleanly (paragraphs, headings, lists, quotes,
+inline images and links).
 
 ## The files
 
 - [`src/lib/rss.ts`](../src/lib/rss.ts) — a small RSS 2.0 reader for
   WordPress feeds. It isn't a general XML parser: it pulls out only the
-  fields we display and drops anything it can't read cleanly. No new
+  fields we use and drops anything it can't read cleanly. No new
   dependency was added for it.
+- [`src/lib/article-blocks.ts`](../src/lib/article-blocks.ts) — turns an
+  article's HTML into safe blocks, and estimates reading time.
 - [`src/features/landing/data/news.ts`](../src/features/landing/data/news.ts) —
-  the list of sources and tags (`NEWS_SOURCES`), the fetching, and the
-  merging. This is the file to edit when adding or removing a feed.
+  the list of sources and tags (`NEWS_SOURCES`), the fetching, the
+  merging, and the `READ_IN_DRAWER` switch. This is the file to edit when
+  adding or removing a feed.
 - [`src/features/landing/NewsHeadlines.tsx`](../src/features/landing/NewsHeadlines.tsx) —
   the headline cards.
+- [`src/features/landing/news/NewsReader.tsx`](../src/features/landing/news/NewsReader.tsx) —
+  the cards plus the drawer: which story is open, the header, and the
+  arrow keys.
+- [`src/features/landing/news/NewsStory.tsx`](../src/features/landing/news/NewsStory.tsx) —
+  one story in the drawer.
+- [`src/components/ui/drawer/Drawer.tsx`](../src/components/ui/drawer/Drawer.tsx) —
+  the reusable side drawer. It shares focus trapping, scroll locking and
+  page inerting with the Modal through
+  [`useModalBehaviour.ts`](../src/components/ui/modal/useModalBehaviour.ts).
 - [`src/app/insights/page.tsx`](../src/app/insights/page.tsx) — fetches
   articles and news together and renders the news section below the
   articles.
 - [`tests/unit/news.test.ts`](../tests/unit/news.test.ts) — tests for the
-  parser and the merge step.
+  feed parser, the article-block converter and the merge step.
 
 ## The feeds used
 
@@ -102,18 +187,27 @@ were tried (October 2026) and rejected:
   contributes nothing and a warning is logged:
   `Skipping news feed <url>: <reason>`.
 
-## What we show, and why only that
+## What we show, and the switch
 
-Each story shows **only** the headline, the publisher's name, the publish
-date, and a link to the original article. We don't copy any article text,
-excerpt or image. RSS feeds are published for exactly this kind of
-headline-and-link use, and showing no more than that keeps the publisher's
-page as the place the story is actually read, which keeps us clear of
-copyright problems. The feeds do contain full article text
-(`content:encoded`) and excerpts (`description`), but the parser deliberately
-never reads them.
+`READ_IN_DRAWER` in [`news.ts`](../src/features/landing/data/news.ts)
+decides how much of a publisher's story Afram shows.
 
-Links use `target="_blank" rel="noopener noreferrer"`.
+| `READ_IN_DRAWER` | Cards                                                 | What reaches the browser                                                                          |
+| ---------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `true` (current) | Open the full story in the reader drawer              | Headline, source, date, link, summary, author, featured image and the full article text as blocks |
+| `false`          | Link straight to the publisher ("Read on <source> ↗") | Headline, source, date and link only                                                              |
+
+**Copyright.** Publishers put the full text in their RSS feeds so feed
+readers can show it to their own subscribers. That doesn't make it free for
+another commercial website to republish. Linking to a headline is
+generally fine; showing the whole article on afram.co, even with credit and
+a link back, needs the publisher's permission. Until MyJoyOnline and The
+High Street Journal have agreed in writing, keep the switch `false` in
+production. Turning it off needs no other change: the drawer isn't
+rendered, and no article text or images are fetched into the page.
+
+Every story in the drawer names its publisher and date and links to the
+original. Links use `target="_blank" rel="noopener noreferrer"`.
 
 ## Freshness and failure behaviour
 
@@ -160,8 +254,13 @@ npx vitest run tests/unit/news.test.ts
 
 This covers:
 
-- reading title, link, date and categories, including CDATA and HTML
-  entities like `&#8217;`;
+- reading title, link, date, categories, summary, author, featured image
+  and article HTML, including CDATA and HTML entities like `&#8217;`;
+- turning article HTML into blocks, and stripping scripts, iframes,
+  `javascript:` links and non-https images;
+- inline bold, italic and line breaks, and reading-time estimates;
+- parsing article bodies only for the stories actually shown, and dropping
+  a lead image that repeats the featured image;
 - dropping items with no date or a non-http link;
 - returning nothing (not crashing) for a non-feed page;
 - leaving a malformed entity as-is instead of throwing;
@@ -169,7 +268,7 @@ This covers:
   newest first.
 
 To see live output, run the dev server and open `/insights`. The news
-section is below the articles.
+section is below the articles; click a story to open the reader.
 
 ## Other sources and paid APIs
 

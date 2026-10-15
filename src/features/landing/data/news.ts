@@ -1,5 +1,6 @@
 import { cache } from "react";
 
+import { parseArticleHtml, readingMinutes, type ArticleBlock } from "@/lib/article-blocks";
 import { parseRss, type RssItem } from "@/lib/rss";
 
 /**
@@ -7,8 +8,12 @@ import { parseRss, type RssItem } from "@/lib/rss";
  * public RSS feeds — shown beside (not instead of) the Afram team's own
  * Insights articles, which still come from Sanity.
  *
- * Only the headline, source, date and a link to the original are ever
- * displayed: no article text or images are copied.
+ * When `READ_IN_DRAWER` is on, the full story (text and images from the
+ * feed) is shown in a drawer on /insights, credited to and linking back to
+ * the publisher. That republishes the publisher's content, so it needs
+ * their permission; with the flag off only the headline, source, date and
+ * an outbound link are shown, and no article text or image is sent to the
+ * browser. See docs/insights-news.md.
  *
  * Each publisher's *tag* feeds are used rather than its main feed or a
  * search feed: the main feeds are general news (football, education…), and
@@ -18,12 +23,30 @@ import { parseRss, type RssItem } from "@/lib/rss";
  * and left out — they pull in rent allowances and producer-price stories.
  */
 
+/** Show full stories in the /insights drawer instead of linking out. */
+export const READ_IN_DRAWER = true;
+
 export interface NewsItem {
   title: string;
   url: string;
   source: string;
   /** ISO 8601. */
   publishedAt: string;
+  summary?: string;
+  author?: string;
+  image?: string;
+  /** The story as safe blocks; empty when the feed carried no body or
+   *  `READ_IN_DRAWER` is off. */
+  body: ArticleBlock[];
+  readMinutes?: number;
+}
+
+/** Article blocks for one item, minus a leading copy of the featured image. */
+function storyBody(item: RssItem): ArticleBlock[] {
+  if (!READ_IN_DRAWER || !item.html) return [];
+  const blocks = parseArticleHtml(item.html);
+  const first = blocks[0];
+  return first?.type === "image" && first.src === item.image ? blocks.slice(1) : blocks;
 }
 
 interface NewsSource {
@@ -97,23 +120,42 @@ function storyKey(url: string): string {
   }
 }
 
-/** Merges per-feed results into one newest-first, de-duplicated list. */
-export function mergeNews(feeds: { source: string; items: RssItem[] }[]): NewsItem[] {
-  const byKey = new Map<string, NewsItem>();
+/** The displayed story for one feed item; the article body is parsed here,
+ *  so only for stories that are actually shown. */
+function toNewsItem(source: string, item: RssItem): NewsItem {
+  const body = storyBody(item);
+  return {
+    title: item.title,
+    url: item.link,
+    source,
+    publishedAt: item.publishedAt,
+    body,
+    ...(READ_IN_DRAWER && {
+      summary: item.summary,
+      author: item.author,
+      image: item.image,
+      ...(body.length > 0 && { readMinutes: readingMinutes(body) }),
+    }),
+  };
+}
+
+/** Merges per-feed results into one newest-first, de-duplicated list of
+ *  the first `limit` stories. */
+export function mergeNews(
+  feeds: { source: string; items: RssItem[] }[],
+  limit = Infinity,
+): NewsItem[] {
+  const byKey = new Map<string, { source: string; item: RssItem }>();
   for (const { source, items } of feeds) {
     for (const item of items) {
       const key = storyKey(item.link);
-      if (!byKey.has(key)) {
-        byKey.set(key, {
-          title: item.title,
-          url: item.link,
-          source,
-          publishedAt: item.publishedAt,
-        });
-      }
+      if (!byKey.has(key)) byKey.set(key, { source, item });
     }
   }
-  return [...byKey.values()].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  return [...byKey.values()]
+    .sort((a, b) => b.item.publishedAt.localeCompare(a.item.publishedAt))
+    .slice(0, limit)
+    .map(({ source, item }) => toNewsItem(source, item));
 }
 
 /** Every configured feed, fetched in parallel; deduped per request. */
@@ -128,5 +170,5 @@ export const getPropertyNews = cache(async function getPropertyNews(
       })),
     ),
   );
-  return mergeNews(feeds).slice(0, limit);
+  return mergeNews(feeds, limit);
 });
