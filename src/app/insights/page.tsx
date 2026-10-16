@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 
 import { getArticlesFresh } from "@/features/landing/data/articles";
-import { getPropertyNews } from "@/features/landing/data/news";
+import { getPropertyNews, READ_IN_DRAWER } from "@/features/landing/data/news";
 import { ArticleCard } from "@/features/landing/ArticleCard";
 import { NewsHeadlines } from "@/features/landing/NewsHeadlines";
+import { NewsReader } from "@/features/landing/news/NewsReader";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -32,20 +33,21 @@ export default async function InsightsPage() {
           ))}
         </div>
 
-        {/* Publishers' headlines, linking out — alongside the team's own
-            articles above, which still come from Sanity. Hidden entirely if
-            every feed is unreachable. */}
+        {/* Publishers' stories — read in a drawer (READ_IN_DRAWER) or linking
+            out — alongside the team's own articles above, which still come
+            from Sanity. Hidden entirely if every feed is unreachable. */}
         {news.length > 0 && (
           <div className="border-ink-100 mt-20 border-t pt-14">
             <h2 className="text-ink-900 text-[clamp(1.6rem,2.4vw,2rem)] leading-[1.18] font-bold tracking-[-0.02em]">
               Property &amp; land news in Ghana
             </h2>
             <p className="text-ink-500 mt-3 max-w-2xl text-[16px] leading-relaxed">
-              The latest real estate, land and housing headlines from Ghanaian publishers. Each
-              story opens on the publisher&apos;s own site.
+              {READ_IN_DRAWER
+                ? "The latest real estate, land and housing stories from Ghanaian publishers. Open one to read it here, credited to its publisher."
+                : "The latest real estate, land and housing headlines from Ghanaian publishers. Each story opens on the publisher's own site."}
             </p>
             <div className="mt-8">
-              <NewsHeadlines items={news} />
+              {READ_IN_DRAWER ? <NewsReader items={news} /> : <NewsHeadlines items={news} />}
             </div>
           </div>
         )}

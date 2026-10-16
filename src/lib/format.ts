@@ -49,3 +49,12 @@ export function formatPropertySize(squareFeet: number): string {
 export function titleCase(value: string): string {
   return value.replace(/\w\S*/g, (word) => word[0].toUpperCase() + word.slice(1).toLowerCase());
 }
+
+/** Format an ISO date string, e.g. "Jun 2, 2026". */
+export function formatArticleDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}

@@ -90,16 +90,35 @@ export function useFocusTrap(
   onEscape: () => void,
 ) {
   const onEscapeRef = useRef(onEscape);
+  const lastFocusedOutside = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     onEscapeRef.current = onEscape;
   }, [onEscape]);
 
+  // Remembers what had focus before the panel opened. Reading
+  // document.activeElement when the trap activates is too late: content
+  // inside the panel (autoFocus, a heading focused on mount) has usually
+  // taken focus by then.
+  useEffect(() => {
+    if (document.activeElement instanceof HTMLElement) {
+      lastFocusedOutside.current = document.activeElement;
+    }
+    const onFocusIn = (event: FocusEvent) => {
+      const target = event.target;
+      if (target instanceof HTMLElement && !panelRef.current?.contains(target)) {
+        lastFocusedOutside.current = target;
+      }
+    };
+    document.addEventListener("focusin", onFocusIn);
+    return () => document.removeEventListener("focusin", onFocusIn);
+  }, [panelRef]);
+
   useEffect(() => {
     const panel = panelRef.current;
     if (!active || !panel) return;
 
-    const returnFocusTo = document.activeElement as HTMLElement | null;
+    const returnFocusTo = lastFocusedOutside.current;
 
     if (!panel.contains(document.activeElement)) {
       const preferred = panel.querySelector<HTMLElement>("[autofocus]");

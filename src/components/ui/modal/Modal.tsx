@@ -57,7 +57,7 @@ export function Modal({
     <div
       ref={rootRef}
       data-state={state}
-      className="group fixed inset-0 z-[100] flex items-end justify-center sm:items-center sm:p-6"
+      className="group/overlay fixed inset-0 z-[100] flex items-end justify-center sm:items-center sm:p-6"
     >
       <div
         aria-hidden
@@ -65,7 +65,7 @@ export function Modal({
         className={cn(
           "bg-ink-950/55 absolute inset-0 backdrop-blur-[6px]",
           "opacity-0 transition-opacity duration-200 ease-out",
-          "group-data-[state=open]:opacity-100 group-data-[state=open]:duration-500",
+          "group-data-[state=open]/overlay:opacity-100 group-data-[state=open]/overlay:duration-500",
           "motion-reduce:transition-none",
         )}
       />
@@ -83,8 +83,8 @@ export function Modal({
           "rounded-t-[1.75rem] sm:max-h-[calc(100vh-3rem)] sm:rounded-[2.25rem] supports-[height:100dvh]:sm:max-h-[calc(100dvh-3rem)]",
           "translate-y-full transition-[transform,opacity] duration-[260ms] ease-in",
           "sm:translate-y-6 sm:scale-[0.96] sm:opacity-0",
-          "group-data-[state=open]:translate-y-0 group-data-[state=open]:duration-[560ms] group-data-[state=open]:ease-[cubic-bezier(0.32,0.72,0,1)]",
-          "sm:group-data-[state=open]:translate-y-0 sm:group-data-[state=open]:scale-100 sm:group-data-[state=open]:opacity-100 sm:group-data-[state=open]:ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "group-data-[state=open]/overlay:translate-y-0 group-data-[state=open]/overlay:duration-[560ms] group-data-[state=open]/overlay:ease-[cubic-bezier(0.32,0.72,0,1)]",
+          "sm:group-data-[state=open]/overlay:translate-y-0 sm:group-data-[state=open]/overlay:scale-100 sm:group-data-[state=open]/overlay:opacity-100 sm:group-data-[state=open]/overlay:ease-[cubic-bezier(0.16,1,0.3,1)]",
           "motion-reduce:translate-y-0 motion-reduce:scale-100 motion-reduce:transition-opacity",
           className,
         )}
