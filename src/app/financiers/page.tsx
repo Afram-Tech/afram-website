@@ -26,7 +26,7 @@ import { accessCta, signUpHref } from "@/features/access/cta";
 const FINANCIER_CTA = accessCta({ label: "Get Started", href: signUpHref("financier") });
 
 export const metadata: Metadata = buildMetadata({
-  title: "Financiers — Deploy Capital into Verified Real Estate",
+  title: "Financiers: Deploy Capital into Verified Real Estate",
   description:
     "Secured, compliant exposure to Ghanaian real estate: verified title, documented security, full KYC, and terms you set.",
   path: "/financiers",

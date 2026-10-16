@@ -57,6 +57,9 @@ export interface Property {
   developer: string;
   priceHistory: { date: string; event: string; price: number }[];
   isFeatured: boolean;
+  /** ISO 8601 — when the listing last changed, else when it was created.
+   *  null when the API has neither. Feeds the sitemap's <lastmod>. */
+  updatedAt: string | null;
 }
 
 interface RawProperty {
@@ -83,6 +86,8 @@ interface RawProperty {
   gpsAddress?: string | null;
   metadata?: unknown;
   siteCoordinates?: unknown;
+  createdAt?: string | null;
+  updatedAt?: string | null;
 }
 
 interface RawProject {
@@ -107,6 +112,14 @@ function slugify(value: string): string {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+/** The API's dates arrive as ISO strings or epoch milliseconds; anything
+ *  unreadable becomes null rather than a wrong date. */
+function toIsoDate(value: string | null | undefined): string | null {
+  if (!value) return null;
+  const date = new Date(/^\d+$/.test(value) ? Number(value) : value);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
 }
 
 function mapProperty(project: RawProject): Property | undefined {
@@ -179,6 +192,7 @@ function mapProperty(project: RawProject): Property | undefined {
       },
     ],
     isFeatured,
+    updatedAt: toIsoDate(property.updatedAt) ?? toIsoDate(property.createdAt),
   };
 }
 

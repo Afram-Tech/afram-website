@@ -10,7 +10,7 @@ import {
   locationPath,
   locationTrail,
   propertyDescription,
-  propertyHeadline,
+  propertyTitle,
 } from "@/lib/property-seo";
 import { buildBreadcrumbJsonLd, buildMetadata } from "@/lib/seo";
 
@@ -32,13 +32,16 @@ export async function generateMetadata({ params }: PropertyPageProps): Promise<M
       title: "Property not found",
       description: "This property listing could not be found.",
       path: `/properties/${slug}`,
+      noindex: true,
     });
   }
 
   // The search phrase leads ("2 Bedroom Apartment for Sale in Adenta…"), the
-  // listing's own name follows — people search for the former, not the latter.
+  // listing's own name follows when it fits — people search for the former.
+  const { title, absolute } = propertyTitle(property);
   return buildMetadata({
-    title: `${propertyHeadline(property)} | ${property.name}`,
+    title,
+    absoluteTitle: absolute,
     description: propertyDescription(property),
     path: `/properties/${property.slug}`,
     images: property.images.slice(0, 4),

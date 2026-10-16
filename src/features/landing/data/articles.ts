@@ -147,11 +147,6 @@ export const findArticleBySlug = cache(async function findArticleBySlug(
   }
 });
 
-/** Format an ISO date string, e.g. "Jun 2, 2026". */
-export function formatArticleDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
+/** Lives in lib/format so client components can use it without pulling in
+ *  this server-only module; re-exported here for existing imports. */
+export { formatArticleDate } from "@/lib/format";

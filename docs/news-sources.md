@@ -42,28 +42,28 @@ All the RSS sources are RSS 2.0. Most are WordPress sites, so they share
 the same core fields. The table lists every field seen in the feeds, and
 whether our parser ([`src/lib/rss.ts`](../src/lib/rss.ts)) reads it.
 
-| Field                                          | What it holds                                                          | Example                                        | We read it                              |
-| ---------------------------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------- | --------------------------------------- |
-| `title`                                        | Headline, often in CDATA with HTML entities                            | `Ghana Begins Review of 1999 Land Policy…`     | **Yes**                                 |
-| `link`                                         | Article URL                                                            | `https://mlnr.gov.gh/…`                        | **Yes**                                 |
-| `pubDate`                                      | Publish time, RFC 822                                                  | `Thu, 08 Oct 2026 19:32:03 +0000`              | **Yes** (as ISO 8601)                   |
-| `category`                                     | Publisher's categories and tags, one element each                      | `National`, `Legal Insights`                   | **Yes** (kept for debugging, not shown) |
-| `guid`                                         | Stable ID, usually the WordPress post URL                              | `https://www.myjoyonline.com/?p=10033191026`   | No                                      |
-| `dc:creator`                                   | Author name                                                            | `Ernest Arhinful`                              | No                                      |
-| `author`                                       | Author, as `email (Name)` (3News only)                                 | `evans.effah@mg.com.gh (Evans Effah)`          | No                                      |
-| `description`                                  | Excerpt, sometimes with HTML                                           | —                                              | No, deliberately                        |
-| `content:encoded`                              | Full article HTML                                                      | —                                              | No, deliberately                        |
-| `media:content`                                | Featured image: `url`, `type`, `medium` attributes                     | `…/uploads/2026/10/MA-…-1024x925.jpg`          | No                                      |
-| `media:description`                            | Caption for `media:content`                                            | —                                              | No                                      |
-| `media:thumbnail`                              | Featured image URL (`url` attribute)                                   | `https://i0.wp.com/thehighstreetjournal.com/…` | No                                      |
-| `enclosure`                                    | Attached media: image (3News), audio or video (some MyJoyOnline posts) | —                                              | No                                      |
-| `post-id`                                      | WordPress post ID (The High Street Journal only)                       | `146622`                                       | No                                      |
-| `comments`, `wfw:commentRss`, `slash:comments` | Comments page URL, comments feed URL, comment count                    | —                                              | No                                      |
+| Field                                          | What it holds                                                          | Example                                        | We read it                                 |
+| ---------------------------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------ |
+| `title`                                        | Headline, often in CDATA with HTML entities                            | `Ghana Begins Review of 1999 Land Policy…`     | **Yes**                                    |
+| `link`                                         | Article URL                                                            | `https://mlnr.gov.gh/…`                        | **Yes**                                    |
+| `pubDate`                                      | Publish time, RFC 822                                                  | `Thu, 08 Oct 2026 19:32:03 +0000`              | **Yes** (as ISO 8601)                      |
+| `category`                                     | Publisher's categories and tags, one element each                      | `National`, `Legal Insights`                   | **Yes** (kept for debugging, not shown)    |
+| `guid`                                         | Stable ID, usually the WordPress post URL                              | `https://www.myjoyonline.com/?p=10033191026`   | No                                         |
+| `dc:creator`                                   | Author name                                                            | `Ernest Arhinful`                              | Yes (reader drawer)                        |
+| `author`                                       | Author, as `email (Name)` (3News only)                                 | `evans.effah@mg.com.gh (Evans Effah)`          | No                                         |
+| `description`                                  | Excerpt, sometimes with HTML                                           | —                                              | Yes (summary, when there's no body)        |
+| `content:encoded`                              | Full article HTML                                                      | —                                              | Yes (as safe blocks; see insights-news.md) |
+| `media:content`                                | Featured image: `url`, `type`, `medium` attributes                     | `…/uploads/2026/10/MA-…-1024x925.jpg`          | Yes (featured image)                       |
+| `media:description`                            | Caption for `media:content`                                            | —                                              | No                                         |
+| `media:thumbnail`                              | Featured image URL (`url` attribute)                                   | `https://i0.wp.com/thehighstreetjournal.com/…` | Yes (featured image)                       |
+| `enclosure`                                    | Attached media: image (3News), audio or video (some MyJoyOnline posts) | —                                              | Images only (featured image)               |
+| `post-id`                                      | WordPress post ID (The High Street Journal only)                       | `146622`                                       | No                                         |
+| `comments`, `wfw:commentRss`, `slash:comments` | Comments page URL, comments feed URL, comment count                    | —                                              | No                                         |
 
-We show only the headline, publisher, date and link. Feeds include full
-text and images, but those belong to the publisher. Showing them would
-need the publisher's permission, so the parser never reads them. See
-[`insights-news.md`](./insights-news.md#what-we-show-and-why-only-that).
+With `READ_IN_DRAWER` on, the /insights reader drawer shows the full
+story: text, images, author and summary. That content belongs to the
+publishers, and showing it needs their permission. See
+[`insights-news.md`](./insights-news.md#what-we-show-and-the-switch).
 
 ## Sources in use
 

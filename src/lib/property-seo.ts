@@ -177,17 +177,51 @@ export const typeLocationPath = (type: PropertyTypePage, node: LocationNode) =>
 
 const isSold = (property: Property) => norm(property.status) === "sold";
 
+/** The API's catch-all project types. They describe how a project is
+ *  structured, not what's for sale, so they make poor search phrases
+ *  ("4 Bedroom Single Unit for Sale"). */
+const GENERIC_TYPES = new Set(["single unit", "single units", "unit", "property", "properties"]);
+
+/** What a buyer would call the listing: its type page's name, else the
+ *  API's own type, else "Home" (has bedrooms) or "Property". */
+function typeLabel(property: Property): string {
+  const page = typePageFor(property);
+  if (page) return page.singular;
+  if (!GENERIC_TYPES.has(norm(property.type))) return titleCase(property.type);
+  return property.beds > 0 ? "Home" : "Property";
+}
+
 /** "2 Bedroom Apartment for Sale in Adenta, Greater Accra" — the phrase a
  *  buyer would type, so it leads the page title. */
 export function propertyHeadline(property: Property): string {
-  const type = typePageFor(property)?.singular ?? titleCase(property.type);
+  const type = typeLabel(property);
   const beds = property.beds > 0 ? `${property.beds} Bedroom ` : "";
   const sale = isSold(property) ? "Sold" : "for Sale";
   return `${beds}${type} ${sale} in ${property.location}`;
 }
 
+/** Search results show about this many characters of a title. */
+const MAX_TITLE = 60;
+const BRAND_SUFFIX = ` — ${siteConfig.name}`;
+
+/**
+ * The listing's <title>: the search phrase first, then the listing's name
+ * and the brand while they still fit in what Google displays. When even
+ * the phrase plus brand is too long, the brand is dropped (`absolute`) so
+ * the words people searched for aren't the part that gets cut off.
+ */
+export function propertyTitle(property: Property): { title: string; absolute: boolean } {
+  const headline = propertyHeadline(property);
+  const named = `${headline} | ${property.name}`;
+  if (named.length + BRAND_SUFFIX.length <= MAX_TITLE) return { title: named, absolute: false };
+  if (headline.length + BRAND_SUFFIX.length <= MAX_TITLE) {
+    return { title: headline, absolute: false };
+  }
+  return { title: headline, absolute: true };
+}
+
 export function propertyDescription(property: Property): string {
-  const type = (typePageFor(property)?.singular ?? titleCase(property.type)).toLowerCase();
+  const type = typeLabel(property).toLowerCase();
   const beds = property.beds > 0 ? `${property.beds}-bedroom ` : "";
   const price = property.price > 0 ? ` for ${formatMoney(property.price, property.currency)}` : "";
   const specs = [
@@ -218,7 +252,7 @@ export function collectionDescription(
     priced.length > 0
       ? ` from ${formatMoney(Math.min(...priced.map((p) => p.price)), priced[0].currency)}`
       : "";
-  return `Browse ${count} title-verified ${count === 1 ? what.replace(/s$/, "") : what} for sale in ${where}${from}. Every listing is checked against Lands Commission records, with flexible financing for qualified buyers.`;
+  return `Browse ${count} title-verified ${count === 1 ? what.replace(/s$/, "") : what} for sale in ${where}${from}. Titles checked with the Lands Commission; flexible financing available.`;
 }
 
 /* ─── Structured data ─── */
@@ -232,15 +266,21 @@ function availability(property: Property): string {
   return "https://schema.org/InStock";
 }
 
-/** Product + Accommodation for one listing. */
+/**
+ * Product + Accommodation for one listing. Google treats a Product with no
+ * offer as invalid, so a listing without a price is described only as the
+ * Accommodation.
+ */
 export function buildPropertyJsonLd(property: Property) {
   const url = absolute(`/properties/${property.slug}`);
   const type = typePageFor(property);
   const [region, district] = locationTrail(property);
+  const accommodation = type?.schemaType ?? "Accommodation";
+  const hasOffer = property.price > 0;
 
   return {
     "@context": "https://schema.org",
-    "@type": ["Product", type?.schemaType ?? "Accommodation"],
+    "@type": hasOffer ? ["Product", accommodation] : accommodation,
     "@id": `${url}#listing`,
     name: `${property.name}: ${propertyHeadline(property)}`,
     // A listing's own copy is often a one-line stub ("Bedroom Apartments for
@@ -278,7 +318,7 @@ export function buildPropertyJsonLd(property: Property) {
         longitude: property.coordinates.lng,
       },
     }),
-    ...(property.price > 0 && {
+    ...(hasOffer && {
       offers: {
         "@type": "Offer",
         url,

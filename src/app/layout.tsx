@@ -39,11 +39,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: siteConfig.legalName }],
   creator: siteConfig.legalName,
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true },
-  },
+  openGraph: { locale: siteConfig.locale, siteName: siteConfig.name, type: "website" },
   icons: {
     icon: "/logo.svg",
     apple: "/apple-touch-icon.png",
@@ -59,7 +55,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   ]);
 
   return (
-    <html lang="en" className={`${montserrat.variable} h-full antialiased`}>
+    <html lang="en-GH" className={`${montserrat.variable} h-full antialiased`}>
       <body className="text-ink-900 flex min-h-full flex-col bg-white">
         <ApolloProvider>
           <JsonLd data={buildOrganizationJsonLd()} />

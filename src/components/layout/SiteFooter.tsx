@@ -24,15 +24,15 @@ export function SiteFooter({ content }: SiteFooterProps) {
     "Stay ahead in real estate. Get updates, expert tips, and insider insights delivered monthly.";
   const copyright = content?.copyrightTemplate
     ? content.copyrightTemplate
-        .replace("{year}", String(year))
-        .replace("{name}", siteConfig.legalName)
+      .replace("{year}", String(year))
+      .replace("{name}", siteConfig.legalName)
     : `© ${year} ${siteConfig.legalName}. All rights reserved.`;
 
   return (
     <footer>
       <div className="border-ink-100 border-t bg-white">
         <div className="mx-auto max-w-[1536px] px-6 py-14 sm:px-8 lg:px-16 lg:py-16">
-          <div className="border-ink-100 flex flex-col gap-5 border-b pb-10 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-5 pb-10 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <Image
                 src="/afram-logo-dark.svg"

@@ -7,13 +7,12 @@ import { notFound } from "next/navigation";
 import { stegaClean } from "@sanity/client/stega";
 
 import { JsonLd } from "@/components/JsonLd";
-import { siteConfig } from "@/config/site";
 import {
   findArticleBySlug,
   formatArticleDate,
   getAllArticleSlugs,
 } from "@/features/landing/data/articles";
-import { buildMetadata } from "@/lib/seo";
+import { buildArticleJsonLd, buildBreadcrumbJsonLd, buildMetadata } from "@/lib/seo";
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
@@ -47,6 +46,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       title: "Article not found",
       description: "This article could not be found.",
       path: `/insights/${slug}`,
+      noindex: true,
     });
   }
 
@@ -54,6 +54,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     title: stegaClean(article.title),
     description: stegaClean(article.excerpt),
     path: `/insights/${article.slug}`,
+    images: article.cover ? [article.cover] : undefined,
   });
 }
 
@@ -65,20 +66,26 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     notFound();
   }
 
-  const articleJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: stegaClean(article.title),
+  const title = stegaClean(article.title);
+  const articleJsonLd = buildArticleJsonLd({
+    title,
     description: stegaClean(article.excerpt),
+    slug: article.slug,
     datePublished: article.date,
     image: article.cover,
-    author: { "@type": "Organization", name: siteConfig.legalName },
-    publisher: { "@type": "Organization", name: siteConfig.legalName },
-  };
+    authorName: stegaClean(article.author?.name) || undefined,
+  });
 
   return (
     <article className="py-16">
       <JsonLd data={articleJsonLd} />
+      <JsonLd
+        data={buildBreadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Insights", path: "/insights" },
+          { name: title, path: `/insights/${article.slug}` },
+        ])}
+      />
       <div className="mx-auto max-w-5xl px-6 sm:px-8 lg:px-16">
         <span className="bg-brand-50 text-brand-700 rounded-full px-3 py-1 text-[12px] font-semibold">
           {article.category}

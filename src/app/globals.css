@@ -63,6 +63,13 @@
   --font-sans: var(--font-montserrat), sans-serif;
 }
 
+/* Inline so the utility reads --font-news-serif where it's used: that
+   variable is only defined inside a news story (news/fonts.ts), so a
+   :root-level token would resolve it too early and come out empty. */
+@theme inline {
+  --font-serif: var(--font-news-serif, Georgia), Georgia, "Times New Roman", serif;
+}
+
 body {
   color: var(--color-ink-900);
   font-family: var(--font-sans);
