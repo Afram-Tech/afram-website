@@ -51,16 +51,23 @@ function storyBody(item: RssItem): ArticleBlock[] {
 
 interface NewsSource {
   name: string;
-  origin: string;
-  /** WordPress tag slugs — each read from `${origin}/tag/<slug>/feed/`. */
-  tags: string[];
+  /** Full RSS feed URLs; see `tagFeeds` for WordPress tag feeds. */
+  feeds: string[];
+  /** When set, only items whose title or categories contain one of these
+   *  words or phrases (whole words, any case) are kept — for feeds that mix
+   *  property news with other topics. */
+  keywords?: string[];
+}
+
+/** WordPress tag feeds: `${origin}/tag/<slug>/feed/` for each slug. */
+function tagFeeds(origin: string, tags: string[]): string[] {
+  return tags.map((tag) => `${origin}/tag/${tag}/feed/`);
 }
 
 export const NEWS_SOURCES: NewsSource[] = [
   {
     name: "MyJoyOnline",
-    origin: "https://www.myjoyonline.com",
-    tags: [
+    feeds: tagFeeds("https://www.myjoyonline.com", [
       "real-estate",
       "land",
       "lands-commission",
@@ -69,13 +76,12 @@ export const NEWS_SOURCES: NewsSource[] = [
       "mortgage",
       "affordable-housing",
       "land-guards",
-    ],
+    ]),
   },
   {
     name: "The High Street Journal",
-    origin: "https://thehighstreetjournal.com",
     // No "mortgage" tag on this site (its feed is empty).
-    tags: [
+    feeds: tagFeeds("https://thehighstreetjournal.com", [
       "real-estate",
       "land",
       "lands-commission",
@@ -83,9 +89,41 @@ export const NEWS_SOURCES: NewsSource[] = [
       "property",
       "affordable-housing",
       "land-guards",
+    ]),
+  },
+  {
+    name: "Ministry of Lands & Natural Resources",
+    feeds: ["https://mlnr.gov.gh/feed/"],
+    // Half the ministry's posts are about mining and forestry. Matching is
+    // whole-word, so "Lands Minister" alone doesn't count as land news.
+    keywords: [
+      "land",
+      "lands commission",
+      "stool lands",
+      "housing",
+      "property",
+      "real estate",
+      "mortgage",
+      "lease",
+      "land title",
+      "land registration",
     ],
   },
+  {
+    name: "Lands Commission",
+    // The news category only — the main feed is mostly deed-registration
+    // notices. The bare lc.gov.gh host redirects here.
+    feeds: ["https://www.lc.gov.gh/category/news/feed/"],
+  },
 ];
+
+/** Whether an item mentions one of `keywords` in its title or categories. */
+export function matchesKeywords(item: RssItem, keywords: string[]): boolean {
+  const haystack = [item.title, ...item.categories].join(" | ");
+  return keywords.some((keyword) =>
+    new RegExp(`\\b${keyword.replace(/ /g, "\\s+")}\\b`, "i").test(haystack),
+  );
+}
 
 /** Feeds refresh at most hourly — polite to publishers, fresh enough for news. */
 const REVALIDATE_SECONDS = 3600;
@@ -163,11 +201,14 @@ export const getPropertyNews = cache(async function getPropertyNews(
   limit = 12,
 ): Promise<NewsItem[]> {
   const feeds = await Promise.all(
-    NEWS_SOURCES.flatMap((source) =>
-      source.tags.map(async (tag) => ({
-        source: source.name,
-        items: await fetchFeed(`${source.origin}/tag/${tag}/feed/`),
-      })),
+    NEWS_SOURCES.flatMap(({ name, feeds, keywords }) =>
+      feeds.map(async (url) => {
+        const items = await fetchFeed(url);
+        return {
+          source: name,
+          items: keywords ? items.filter((item) => matchesKeywords(item, keywords)) : items,
+        };
+      }),
     ),
   );
   return mergeNews(feeds, limit);

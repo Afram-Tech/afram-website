@@ -12,7 +12,8 @@ The Insights page (`/insights`) has two parts:
 
 > **Before this goes live:** the reader shows publishers' full articles,
 > text and images, on afram.co. That's republishing their content, so it
-> needs written permission from MyJoyOnline and The High Street Journal, or
+> needs written permission from MyJoyOnline and The High Street Journal (and
+> a check of the government sites' terms for the two official feeds), or
 > a content licence. Until then, set `READ_IN_DRAWER = false` in
 > [`news.ts`](../src/features/landing/data/news.ts). See
 > [What we show](#what-we-show-and-the-switch).
@@ -31,8 +32,9 @@ sources (in use, candidates and paid APIs) and their data points, see
   │
   └─ getPropertyNews()       → src/features/landing/data/news.ts
         │
-        ├─ for every source × tag in NEWS_SOURCES (15 feeds), in parallel:
-        │     fetch  https://<site>/tag/<tag>/feed/
+        ├─ for every feed URL in NEWS_SOURCES (17 feeds), in parallel:
+        │     fetch  https://<site>/tag/<tag>/feed/  (publishers)
+        │            https://mlnr.gov.gh/feed/, https://www.lc.gov.gh/category/news/feed/
         │       • cached by Next.js for 1 hour
         │       • 8-second timeout; a failed or slow feed is skipped
         │     parseRss(xml)  → src/lib/rss.ts
@@ -148,15 +150,24 @@ inline images and links).
 
 ## The feeds used
 
-All are WordPress tag feeds, in the form `https://<site>/tag/<tag>/feed/`.
+The two publishers are read through WordPress tag feeds, in the form
+`https://<site>/tag/<tag>/feed/`. The two official sources are read from a
+single full feed URL each.
 
 | Source                                                       | Tags read                                                                                                         |
 | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
 | MyJoyOnline (`https://www.myjoyonline.com`)                  | `real-estate`, `land`, `lands-commission`, `housing`, `property`, `mortgage`, `affordable-housing`, `land-guards` |
 | The High Street Journal (`https://thehighstreetjournal.com`) | `real-estate`, `land`, `lands-commission`, `housing`, `property`, `affordable-housing`, `land-guards`             |
 
-That's 15 feed requests per refresh. Each MyJoyOnline tag feed returns up to
-50 stories and each High Street Journal feed up to 10.
+| Official source                       | Feed                                        | Filter                                                                                                       |
+| ------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Ministry of Lands & Natural Resources | `https://mlnr.gov.gh/feed/`                 | `keywords`: about half its posts are mining or forestry, so only land/property titles or categories are kept |
+| Lands Commission                      | `https://www.lc.gov.gh/category/news/feed/` | None. The news category only, because the main feed is mostly deed-registration notices                      |
+
+That's 17 feed requests per refresh. Each MyJoyOnline tag feed returns up to
+50 stories, each High Street Journal feed up to 10, and the ministry's feed
+10 before filtering. The Lands Commission posts rarely, so it adds a story
+every few months.
 
 ### Why tag feeds
 
@@ -233,12 +244,15 @@ original. Links use `target="_blank" rel="noopener noreferrer"`.
 
    An empty result usually means the tag doesn't exist on that site.
 
-2. Add the tag slug (or a new source with its `name`, `origin` and `tags`)
-   to `NEWS_SOURCES` in
-   [`news.ts`](../src/features/landing/data/news.ts).
-3. Only WordPress-style feeds at `/tag/<slug>/feed/` work as-is. A source
-   whose feeds live somewhere else needs `getPropertyNews` changed to take
-   a full feed URL instead of building one from `origin` + tag.
+2. Add the feed to `NEWS_SOURCES` in
+   [`news.ts`](../src/features/landing/data/news.ts): a new tag slug in a
+   `tagFeeds(origin, [...])` list, or a new source with its `name` and
+   full `feeds` URLs.
+3. If the feed mixes property news with other topics (like the Ministry
+   of Lands, which also covers mining and forestry), give the source
+   `keywords`. Only items whose title or categories contain one of them —
+   as whole words, any case — are kept, so "land" doesn't match
+   "Lands Minister" or "landmark".
 4. To show more or fewer than 12 stories, change the `limit` passed to
    `getPropertyNews()` (its default is 12).
 

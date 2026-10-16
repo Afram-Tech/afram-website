@@ -1,7 +1,7 @@
 /**
  * A deliberately small RSS 2.0 reader — enough for the WordPress feeds the
- * news section reads (MyJoyOnline, The High Street Journal), not a general
- * XML parser. It pulls out what the news reader shows: title, link, date,
+ * news section reads (publishers' tag feeds and two government sites), not
+ * a general XML parser. It pulls out what the news reader shows: title, link, date,
  * summary, author, featured image and the article HTML (turned into safe
  * blocks by `article-blocks.ts`, never rendered as HTML), plus categories
  * for debugging which tag a story came from. Anything it can't read cleanly

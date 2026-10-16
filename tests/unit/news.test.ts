@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { mergeNews } from "@/features/landing/data/news";
+import { matchesKeywords, mergeNews, NEWS_SOURCES } from "@/features/landing/data/news";
 import { parseArticleHtml, parseInline, readingMinutes } from "@/lib/article-blocks";
 import { decodeEntities, parseRss } from "@/lib/rss";
 
@@ -130,6 +130,56 @@ describe("mergeNews", () => {
     expect(merged).toHaveLength(1);
     expect(merged[0].body).toEqual([{ type: "paragraph", spans: [{ text: "Body text." }] }]);
     expect(merged[0].readMinutes).toBe(1);
+  });
+});
+
+describe("matchesKeywords", () => {
+  const mlnrKeywords = NEWS_SOURCES.find((s) => s.name.startsWith("Ministry of Lands"))!.keywords!;
+  // Real titles and categories from mlnr.gov.gh/feed/ (Oct 2026).
+  const post = (title: string, categories: string[]) => ({
+    title,
+    link: "https://mlnr.gov.gh/x/",
+    publishedAt: "2026-10-01T00:00:00.000Z",
+    categories,
+  });
+
+  it("keeps the ministry's land posts", () => {
+    expect(
+      matchesKeywords(
+        post("Ghana Begins Review of 1999 Land Policy to Shape Modern Land Governance", ["Land"]),
+        mlnrKeywords,
+      ),
+    ).toBe(true);
+    expect(
+      matchesKeywords(
+        post("Presidential Policy Delivery Unit Steps Up Support for Key Programmes", [
+          "Forestry",
+          "Land",
+        ]),
+        mlnrKeywords,
+      ),
+    ).toBe(true);
+  });
+
+  it("drops mining posts that only mention the Lands Minister", () => {
+    expect(
+      matchesKeywords(
+        post("Ghana’s Mineral Wealth Must Benefit Host Communities — Lands Minister", [
+          "News and Updates",
+          "Economy",
+        ]),
+        mlnrKeywords,
+      ),
+    ).toBe(false);
+    expect(matchesKeywords(post("Landmark mining deal signed", ["Mining"]), mlnrKeywords)).toBe(
+      false,
+    );
+  });
+
+  it("matches multi-word phrases across any whitespace, ignoring case", () => {
+    expect(matchesKeywords(post("NEW LANDS\u00a0COMMISSION FEES", []), ["lands commission"])).toBe(
+      true,
+    );
   });
 });
 
