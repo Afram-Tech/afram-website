@@ -11,9 +11,10 @@ import { parseRss, type RssItem } from "@/lib/rss";
  * When `READ_IN_DRAWER` is on, the full story (text and images from the
  * feed) is shown in a drawer on /insights, credited to and linking back to
  * the publisher. That republishes the publisher's content, so it needs
- * their permission; with the flag off only the headline, source, date and
- * an outbound link are shown, and no article text or image is sent to the
- * browser. See docs/insights-news.md.
+ * their permission; with the flag off the cards show the headline, source,
+ * date, the publisher's cover image (credited, loaded from their server) and
+ * an outbound link, and no article text is sent to the browser. See
+ * docs/insights-news.md.
  *
  * Each publisher's *tag* feeds are used rather than its main feed or a
  * search feed: the main feeds are general news (football, education…), and
@@ -168,10 +169,12 @@ function toNewsItem(source: string, item: RssItem): NewsItem {
     source,
     publishedAt: item.publishedAt,
     body,
+    // The cover image shows on the cards either way, loaded from the
+    // publisher's own server and credited to them.
+    image: item.image,
     ...(READ_IN_DRAWER && {
       summary: item.summary,
       author: item.author,
-      image: item.image,
       ...(body.length > 0 && { readMinutes: readingMinutes(body) }),
     }),
   };

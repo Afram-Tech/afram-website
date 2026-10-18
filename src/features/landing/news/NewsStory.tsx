@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowUpRight } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import type { NewsItem } from "@/features/landing/data/news";
 import type { ArticleBlock, InlineSpan } from "@/lib/article-blocks";
@@ -9,6 +9,7 @@ import { formatArticleDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 import { newsSerif } from "./fonts";
+import { PublisherImage } from "./PublisherImage";
 
 export const STORY_TITLE_ID = "news-story-title";
 
@@ -53,37 +54,6 @@ function Spans({ spans }: { spans: InlineSpan[] }) {
     }
     return <span key={index}>{node}</span>;
   });
-}
-
-/** A publisher's image, loaded straight from their server. Hidden if it
- *  fails, rather than leaving a broken-image icon in the story. */
-function PublisherImage({
-  src,
-  alt,
-  className,
-  eager = false,
-}: {
-  src: string;
-  alt: string;
-  className: string;
-  /** For the story's lead image, which is on screen as soon as it opens. */
-  eager?: boolean;
-}) {
-  const [failed, setFailed] = useState(false);
-  if (failed) return null;
-  return (
-    // eslint-disable-next-line @next/next/no-img-element -- third-party image of unknown size, served as-is
-    <img
-      src={src}
-      alt={alt}
-      loading={eager ? "eager" : "lazy"}
-      fetchPriority={eager ? "high" : "auto"}
-      decoding="async"
-      referrerPolicy="no-referrer"
-      onError={() => setFailed(true)}
-      className={className}
-    />
-  );
 }
 
 interface BlockProps {

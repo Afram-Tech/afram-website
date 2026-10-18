@@ -206,7 +206,7 @@ decides how much of a publisher's story Afram shows.
 | `READ_IN_DRAWER` | Cards                                                 | What reaches the browser                                                                          |
 | ---------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | `true` (current) | Open the full story in the reader drawer              | Headline, source, date, link, summary, author, featured image and the full article text as blocks |
-| `false`          | Link straight to the publisher ("Read on <source> ↗") | Headline, source, date and link only                                                              |
+| `false`          | Link straight to the publisher ("Read on <source> ↗") | Headline, source, date, link and the credited cover image                                         |
 
 **Copyright.** Publishers put the full text in their RSS feeds so feed
 readers can show it to their own subscribers. That doesn't make it free for
@@ -215,7 +215,18 @@ generally fine; showing the whole article on afram.co, even with credit and
 a link back, needs the publisher's permission. Until MyJoyOnline and The
 High Street Journal have agreed in writing, keep the switch `false` in
 production. Turning it off needs no other change: the drawer isn't
-rendered, and no article text or images are fetched into the page.
+rendered, and no article text is fetched into the page.
+
+**Cover images on the cards.** Every card shows the story's featured image
+from the feed, whatever the switch says — a deliberate product decision
+(October 2026). Each one is credited on the image ("Photo: <publisher>"),
+loaded straight from the publisher's server with no referrer sent (Afram
+never copies or re-serves it), and the card links to the original story.
+Crediting a photo is not the same as having permission to use it, so if a
+publisher objects, the quickest fix is to stop passing `image` through in
+`toNewsItem` in [`news.ts`](../src/features/landing/data/news.ts). Stories
+without an image, or whose image fails to load, show a same-size
+placeholder with the publisher's name so cards in a row stay level.
 
 Every story in the drawer names its publisher and date and links to the
 original. Links use `target="_blank" rel="noopener noreferrer"`.
