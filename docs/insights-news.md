@@ -77,8 +77,10 @@ sources (in use, candidates and paid APIs) and their data points, see
   returns to the card that opened the drawer. The ↗ button in the header,
   and "Read on <source>" at the end of each story, open the original in a
   new tab.
-- **Layout:** full width on phones; on wider screens a square-cornered
-  680px panel sliding in from the right, over a blurred backdrop. While it's open the page
+- **Layout:** full width on phones, 680px on tablets, and half the screen
+  on large screens (never narrower than 680px), sliding in from the right
+  over a blurred backdrop. In a wide drawer the headline and story keep a
+  readable column (up to 880px), and the lead photo is inset to that column with rounded corners. While it's open the page
   behind doesn't scroll and can't be tabbed into. With reduced motion
   turned on there's no slide animation.
 - **Typesetting:** each story reads like a news article:
@@ -86,7 +88,8 @@ sources (in use, candidates and paid APIs) and their data points, see
     only for the reader, through `news/fonts.ts`; the rest of the site
     stays Montserrat);
   - a standfirst, which is the feed's summary, shown only when it isn't
-    just the opening paragraph again;
+    just the opening paragraph again, and cut to whole sentences of up to
+    260 characters (left out if the first sentence alone is longer);
   - a byline row between rules (author, date, reading time);
   - a full-width lead photo credited to the publisher;
   - serif body text with a drop cap, pull-quote styling, captioned
@@ -137,7 +140,8 @@ inline images and links).
   the cards plus the drawer: which story is open, the header, and the
   arrow keys.
 - [`src/features/landing/news/NewsStory.tsx`](../src/features/landing/news/NewsStory.tsx) —
-  one story in the drawer.
+  one story in the drawer, built from the typesetting pieces in
+  [`story-parts.tsx`](../src/features/landing/news/story-parts.tsx).
 - [`src/components/ui/drawer/Drawer.tsx`](../src/components/ui/drawer/Drawer.tsx) —
   the reusable side drawer. It shares focus trapping, scroll locking and
   page inerting with the Modal through

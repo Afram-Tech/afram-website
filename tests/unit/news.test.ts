@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { matchesKeywords, mergeNews, NEWS_SOURCES } from "@/features/landing/data/news";
+import { shortDeck } from "@/features/landing/news/story-parts";
 import { parseArticleHtml, parseInline, readingMinutes } from "@/lib/article-blocks";
 import { decodeEntities, parseRss } from "@/lib/rss";
 
@@ -241,5 +242,21 @@ describe("readingMinutes", () => {
     const words = (n: number) => Array.from({ length: n }, () => "word").join(" ");
     expect(readingMinutes([{ type: "paragraph", spans: [{ text: "short" }] }])).toBe(1);
     expect(readingMinutes([{ type: "paragraph", spans: [{ text: words(660) }] }])).toBe(3);
+  });
+});
+
+describe("shortDeck (standfirst)", () => {
+  it("keeps a short summary as it is", () => {
+    expect(shortDeck("GREDA wants the state to lead.")).toBe("GREDA wants the state to lead.");
+  });
+
+  it("cuts a long summary at a sentence boundary", () => {
+    const first = "Real estate development is one of Africa's greatest opportunities. ";
+    const deck = shortDeck(first + "x".repeat(300) + ". More.");
+    expect(deck).toBe(first.trim());
+  });
+
+  it("drops it entirely when even the first sentence is too long", () => {
+    expect(shortDeck("word ".repeat(80) + "end.")).toBeUndefined();
   });
 });

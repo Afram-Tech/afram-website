@@ -186,6 +186,15 @@ export function mergeNews(
   feeds: { source: string; items: RssItem[] }[],
   limit = Infinity,
 ): NewsItem[] {
+  return dedupeAndSort(feeds)
+    .slice(0, limit)
+    .map(({ source, item }) => toNewsItem(source, item));
+}
+
+type FeedResult = { source: string; items: RssItem[] };
+
+/** One entry per story, newest first — without parsing any article bodies. */
+function dedupeAndSort(feeds: FeedResult[]): { source: string; item: RssItem }[] {
   const byKey = new Map<string, { source: string; item: RssItem }>();
   for (const { source, items } of feeds) {
     for (const item of items) {
@@ -193,17 +202,12 @@ export function mergeNews(
       if (!byKey.has(key)) byKey.set(key, { source, item });
     }
   }
-  return [...byKey.values()]
-    .sort((a, b) => b.item.publishedAt.localeCompare(a.item.publishedAt))
-    .slice(0, limit)
-    .map(({ source, item }) => toNewsItem(source, item));
+  return [...byKey.values()].sort((a, b) => b.item.publishedAt.localeCompare(a.item.publishedAt));
 }
 
 /** Every configured feed, fetched in parallel; deduped per request. */
-export const getPropertyNews = cache(async function getPropertyNews(
-  limit = 12,
-): Promise<NewsItem[]> {
-  const feeds = await Promise.all(
+const fetchAllFeeds = cache(async function fetchAllFeeds(): Promise<FeedResult[]> {
+  return Promise.all(
     NEWS_SOURCES.flatMap(({ name, feeds, keywords }) =>
       feeds.map(async (url) => {
         const items = await fetchFeed(url);
@@ -214,5 +218,11 @@ export const getPropertyNews = cache(async function getPropertyNews(
       }),
     ),
   );
-  return mergeNews(feeds, limit);
+});
+
+/** The newest `limit` stories, for the /insights cards. */
+export const getPropertyNews = cache(async function getPropertyNews(
+  limit = 12,
+): Promise<NewsItem[]> {
+  return mergeNews(await fetchAllFeeds(), limit);
 });
