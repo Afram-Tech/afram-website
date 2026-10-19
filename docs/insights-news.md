@@ -77,8 +77,10 @@ sources (in use, candidates and paid APIs) and their data points, see
   returns to the card that opened the drawer. The ↗ button in the header,
   and "Read on <source>" at the end of each story, open the original in a
   new tab.
-- **Layout:** full width on phones; on wider screens a square-cornered
-  680px panel sliding in from the right, over a blurred backdrop. While it's open the page
+- **Layout:** full width on phones, 680px on tablets, and half the screen
+  on large screens (never narrower than 680px), sliding in from the right
+  over a blurred backdrop. In a wide drawer the headline and story keep a
+  readable column (up to 880px), and the lead photo is inset to that column with rounded corners. While it's open the page
   behind doesn't scroll and can't be tabbed into. With reduced motion
   turned on there's no slide animation.
 - **Typesetting:** each story reads like a news article:
@@ -86,7 +88,8 @@ sources (in use, candidates and paid APIs) and their data points, see
     only for the reader, through `news/fonts.ts`; the rest of the site
     stays Montserrat);
   - a standfirst, which is the feed's summary, shown only when it isn't
-    just the opening paragraph again;
+    just the opening paragraph again, and cut to whole sentences of up to
+    260 characters (left out if the first sentence alone is longer);
   - a byline row between rules (author, date, reading time);
   - a full-width lead photo credited to the publisher;
   - serif body text with a drop cap, pull-quote styling, captioned
@@ -137,7 +140,8 @@ inline images and links).
   the cards plus the drawer: which story is open, the header, and the
   arrow keys.
 - [`src/features/landing/news/NewsStory.tsx`](../src/features/landing/news/NewsStory.tsx) —
-  one story in the drawer.
+  one story in the drawer, built from the typesetting pieces in
+  [`story-parts.tsx`](../src/features/landing/news/story-parts.tsx).
 - [`src/components/ui/drawer/Drawer.tsx`](../src/components/ui/drawer/Drawer.tsx) —
   the reusable side drawer. It shares focus trapping, scroll locking and
   page inerting with the Modal through
@@ -206,7 +210,7 @@ decides how much of a publisher's story Afram shows.
 | `READ_IN_DRAWER` | Cards                                                 | What reaches the browser                                                                          |
 | ---------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | `true` (current) | Open the full story in the reader drawer              | Headline, source, date, link, summary, author, featured image and the full article text as blocks |
-| `false`          | Link straight to the publisher ("Read on <source> ↗") | Headline, source, date and link only                                                              |
+| `false`          | Link straight to the publisher ("Read on <source> ↗") | Headline, source, date, link and the credited cover image                                         |
 
 **Copyright.** Publishers put the full text in their RSS feeds so feed
 readers can show it to their own subscribers. That doesn't make it free for
@@ -215,7 +219,18 @@ generally fine; showing the whole article on afram.co, even with credit and
 a link back, needs the publisher's permission. Until MyJoyOnline and The
 High Street Journal have agreed in writing, keep the switch `false` in
 production. Turning it off needs no other change: the drawer isn't
-rendered, and no article text or images are fetched into the page.
+rendered, and no article text is fetched into the page.
+
+**Cover images on the cards.** Every card shows the story's featured image
+from the feed, whatever the switch says — a deliberate product decision
+(October 2026). Each one is credited on the image ("Photo: <publisher>"),
+loaded straight from the publisher's server with no referrer sent (Afram
+never copies or re-serves it), and the card links to the original story.
+Crediting a photo is not the same as having permission to use it, so if a
+publisher objects, the quickest fix is to stop passing `image` through in
+`toNewsItem` in [`news.ts`](../src/features/landing/data/news.ts). Stories
+without an image, or whose image fails to load, show a same-size
+placeholder with the publisher's name so cards in a row stay level.
 
 Every story in the drawer names its publisher and date and links to the
 original. Links use `target="_blank" rel="noopener noreferrer"`.

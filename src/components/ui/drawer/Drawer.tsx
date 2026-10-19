@@ -34,8 +34,8 @@ interface DrawerProps {
 }
 
 /**
- * A panel that slides in from the right edge: full width on phones, up to
- * 680px on larger screens. Behaves like the Modal: focus stays inside, Escape
+ * A panel that slides in from the right edge: full width on phones, 680px on
+ * tablets, and half the screen on large screens (never narrower than 680px). Behaves like the Modal: focus stays inside, Escape
  * and the backdrop close it, the page behind is inert and doesn't scroll.
  */
 export function Drawer({ open, onClose, labelledBy, header, children, bodyRef }: DrawerProps) {
@@ -70,7 +70,7 @@ export function Drawer({ open, onClose, labelledBy, header, children, bodyRef }:
         aria-labelledby={labelledBy}
         tabIndex={-1}
         className={cn(
-          "absolute inset-y-0 right-0 flex w-full flex-col bg-white outline-none sm:w-[min(680px,92vw)]",
+          "absolute inset-y-0 right-0 flex w-full flex-col bg-white outline-none sm:w-[min(680px,92vw)] lg:w-[max(680px,50vw)]",
           "shadow-[-30px_0_80px_-30px_rgba(0,38,42,0.45)]",
           "translate-x-full transition-transform duration-[280ms] ease-in",
           "group-data-[state=open]/overlay:translate-x-0 group-data-[state=open]/overlay:duration-[520ms] group-data-[state=open]/overlay:ease-[cubic-bezier(0.32,0.72,0,1)]",

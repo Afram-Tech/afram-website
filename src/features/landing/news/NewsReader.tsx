@@ -86,7 +86,7 @@ export function NewsReader({ items }: { items: NewsItem[] }) {
         bodyRef={bodyRef}
         header={
           story && (
-            <div className="flex items-center gap-2 py-3 pr-3 pl-5 sm:pl-10">
+            <div className="flex items-center gap-2 py-3 pr-3 pl-5 sm:pl-6">
               <p className="text-ink-500 min-w-0 flex-1 truncate text-[13px] font-medium">
                 <span className="text-ink-900 hidden font-semibold sm:inline">
                   Property &amp; land news ·{" "}
