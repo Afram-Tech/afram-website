@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { guessKind, parseIssueReport, titleFrom } from "@/features/help/report-issue";
+import {
+  guessKind,
+  parseIssueReport,
+  parseReference,
+  titleFrom,
+} from "@/features/help/report-issue";
 
 const form = (fields: Record<string, string>) => {
   const data = new FormData();
@@ -45,11 +50,6 @@ describe("parseIssueReport", () => {
     });
   });
 
-  it("marks the report as blocking when the visitor ticks it", () => {
-    const result = parseIssueReport(form({ ...VALID, blocked: "1" }));
-    expect(result.ok && result.payload.impact).toBe("blocked");
-  });
-
   it("uses the email as the reporter when one is given", () => {
     const result = parseIssueReport(form({ ...VALID, email: " ama@email.com " }));
     expect(result.ok && result.payload.context.reporter).toBe("ama@email.com");
@@ -88,5 +88,19 @@ describe("titleFrom", () => {
     expect(title.endsWith("…")).toBe(true);
     expect(title.length).toBeLessThanOrEqual(81);
     expect(title).not.toMatch(/\s…$/);
+  });
+});
+
+describe("parseReference", () => {
+  it.each([
+    ["AF-7KQ2M9", "AF-7KQ2M9"],
+    [" af-7kq2m9 ", "AF-7KQ2M9"],
+    ["7kq 2m9", "AF-7KQ2M9"],
+  ])("reads %j as %s", (input, reference) => {
+    expect(parseReference(input)).toBe(reference);
+  });
+
+  it.each(["AF-7KQ2M", "AF-7KQ2M0", "XY-7KQ2M9", ""])("rejects %j", (input) => {
+    expect(parseReference(input)).toBeNull();
   });
 });

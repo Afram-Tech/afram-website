@@ -1,13 +1,19 @@
 "use server";
 
-import { parseIssueReport, type ReportState } from "./report-issue";
+import {
+  parseIssueReport,
+  parseReference,
+  type ReportCheck,
+  type ReportState,
+} from "./report-issue";
 
 /** The Exchange's report intake. Sent from the server, so no CORS is involved. */
 const DEFAULT_REPORT_API = "https://afram-exchange-v2.vercel.app/api/report";
+const reportApi = () => process.env.AFRAM_REPORT_API_URL || DEFAULT_REPORT_API;
 
 const SEND_FAILED: ReportState = {
   status: "error",
-  message: "We couldn't send your report. Please try again.",
+  message: "We couldn't send your message. Please try again.",
 };
 
 export async function reportIssue(_previous: ReportState, form: FormData): Promise<ReportState> {
@@ -15,7 +21,7 @@ export async function reportIssue(_previous: ReportState, form: FormData): Promi
   if (!report.ok) return report.state;
 
   try {
-    const response = await fetch(process.env.AFRAM_REPORT_API_URL || DEFAULT_REPORT_API, {
+    const response = await fetch(reportApi(), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       cache: "no-store",
@@ -32,5 +38,29 @@ export async function reportIssue(_previous: ReportState, form: FormData): Promi
     return { status: "sent", reference: data.reference };
   } catch {
     return SEND_FAILED;
+  }
+}
+
+/** Where a request is, by the reference it was given. Status and dates only, never its content. */
+export async function checkReport(input: string): Promise<ReportCheck> {
+  const reference = parseReference(input);
+  if (!reference) return { status: "not_found", reference: input.trim() };
+
+  try {
+    const url = new URL(reportApi());
+    url.searchParams.set("refs", reference);
+    const response = await fetch(url, { cache: "no-store", signal: AbortSignal.timeout(10_000) });
+    if (!response.ok) return { status: "error" };
+    const data = (await response.json()) as {
+      statuses?: Record<string, string>;
+      times?: Record<string, { receivedAt: string; updatedAt?: string }>;
+    };
+    const state = data.statuses?.[reference];
+    if (state !== "received" && state !== "in_progress" && state !== "resolved") {
+      return { status: "not_found", reference };
+    }
+    return { status: "found", reference, state, ...data.times?.[reference] };
+  } catch {
+    return { status: "error" };
   }
 }

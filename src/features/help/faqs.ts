@@ -24,7 +24,7 @@ export const HELP_GROUPS: HelpGroup[] = [
       },
       {
         q: "I forgot my password",
-        a: "Password reset isn't available yet. Report an issue below and we'll help you get back in.",
+        a: "Password reset isn't available yet. Send us a message on this page and we'll help you get back in.",
       },
     ],
   },

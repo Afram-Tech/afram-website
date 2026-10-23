@@ -1,20 +1,33 @@
 "use client";
 
-import { CheckCircle2, Loader2 } from "lucide-react";
-import { useActionState, useState, type ReactNode } from "react";
+import { Loader2 } from "lucide-react";
+import { useActionState, useEffect, useState } from "react";
 
-import { fieldClass } from "@/components/access/FormField";
 import { reportIssue } from "@/features/help/actions";
 import type { ReportField, ReportState } from "@/features/help/report-issue";
 import { cn } from "@/lib/utils";
 
 const INITIAL_STATE: ReportState = { status: "idle" };
 
-/** Report an issue — one message, filed into the Exchange's report intake like in-app reports. */
-export function ReportIssueForm() {
+const fieldClass =
+  "w-full rounded-[14px] bg-white px-4 text-[15px] text-ink-900 ring-1 ring-ink-200 transition placeholder:text-ink-400 focus:outline-none focus:ring-2 focus:ring-brand-400 aria-[invalid=true]:ring-coral-500/60";
+
+/** One message and an email — filed into the Exchange's report intake, like in-app reports. */
+export function ReportIssueForm({
+  onSent,
+  onAgain,
+}: {
+  onSent?: (reference: string) => void;
+  onAgain?: () => void;
+}) {
   const [state, action, pending] = useActionState(reportIssue, INITIAL_STATE);
   // Controlled: React resets a form after its action, and an error shouldn't wipe it.
-  const [values, setValues] = useState({ message: "", blocked: false, email: "" });
+  const [values, setValues] = useState({ message: "", email: "" });
+
+  const sentReference = state.status === "sent" ? state.reference : null;
+  useEffect(() => {
+    if (sentReference) onSent?.(sentReference);
+  }, [sentReference, onSent]);
 
   // Where the visitor is and on what device, added at submit to help triage.
   const submit = (form: FormData) => {
@@ -26,29 +39,43 @@ export function ReportIssueForm() {
   };
 
   if (state.status === "sent") {
+    const email = values.email.trim();
     return (
-      <div
-        className="bg-accent-50 ring-accent-100 flex flex-col items-start gap-3 rounded-2xl p-6 ring-1"
-        aria-live="polite"
-      >
-        <span className="bg-accent-500 flex h-11 w-11 items-center justify-center rounded-full text-white">
-          <CheckCircle2 className="h-6 w-6" />
-        </span>
-        <p className="text-ink-900 text-lg font-semibold">Thanks, we&apos;ve got it</p>
-        <p className="text-ink-600 text-[15px]">
-          Your reference is <b className="tnum text-ink-900 font-semibold">{state.reference}</b>.
-          {values.email ? " We'll reply by email." : " Quote it if you get in touch."}
-        </p>
+      <div className="flex flex-col gap-3" aria-live="polite">
+        <div className="bg-brand-500 max-w-[88%] self-end rounded-2xl rounded-br-md px-4 py-3 text-[14px] leading-relaxed wrap-break-word whitespace-pre-wrap text-white">
+          {values.message.trim()}
+        </div>
+        <div className="text-ink-900 ring-ink-100 max-w-[92%] self-start rounded-2xl rounded-bl-md bg-white px-4 py-3 text-[14px] leading-relaxed ring-1">
+          <span className="text-brand-700 mb-0.5 block text-[11.5px] font-bold">Afram Support</span>
+          Thanks, we&apos;ve got it. Your reference is{" "}
+          <b className="tnum font-semibold">{state.reference}</b>.{" "}
+          {email ? <>We&apos;ll reply to {email}.</> : "Keep it to check on your request below."}
+        </div>
+        {onAgain && (
+          <button
+            type="button"
+            onClick={onAgain}
+            className="text-brand-500 hover:text-brand-700 self-start text-[13.5px] font-semibold"
+          >
+            Send another message
+          </button>
+        )}
       </div>
     );
   }
 
   const error = state.status === "error" ? state : null;
-  const errorFor = (field: ReportField) => (error?.field === field ? error.message : undefined);
+  const errorFor = (field: ReportField) =>
+    error?.field === field ? (
+      <span role="alert" className="mt-1.5 block text-[13px] font-medium text-red-600">
+        {error.message}
+      </span>
+    ) : null;
 
   return (
-    <form action={submit} className="space-y-4" noValidate>
-      <Field label="What's going wrong?" error={errorFor("message")}>
+    <form action={submit} className="flex flex-col gap-2.5" noValidate>
+      <label className="block">
+        <span className="sr-only">Your message</span>
         <textarea
           name="message"
           value={values.message}
@@ -56,21 +83,16 @@ export function ReportIssueForm() {
             setValues((current) => ({ ...current, message: event.target.value }))
           }
           aria-invalid={error?.field === "message"}
-          rows={6}
+          rows={4}
           maxLength={4000}
-          placeholder="Tell us in your own words. For example: my access link says it has expired."
-          className={cn(fieldClass, "h-auto min-h-[150px] resize-y py-3 leading-relaxed sm:h-auto")}
+          placeholder="Type your message…"
+          className={cn(fieldClass, "min-h-[118px] resize-y py-3 leading-relaxed")}
         />
-      </Field>
+        {errorFor("message")}
+      </label>
 
-      <Field
-        label={
-          <>
-            Your email <span className="text-ink-400 font-normal">(so we can reply)</span>
-          </>
-        }
-        error={errorFor("email")}
-      >
+      <label className="block">
+        <span className="sr-only">Your email</span>
         <input
           name="email"
           type="email"
@@ -78,10 +100,11 @@ export function ReportIssueForm() {
           onChange={(event) => setValues((current) => ({ ...current, email: event.target.value }))}
           aria-invalid={error?.field === "email"}
           autoComplete="email"
-          placeholder="you@email.com"
-          className={fieldClass}
+          placeholder="Your email, so we can reply"
+          className={cn(fieldClass, "h-12")}
         />
-      </Field>
+        {errorFor("email")}
+      </label>
 
       {error && !error.field && (
         <p role="alert" className="text-[13.5px] font-medium text-red-600">
@@ -92,7 +115,7 @@ export function ReportIssueForm() {
       <button
         type="submit"
         disabled={pending}
-        className="bg-brand-500 hover:bg-brand-600 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-white transition-all active:scale-[0.99] disabled:cursor-wait disabled:opacity-70"
+        className="bg-brand-500 hover:bg-brand-600 mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-white transition-all active:scale-[0.99] disabled:cursor-wait disabled:opacity-70"
       >
         {pending ? (
           <>
@@ -100,31 +123,9 @@ export function ReportIssueForm() {
             Sending…
           </>
         ) : (
-          "Send"
+          "Send message"
         )}
       </button>
     </form>
-  );
-}
-
-function Field({
-  label,
-  error,
-  children,
-}: {
-  label: ReactNode;
-  error?: string;
-  children: ReactNode;
-}) {
-  return (
-    <label className="block min-w-0">
-      <span className="text-ink-900 mb-2 block text-[14px] font-semibold">{label}</span>
-      {children}
-      {error && (
-        <span role="alert" className="mt-1.5 block text-[13px] font-medium text-red-600">
-          {error}
-        </span>
-      )}
-    </label>
   );
 }

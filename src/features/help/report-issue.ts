@@ -3,8 +3,8 @@ import { z } from "zod";
 /**
  * Report an issue from /help. Reports are filed into the Exchange's report
  * intake (`api/report`), the same place in-app reports go (and where Linear
- * picks them up). The visitor writes one message; kind, summary and urgency
- * are filled in from it, as in the Exchange's own Help.
+ * picks them up). The visitor writes one message; kind and summary are
+ * filled in from it, as in the Exchange's own Help.
  */
 
 const ReportSchema = z.object({
@@ -13,7 +13,6 @@ const ReportSchema = z.object({
     .trim()
     .min(10, "Tell us a little more, so we can find the problem.")
     .max(4000, "Keep this under 4,000 characters."),
-  blocked: z.boolean(),
   email: z.union([z.literal(""), z.email("Enter a valid email, or leave it blank.")]),
   path: z.string().max(200).optional(),
   userAgent: z.string().max(400).optional(),
@@ -32,7 +31,7 @@ export type ReportState =
 export interface ReportPayload {
   kind: "bug" | "help";
   area: string;
-  impact: "blocked" | "workaround";
+  impact: "workaround";
   title: string;
   details: string;
   screenshots: string[];
@@ -75,7 +74,6 @@ export function parseIssueReport(
 ): { ok: true; payload: ReportPayload } | { ok: false; state: ReportState } {
   const parsed = ReportSchema.safeParse({
     message: text(form, "message") ?? "",
-    blocked: Boolean(text(form, "blocked")),
     email: (text(form, "email") ?? "").trim(),
     path: text(form, "path"),
     userAgent: text(form, "userAgent"),
@@ -102,7 +100,7 @@ export function parseIssueReport(
     payload: {
       kind: guessKind(d.message),
       area: "other",
-      impact: d.blocked ? "blocked" : "workaround",
+      impact: "workaround",
       title: titleFrom(d.message),
       details: d.message,
       screenshots: [],
@@ -119,4 +117,31 @@ export function parseIssueReport(
       },
     },
   };
+}
+
+/* ── Track a request ─────────────────────────────────────────────────── */
+
+export type RequestState = "received" | "in_progress" | "resolved";
+
+export type ReportCheck =
+  | {
+      status: "found";
+      reference: string;
+      state: RequestState;
+      receivedAt?: string;
+      updatedAt?: string;
+    }
+  | { status: "not_found"; reference: string }
+  | { status: "error" };
+
+const REFERENCE = /^AF-[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{6}$/;
+
+/**
+ * A reference as the Exchange issues it (`AF-` and 6 letters and numbers), or
+ * null when it can't be one. Case, spaces and a missing `AF-` don't matter.
+ */
+export function parseReference(input: string) {
+  const raw = input.trim().toUpperCase().replace(/\s+/g, "");
+  const reference = /^[A-Z0-9]{6}$/.test(raw) ? `AF-${raw}` : raw;
+  return REFERENCE.test(reference) ? reference : null;
 }
