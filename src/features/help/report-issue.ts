@@ -3,51 +3,17 @@ import { z } from "zod";
 /**
  * Report an issue from /help. Reports are filed into the Exchange's report
  * intake (`api/report`), the same place in-app reports go (and where Linear
- * picks them up), so the option ids below must match the Exchange's.
+ * picks them up). The visitor writes one message; kind, summary and urgency
+ * are filled in from it, as in the Exchange's own Help.
  */
 
-export const REPORT_KINDS = [
-  { id: "bug", label: "Something's broken" },
-  { id: "help", label: "I need help" },
-] as const;
-
-export const REPORT_AREAS = [
-  { id: "access", label: "Signing in or my account" },
-  { id: "verification", label: "Onboarding and ID verification" },
-  { id: "listings", label: "Listing a property or project" },
-  { id: "buying", label: "Browsing or expressing interest" },
-  { id: "financing", label: "Financing and offers" },
-  { id: "transactions", label: "Transactions and payments" },
-  { id: "messaging", label: "Messaging" },
-  { id: "notifications", label: "Notifications" },
-  { id: "settings", label: "Settings and users" },
-  { id: "other", label: "Something else" },
-] as const;
-
-export const REPORT_IMPACTS = [
-  { id: "blocked", label: "I can't continue" },
-  { id: "workaround", label: "I found a way around it" },
-  { id: "minor", label: "Minor" },
-] as const;
-
-type Ids<T extends readonly { id: string }[]> = [T[number]["id"], ...T[number]["id"][]];
-const ids = <T extends readonly { id: string }[]>(options: T) =>
-  options.map((option) => option.id) as Ids<T>;
-
 const ReportSchema = z.object({
-  kind: z.enum(ids(REPORT_KINDS), { message: "Choose what's happening." }),
-  area: z.enum(ids(REPORT_AREAS), { message: "Choose what it's about." }),
-  impact: z.enum(ids(REPORT_IMPACTS), { message: "Choose how much it's affecting you." }),
-  title: z
+  message: z
     .string()
     .trim()
-    .min(5, "Add a short summary (5+ characters).")
-    .max(120, "Keep the summary under 120 characters."),
-  details: z
-    .string()
-    .trim()
-    .min(10, "Tell us a little more (10+ characters).")
-    .max(4000, "Keep the details under 4,000 characters."),
+    .min(10, "Tell us a little more, so we can find the problem.")
+    .max(4000, "Keep this under 4,000 characters."),
+  blocked: z.boolean(),
   email: z.union([z.literal(""), z.email("Enter a valid email, or leave it blank.")]),
   path: z.string().max(200).optional(),
   userAgent: z.string().max(400).optional(),
@@ -55,7 +21,7 @@ const ReportSchema = z.object({
   language: z.string().max(40).optional(),
 });
 
-export type ReportField = "kind" | "area" | "impact" | "title" | "details" | "email";
+export type ReportField = "message" | "email";
 
 export type ReportState =
   | { status: "idle" }
@@ -64,16 +30,39 @@ export type ReportState =
 
 /** The body the Exchange's `api/report` takes. */
 export interface ReportPayload {
-  kind: string;
+  kind: "bug" | "help";
   area: string;
-  impact: string;
+  impact: "blocked" | "workaround";
   title: string;
   details: string;
   screenshots: string[];
   context: Record<string, string>;
 }
 
-const FIELDS: readonly string[] = ["kind", "area", "impact", "title", "details", "email"];
+const FIELDS: readonly string[] = ["message", "email"];
+
+/** A question reads as a request for help; anything else as something broken. */
+export const guessKind = (message: string): ReportPayload["kind"] =>
+  /\?|\b(how (do|can|to)|where (is|are|do|can)|what (is|does)|can i|is it possible)\b/i.test(
+    message,
+  )
+    ? "help"
+    : "bug";
+
+/** A short summary: the first sentence of the first real line, cut to ~80 characters. */
+export function titleFrom(message: string) {
+  const flat = message.replace(/\s+/g, " ").trim();
+  const line =
+    message
+      .split(/\n/)
+      .map((l) => l.trim())
+      .find((l) => l.length >= 5) ?? flat;
+  const sentence = (line.match(/^.+?[.!?](\s|$)/)?.[0] ?? line).trim();
+  const base = sentence.length >= 5 ? sentence : flat;
+  if (base.length <= 80) return base.replace(/[.!]+$/, "");
+  const cut = base.slice(0, 80);
+  return `${cut.slice(0, Math.max(cut.lastIndexOf(" "), 40)).trim()}…`;
+}
 
 const text = (form: FormData, name: string) => {
   const value = form.get(name);
@@ -85,11 +74,8 @@ export function parseIssueReport(
   reportedAt = new Date(),
 ): { ok: true; payload: ReportPayload } | { ok: false; state: ReportState } {
   const parsed = ReportSchema.safeParse({
-    kind: text(form, "kind"),
-    area: text(form, "area"),
-    impact: text(form, "impact"),
-    title: text(form, "title") ?? "",
-    details: text(form, "details") ?? "",
+    message: text(form, "message") ?? "",
+    blocked: Boolean(text(form, "blocked")),
     email: (text(form, "email") ?? "").trim(),
     path: text(form, "path"),
     userAgent: text(form, "userAgent"),
@@ -114,11 +100,11 @@ export function parseIssueReport(
   return {
     ok: true,
     payload: {
-      kind: d.kind,
-      area: d.area,
-      impact: d.impact,
-      title: d.title,
-      details: d.details,
+      kind: guessKind(d.message),
+      area: "other",
+      impact: d.blocked ? "blocked" : "workaround",
+      title: titleFrom(d.message),
+      details: d.message,
       screenshots: [],
       context: {
         page: "Website · Help",
