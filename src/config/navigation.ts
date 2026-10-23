@@ -57,6 +57,7 @@ export const FOOTER_COMPANY_LINKS = [
   { label: "How it works", href: "/how-it-works" },
   { label: "Insights", href: "/insights" },
   { label: "About", href: "/how-it-works" },
+  { label: "Help", href: "/help" },
 ];
 
 export const FOOTER_SOCIAL_LINKS = [

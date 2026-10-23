@@ -34,6 +34,7 @@ const STATIC_ROUTES: {
   { path: "/properties", priority: 0.8, changeFrequency: "daily", listings: "all" },
   { path: "/insights", priority: 0.7, changeFrequency: "weekly", listings: "none" },
   { path: "/how-it-works", priority: 0.6, changeFrequency: "monthly", listings: "none" },
+  { path: "/help", priority: 0.4, changeFrequency: "monthly", listings: "none" },
   { path: "/privacy-policy", priority: 0.2, changeFrequency: "yearly", listings: "none" },
 ];
 
