@@ -1,10 +1,12 @@
 import { z } from "zod";
 
+import type { SubmitSupportRequestInput, SupportStatus } from "@/types/generated/graphql";
+
 /**
- * Report an issue from /help. Reports are filed into the Exchange's report
- * intake (`api/report`), the same place in-app reports go (and where Linear
- * picks them up). The visitor writes one message; kind and summary are
- * filled in from it, as in the Exchange's own Help.
+ * Report an issue from /help. Filed with the API's public
+ * `submitSupportRequest`, the same support requests in-app Help sends (the
+ * team works them in Linear). The visitor writes one message; kind and
+ * summary are filled in from it, as in the app's own Help.
  */
 
 const ReportSchema = z.object({
@@ -18,6 +20,8 @@ const ReportSchema = z.object({
   userAgent: z.string().max(400).optional(),
   viewport: z.string().max(40).optional(),
   language: z.string().max(40).optional(),
+  captchaToken: z.string().max(4096).optional(),
+  idempotencyKey: z.string().max(100).optional(),
 });
 
 export type ReportField = "message" | "email";
@@ -27,16 +31,8 @@ export type ReportState =
   | { status: "error"; message: string; field?: ReportField }
   | { status: "sent"; reference: string };
 
-/** The body the Exchange's `api/report` takes. */
-export interface ReportPayload {
-  kind: "bug" | "help";
-  area: string;
-  impact: "workaround";
-  title: string;
-  details: string;
-  screenshots: string[];
-  context: Record<string, string>;
-}
+/** What `submitSupportRequest` takes. */
+export type ReportPayload = SubmitSupportRequestInput;
 
 const FIELDS: readonly string[] = ["message", "email"];
 
@@ -79,6 +75,8 @@ export function parseIssueReport(
     userAgent: text(form, "userAgent"),
     viewport: text(form, "viewport"),
     language: text(form, "language"),
+    captchaToken: text(form, "captchaToken"),
+    idempotencyKey: text(form, "idempotencyKey"),
   });
 
   if (!parsed.success) {
@@ -98,21 +96,22 @@ export function parseIssueReport(
   return {
     ok: true,
     payload: {
+      // One per message, made in the browser: a resend after a dropped
+      // connection can't file it twice.
+      idempotencyKey: d.idempotencyKey || crypto.randomUUID(),
+      replyEmail: d.email || null,
       kind: guessKind(d.message),
       area: "other",
-      impact: "workaround",
       title: titleFrom(d.message),
-      details: d.message,
-      screenshots: [],
+      body: d.message,
+      captchaToken: d.captchaToken ?? "",
       context: {
-        page: "Website · Help",
-        role: "Website visitor",
-        reporter: d.email || "Not given",
+        screen: "Website Help",
         path: d.path || "/help",
         userAgent: d.userAgent ?? "",
         viewport: d.viewport ?? "",
         language: d.language ?? "",
-        build: "afram-website",
+        appVersion: "afram-website",
         reportedAt: reportedAt.toISOString(),
       },
     },
@@ -124,15 +123,18 @@ export function parseIssueReport(
 export type RequestState = "received" | "in_progress" | "resolved";
 
 export type ReportCheck =
-  | {
-      status: "found";
-      reference: string;
-      state: RequestState;
-      receivedAt?: string;
-      updatedAt?: string;
-    }
+  | { status: "found"; reference: string; state: RequestState; updatedAt?: string }
   | { status: "not_found"; reference: string }
   | { status: "error" };
+
+/** The API's status on the visitor's three steps. "Waiting on member" is
+ *  still the team's; a status added later reads as "Team on it". */
+export const stateFrom = (status: SupportStatus | string): RequestState =>
+  status === "open"
+    ? "received"
+    : status === "resolved" || status === "closed"
+      ? "resolved"
+      : "in_progress";
 
 const REFERENCE = /^AF-[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{6}$/;
 
