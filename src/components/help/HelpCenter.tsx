@@ -21,7 +21,7 @@ const isOnline = (now: Date) =>
 export function HelpCenter({ groups }: { groups: HelpGroup[] }) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState<string | null>(groups[0]?.items[0]?.q ?? null);
-  const [sentReference, setSentReference] = useState("");
+  const [sent, setSent] = useState({ reference: "", email: "" });
   const [formKey, setFormKey] = useState(0);
 
   const words = useMemo(
@@ -44,7 +44,10 @@ export function HelpCenter({ groups }: { groups: HelpGroup[] }) {
         .filter((group) => group.items.length > 0),
     [groups, words],
   );
-  const onSent = useCallback((reference: string) => setSentReference(reference), []);
+  const onSent = useCallback(
+    (reference: string, email: string) => setSent({ reference, email }),
+    [],
+  );
 
   return (
     <>
@@ -175,7 +178,7 @@ export function HelpCenter({ groups }: { groups: HelpGroup[] }) {
           </section>
 
           {/* Keyed, so a message just sent starts it afresh with its own reference. */}
-          <TrackRequest key={sentReference} initial={sentReference} />
+          <TrackRequest key={sent.reference} initial={sent.reference} initialEmail={sent.email} />
         </aside>
       </div>
     </>

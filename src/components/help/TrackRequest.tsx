@@ -14,16 +14,24 @@ const STATES: Record<RequestState, { label: string; done: number; tone: string }
   resolved: { label: "Sorted", done: 3, tone: "bg-emerald-50 text-emerald-700" },
 };
 
-/** Where a request is, by the reference from its confirmation. */
-export function TrackRequest({ initial }: { initial: string }) {
+/** Where a request is, by the reference from its confirmation and the email
+ *  it was sent with — the API matches both, so a reference alone shows nothing. */
+export function TrackRequest({
+  initial,
+  initialEmail = "",
+}: {
+  initial: string;
+  initialEmail?: string;
+}) {
   const [value, setValue] = useState(initial);
+  const [email, setEmail] = useState(initialEmail);
   const [result, setResult] = useState<ReportCheck | null>(null);
   const [pending, startTransition] = useTransition();
   const id = useId();
 
   const check = () => {
-    if (!value.trim()) return;
-    startTransition(async () => setResult(await checkReport(value)));
+    if (!value.trim() || !email.trim()) return;
+    startTransition(async () => setResult(await checkReport(value, email)));
   };
 
   return (
@@ -35,14 +43,14 @@ export function TrackRequest({ initial }: { initial: string }) {
         Track a request
       </h2>
       <p className="text-ink-500 -mt-1 text-[13.5px] leading-relaxed">
-        Enter the reference from your confirmation.
+        Enter the reference from your confirmation and the email you sent it with.
       </p>
       <form
         onSubmit={(event) => {
           event.preventDefault();
           check();
         }}
-        className="flex gap-2"
+        className="flex flex-col gap-2"
       >
         <label htmlFor={`${id}-ref`} className="sr-only">
           Reference
@@ -54,12 +62,24 @@ export function TrackRequest({ initial }: { initial: string }) {
           placeholder="AF-XXXXXX"
           autoCapitalize="characters"
           spellCheck={false}
-          className="tnum text-ink-900 ring-ink-200 placeholder:text-ink-400 focus:ring-brand-400 h-11 min-w-0 flex-1 rounded-[14px] bg-white px-4 text-[14.5px] font-semibold tracking-[0.04em] uppercase ring-1 placeholder:font-normal placeholder:tracking-normal placeholder:normal-case focus:ring-2 focus:outline-none"
+          className="tnum text-ink-900 ring-ink-200 placeholder:text-ink-400 focus:ring-brand-400 h-11 min-w-0 rounded-[14px] bg-white px-4 text-[14.5px] font-semibold tracking-[0.04em] uppercase ring-1 placeholder:font-normal placeholder:tracking-normal placeholder:normal-case focus:ring-2 focus:outline-none sm:w-[150px] sm:shrink-0"
+        />
+        <label htmlFor={`${id}-email`} className="sr-only">
+          Email
+        </label>
+        <input
+          id={`${id}-email`}
+          type="email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          placeholder="Your email"
+          autoComplete="email"
+          className="text-ink-900 ring-ink-200 placeholder:text-ink-400 focus:ring-brand-400 h-11 min-w-0 flex-1 rounded-[14px] bg-white px-4 text-[14.5px] ring-1 focus:ring-2 focus:outline-none"
         />
         <button
           type="submit"
-          disabled={pending}
-          className="text-brand-500 ring-brand-500 hover:bg-brand-50 inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-5 text-[14px] font-semibold ring-1 transition-colors disabled:opacity-60"
+          disabled={pending || !value.trim() || !email.trim()}
+          className="text-brand-500 ring-brand-500 hover:bg-brand-50 inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full px-5 text-[14px] font-semibold ring-1 transition-colors disabled:opacity-60"
         >
           {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Check"}
         </button>
@@ -69,8 +89,9 @@ export function TrackRequest({ initial }: { initial: string }) {
         {result?.status === "found" && <TrackResult result={result} />}
         {result?.status === "not_found" && (
           <p className="bg-ink-50 text-ink-700 rounded-2xl px-4 py-3 text-[13.5px] leading-relaxed">
-            We couldn&apos;t find <b className="font-semibold">{result.reference}</b>. Check it
-            against your confirmation: AF- and then 6 letters and numbers.
+            We couldn&apos;t find <b className="font-semibold">{result.reference}</b> with that
+            email. Check both against your confirmation: AF- and then 6 letters and numbers, and the
+            email you sent it from.
           </p>
         )}
         {result?.status === "error" && (
@@ -114,11 +135,8 @@ function TrackResult({ result }: { result: Extract<ReportCheck, { status: "found
           </li>
         ))}
       </ol>
-      {(result.receivedAt || result.updatedAt) && (
-        <p className="text-ink-500 text-[12.5px]">
-          {result.receivedAt && <>Sent {when(result.receivedAt)}</>}
-          {result.updatedAt && <> · Updated {when(result.updatedAt)}</>}
-        </p>
+      {result.updatedAt && (
+        <p className="text-ink-500 text-[12.5px]">Last update {when(result.updatedAt)}</p>
       )}
     </div>
   );

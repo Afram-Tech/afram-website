@@ -4,6 +4,7 @@ import {
   guessKind,
   parseIssueReport,
   parseReference,
+  stateFrom,
   titleFrom,
 } from "@/features/help/report-issue";
 
@@ -20,39 +21,45 @@ const VALID = {
   userAgent: "Test",
   viewport: "390×844",
   language: "en-GH",
+  captchaToken: "turnstile-token",
+  idempotencyKey: "6f1c2a4e-8b0d-4a8e-9a55-1d2c3b4a5e6f",
 };
 
 describe("parseIssueReport", () => {
-  it("builds the Exchange's report body from one message, with the visitor's context", () => {
+  it("builds submitSupportRequest's input from one message, with the visitor's context", () => {
     const result = parseIssueReport(form(VALID), new Date("2026-10-19T09:00:00.000Z"));
 
     expect(result).toEqual({
       ok: true,
       payload: {
+        idempotencyKey: "6f1c2a4e-8b0d-4a8e-9a55-1d2c3b4a5e6f",
+        replyEmail: null,
         kind: "bug",
         area: "other",
-        impact: "workaround",
         title: "My access link says it has expired",
-        details: "My access link says it has expired. I opened it straight from the email.",
-        screenshots: [],
+        body: "My access link says it has expired. I opened it straight from the email.",
+        captchaToken: "turnstile-token",
         context: {
-          page: "Website · Help",
-          role: "Website visitor",
-          reporter: "Not given",
+          screen: "Website Help",
           path: "/help",
           userAgent: "Test",
           viewport: "390×844",
           language: "en-GH",
-          build: "afram-website",
+          appVersion: "afram-website",
           reportedAt: "2026-10-19T09:00:00.000Z",
         },
       },
     });
   });
 
-  it("uses the email as the reporter when one is given", () => {
+  it("sends the email to reply to, when one is given", () => {
     const result = parseIssueReport(form({ ...VALID, email: " ama@email.com " }));
-    expect(result.ok && result.payload.context.reporter).toBe("ama@email.com");
+    expect(result.ok && result.payload.replyEmail).toBe("ama@email.com");
+  });
+
+  it("makes a send key when the browser didn't give one", () => {
+    const result = parseIssueReport(form({ ...VALID, idempotencyKey: "" }));
+    expect(result.ok && result.payload.idempotencyKey).toMatch(/^[0-9a-f-]{36}$/);
   });
 
   it.each([
@@ -102,5 +109,18 @@ describe("parseReference", () => {
 
   it.each(["AF-7KQ2M", "AF-7KQ2M0", "XY-7KQ2M9", ""])("rejects %j", (input) => {
     expect(parseReference(input)).toBeNull();
+  });
+});
+
+describe("stateFrom", () => {
+  it.each([
+    ["open", "received"],
+    ["in_progress", "in_progress"],
+    ["waiting_on_member", "in_progress"],
+    ["resolved", "resolved"],
+    ["closed", "resolved"],
+    ["something_new", "in_progress"],
+  ])("reads %s as %s", (status, state) => {
+    expect(stateFrom(status)).toBe(state);
   });
 });
