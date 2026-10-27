@@ -74,7 +74,7 @@ export function TrackRequest({
           onChange={(event) => setEmail(event.target.value)}
           placeholder="Your email"
           autoComplete="email"
-          className="text-ink-900 ring-ink-200 placeholder:text-ink-400 focus:ring-brand-400 h-11 min-w-0 flex-1 rounded-[14px] bg-white px-4 text-[14.5px] ring-1 focus:ring-2 focus:outline-none"
+          className="tnum text-ink-900 ring-ink-200 placeholder:text-ink-400 focus:ring-brand-400 h-11 min-w-[350px] rounded-[14px] bg-white px-4 text-[14.5px] font-semibold tracking-[0.04em] ring-1 placeholder:font-normal placeholder:tracking-normal placeholder:normal-case focus:ring-2 focus:outline-none sm:w-[150px] sm:shrink-0"
         />
         <button
           type="submit"
