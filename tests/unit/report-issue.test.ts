@@ -52,9 +52,22 @@ describe("parseIssueReport", () => {
     });
   });
 
-  it("sends the email to reply to, when one is given", () => {
+  it("sends the email to reply to, and adds it to the message, when one is given", () => {
     const result = parseIssueReport(form({ ...VALID, email: " ama@email.com " }));
     expect(result.ok && result.payload.replyEmail).toBe("ama@email.com");
+    expect(result.ok && result.payload.body).toBe(
+      "My access link says it has expired. I opened it straight from the email.\n\nReply to: ama@email.com",
+    );
+  });
+
+  it("keeps the message within 4,000 characters with the email line added", () => {
+    const result = parseIssueReport(
+      form({ ...VALID, message: "a".repeat(3995), email: "ama@email.com" }),
+    );
+    expect(result).toEqual({
+      ok: false,
+      state: { status: "error", message: "Keep this under 3,975 characters.", field: "message" },
+    });
   });
 
   it("makes a send key when the browser didn't give one", () => {

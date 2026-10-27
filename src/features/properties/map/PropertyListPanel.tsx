@@ -5,6 +5,7 @@ import type { Property } from "@/features/landing/data/properties";
 import { formatMoney } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { isMarkerUnavailable } from "./markers";
+import { bathsLabel } from "@/features/properties/listing-display";
 
 /** Mirrors the pin/boundary colour split (markers.ts's markerColorFor) so
  *  the badge on a list row always agrees with how that property's pin
@@ -107,7 +108,7 @@ export function PropertyListPanel({
                     </span>
                     <span className="flex items-center gap-1">
                       <Bath className="h-3 w-3" />
-                      {property.baths}
+                      {bathsLabel(property)}
                     </span>
                   </div>
                 </div>

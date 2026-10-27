@@ -3,6 +3,11 @@ import { cache } from "react";
 import { getClient } from "@/graphql/client";
 import { GET_PUBLIC_PROPERTIES } from "@/graphql/queries";
 import { centroidOf, extractPointsFromSiteCoordinates } from "@/lib/siteCoordinates";
+import {
+  LISTING_STATUS_LABEL,
+  listingStatusLabel,
+  titleTypeLabel,
+} from "@/features/properties/listing-display";
 
 export interface Property {
   id: string;
@@ -39,7 +44,11 @@ export interface Property {
   price: number;
   currency: string;
   beds: number;
+  /** Every bathroom, half ones included — the count search engines expect
+   *  (numberOfBathroomsTotal). Shown to people through bathsLabel(). */
   baths: number;
+  /** How many of `baths` are half bathrooms. */
+  halfBaths?: number;
   sqft: number;
   image: string;
   status: string;
@@ -100,13 +109,6 @@ interface GetPublicPropertiesResponse {
   getPublicProjects: RawProject[];
 }
 
-const LISTING_STATUS_LABELS: Record<string, string> = {
-  listed: "Live on Afram Marketplace",
-  pending: "Pending review",
-  divided: "Subdivided listing",
-  subdivision: "Subdivided listing",
-};
-
 function slugify(value: string): string {
   return value
     .toLowerCase()
@@ -165,6 +167,7 @@ function mapProperty(project: RawProject): Property | undefined {
     currency: property.currency || "USD",
     beds: property.bedroom ?? 0,
     baths: (property.fullBathroom ?? 0) + (property.halfBathroom ?? 0),
+    halfBaths: property.halfBathroom ?? 0,
     sqft: property.squareFeet ?? 0,
     image: images[0],
     status,
@@ -173,9 +176,9 @@ function mapProperty(project: RawProject): Property | undefined {
     about: property.propertyDescription || property.propertyCardDesc || "",
     amenities: (property.propertyAmenities ?? []).filter((a): a is string => Boolean(a)),
     legal: {
-      titleType: property.titleType || "Not yet on file",
+      titleType: titleTypeLabel(property.titleType),
       landCertificate: property.landCertificateNumber ? "On file" : "Not available",
-      listingStatus: LISTING_STATUS_LABELS[status] ?? "Unavailable",
+      listingStatus: listingStatusLabel(status),
       verification: "Afram-verified listing",
     },
     address: {
@@ -187,7 +190,7 @@ function mapProperty(project: RawProject): Property | undefined {
     priceHistory: [
       {
         date: "Current",
-        event: LISTING_STATUS_LABELS[status] ?? "Listed",
+        event: LISTING_STATUS_LABEL[status] ?? "Listed",
         price: property.price,
       },
     ],

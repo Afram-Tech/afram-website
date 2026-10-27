@@ -203,7 +203,11 @@ export function LocationPicker({
         // `dialog:not([open]) { display: none }` and keep it visible.
         open ? "flex" : "hidden",
         "m-0 max-h-none w-full max-w-none flex-col overflow-hidden bg-white p-0 shadow-xl backdrop:bg-black/50",
-        "fixed inset-x-0 top-[8vh] bottom-0 rounded-t-2xl",
+        // `h-auto` is load-bearing: the UA gives <dialog> `height: fit-content`,
+        // and an explicit height wins over `bottom`, so on phones the sheet grew
+        // to the whole list (~1,330px) and the list below had nothing to scroll
+        // in (DEF: AFX-LST-057). Auto height fills top-to-bottom instead.
+        "fixed inset-x-0 top-[8vh] bottom-0 h-auto rounded-t-2xl",
         "sm:inset-auto sm:top-1/2 sm:left-1/2 sm:h-[min(640px,85vh)] sm:w-[min(900px,92vw)] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl",
       )}
     >

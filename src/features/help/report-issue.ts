@@ -36,6 +36,12 @@ export type ReportPayload = SubmitSupportRequestInput;
 
 const FIELDS: readonly string[] = ["message", "email"];
 
+const BODY_MAX = 4000;
+
+/** The line the message ends with when they gave an email, so whoever reads
+ *  it — in our admin or in Linear — sees where to answer. */
+export const replyLine = (email: string) => (email ? `\n\nReply to: ${email}` : "");
+
 /** A question reads as a request for help; anything else as something broken. */
 export const guessKind = (message: string): ReportPayload["kind"] =>
   /\?|\b(how (do|can|to)|where (is|are|do|can)|what (is|does)|can i|is it possible)\b/i.test(
@@ -93,6 +99,17 @@ export function parseIssueReport(
   }
 
   const d = parsed.data;
+  const body = `${d.message}${replyLine(d.email)}`;
+  if (body.length > BODY_MAX) {
+    return {
+      ok: false,
+      state: {
+        status: "error",
+        message: `Keep this under ${(BODY_MAX - replyLine(d.email).length).toLocaleString("en-GB")} characters.`,
+        field: "message",
+      },
+    };
+  }
   return {
     ok: true,
     payload: {
@@ -103,7 +120,8 @@ export function parseIssueReport(
       kind: guessKind(d.message),
       area: "other",
       title: titleFrom(d.message),
-      body: d.message,
+      // The email goes in the message too, so it travels with their words.
+      body,
       captchaToken: d.captchaToken ?? "",
       context: {
         screen: "Website Help",
