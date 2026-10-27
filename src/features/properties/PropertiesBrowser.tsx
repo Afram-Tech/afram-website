@@ -30,7 +30,7 @@ import { PropertyListPanel } from "@/features/properties/map/PropertyListPanel";
 import { deriveMapMarkers } from "@/features/properties/map/markers";
 import type { Property } from "@/features/landing/data/properties";
 import { PropertyCard } from "@/features/landing/PropertyCard";
-import { titleCase } from "@/lib/format";
+import { formatMoney, titleCase } from "@/lib/format";
 import { getBySlug, getPath } from "@/lib/location-taxonomy";
 import { clientSearchProperties } from "@/lib/property-search";
 import { countPropertiesByLocation } from "@/lib/location-match";
@@ -63,12 +63,34 @@ const DEFAULT_FILTERS: Filters = { status: "all", type: "all", price: "all" };
 /** How many cards a scroll into view reveals at a time. */
 const PAGE_SIZE = 12;
 
+/** In the listings' own currency: prices are compared as-is, with no
+ *  conversion (clientSearchProperties gets no `convert`), so the labels must
+ *  name that currency too — they used to read in dollars over GHS prices
+ *  (DEF: AFX-LST-059). */
 const PRICE_BANDS = [
-  { value: "0-100000", label: "Under $100,000", min: 0, max: 100_000 },
-  { value: "100000-300000", label: "$100,000 – $300,000", min: 100_000, max: 300_000 },
-  { value: "300000-600000", label: "$300,000 – $600,000", min: 300_000, max: 600_000 },
-  { value: "600000-", label: "Over $600,000", min: 600_000, max: Infinity },
+  { value: "0-100000", min: 0, max: 100_000 },
+  { value: "100000-300000", min: 100_000, max: 300_000 },
+  { value: "300000-600000", min: 300_000, max: 600_000 },
+  { value: "600000-", min: 600_000, max: Infinity },
 ];
+
+/** For the labels when there are no listings to take a currency from. */
+const DEFAULT_CURRENCY = "GHS";
+
+/** The currency most listings are priced in. */
+function listingCurrency(properties: Property[]) {
+  const counts = new Map<string, number>();
+  for (const { currency } of properties) {
+    if (currency) counts.set(currency, (counts.get(currency) ?? 0) + 1);
+  }
+  return [...counts].sort(([, a], [, b]) => b - a)[0]?.[0] ?? DEFAULT_CURRENCY;
+}
+
+function priceBandLabel({ min, max }: (typeof PRICE_BANDS)[number], currency: string) {
+  if (min === 0) return `Under ${formatMoney(max, currency)}`;
+  if (max === Infinity) return `Over ${formatMoney(min, currency)}`;
+  return `${formatMoney(min, currency)} – ${formatMoney(max, currency)}`;
+}
 
 /** Fixed to what clientSearchProperties' status filter actually understands
  *  (getPropertyAvailability's available/under_offer split) — not every raw
@@ -181,10 +203,13 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
       ),
     [properties],
   );
-  const priceOptions: FilterOption[] = [
-    { value: "all", label: "Price" },
-    ...PRICE_BANDS.map((band) => ({ value: band.value, label: band.label })),
-  ];
+  const priceOptions = useMemo<FilterOption[]>(() => {
+    const currency = listingCurrency(properties);
+    return [
+      { value: "all", label: "Price" },
+      ...PRICE_BANDS.map((band) => ({ value: band.value, label: priceBandLabel(band, currency) })),
+    ];
+  }, [properties]);
 
   const searchFilters = useMemo<PropertySearchFilters>(() => {
     const band =
@@ -320,6 +345,20 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
     </div>
   );
 
+  const searchInput = (className: string) => (
+    <div className={cn("relative", className)}>
+      <Search className="text-ink-400 absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2" />
+      <input
+        type="search"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search properties..."
+        aria-label="Search properties"
+        className="border-ink-200 text-ink-900 placeholder:text-ink-400 focus:border-brand-400 h-10 w-full rounded-full border bg-white pr-3 pl-9 text-[13px] transition-colors outline-none max-sm:text-base"
+      />
+    </div>
+  );
+
   /* One filter bar for both routes — a single row of pills, all the same
      height as the search input beside them, so every control sits on one
      baseline.
@@ -330,64 +369,61 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
      sheet: one row per filter, its options hidden until that row is tapped
      (progressive disclosure), so a visitor sees one decision at a time
      instead of every option for every filter competing for the same small
-     screen at once. */
+     screen at once. Search stays on the page, in its own row above, bound
+     to the same state as the desktop box so both return the same results
+     (DEF: AFX-LST-058). */
   const filterBar = (
-    <div className="flex items-center gap-3">
-      <div className="hidden flex-1 flex-wrap items-center gap-2 sm:flex">
-        <FilterDropdown
-          label="Status"
-          icon={<Tag className="h-3.5 w-3.5" />}
-          value={filters.status}
-          options={STATUS_OPTIONS}
-          onChange={(value) => setFilters((f) => ({ ...f, status: value }))}
-        />
+    <>
+      {searchInput("mb-2 sm:hidden")}
+      <div className="flex items-center gap-3">
+        <div className="hidden flex-1 flex-wrap items-center gap-2 sm:flex">
+          <FilterDropdown
+            label="Status"
+            icon={<Tag className="h-3.5 w-3.5" />}
+            value={filters.status}
+            options={STATUS_OPTIONS}
+            onChange={(value) => setFilters((f) => ({ ...f, status: value }))}
+          />
+          <button
+            type="button"
+            onClick={() => setLocationPickerOpen(true)}
+            aria-haspopup="dialog"
+            aria-expanded={locationPickerOpen}
+            className={filterTriggerClass}
+          >
+            <MapPin className="text-brand-500 h-3.5 w-3.5 shrink-0" />
+            <span className="truncate">{selectedLocationLabel ?? "All Locations"}</span>
+            <ChevronDown className="text-ink-400 h-4 w-4 shrink-0" />
+          </button>
+          <FilterDropdown
+            label="Type"
+            icon={<Home className="h-3.5 w-3.5" />}
+            value={filters.type}
+            options={typeOptions}
+            onChange={(value) => setFilters((f) => ({ ...f, type: value }))}
+          />
+          <FilterDropdown
+            label="Price"
+            value={filters.price}
+            options={priceOptions}
+            onChange={(value) => setFilters((f) => ({ ...f, price: value }))}
+          />
+          {searchInput("max-w-[220px] min-w-[160px] flex-1")}
+        </div>
+
         <button
           type="button"
-          onClick={() => setLocationPickerOpen(true)}
-          aria-haspopup="dialog"
-          aria-expanded={locationPickerOpen}
-          className={filterTriggerClass}
+          onClick={() => setMobileFilterOpen(true)}
+          className="border-ink-200 text-ink-900 flex h-10 flex-1 items-center justify-center gap-2 rounded-full border bg-white px-4 text-[14px] font-semibold sm:hidden"
         >
-          <MapPin className="text-brand-500 h-3.5 w-3.5 shrink-0" />
-          <span className="truncate">{selectedLocationLabel ?? "All Locations"}</span>
-          <ChevronDown className="text-ink-400 h-4 w-4 shrink-0" />
+          <SlidersHorizontal className="h-4 w-4" />
+          Filters
+          {hasActiveFilters && <span className="bg-brand-600 h-2 w-2 rounded-full" />}
         </button>
-        <FilterDropdown
-          label="Type"
-          icon={<Home className="h-3.5 w-3.5" />}
-          value={filters.type}
-          options={typeOptions}
-          onChange={(value) => setFilters((f) => ({ ...f, type: value }))}
-        />
-        <FilterDropdown
-          label="Price"
-          value={filters.price}
-          options={priceOptions}
-          onChange={(value) => setFilters((f) => ({ ...f, price: value }))}
-        />
-        <div className="relative max-w-[220px] min-w-[160px] flex-1">
-          <Search className="text-ink-400 absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2" />
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search properties..."
-            className="border-ink-200 text-ink-900 placeholder:text-ink-400 focus:border-brand-400 h-10 w-full rounded-full border bg-white pr-3 pl-9 text-[13px] transition-colors outline-none"
-          />
-        </div>
+
+        {viewToggle}
       </div>
-
-      <button
-        type="button"
-        onClick={() => setMobileFilterOpen(true)}
-        className="border-ink-200 text-ink-900 flex h-10 flex-1 items-center justify-center gap-2 rounded-full border bg-white px-4 text-[14px] font-semibold sm:hidden"
-      >
-        <SlidersHorizontal className="h-4 w-4" />
-        Filters
-        {hasActiveFilters && <span className="bg-brand-600 h-2 w-2 rounded-full" />}
-      </button>
-
-      {viewToggle}
-    </div>
+    </>
   );
 
   const resultSummary = (
@@ -450,7 +486,7 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
             by default so the map (the actual reason to be on this route)
             gets the whole screen and the list stays one tap away instead
             of a permanently cramped strip above it. */}
-        <div className="border-ink-100 relative mt-3 h-[calc(100vh-190px)] min-h-[420px] overflow-hidden rounded-[22px] border lg:h-[calc(100vh-230px)] lg:min-h-[520px]">
+        <div className="border-ink-100 relative mt-3 h-[calc(100vh-238px)] min-h-[420px] overflow-hidden rounded-[22px] border sm:h-[calc(100vh-190px)] lg:h-[calc(100vh-230px)] lg:min-h-[520px]">
           <div className="absolute inset-0 lg:left-[380px]">
             <PropertyMap
               markers={mapMarkers}
