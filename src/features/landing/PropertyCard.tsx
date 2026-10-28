@@ -6,6 +6,7 @@ import { MonthlyEstimate } from "@/features/landing/MonthlyEstimate";
 import type { Property } from "@/features/landing/data/properties";
 import { formatMoney, formatPropertySize, titleCase } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { bathsLabel } from "@/features/properties/listing-display";
 
 /**
  * The card is an <article>, not a <a>: the monthly breakdown's (i) trigger
@@ -71,7 +72,7 @@ export function PropertyCard({ property, className }: { property: Property; clas
         </span>
         <span className="flex items-center gap-1.5">
           <Bath className="text-ink-400 h-4 w-4" />
-          {property.baths}
+          {bathsLabel(property)}
         </span>
         <span className="flex items-center gap-1.5">
           <Maximize className="text-ink-400 h-4 w-4" />

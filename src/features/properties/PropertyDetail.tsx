@@ -26,6 +26,7 @@ import type { Property } from "@/features/landing/data/properties";
 import { PropertyGallery } from "@/features/properties/PropertyGallery";
 import { formatMoney, formatPropertySize, titleCase } from "@/lib/format";
 import { locationName, locationPath, locationTrail } from "@/lib/property-seo";
+import { bathsLabel } from "@/features/properties/listing-display";
 
 const DEPOSIT_RATE = 0.1;
 const ASSUMED_RATE = 0.12;
@@ -141,7 +142,7 @@ export function PropertyDetail({ property }: { property: Property }) {
         <div className="border-ink-100 mt-7 flex flex-wrap gap-x-6 gap-y-4 border-y py-5 sm:gap-x-10">
           <Spec icon={Home} label="Type" value={titleCase(property.type)} />
           <Spec icon={Bed} label="Bedrooms" value={String(property.beds)} />
-          <Spec icon={Bath} label="Bathrooms" value={String(property.baths)} />
+          <Spec icon={Bath} label="Bathrooms" value={bathsLabel(property)} />
           <Spec icon={Maximize} label="Size" value={formatPropertySize(property.sqft)} />
         </div>
 

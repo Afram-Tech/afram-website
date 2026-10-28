@@ -2,10 +2,16 @@
 
 import type { TurnstileInstance } from "@marsidev/react-turnstile";
 import { Loader2 } from "lucide-react";
-import { useActionState, useEffect, useRef, useState } from "react";
+import { startTransition, useActionState, useEffect, useRef, useState } from "react";
 
-import { reportIssue } from "@/features/help/actions";
-import type { ReportField, ReportState } from "@/features/help/report-issue";
+import {
+  parseIssueReport,
+  refusal,
+  SEND_FAILED,
+  type ReportField,
+  type ReportState,
+} from "@/features/help/report-issue";
+import { useSubmitSupportRequest } from "@/hooks/data";
 import { cn } from "@/lib/utils";
 
 import { TURNSTILE_SITE_KEY, TurnstileCheck } from "./TurnstileCheck";
@@ -15,7 +21,9 @@ const INITIAL_STATE: ReportState = { status: "idle" };
 const fieldClass =
   "w-full rounded-[14px] bg-white px-4 text-[15px] text-ink-900 ring-1 ring-ink-200 transition placeholder:text-ink-400 focus:outline-none focus:ring-2 focus:ring-brand-400 aria-[invalid=true]:ring-coral-500/60";
 
-/** One message and an email — filed as a support request, like in-app Help. */
+/** One message and an email — filed as a support request, like in-app Help.
+ *  The email is required: it's how we reply, and with the reference it's the
+ *  only way to track the request. */
 export function ReportIssueForm({
   onSent,
   onAgain,
@@ -23,8 +31,23 @@ export function ReportIssueForm({
   onSent?: (reference: string, email: string) => void;
   onAgain?: () => void;
 }) {
-  const [state, action, pending] = useActionState(reportIssue, INITIAL_STATE);
-  // Controlled: React resets a form after its action, and an error shouldn't wipe it.
+  const { submitSupportRequest } = useSubmitSupportRequest();
+
+  const submit = async (_previous: ReportState, form: FormData): Promise<ReportState> => {
+    const report = parseIssueReport(form);
+    if (!report.ok) return report.state;
+
+    try {
+      const { data } = await submitSupportRequest({ variables: { input: report.payload } });
+      const reference = data?.submitSupportRequest.reference;
+      return reference ? { status: "sent", reference } : SEND_FAILED;
+    } catch (error) {
+      return refusal(error);
+    }
+  };
+
+  const [state, action, pending] = useActionState(submit, INITIAL_STATE);
+  // Controlled: the send reads from here, and the sent view shows the message back.
   const [values, setValues] = useState({ message: "", email: "" });
   const [captcha, setCaptcha] = useState("");
   const turnstile = useRef<TurnstileInstance>(null);
@@ -38,6 +61,7 @@ export function ReportIssueForm({
   };
   // Without a site key (local dev) there's no check to wait for.
   const waitingOnCheck = !!TURNSTILE_SITE_KEY && !captcha;
+  const incomplete = !values.message.trim() || !values.email.trim();
 
   const sentReference = state.status === "sent" ? state.reference : null;
   useEffect(() => {
@@ -46,15 +70,19 @@ export function ReportIssueForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sentReference, onSent]);
 
-  // Where the visitor is and on what device, added at submit to help triage.
-  const submit = (form: FormData) => {
+  // The message and email, plus where the visitor is and on what device, to help triage.
+  const send = () => {
+    const form = new FormData();
+    form.set("message", values.message);
+    form.set("email", values.email);
     form.set("path", window.location.pathname);
     form.set("userAgent", navigator.userAgent);
     form.set("viewport", `${window.innerWidth}×${window.innerHeight}`);
     form.set("language", navigator.language);
     form.set("captchaToken", captcha);
     form.set("idempotencyKey", sendKey.current ?? crypto.randomUUID());
-    action(form);
+    // Outside a <form action>, the dispatch needs a transition for `pending` to track it.
+    startTransition(() => action(form));
     // A token works once, sent or refused: the next send needs a fresh check.
     turnstile.current?.reset();
     setCaptcha("");
@@ -70,12 +98,8 @@ export function ReportIssueForm({
         <div className="text-ink-900 ring-ink-100 max-w-[92%] self-start rounded-2xl rounded-bl-md bg-white px-4 py-3 text-[14px] leading-relaxed ring-1">
           <span className="text-brand-700 mb-0.5 block text-[11.5px] font-bold">Afram Support</span>
           Thanks, we&apos;ve got it. Your reference is{" "}
-          <b className="tnum font-semibold">{state.reference}</b>.{" "}
-          {email ? (
-            <>We&apos;ll reply to {email}. Check on it below with the reference and that email.</>
-          ) : (
-            "Quote it if you contact us. Add an email next time so we can reply."
-          )}
+          <b className="tnum font-semibold">{state.reference}</b>. We&apos;ll reply to {email}.
+          Check on it below with the reference and that email.
         </div>
         {onAgain && (
           <button
@@ -99,11 +123,10 @@ export function ReportIssueForm({
     ) : null;
 
   return (
-    <form action={submit} className="flex flex-col gap-2.5" noValidate>
+    <div className="flex flex-col gap-2.5">
       <label className="block">
         <span className="sr-only">Your message</span>
         <textarea
-          name="message"
           value={values.message}
           onChange={(event) => edit({ message: event.target.value })}
           aria-invalid={error?.field === "message"}
@@ -118,8 +141,9 @@ export function ReportIssueForm({
       <label className="block">
         <span className="sr-only">Your email</span>
         <input
-          name="email"
           type="email"
+          required
+          aria-required="true"
           value={values.email}
           onChange={(event) => edit({ email: event.target.value })}
           aria-invalid={error?.field === "email"}
@@ -144,8 +168,9 @@ export function ReportIssueForm({
       )}
 
       <button
-        type="submit"
-        disabled={pending || waitingOnCheck}
+        type="button"
+        onClick={send}
+        disabled={pending || waitingOnCheck || incomplete}
         className="bg-brand-500 hover:bg-brand-600 mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-white transition-all active:scale-[0.99] disabled:cursor-wait disabled:opacity-70"
       >
         {pending ? (
@@ -157,6 +182,6 @@ export function ReportIssueForm({
           "Send message"
         )}
       </button>
-    </form>
+    </div>
   );
 }
