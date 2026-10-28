@@ -16,7 +16,7 @@ const form = (fields: Record<string, string>) => {
 
 const VALID = {
   message: "  My access link says it has expired. I opened it straight from the email.  ",
-  email: "",
+  email: " ama@email.com ",
   path: "/help",
   userAgent: "Test",
   viewport: "390×844",
@@ -33,11 +33,11 @@ describe("parseIssueReport", () => {
       ok: true,
       payload: {
         idempotencyKey: "6f1c2a4e-8b0d-4a8e-9a55-1d2c3b4a5e6f",
-        replyEmail: null,
+        replyEmail: "ama@email.com",
         kind: "bug",
         area: "other",
         title: "My access link says it has expired",
-        body: "My access link says it has expired. I opened it straight from the email.",
+        body: "My access link says it has expired. I opened it straight from the email.\n\nReply to: ama@email.com",
         captchaToken: "turnstile-token",
         context: {
           screen: "Website Help",
@@ -50,14 +50,6 @@ describe("parseIssueReport", () => {
         },
       },
     });
-  });
-
-  it("sends the email to reply to, and adds it to the message, when one is given", () => {
-    const result = parseIssueReport(form({ ...VALID, email: " ama@email.com " }));
-    expect(result.ok && result.payload.replyEmail).toBe("ama@email.com");
-    expect(result.ok && result.payload.body).toBe(
-      "My access link says it has expired. I opened it straight from the email.\n\nReply to: ama@email.com",
-    );
   });
 
   it("keeps the message within 4,000 characters with the email line added", () => {
@@ -77,7 +69,9 @@ describe("parseIssueReport", () => {
 
   it.each([
     ["message", { message: "Broken" }, "Tell us a little more, so we can find the problem."],
-    ["email", { email: "not-an-email" }, "Enter a valid email, or leave it blank."],
+    ["email", { email: "" }, "Add your email, so we can reply and you can track this."],
+    ["email", { email: "   " }, "Add your email, so we can reply and you can track this."],
+    ["email", { email: "not-an-email" }, "Enter a valid email."],
   ])("points at the %s field when it's wrong", (field, change, message) => {
     expect(parseIssueReport(form({ ...VALID, ...change }))).toEqual({
       ok: false,

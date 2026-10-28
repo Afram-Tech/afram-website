@@ -15,7 +15,11 @@ const ReportSchema = z.object({
     .trim()
     .min(10, "Tell us a little more, so we can find the problem.")
     .max(4000, "Keep this under 4,000 characters."),
-  email: z.union([z.literal(""), z.email("Enter a valid email, or leave it blank.")]),
+  // Required: a request is only ever looked up by its reference and this email.
+  email: z
+    .string()
+    .min(1, "Add your email, so we can reply and you can track this.")
+    .pipe(z.email("Enter a valid email.")),
   path: z.string().max(200).optional(),
   userAgent: z.string().max(400).optional(),
   viewport: z.string().max(40).optional(),
@@ -38,9 +42,9 @@ const FIELDS: readonly string[] = ["message", "email"];
 
 const BODY_MAX = 4000;
 
-/** The line the message ends with when they gave an email, so whoever reads
- *  it — in our admin or in Linear — sees where to answer. */
-export const replyLine = (email: string) => (email ? `\n\nReply to: ${email}` : "");
+/** The line the message ends with, so whoever reads it — in our admin or in
+ *  Linear — sees where to answer. */
+export const replyLine = (email: string) => `\n\nReply to: ${email}`;
 
 /** A question reads as a request for help; anything else as something broken. */
 export const guessKind = (message: string): ReportPayload["kind"] =>
@@ -116,7 +120,7 @@ export function parseIssueReport(
       // One per message, made in the browser: a resend after a dropped
       // connection can't file it twice.
       idempotencyKey: d.idempotencyKey || crypto.randomUUID(),
-      replyEmail: d.email || null,
+      replyEmail: d.email,
       kind: guessKind(d.message),
       area: "other",
       title: titleFrom(d.message),

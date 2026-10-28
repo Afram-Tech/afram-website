@@ -45,13 +45,7 @@ export function TrackRequest({
       <p className="text-ink-500 -mt-1 text-[13.5px] leading-relaxed">
         Enter the reference from your confirmation and the email you sent it with.
       </p>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          check();
-        }}
-        className="flex flex-col gap-2"
-      >
+      <div className="flex flex-col gap-2">
         <label htmlFor={`${id}-ref`} className="sr-only">
           Reference
         </label>
@@ -77,13 +71,14 @@ export function TrackRequest({
           className="tnum text-ink-900 ring-ink-200 placeholder:text-ink-400 focus:ring-brand-400 h-11 min-w-[350px] rounded-[14px] bg-white px-4 text-[14.5px] font-semibold tracking-[0.04em] ring-1 placeholder:font-normal placeholder:tracking-normal placeholder:normal-case focus:ring-2 focus:outline-none sm:w-[150px] sm:shrink-0"
         />
         <button
-          type="submit"
+          type="button"
+          onClick={check}
           disabled={pending || !value.trim() || !email.trim()}
           className="text-brand-500 ring-brand-500 hover:bg-brand-50 inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full px-5 text-[14px] font-semibold ring-1 transition-colors disabled:opacity-60"
         >
           {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Check"}
         </button>
-      </form>
+      </div>
 
       <div aria-live="polite">
         {result?.status === "found" && <TrackResult result={result} />}
