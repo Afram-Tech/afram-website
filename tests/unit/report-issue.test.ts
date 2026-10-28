@@ -1,9 +1,13 @@
+import { CombinedGraphQLErrors } from "@apollo/client";
 import { describe, expect, it } from "vitest";
 
 import {
+  checkFrom,
   guessKind,
   parseIssueReport,
   parseReference,
+  refusal,
+  SEND_FAILED,
   stateFrom,
   titleFrom,
 } from "@/features/help/report-issue";
@@ -129,5 +133,54 @@ describe("stateFrom", () => {
     ["something_new", "in_progress"],
   ])("reads %s as %s", (status, state) => {
     expect(stateFrom(status)).toBe(state);
+  });
+});
+
+describe("refusal", () => {
+  const graphQLError = (message: string, field?: string[]) =>
+    new CombinedGraphQLErrors({
+      errors: [{ message, ...(field && { extensions: { field } }) }],
+    });
+
+  it("shows the API's message against the box it's about", () => {
+    expect(
+      refusal(graphQLError("That email can't receive mail.", ["input", "replyEmail"])),
+    ).toEqual({
+      status: "error",
+      message: "That email can't receive mail.",
+      field: "email",
+    });
+  });
+
+  it("shows a message about no box on its own", () => {
+    expect(refusal(graphQLError("Please try the check again."))).toEqual({
+      status: "error",
+      message: "Please try the check again.",
+    });
+  });
+
+  it("falls back to a general failure for anything else", () => {
+    expect(refusal(new TypeError("Failed to fetch"))).toBe(SEND_FAILED);
+  });
+});
+
+describe("checkFrom", () => {
+  it("reads a found request onto the tracker's steps", () => {
+    expect(
+      checkFrom("AF-7KQ2M9", {
+        reference: "AF-7KQ2M9",
+        status: "open" as never,
+        updatedAt: "2026-10-28T09:00:00.000Z",
+      }),
+    ).toEqual({
+      status: "found",
+      reference: "AF-7KQ2M9",
+      state: "received",
+      updatedAt: "2026-10-28T09:00:00.000Z",
+    });
+  });
+
+  it("is not found when the reference and email don't match", () => {
+    expect(checkFrom("AF-7KQ2M9", null)).toEqual({ status: "not_found", reference: "AF-7KQ2M9" });
   });
 });

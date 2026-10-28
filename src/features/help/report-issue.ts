@@ -1,6 +1,11 @@
+import { CombinedGraphQLErrors } from "@apollo/client";
 import { z } from "zod";
 
-import type { SubmitSupportRequestInput, SupportStatus } from "@/types/generated/graphql";
+import type {
+  GetSupportRequestStatusQuery,
+  SubmitSupportRequestInput,
+  SupportStatus,
+} from "@/types/generated/graphql";
 
 /**
  * Report an issue from /help. Filed with the API's public
@@ -140,6 +145,27 @@ export function parseIssueReport(
   };
 }
 
+export const SEND_FAILED: ReportState = {
+  status: "error",
+  message: "We couldn't send your message. Please try again.",
+};
+
+/** The API's input fields the form has a box for. */
+const FIELD_FOR: Record<string, ReportField> = { body: "message", replyEmail: "email" };
+
+/**
+ * A refusal the visitor can fix comes back as a GraphQL error with a message
+ * written for people (spec 1.7) and the input it's about. Shown as written,
+ * against its field when there is one.
+ */
+export function refusal(error: unknown): ReportState {
+  if (!CombinedGraphQLErrors.is(error) || !error.errors[0]) return SEND_FAILED;
+  const first = error.errors[0];
+  const path = first.extensions?.field;
+  const field = Array.isArray(path) ? FIELD_FOR[String(path[path.length - 1])] : undefined;
+  return { status: "error", message: first.message, ...(field && { field }) };
+}
+
 /* ── Track a request ─────────────────────────────────────────────────── */
 
 export type RequestState = "received" | "in_progress" | "resolved";
@@ -168,4 +194,18 @@ export function parseReference(input: string) {
   const raw = input.trim().toUpperCase().replace(/\s+/g, "");
   const reference = /^[A-Z0-9]{6}$/.test(raw) ? `AF-${raw}` : raw;
   return REFERENCE.test(reference) ? reference : null;
+}
+
+/** What `getSupportRequestStatus` found, as the tracker shows it. */
+export function checkFrom(
+  reference: string,
+  found: GetSupportRequestStatusQuery["getSupportRequestStatus"],
+): ReportCheck {
+  if (!found) return { status: "not_found", reference };
+  return {
+    status: "found",
+    reference: found.reference,
+    state: stateFrom(found.status),
+    updatedAt: found.updatedAt as string,
+  };
 }

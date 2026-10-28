@@ -4,8 +4,14 @@ import type { TurnstileInstance } from "@marsidev/react-turnstile";
 import { Loader2 } from "lucide-react";
 import { startTransition, useActionState, useEffect, useRef, useState } from "react";
 
-import { reportIssue } from "@/features/help/actions";
-import type { ReportField, ReportState } from "@/features/help/report-issue";
+import {
+  parseIssueReport,
+  refusal,
+  SEND_FAILED,
+  type ReportField,
+  type ReportState,
+} from "@/features/help/report-issue";
+import { useSubmitSupportRequest } from "@/hooks/data";
 import { cn } from "@/lib/utils";
 
 import { TURNSTILE_SITE_KEY, TurnstileCheck } from "./TurnstileCheck";
@@ -25,7 +31,22 @@ export function ReportIssueForm({
   onSent?: (reference: string, email: string) => void;
   onAgain?: () => void;
 }) {
-  const [state, action, pending] = useActionState(reportIssue, INITIAL_STATE);
+  const { submitSupportRequest } = useSubmitSupportRequest();
+
+  const submit = async (_previous: ReportState, form: FormData): Promise<ReportState> => {
+    const report = parseIssueReport(form);
+    if (!report.ok) return report.state;
+
+    try {
+      const { data } = await submitSupportRequest({ variables: { input: report.payload } });
+      const reference = data?.submitSupportRequest.reference;
+      return reference ? { status: "sent", reference } : SEND_FAILED;
+    } catch (error) {
+      return refusal(error);
+    }
+  };
+
+  const [state, action, pending] = useActionState(submit, INITIAL_STATE);
   // Controlled: the send reads from here, and the sent view shows the message back.
   const [values, setValues] = useState({ message: "", email: "" });
   const [captcha, setCaptcha] = useState("");

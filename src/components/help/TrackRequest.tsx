@@ -3,8 +3,13 @@
 import { Check, Loader2 } from "lucide-react";
 import { useId, useState, useTransition } from "react";
 
-import { checkReport } from "@/features/help/actions";
-import type { ReportCheck, RequestState } from "@/features/help/report-issue";
+import {
+  checkFrom,
+  parseReference,
+  type ReportCheck,
+  type RequestState,
+} from "@/features/help/report-issue";
+import { useSupportRequestStatus } from "@/hooks/data";
 import { cn } from "@/lib/utils";
 
 const STEPS = ["Sent", "Team on it", "Sorted"] as const;
@@ -28,10 +33,26 @@ export function TrackRequest({
   const [result, setResult] = useState<ReportCheck | null>(null);
   const [pending, startTransition] = useTransition();
   const id = useId();
+  const { getSupportRequestStatus } = useSupportRequestStatus();
+
+  const lookUp = async (): Promise<ReportCheck> => {
+    const reference = parseReference(value);
+    const replyEmail = email.trim();
+    if (!reference || !replyEmail) return { status: "not_found", reference: value.trim() };
+
+    try {
+      const { data, error } = await getSupportRequestStatus({
+        variables: { reference, replyEmail },
+      });
+      return error ? { status: "error" } : checkFrom(reference, data?.getSupportRequestStatus);
+    } catch {
+      return { status: "error" };
+    }
+  };
 
   const check = () => {
     if (!value.trim() || !email.trim()) return;
-    startTransition(async () => setResult(await checkReport(value, email)));
+    startTransition(async () => setResult(await lookUp()));
   };
 
   return (
