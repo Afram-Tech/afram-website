@@ -9,7 +9,6 @@ const MARQUEE_DURATION = "110s";
 
 export function PropertyMarquee({ properties }: { properties: Property[] }) {
   const [paused, setPaused] = useState(false);
-  // const track = [...properties, ...properties];
 
   return (
     <div

@@ -8,12 +8,6 @@ import { formatMoney, formatPropertySize, titleCase } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { bathsLabel } from "@/features/properties/listing-display";
 
-/**
- * The card is an <article>, not a <a>: the monthly breakdown's (i) trigger
- * and its "Full terms" link cannot sit inside an anchor. The title link is
- * stretched over the whole card with a ::before overlay instead, so the card
- * still clicks through everywhere the tooltip does not cover.
- */
 export function PropertyCard({ property, className }: { property: Property; className?: string }) {
   return (
     <article
