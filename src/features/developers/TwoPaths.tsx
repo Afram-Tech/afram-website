@@ -28,8 +28,8 @@ export const VENDOR_PATHS: Path[] = [
   {
     badge: "Sell faster",
     icon: TrendingUp,
-    title: "Sell to members who already have financing.",
-    intro: "Members arrive approved. Their financier pays you in full.",
+    title: "Sell to buyers who already have financing.",
+    intro: "Buyers arrive approved. Their financier pays you in full.",
     points: [],
     cta: SIGN_UP_CTA,
   },

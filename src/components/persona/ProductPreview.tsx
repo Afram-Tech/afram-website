@@ -24,7 +24,7 @@ const SLIDES = [
   {
     key: "finance",
     url: "afram.co/financing",
-    caption: "Member financing priced before anyone commits.",
+    caption: "Buyer financing priced before anyone commits.",
     render: () => <FinanceMock />,
   },
   {

@@ -218,7 +218,7 @@ export function ContactSplit({
   title,
   subtitle,
   formTitle = "Send us a message",
-  formSubtitle = "Leave your details and what it's about. A real person will get back to you.",
+  formSubtitle = "Leave your details and what it’s about. A real person will get back to you.",
   topics,
   cta = "Send a message",
   showContacts = true,

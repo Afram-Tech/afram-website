@@ -59,7 +59,7 @@ WHAT YOU CONTROL
 
 WHO BORROWS
  Developers request construction and completion facilities.
- Home members request purchase facilities on completed units.
+ Home buyers request purchase facilities on completed units.
  Afram sets no terms. Rate, tenor and structure are yours.
 
 Email     capital@afram.co

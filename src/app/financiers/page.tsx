@@ -26,7 +26,7 @@ import { accessCta, signUpHref } from "@/features/access/cta";
 const FINANCIER_CTA = accessCta({ label: "Get Started", href: signUpHref("financier") });
 
 export const metadata: Metadata = buildMetadata({
-  title: "Financiers: Deploy Capital into Verified Real Estate",
+  title: "Lend against verified collateral",
   description:
     "Secured, compliant exposure to Ghanaian real estate: verified title, documented security, full KYC, and terms you set.",
   path: "/financiers",
@@ -43,9 +43,9 @@ const FINANCE_PATHS: Path[] = [
     cta: { label: "Request a briefing", href: "#briefing" },
   },
   {
-    badge: "Home members",
+    badge: "Home buyers",
     icon: Home,
-    title: "Lend to members of verified homes.",
+    title: "Lend to buyers of verified homes.",
     intro: "Often the same asset you funded during construction.",
     points: [],
     cta: { label: "Request a briefing", href: "#briefing" },
@@ -84,7 +84,7 @@ export default async function FinanciersPage() {
       <JsonLd data={buildFaqJsonLd(allFaqs)} />
       <PersonaPhotoHero
         image="/for-financiers-hero.webp"
-        imageAlt="Two financiers shaking hands over a deal"
+        imageAlt="Two financiers shaking hands on a rooftop"
         headline={["Deploy capital into verified Ghanaian real estate."]}
         subhead="Every loan is secured against title-verified Ghanaian real estate, with full KYC and terms you control."
         ctaLabel={FINANCIER_CTA.label}
@@ -98,7 +98,7 @@ export default async function FinanciersPage() {
 
       <TwoPaths
         tone="mint"
-        title="Finance the build, or finance the member."
+        title="Finance the build, or finance the buyer."
         paths={FINANCE_PATHS}
       />
       <PersonaProof

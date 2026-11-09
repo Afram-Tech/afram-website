@@ -6,20 +6,20 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 const PILLARS = [
   {
     eyebrow: "Collateral",
-    title: "Secured by verified collateral",
+    title: "Deploy capital into verified real estate opportunities.",
     body: "Every loan sits behind a registered first legal charge over a parcel checked against Lands Commission records.",
     featured: true,
   },
   {
-    eyebrow: "Your mandate",
-    title: "Set your own rules",
-    body: "You choose the ticket, the term, and the rate. Only deals that fit your box reach your desk.",
+    eyebrow: "Transparency",
+    title: "Access transparent property and ownership records.",
+    body: "You see the verified title result and the full paper trail, so you are not relying on a borrower's photocopy.",
     featured: false,
   },
   {
-    eyebrow: "Compliance",
-    title: "Compliance handled",
-    body: "Borrowers are verified by Ghana Card, with AML screening and a documented audit trail for your file.",
+    eyebrow: "Your mandate",
+    title: "Configure financing terms and risk parameters.",
+    body: "You choose the ticket, the term, and the rate. Only deals that fit your box reach your desk.",
     featured: false,
   },
 ];
@@ -28,7 +28,6 @@ export function FinancierPillars() {
   return (
     <Section>
       <SectionHeading
-        eyebrow="Why Afram"
         title="Lend with confidence."
         intro="Clean collateral, your own rules, and the compliance work done for you."
       />
@@ -36,7 +35,6 @@ export function FinancierPillars() {
         {PILLARS.map((pillar, index) => (
           <Reveal key={pillar.title} delay={index * 0.08}>
             <FeatureCard
-              eyebrow={pillar.eyebrow}
               title={pillar.title}
               body={pillar.body}
               featured={pillar.featured}

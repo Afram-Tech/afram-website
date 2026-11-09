@@ -5,9 +5,7 @@ import { useEffect, useRef } from "react";
 
 import type { NewsItem } from "@/features/landing/data/news";
 import { formatArticleDate } from "@/lib/format";
-import { cn } from "@/lib/utils";
 
-import { newsSerif } from "./fonts";
 import { PublisherImage } from "./PublisherImage";
 import { Block, longDate, standfirst } from "./story-parts";
 
@@ -20,8 +18,8 @@ interface NewsStoryProps {
 }
 
 /**
- * One publisher's story, typeset as news: kicker, serif headline, standfirst,
- * byline between rules, full-width lead photo, serif body with a drop cap,
+ * One publisher's story, typeset as news: kicker, headline, standfirst,
+ * byline between rules, full-width lead photo, body with a drop cap,
  * an end mark, the source note and "More stories". The text and images are
  * safe blocks (see lib/article-blocks.ts), always credited to and linking
  * back to the publisher. `data-nosnippet` keeps search engines from quoting
@@ -37,7 +35,7 @@ export function NewsStory({ item, upNext, onSelect }: NewsStoryProps) {
   }, []);
 
   return (
-    <article data-nosnippet className={cn(newsSerif.variable, "rise pb-8")}>
+    <article data-nosnippet className="rise pb-8">
       <header className="mx-auto max-w-[880px] px-5 pt-5 sm:px-6 sm:pt-6">
         <p className="text-brand-700 flex items-center gap-3 font-sans text-[11.5px] font-bold tracking-[0.16em] uppercase">
           <span aria-hidden className="bg-brand-500 h-0.5 w-6" />
@@ -47,11 +45,11 @@ export function NewsStory({ item, upNext, onSelect }: NewsStoryProps) {
           id={STORY_TITLE_ID}
           ref={titleRef}
           tabIndex={-1}
-          className="text-ink-950 mt-3 font-serif text-[clamp(1.85rem,3.8vw,2.55rem)] leading-[1.1] font-bold tracking-[-0.015em] outline-none"
+          className="text-ink-950 mt-3 text-[clamp(1.85rem,3.8vw,2.55rem)] leading-[1.1] font-bold tracking-[-0.015em] outline-none"
         >
           {item.title}
         </h2>
-        {deck && <p className="text-ink-600 mt-3 font-serif text-[1.2rem] leading-[1.5]">{deck}</p>}
+        {deck && <p className="text-ink-600 mt-3 text-[1.2rem] leading-[1.5]">{deck}</p>}
         <div className="border-ink-200 text-ink-500 mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 border-y py-2 font-sans text-[12.5px] sm:gap-x-3">
           {item.author && (
             <>
@@ -90,7 +88,7 @@ export function NewsStory({ item, upNext, onSelect }: NewsStoryProps) {
 
       {/* Half-screen drawers get wide; the text keeps a readable measure. */}
       <div className="mx-auto max-w-[880px] px-5 sm:px-6">
-        <div className="text-ink-800 mt-5 space-y-4 font-serif text-[1.125rem] leading-[1.75]">
+        <div className="text-ink-800 mt-5 space-y-4 text-[1.125rem] leading-[1.75]">
           {item.body.length > 0 ? (
             item.body.map((block, index) => (
               <Block
@@ -140,12 +138,12 @@ export function NewsStory({ item, upNext, onSelect }: NewsStoryProps) {
                   >
                     <span
                       aria-hidden
-                      className="text-brand-600 w-7 shrink-0 font-serif text-[1.6rem] leading-none font-bold"
+                      className="text-brand-600 w-7 shrink-0 text-[1.6rem] leading-none font-bold"
                     >
                       {String(position + 1).padStart(2, "0")}
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="text-ink-950 group-hover/next:text-brand-700 line-clamp-3 block font-serif text-[1.08rem] leading-snug font-semibold transition-colors">
+                      <span className="text-ink-950 group-hover/next:text-brand-700 line-clamp-3 block text-[1.08rem] leading-snug font-semibold transition-colors">
                         {next.title}
                       </span>
                       <span className="text-ink-400 mt-1.5 block font-sans text-[12px]">

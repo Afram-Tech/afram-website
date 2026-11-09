@@ -24,13 +24,13 @@ const SALE_STEPS: Step[] = [
   },
   {
     n: "03",
-    title: "Access financed members",
-    body: "Members arrive financed by Afram lenders or pay through your own payment plan. Either way, you sell faster.",
+    title: "Access financed buyers",
+    body: "Buyers arrive financed by Afram lenders or pay through your own payment plan. Either way, you sell faster.",
   },
   {
     n: "04",
     title: "Review and close",
-    body: "Review the offers from financed members. Agree the terms. Close the sale.",
+    body: "Review the offers from financed buyers. Agree the terms. Close the sale.",
   },
 ];
 
@@ -108,7 +108,7 @@ export function SellFlow() {
   return (
     <Steps
       title="Four steps from listing to closing a sale."
-      intro="No bank queues for your members. No chasing leads for you."
+      intro="No bank queues for your buyers. No chasing leads for you."
       steps={SALE_STEPS}
       cta
       className="bg-ink-50/60"

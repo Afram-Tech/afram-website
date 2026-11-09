@@ -20,6 +20,9 @@ import "./globals.css";
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
+  // Variable font: every weight the design uses (400–800) comes from one file.
+  // Italic is loaded too, for blockquotes and <em> in articles.
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {

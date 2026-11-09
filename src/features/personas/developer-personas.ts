@@ -11,10 +11,10 @@ export const PERSONAS: Record<string, PersonaContent> = {
   individual: {
     id: "individual",
     tab: "Individual",
-    eyebrow: "For individual vendors",
+    eyebrow: "For individual developers",
     headline: "Sell units faster.",
     subhead:
-      "Unsold units lock up your capital. List your project or portfolio on Afram. Members arrive with financing in place. You recover your money, make profit, and start the next build.",
+      "Unsold units lock up your capital. List your project or portfolio on Afram. Buyers arrive with financing in place. You recover your money, make profit, and start the next build.",
     image: unsplash("photo-1605276374104-dee2a0ed3cd6"),
     imageBadge: "Verified project",
     // The stat panel was cut (vendors page doc, Oct 2026).
@@ -30,12 +30,12 @@ export const PERSONAS: Record<string, PersonaContent> = {
       {
         title: "Your financials stay private",
         icon: "Lock",
-        body: "Members see your title, permits, and unit prices. Your costs, margins, and funding sources stay private.",
+        body: "Buyers see your title, permits, and unit prices. Your costs, margins, and funding sources stay private.",
       },
       {
         title: "Deposits protected",
         icon: "ShieldCheck",
-        body: "Afram holds member deposits. Members arrive with financing arranged. You stop chasing defaulters.",
+        body: "Afram holds buyer deposits. Buyers arrive with financing arranged. You stop chasing defaulters.",
       },
       {
         title: "No formal title yet? Talk to us.",
@@ -51,25 +51,25 @@ export const PERSONAS: Record<string, PersonaContent> = {
       },
       {
         q: "How does an Afram endorsement help me sell faster?",
-        a: "Members in Ghana are careful, and for good reason. Land disputes and stalled projects are common. Since every asset on Afram is verified, it serves as an endorsement that your title has been checked.",
+        a: "Buyers in Ghana are careful, and for good reason. Land disputes and stalled projects are common. Since every asset on Afram is verified, it serves as an endorsement that your title has been checked.",
       },
       {
-        q: "Are these real members or just leads?",
-        a: "They are serious members. Financing is arranged through Afram. They are ready to buy.",
+        q: "Are these real buyers or just leads?",
+        a: "They are serious buyers. Financing is arranged through Afram. They are ready to buy.",
       },
       {
         q: "Will my project’s financials be exposed?",
-        a: "No. Your pricing, costs and margins stay private. We publish only what a member needs to decide.",
+        a: "No. Your pricing, costs and margins stay private. We publish only what a buyer needs to decide.",
       },
     ],
   },
   corporate: {
     id: "corporate",
     tab: "Corporate",
-    eyebrow: "For vendor firms",
+    eyebrow: "For development firms",
     headline: "Build or sell more units faster.",
     subhead:
-      "List your unit or portfolio to get access to financed members; list your projects to raise capital for completion.",
+      "List your unit or portfolio to get access to financed buyers; list your projects to raise capital for completion.",
     image: unsplash("photo-1576941089067-2de3c901e126"),
     imageBadge: "Verified project",
     stats: [],
@@ -82,12 +82,12 @@ export const PERSONAS: Record<string, PersonaContent> = {
       {
         title: "An endorsement",
         icon: "BadgeCheck",
-        body: "Listing a property on Afram tells members your title is verified.",
+        body: "Listing a property on Afram tells buyers your title is verified.",
       },
       {
-        title: "Financed members, plus market data",
+        title: "Financed buyers, plus market data",
         icon: "TrendingUp",
-        body: "You get members with financing ready. You also see demand: which areas are heating up, and which unit sizes and prices sell.",
+        body: "You get buyers with financing ready. You also see demand: which areas are heating up, and which unit sizes and prices sell.",
       },
     ],
     blocksCta: SIGN_UP_CTA,
@@ -98,7 +98,7 @@ export const PERSONAS: Record<string, PersonaContent> = {
       },
       {
         q: "Does this turn into sales, or just interest?",
-        a: "Sales are the point. The members we send already have financing arranged.",
+        a: "Sales are the point. The buyers we send already have financing arranged.",
       },
       {
         q: "Will this clash with our agents?",
@@ -106,7 +106,7 @@ export const PERSONAS: Record<string, PersonaContent> = {
       },
       {
         q: "What market data do we get?",
-        a: "You see demand from real member activity. Which areas are heating up. Which unit sizes and prices sell.",
+        a: "You see demand from real buyer activity. Which areas are heating up. Which unit sizes and prices sell.",
       },
     ],
   },

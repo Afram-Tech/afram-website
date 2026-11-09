@@ -60,14 +60,12 @@
 
   --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
 
+  /* Montserrat is the only typeface. The serif and mono stacks point at it
+     too, so a stray font-serif/font-mono utility (or preflight's monospace
+     default for code, kbd and pre) cannot fall back to another face. */
   --font-sans: var(--font-montserrat), sans-serif;
-}
-
-/* Inline so the utility reads --font-news-serif where it's used: that
-   variable is only defined inside a news story (news/fonts.ts), so a
-   :root-level token would resolve it too early and come out empty. */
-@theme inline {
-  --font-serif: var(--font-news-serif, Georgia), Georgia, "Times New Roman", serif;
+  --font-serif: var(--font-montserrat), sans-serif;
+  --font-mono: var(--font-montserrat), sans-serif;
 }
 
 body {

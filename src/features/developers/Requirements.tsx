@@ -39,7 +39,7 @@ WHO WANTS WHAT
 
 MISSING A DOCUMENT?
 Most developers are. Talk to us before you assemble the whole pack,
-using the form on the Afram vendors page.
+using the form on the Afram developers page.
 `;
 
 export function Requirements() {

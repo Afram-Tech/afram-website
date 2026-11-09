@@ -27,9 +27,9 @@ const VENDOR_CTA = accessCta({ label: "Get Started", href: signUpHref("issuer") 
 const LIST_A_PROJECT = accessCta({ label: "List a project", href: signUpHref() });
 
 export const metadata: Metadata = buildMetadata({
-  title: "List Properties — Raise Capital and Accelerate Sales",
+  title: "List, sell, and get paid faster",
   description:
-    "List an Afram-verified project and reach pre-financed, ready members. Recover capital faster without waiting on slow sales, whether you're an individual vendor or a development firm.",
+    "List a verified project on Afram, bring buyers built-in financing, and recover capital faster without diluting your brand.",
   path: "/developers",
 });
 
@@ -70,9 +70,9 @@ export default async function DevelopersPage() {
       <JsonLd data={buildFaqJsonLd(allFaqs)} />
       <PersonaPhotoHero
         image="/for-vendors-hero.webp"
-        imageAlt="A vendor reviewing project plans on-site"
+        imageAlt="A property developer reviewing plans on site"
         headline={["Raise Capital", "and accelerate sales"]}
-        subhead="List a project on Afram. We verify and validate every project, so financiers fund it and you reach members with financing."
+        subhead="List a project on Afram. We verify and validate every project, so financiers fund it and you reach buyers with financing."
         ctaLabel={VENDOR_CTA.label}
         ctaHref={VENDOR_CTA.href}
       />
@@ -86,7 +86,7 @@ export default async function DevelopersPage() {
       <CapitalFlow />
       <PersonaProof
         title="Projects already listed on Afram."
-        intro="Every listing passed a title check before going live. See what vendors have listed."
+        intro="Every listing passed a title check before going live. See what developers have listed."
         stats={PROOF_STATS}
         properties={proofProperties}
         ctaLabel="Browse all listings"
@@ -99,11 +99,11 @@ export default async function DevelopersPage() {
       <TalkToPartner />
 
       <PersonaAnswers personas={ordered} title="Before you list." />
-      <PersonaFaq title="Questions vendors ask." groups={faqGroups} />
+      <PersonaFaq title="Questions developers ask." groups={faqGroups} />
 
       <PersonaFinalCta
         title="Turn unsold units into capital."
-        subtitle="List a verified project to access financed members or raise capital."
+        subtitle="List a verified project to access financed buyers or raise capital."
         primary={LIST_A_PROJECT}
         secondary={{ label: "Talk to a partner", href: "#talk" }}
       />
