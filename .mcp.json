@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "afram-design": {
+      "command": "node",
+      "args": ["../afram-design/mcp/server.mjs"]
+    }
+  }
+}
