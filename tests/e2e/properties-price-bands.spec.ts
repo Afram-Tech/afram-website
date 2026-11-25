@@ -18,10 +18,11 @@ test("price bands use the listings' currency and filter by it", async ({ page })
 
   await page.getByRole("button", { name: "GHS 300,000 – GHS 600,000" }).click();
 
-  // Each card's headline price sits under its "From" label.
-  const prices = page.locator("p:text-is('From') + p");
+  // Each card's headline price is the line that opens with a "From" label.
+  const prices = page.locator("article p:has(> span:text-is('From'))");
   await expect(prices.first()).toBeVisible();
-  for (const text of await prices.allTextContents()) {
+  for (const line of await prices.allTextContents()) {
+    const text = line.replace(/^From\s*/, "");
     expect(text).toMatch(/^GHS\s/); // Intl puts a no-break space after the code
     const amount = Number(text.replace(/[^\d.]/g, ""));
     expect(amount).toBeGreaterThanOrEqual(300_000);

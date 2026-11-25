@@ -2,49 +2,44 @@ export interface RoleCard {
   eyebrow: string;
   title: string;
   href: string;
-  backgroundColor: string;
+  /** Card surface — a soft top-to-bottom gradient. */
+  background: string;
+  /** Eyebrow pill background. */
   pillColor: string;
-  art: { src: string; alt: string; class: string };
+  /**
+   * Decorative cut-out, rendered with alt="" (the link is named by its text).
+   * Geometry at full size, in px: rendered height, how far it hangs below the
+   * card's bottom edge, and its inset from the right edge. The art is taller
+   * than what shows, so only heads and shoulders peek up from the
+   * bottom-right corner; the card's overflow-hidden clips the rest. Scaled by
+   * --art-k on narrow cards.
+   */
+  art: { src: string; width: number; height: number; h: number; drop: number; right: number };
 }
 
 export const ROLE_CARDS: RoleCard[] = [
   {
     eyebrow: "For Members",
-    title: "Buy property with confidence and flexible financing",
+    title: "Own verified property with flexible financing",
     href: "/properties",
-    backgroundColor: "#e6faf9",
-    pillColor: "rgba(178,233,240,0.55)",
-    art: {
-      src: "/role-couple.webp",
-      alt: "A couple holding the keys to their new home",
-      class:
-        "absolute bottom-[-40px] right-1 h-[70%] w-auto max-w-none sm:bottom-[-80px] sm:right-2 sm:h-[92%] lg:bottom-[-70px] lg:h-[80%] xl:bottom-[-80px] xl:h-[92%]",
-    },
+    background: "linear-gradient(180deg, #e5fbf8 0%, #f6fdfc 100%)",
+    pillColor: "#caf0f3",
+    art: { src: "/role-couple.webp", width: 756, height: 991, h: 180, drop: 86, right: 8 },
   },
   {
-    eyebrow: "For Vendors",
-    title: "Raise Capital and accelerate sales",
+    eyebrow: "For Developers",
+    title: "Raise capital and accelerate sales",
     href: "/developers",
-    backgroundColor: "#ccf8f6",
+    background: "linear-gradient(180deg, #ccf8f6 0%, #ebfdfb 100%)",
     pillColor: "rgba(255,255,255,0.5)",
-    art: {
-      src: "/role-developer.webp",
-      alt: "A property vendor reviewing plans",
-      class:
-        "absolute bottom-[-40px] right-0 h-[64%] w-auto max-w-none sm:bottom-[-80px] sm:h-[86%]",
-    },
+    art: { src: "/role-developer.webp", width: 760, height: 855, h: 170, drop: 92, right: 0 },
   },
   {
     eyebrow: "For Financiers",
     title: "Deploy capital securely against verified assets",
     href: "/financiers",
-    backgroundColor: "#b1f0ed",
+    background: "linear-gradient(180deg, #b2f1ee 0%, #e0faf7 100%)",
     pillColor: "rgba(255,255,255,0.5)",
-    art: {
-      src: "/role-financier.webp",
-      alt: "Two professionals shaking hands on a deal",
-      class:
-        "absolute bottom-[-35px] right-0 h-[58%] w-auto max-w-none sm:bottom-[-70px] sm:h-[78%]",
-    },
+    art: { src: "/role-financier.webp", width: 760, height: 565, h: 145, drop: 73, right: 3 },
   },
 ];

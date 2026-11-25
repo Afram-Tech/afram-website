@@ -41,6 +41,7 @@ export function Reveal({
       className={cn(
         "transition-[opacity,transform] duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
         visible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
+        "motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none",
         className,
       )}
       style={{ transitionDelay: `${delay}s` }}

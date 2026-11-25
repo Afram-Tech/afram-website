@@ -1,27 +1,33 @@
 @import "tailwindcss";
 
 @theme {
-  /* Core brand — Afram teal */
-  --color-brand-950: #021f24;
-  --color-brand-900: #022e33;
-  --color-brand-800: #034349;
+  /* Afram design system v1 (afram-design/tokens). Teal is the brand;
+     neutrals carry a faint teal bias. */
+  --color-brand-950: #00262a;
+  --color-brand-900: #013a40;
+  --color-brand-800: #003d44;
   --color-brand-700: #00565e;
-  --color-brand-600: #025257;
+  --color-brand-600: #005a64;
   --color-brand-500: #007481;
   --color-brand-400: #2a99a2;
   --color-brand-300: #6bbfc6;
-  --color-brand-200: #a7dde1;
-  --color-brand-100: #d3ecee;
-  --color-brand-50: #eef7f7;
+  --color-brand-200: #b3e1e6;
+  --color-brand-100: #dcf3f4;
+  --color-brand-50: #f0f9fa;
+
+  /* Deep ground: heroes, closing CTAs */
+  --color-deep-950: #00262a;
+  --color-deep-900: #013a40;
+  --color-deep-800: #0a5961;
 
   /* Per-page accent — defaults to the brand teal */
-  --color-accent-50: #eef7f7;
-  --color-accent-100: #d3ecee;
-  --color-accent-200: #a7dde1;
+  --color-accent-50: #f0f9fa;
+  --color-accent-100: #dcf3f4;
+  --color-accent-200: #b3e1e6;
   --color-accent-300: #6bbfc6;
   --color-accent-400: #2a99a2;
   --color-accent-500: #007481;
-  --color-accent-600: #025257;
+  --color-accent-600: #005a64;
   --color-accent-700: #00565e;
 
   /* Gold — sparing secondary accent */
@@ -42,23 +48,35 @@
   --color-coral-500: #f43f5e;
   --color-coral-100: #ffe4e6;
 
-  /* Ink — neutrals (warm grey) */
-  --color-ink-950: #16181c;
-  --color-ink-900: #25272c;
-  --color-ink-800: #393c43;
-  --color-ink-700: #4e525a;
-  --color-ink-500: #6e727b;
-  --color-ink-400: #9296a0;
-  --color-ink-300: #b7bcc4;
-  --color-ink-200: #d8dbe0;
-  --color-ink-100: #e8eaed;
-  --color-ink-50: #f6f7f8;
+  /* Ink — neutrals (design system v1: text-strong, text-sub, text-soft) */
+  --color-ink-950: #0a1214;
+  --color-ink-900: #0f1a1c;
+  --color-ink-800: #2a3538;
+  --color-ink-700: #3d4a4d;
+  --color-ink-600: #526063;
+  --color-ink-500: #526063;
+  --color-ink-400: #627176;
+  --color-ink-300: #b3bec0;
+  --color-ink-200: #c9d1d3;
+  --color-ink-100: #e3e8e9;
+  --color-ink-50: #f6f8f8;
+
+  /* Depth: a crisp 1px edge plus a soft shadow */
+  --shadow-xs: 0 1px 2px 0 rgba(15, 26, 28, 0.05);
+  --shadow-card: 0 1px 2px 0 rgba(15, 26, 28, 0.04), 0 2px 6px -2px rgba(15, 26, 28, 0.06);
+  --shadow-raised: 0 1px 2px 0 rgba(15, 26, 28, 0.05), 0 10px 24px -10px rgba(0, 61, 68, 0.2);
+  --shadow-primary:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.16), inset 0 -1px 0 0 rgba(0, 38, 42, 0.28),
+    0 1px 2px 0 rgba(0, 61, 68, 0.24), 0 4px 12px -4px rgba(0, 116, 129, 0.45);
+  --shadow-secondary: inset 0 -1px 0 0 rgba(15, 26, 28, 0.06), 0 1px 2px 0 rgba(15, 26, 28, 0.06);
+  --shadow-focus: 0 0 0 1px #007481, 0 0 0 4px rgba(0, 116, 129, 0.18);
 
   /* Gap between sibling cards in a row — the property grid's spacing, used
      for every card collection on the site so they all read the same. */
   --spacing-card: 2rem;
 
   --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
 
   /* Montserrat is the only typeface. The serif and mono stacks point at it
      too, so a stray font-serif/font-mono utility (or preflight's monospace
@@ -71,6 +89,46 @@
 body {
   color: var(--color-ink-900);
   font-family: var(--font-sans);
+}
+
+/* The type scale, from the design system. One size per role, so a page reads
+   top-down the same way everywhere. Size, weight and spacing only: colour
+   stays with the caller. At 1440: 52 / 36 / 24 / 17, 18 for a lead. */
+@layer components {
+  .t-h1,
+  .t-h2 {
+    font-weight: 600;
+    text-wrap: balance;
+  }
+  .t-h1 {
+    font-size: clamp(2.125rem, 3.7vw, 3.25rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+  .t-h2 {
+    font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+    line-height: 1.14;
+    letter-spacing: -0.025em;
+  }
+  .t-h4 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+  .t-lead {
+    font-size: clamp(1.0625rem, 1.25vw, 1.125rem);
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+    text-wrap: pretty;
+  }
+  .t-overline {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
 }
 
 /* Halftone dot-grid decoration. Tint via text color. */
@@ -153,6 +211,26 @@ body {
       transform: translateY(0) scale(1);
     }
   }
+  @keyframes afram-shimmer {
+    0% {
+      background-position: 100% 0;
+    }
+    100% {
+      background-position: -100% 0;
+    }
+  }
+  /* Loading placeholder, for images and skeleton blocks alike. */
+  .skel {
+    background-color: var(--color-ink-100);
+    background-image: linear-gradient(
+      90deg,
+      var(--color-ink-100) 0%,
+      var(--color-ink-50) 50%,
+      var(--color-ink-100) 100%
+    );
+    background-size: 200% 100%;
+    animation: afram-shimmer 1.4s ease-in-out infinite;
+  }
   .scrim-in {
     animation: afram-scrim-in 0.18s var(--ease-out-soft) forwards;
   }
@@ -163,6 +241,7 @@ body {
     .rise,
     .fade,
     .marquee-track,
+    .skel,
     .scrim-in,
     .panel-in {
       animation: none;

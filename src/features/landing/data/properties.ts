@@ -224,10 +224,16 @@ export async function getAllProperties(): Promise<Property[]> {
   return fetchPublicProperties();
 }
 
-/** Properties tagged "isFeatured" from the dashboard. */
-export async function getFeaturedProperties(): Promise<Property[]> {
+/**
+ * Up to `limit` listings for the home page: the ones tagged "isFeatured" from
+ * the dashboard first, then the rest of the catalogue in API order, so the
+ * grid stays full while only a few listings are tagged.
+ */
+export async function getFeaturedProperties(limit = 6): Promise<Property[]> {
   const properties = await fetchPublicProperties();
-  return properties.filter((property) => Boolean(property.isFeatured) == true);
+  const featured = properties.filter((property) => property.isFeatured);
+  const rest = properties.filter((property) => !property.isFeatured);
+  return [...featured, ...rest].slice(0, limit);
 }
 
 export async function findPropertyBySlug(slug: string): Promise<Property | undefined> {
