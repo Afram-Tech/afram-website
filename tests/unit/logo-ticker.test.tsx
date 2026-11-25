@@ -5,7 +5,7 @@ import { LogoTicker } from "@/components/ui/LogoTicker";
 
 const LOGOS = [
   { name: "Ecobank", src: "/partners/ecobank.svg" },
-  { name: "Origen", src: "/partners/origen.png" },
+  { name: "Origen", src: "/partners/origen-logo-trimmed.png" },
   { name: "Wordmark Only" },
 ];
 
