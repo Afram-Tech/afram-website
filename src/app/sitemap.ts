@@ -36,7 +36,6 @@ const STATIC_ROUTES: {
   { path: "/insights", priority: 0.7, changeFrequency: "weekly", listings: "none" },
   { path: "/how-it-works", priority: 0.6, changeFrequency: "monthly", listings: "none" },
   { path: "/help", priority: 0.4, changeFrequency: "monthly", listings: "none" },
-  { path: "/invest", priority: 0.7, changeFrequency: "monthly", listings: "none" },
   { path: "/fees", priority: 0.5, changeFrequency: "monthly", listings: "none" },
   { path: "/about", priority: 0.5, changeFrequency: "yearly", listings: "none" },
   ...LEGAL_SLUGS.map((slug) => ({
