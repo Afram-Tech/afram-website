@@ -1,13 +1,13 @@
 import { devices, expect, test, type Page } from "@playwright/test";
 
-/* AFX-LST-058: at phone width the "Search properties..." box went with the
-   filter pills into the Filters sheet's place and disappeared. It must be on
-   the page and return what desktop returns for the same query. */
+/* AFX-LST-058: at phone width the text search disappeared into the Filters
+   sheet. The Location box must be on the page and return what desktop
+   returns for the same query. */
 const QUERY = "Roman";
 
 const resultCount = async (page: Page) => {
   await page.goto("/properties");
-  await page.getByRole("searchbox", { name: "Search properties" }).fill(QUERY);
+  await page.getByRole("searchbox", { name: "Location" }).fill(QUERY);
   const summary = page.getByText(/propert(y|ies) found/);
   await expect(summary).toBeVisible();
   return summary.textContent();

@@ -1,8 +1,13 @@
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-
+import type { CSSProperties } from "react";
+import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+/**
+ * Paper card on the design system's edge and depth; `featured` sits on the
+ * deep ground. Has an arrow affordance by default; pass `compact` for a shorter
+ * informational card with no arrow.
+ */
 export function FeatureCard({
   eyebrow,
   title,
@@ -11,6 +16,7 @@ export function FeatureCard({
   featured = false,
   compact = false,
   className,
+  style,
 }: {
   eyebrow?: string;
   title: string;
@@ -19,35 +25,32 @@ export function FeatureCard({
   featured?: boolean;
   compact?: boolean;
   className?: string;
+  style?: CSSProperties;
 }) {
-  const cardClassName = cn(
-    "group relative flex flex-col overflow-hidden rounded-[1.75rem] p-7 transition-all duration-300",
-    compact ? "min-h-[230px]" : "min-h-[480px] lg:min-h-[520px]",
-    href && "hover:-translate-y-1.5",
+  const cls = cn(
+    "group relative flex flex-col overflow-hidden rounded-[20px] p-6 transition-[background-color,box-shadow,border-color,transform] duration-200 sm:p-7",
+    compact
+      ? "min-h-[200px]"
+      : href
+        ? "min-h-[280px] lg:min-h-[340px]"
+        : "min-h-[200px]",
+    href && "hover:-translate-y-px",
     featured
-      ? "bg-accent-700 shadow-[0_28px_64px_-28px_color-mix(in_oklab,var(--color-accent-700)_55%,transparent)]"
-      : "bg-accent-50 ring-1 ring-accent-100 hover:bg-accent-700 hover:shadow-[0_28px_64px_-28px_color-mix(in_oklab,var(--color-accent-700)_55%,transparent)]",
+      ? "bg-deep-950 shadow-banner"
+      : "border border-ink-100 bg-white shadow-card hover:border-brand-500/30 hover:shadow-raised",
     className,
   );
 
   const inner = (
     <>
-      <div
-        className={cn(
-          "dot-grid pointer-events-none absolute right-0 bottom-0 transition-colors duration-300",
-          compact ? "h-36 w-40" : "h-52 w-56",
-          featured ? "text-white/15" : "text-accent-300/50 group-hover:text-white/15",
-        )}
-        aria-hidden
-      />
 
       {eyebrow && (
         <span
           className={cn(
-            "relative z-10 inline-flex w-fit items-center rounded-full px-3 py-1 text-[12px] font-semibold transition-colors duration-300",
+            "relative z-10 inline-flex w-fit items-center rounded-full px-3 py-1 text-[12px] font-semibold ",
             featured
               ? "bg-white/15 text-white"
-              : "text-accent-600 ring-accent-100 bg-white ring-1 group-hover:bg-white/15 group-hover:text-white group-hover:ring-transparent",
+              : "bg-brand-50 text-brand-500",
           )}
         >
           {eyebrow}
@@ -57,32 +60,34 @@ export function FeatureCard({
       <div className={cn("relative z-10", eyebrow && "mt-5")}>
         <h3
           className={cn(
-            "text-[1.4rem] leading-[1.2] font-bold tracking-[-0.01em] transition-colors duration-300",
-            featured ? "text-white" : "text-ink-900 group-hover:text-white",
+            "t-h4 ",
+            featured ? "text-white" : "text-ink-900",
           )}
         >
           {title}
         </h3>
         <p
           className={cn(
-            "mt-3 max-w-[22rem] text-[14px] leading-relaxed transition-colors duration-300",
-            featured ? "text-white/75" : "text-ink-500 group-hover:text-white/75",
+            "mt-3 max-w-[22rem] text-[14px] leading-relaxed ",
+            featured
+              ? "text-white/75"
+              : "text-ink-500",
           )}
         >
           {body}
         </p>
       </div>
 
-      {!compact && (
+      {!compact && href && (
         <span
           className={cn(
-            "relative z-10 mt-auto flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-300",
+            "relative z-10 mt-auto flex h-10 w-10 items-center justify-center rounded-full ",
             featured
-              ? "text-accent-700 bg-white"
-              : "text-ink-700 ring-ink-200 group-hover:text-accent-700 bg-white ring-1 group-hover:ring-transparent",
+              ? "bg-white text-accent-700"
+              : "bg-brand-50 text-brand-500",
           )}
         >
-          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+          <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
         </span>
       )}
     </>
@@ -90,10 +95,14 @@ export function FeatureCard({
 
   if (href) {
     return (
-      <Link href={href} className={cardClassName}>
+      <Link href={href} className={cls} style={style}>
         {inner}
       </Link>
     );
   }
-  return <div className={cardClassName}>{inner}</div>;
+  return (
+    <div className={cls} style={style}>
+      {inner}
+    </div>
+  );
 }

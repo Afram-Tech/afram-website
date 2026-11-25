@@ -1,30 +1,22 @@
 import type { Metadata } from "next";
 
 import { JsonLd } from "@/components/JsonLd";
-import { PersonaAnswers } from "@/components/persona/PersonaAnswers";
-import { PersonaFaq } from "@/components/persona/PersonaFaq";
-import { PersonaFinalCta } from "@/components/persona/PersonaFinalCta";
-import { PersonaPhotoHero } from "@/components/persona/PersonaPhotoHero";
+import { PersonaHeroPhoto } from "@/components/persona/PersonaHeroPhoto";
 import { PersonaProof } from "@/components/persona/PersonaProof";
 import { PersonaQuickLinks } from "@/components/persona/PersonaQuickLinks";
-import { PersonaSwitcher } from "@/components/persona/PersonaSwitcher";
-import { FinancierTypes } from "@/features/developers/FinancierTypes";
-import { Requirements } from "@/features/developers/Requirements";
-import { CapitalFlow, SellFlow } from "@/features/developers/SellFlow";
-import { TalkToPartner } from "@/features/developers/TalkToPartner";
-import { Testimonials } from "@/features/developers/Testimonials";
-import { TwoPaths } from "@/features/developers/TwoPaths";
-import { getAllProperties } from "@/features/landing/data/properties";
-import { catalogueStats, sampleProperties } from "@/features/personas/catalogue";
-import { ORDER, PERSONAS } from "@/features/personas/developer-personas";
+import { PersonaShell } from "@/components/persona/PersonaShell";
+import { Testimonials } from "@/components/persona/Testimonials";
 import { accessCta, signUpHref } from "@/features/access/cta";
-import { siteConfig } from "@/config/site";
+import { CapitalBand } from "@/features/developers/CapitalBand";
+import { SellSection } from "@/features/developers/SellSection";
+import { TalkToPartner } from "@/features/developers/TalkToPartner";
+import { VendorConcerns } from "@/features/developers/VendorConcerns";
+import { getAllProperties } from "@/features/landing/data/properties";
+import { catalogueStats } from "@/features/personas/catalogue";
+import { VERIFY_URL } from "@/lib/config";
+import { DEFAULT, ORDER, PERSONAS } from "@/lib/data/developer-personas";
+import { PHOTOS } from "@/lib/data/photos";
 import { buildFaqJsonLd, buildMetadata } from "@/lib/seo";
-
-/* Both read "Request Access" while the site is invite-only. The hero href also
-   loses a stray double slash it carried while nothing navigated through it. */
-const VENDOR_CTA = accessCta({ label: "Get Started", href: signUpHref("issuer") });
-const LIST_A_PROJECT = accessCta({ label: "List a project", href: signUpHref() });
 
 export const metadata: Metadata = buildMetadata({
   title: "List, sell, and get paid faster",
@@ -33,82 +25,74 @@ export const metadata: Metadata = buildMetadata({
   path: "/developers",
 });
 
-/**
- * The financier count has no live source in this codebase — it is a
- * hand-maintained constant to update rather than being scattered through
- * copy.
- */
-const FINANCIERS_FUNDING = 4;
+/** Reads "Request Access" while the site is invite-only. */
+const GET_STARTED = accessCta({ label: "Get Started", href: signUpHref("issuer") });
 
-// V2 also links "What it costs" (/fees); this site has no fees page yet.
+/**
+ * Listing and developer counts come from the live catalogue, so they cannot
+ * drift from /properties. The financier count is marketing-asserted — it is
+ * not derivable from anything in this repo, so it lives here as a single
+ * constant to update rather than being scattered through copy.
+ */
+const FINANCIERS_FUNDING = 3;
+
 const LINKS = [
   { label: "How selling works", href: "/how-it-works" },
-  { label: "Verify a title", href: siteConfig.registryUrl, external: true, on: "Afram Verify" },
+  { label: "What it costs", href: "/fees" },
+  { label: "Verify a title", href: VERIFY_URL, external: true, on: "Afram Verify" },
   { label: "Insights", href: "/insights" },
 ];
 
 export default async function DevelopersPage() {
-  const ordered = ORDER.map((id) => PERSONAS[id]);
-  const faqGroups = ordered.map((persona) => ({ label: persona.tab, faqs: persona.faqs }));
-  const allFaqs = ordered.flatMap((persona) =>
-    persona.faqs.map((faq) => ({ question: faq.q, answer: faq.a })),
-  );
-
-  const properties = await getAllProperties();
-  const stats = catalogueStats(properties);
-  const proofProperties = sampleProperties(properties);
-
-  const PROOF_STATS = [
-    { value: `${stats.listings}`, label: "Verified listings live" },
-    { value: `${stats.vendors}`, label: "Developers listing with us" },
+  const catalogue = catalogueStats(await getAllProperties());
+  const stats = [
+    { value: `${catalogue.listings}`, label: "Verified listings live" },
+    { value: `${catalogue.vendors}`, label: "Developers listing with us" },
     { value: `${FINANCIERS_FUNDING}`, label: "Financiers funding projects" },
-    { value: "0%", label: "Share of your project we take" },
   ];
+  const faqs = ORDER.flatMap((id) =>
+    PERSONAS[id].faqs.map((faq) => ({ question: faq.q, answer: faq.a })),
+  );
 
   return (
     <>
-      <JsonLd data={buildFaqJsonLd(allFaqs)} />
-      <PersonaPhotoHero
-        image="/for-vendors-hero.webp"
-        imageAlt="A property developer reviewing plans on site"
-        headline={["Raise Capital", "and accelerate sales"]}
-        subhead="List a project on Afram. We verify and validate every project, so financiers fund it and you reach buyers with financing."
-        ctaLabel={VENDOR_CTA.label}
-        ctaHref={VENDOR_CTA.href}
-      />
-
-      {/* Each audience's question cards render further down, in
-          <PersonaAnswers>, rather than inside the switcher panel. */}
-      <PersonaSwitcher personas={ordered} blocksInPanel={false} />
-
-      {/* Order follows the vendors page doc (Oct 2026). */}
-      <TwoPaths tone="mint" />
-      <CapitalFlow />
-      <PersonaProof
-        title="Projects already listed on Afram."
-        intro="Every listing passed a title check before going live. See what developers have listed."
-        stats={PROOF_STATS}
-        properties={proofProperties}
-        ctaLabel="Browse all listings"
-        ctaHref="/properties"
-      />
-      <FinancierTypes />
-      <Requirements />
-      <SellFlow />
-      <Testimonials title="Developers already selling on Afram." />
-      <TalkToPartner />
-
-      <PersonaAnswers personas={ordered} title="Before you list." />
-      <PersonaFaq title="Questions developers ask." groups={faqGroups} />
-
-      <PersonaFinalCta
-        title="Turn unsold units into capital."
-        subtitle="List a verified project to access financed buyers or raise capital."
-        primary={LIST_A_PROJECT}
-        secondary={{ label: "Talk to a partner", href: "#talk" }}
-      />
-
-      <PersonaQuickLinks links={LINKS} />
+      <JsonLd data={buildFaqJsonLd(faqs)} />
+      <PersonaShell
+        personas={PERSONAS}
+        order={ORDER}
+        defaultId={DEFAULT}
+        accent="teal"
+        layout="none"
+        compact
+        heroSlot={
+          <PersonaHeroPhoto
+            photo={PHOTOS.heroVendorPhoto}
+            photoAlt="A property developer reviewing plans on site"
+            photoPosition="xl:object-[center_12%]"
+            headline="List on Afram for the opportunity to raise capital for your project and also enable financing for your buyers so they can afford your property."
+            ctaLabel={GET_STARTED.label}
+            ctaHref={GET_STARTED.href}
+          />
+        }
+        faqTitleSuffix="developers ask."
+        closingSlot={<TalkToPartner />}
+        footerSlot={<PersonaQuickLinks links={LINKS} />}
+      >
+        {/* One story, in the order a development firm thinks it through:
+            sell what you have (1), fund what you haven't built (2), what it
+            means for the firm (3), proof that it works (4, 5), the questions
+            left (FAQ), and a person to talk to (closingSlot). */}
+        <SellSection />
+        <CapitalBand />
+        <VendorConcerns />
+        <PersonaProof
+          title="Already happening on Afram."
+          stats={stats}
+          ctaLabel="Browse all listings"
+          ctaHref="/properties"
+        />
+        <Testimonials title="Developers already selling on Afram." />
+      </PersonaShell>
     </>
   );
 }

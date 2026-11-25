@@ -1,19 +1,18 @@
 import Image from "next/image";
-
 import { cn } from "@/lib/utils";
 
-/** "Regulated and licensed by the SEC": the Ghana SEC seal in a white pill. */
+/** "Regulated and licensed by the SEC": Ghana SEC seal in a pill. */
 export function SecBadge({
-  label = "Regulated and licensed by the SEC",
   className,
+  label = "Regulated and licensed by the SEC",
 }: {
-  label?: string;
   className?: string;
+  label?: string;
 }) {
   return (
     <span
       className={cn(
-        "border-brand-500/15 text-deep-950 inline-flex h-8 w-fit items-center gap-2 rounded-full border bg-white py-1 pr-3 pl-1 text-[13px] leading-none font-semibold tracking-[-0.005em] shadow-xs",
+        "inline-flex h-8 w-fit items-center gap-2 rounded-full border border-brand-500/15 bg-white py-1 pl-1 pr-3 text-[13px] font-semibold leading-none tracking-[calc(-0.005em*var(--tracking-scale,1))] text-deep-950 shadow-xs",
         className,
       )}
     >

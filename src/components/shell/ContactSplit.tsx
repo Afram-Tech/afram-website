@@ -1,24 +1,7 @@
-"use client";
-
-import {
-  CheckCircle2,
-  ChevronDown,
-  Clock,
-  Loader2,
-  Mail,
-  MapPin,
-  MessageCircle,
-  Phone,
-} from "lucide-react";
 import type { ReactNode } from "react";
-import { useActionState } from "react";
-
-import {
-  isSpam,
-  parseContactMessage,
-  type ContactFormState,
-} from "@/features/contact/contact-message";
-import { useContactUs } from "@/hooks/data";
+import { Mail, MapPin, Phone, MessageCircle, Clock } from "lucide-react";
+import { Section } from "@/components/ui/Section";
+import { BookingWidget } from "@/components/shell/BookingWidget";
 import { cn } from "@/lib/utils";
 
 function ContactRow({
@@ -36,18 +19,20 @@ function ContactRow({
 }) {
   const inner = (
     <>
-      <span className="text-brand-200 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/10">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-brand-200 ring-1 ring-white/10">
         {icon}
       </span>
       <span>
         <span className="block text-[12px] text-white/50">{label}</span>
-        <span className="group-hover:text-brand-200 block text-[15px] font-semibold text-white transition-colors">
+        <span className="block text-[15px] font-semibold text-white transition-colors group-hover:text-brand-200">
           {value}
         </span>
       </span>
     </>
   );
-  if (!href) return <li className="flex items-center gap-3.5 p-2">{inner}</li>;
+  if (!href) {
+    return <li className="-mx-2 flex items-center gap-3.5 p-2">{inner}</li>;
+  }
   return (
     <li>
       <a
@@ -61,159 +46,14 @@ function ContactRow({
   );
 }
 
-const fieldClass =
-  "h-12 w-full rounded-xl bg-brand-50 px-4 text-[15px] text-ink-900 ring-1 ring-brand-100 transition placeholder:text-ink-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-400";
-
-function FieldLabel({ children }: { children: ReactNode }) {
-  return <span className="text-ink-600 mb-1.5 block text-[13px] font-medium">{children}</span>;
-}
-
 /**
- * Sends through the API's contactUs mutation (see features/contact/actions).
- * `simple` drops the phone field and the WhatsApp line, as on the vendors
- * page's "Talk to us".
+ * The shared "contact us" section — a dark teal split card with the universal
+ * Afram contact methods on the left and a message form on the right. Copy and
+ * form topics are passed per page; the contact details and layout stay
+ * consistent across the site.
  */
-const SEND_FAILED = "We couldn’t send your message just now. Please try again in a moment.";
-
-function MessageForm({
-  topics = ["Book a site visit", "Talk to a partner", "Speak to a lawyer"],
-  cta,
-  simple,
-}: {
-  topics?: string[];
-  cta: string;
-  simple: boolean;
-}) {
-  const { contactUs } = useContactUs();
-
-  const submit = async (_previous: ContactFormState, form: FormData): Promise<ContactFormState> => {
-    if (isSpam(form)) return { status: "sent" };
-
-    const message = parseContactMessage(form);
-    if (!message.ok) return { status: "error", error: message.error };
-
-    try {
-      const { data } = await contactUs({ variables: { input: message.input } });
-      if (!data?.contactUs.success) return { status: "error", error: SEND_FAILED };
-      return { status: "sent" };
-    } catch {
-      return { status: "error", error: SEND_FAILED };
-    }
-  };
-
-  const [state, action, pending] = useActionState(submit, { status: "idle" });
-
-  if (state.status === "sent") {
-    return (
-      <div
-        role="status"
-        className="bg-brand-50 text-brand-700 flex items-center gap-2.5 rounded-2xl px-5 py-5 text-[15px] font-medium"
-      >
-        <CheckCircle2 className="h-5 w-5" />
-        Thanks — your message is in. We&apos;ll reply within one business day.
-      </div>
-    );
-  }
-
-  return (
-    <form action={action} className="space-y-4">
-      <div className="grid gap-4 sm:grid-cols-2">
-        <label className="block">
-          <FieldLabel>{simple ? "Full name" : "Your name"}</FieldLabel>
-          <input
-            name="name"
-            required
-            placeholder="Ama Mensah"
-            autoComplete="name"
-            maxLength={120}
-            className={fieldClass}
-          />
-        </label>
-        <label className="block">
-          <FieldLabel>{simple ? "Email address" : "Email"}</FieldLabel>
-          <input
-            name="email"
-            type="email"
-            required
-            placeholder="ama@email.com"
-            autoComplete="email"
-            maxLength={200}
-            className={fieldClass}
-          />
-        </label>
-      </div>
-
-      <div className={cn("grid gap-4", !simple && "sm:grid-cols-2")}>
-        {!simple && (
-          <label className="block">
-            <FieldLabel>Phone (optional)</FieldLabel>
-            <input
-              name="phone"
-              inputMode="tel"
-              placeholder="024 000 0000"
-              autoComplete="tel"
-              maxLength={40}
-              className={fieldClass}
-            />
-          </label>
-        )}
-        <label className="block">
-          <FieldLabel>{simple ? "Topic" : "What is it about?"}</FieldLabel>
-          <div className="relative">
-            <select name="topic" className={cn(fieldClass, "appearance-none pr-10")}>
-              {topics.map((topic) => (
-                <option key={topic}>{topic}</option>
-              ))}
-            </select>
-            <ChevronDown className="text-ink-400 pointer-events-none absolute top-1/2 right-3.5 h-4 w-4 -translate-y-1/2" />
-          </div>
-        </label>
-      </div>
-
-      <label className="block">
-        <FieldLabel>Message</FieldLabel>
-        <textarea
-          name="message"
-          rows={4}
-          maxLength={5000}
-          placeholder="Tell us a little about what you need…"
-          className={cn(fieldClass, "h-auto min-h-[120px] resize-none py-3 leading-relaxed")}
-        />
-      </label>
-
-      {/* Spam trap — hidden from people, filled in by bots. */}
-      <input
-        type="text"
-        name="company"
-        tabIndex={-1}
-        autoComplete="off"
-        aria-hidden="true"
-        className="absolute -left-[9999px] h-px w-px opacity-0"
-      />
-
-      {state.status === "error" && (
-        <p role="alert" className="text-[13px] font-medium text-red-600">
-          {state.error}
-        </p>
-      )}
-
-      <button
-        type="submit"
-        disabled={pending}
-        className="bg-accent-500 hover:bg-accent-600 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-white transition-all active:scale-[0.99] disabled:opacity-70"
-      >
-        {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : cta}
-      </button>
-
-      <p className="text-ink-400 text-[12px] leading-relaxed">
-        We will never share your details.
-        {!simple && " Prefer WhatsApp? Mention it and we will message you there."}
-      </p>
-    </form>
-  );
-}
-
 export function ContactSplit({
+  id,
   eyebrow = "Get in touch",
   title,
   subtitle,
@@ -223,8 +63,11 @@ export function ContactSplit({
   cta = "Send a message",
   showContacts = true,
   simpleForm = false,
+  className,
 }: {
-  eyebrow?: string;
+  id?: string;
+  /** null leaves the label out (the vendor and financier pages). */
+  eyebrow?: string | null;
   title: string;
   subtitle: string;
   formTitle?: string;
@@ -233,27 +76,33 @@ export function ContactSplit({
   cta?: string;
   /** false hides the phone / WhatsApp / email / address rows. */
   showContacts?: boolean;
-  /** Name, email, topic and message only — no phone, no WhatsApp line. */
   simpleForm?: boolean;
+  className?: string;
 }) {
   return (
-    <div className="ring-ink-100 -mx-2 overflow-hidden rounded-[2rem] shadow-[0_40px_100px_-50px_rgba(0,45,48,0.45)] ring-1 lg:grid lg:grid-cols-[0.95fr_1.05fr]">
-      <div className="bg-brand-950 relative overflow-hidden p-4 sm:p-10 lg:p-12">
-        <div
-          className="bg-brand-500/20 pointer-events-none absolute -top-24 -right-20 h-72 w-72 rounded-full blur-3xl"
-          aria-hidden
-        />
-        <div className="relative">
-          <span className="text-brand-200 inline-flex items-center gap-2 text-[12px] font-bold tracking-[0.16em] uppercase">
-            <span className="bg-brand-300 h-1.5 w-1.5 rounded-full" />
-            {eyebrow}
-          </span>
-          <h2 className="mt-4 text-[clamp(1.6rem,2.4vw,2rem)] leading-[1.18] font-bold tracking-[-0.02em] text-white">
-            {title}
-          </h2>
-          <p className="mt-4 max-w-sm text-[16px] leading-relaxed text-white/70">{subtitle}</p>
+    <Section id={id} className={cn("scroll-mt-24 bg-white", className)}>
+      <div className="overflow-hidden rounded-3xl shadow-modal ring-1 ring-ink-100 lg:grid lg:grid-cols-[0.95fr_1.05fr]">
+        {/* Left — dark teal contact panel */}
+        <div className="relative overflow-hidden bg-brand-950 p-8 sm:p-10 lg:p-12">
+          <div
+            className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl"
+            aria-hidden
+          />
+          <div className="relative">
+            {eyebrow && (
+              <span className="mb-4 inline-flex items-center gap-2 t-overline text-brand-200">
+                <span className="h-1.5 w-1.5 rounded-full bg-brand-300" />
+                {eyebrow}
+              </span>
+            )}
+            <h2 className="t-h2 text-white">
+              {title}
+            </h2>
+            <p className="mt-4 max-w-sm t-lead text-white/70">
+              {subtitle}
+            </p>
 
-          {showContacts && (
+            {showContacts && (
             <ul className="mt-8 space-y-1.5">
               <ContactRow
                 icon={<Phone className="h-4 w-4" />}
@@ -280,24 +129,30 @@ export function ContactSplit({
                 value="Accra, Ghana"
               />
             </ul>
-          )}
+            )}
 
-          <div className="mt-8 inline-flex items-center gap-2 rounded-xl bg-white/5 px-4 py-3 ring-1 ring-white/10">
-            <Clock className="text-brand-200 h-4 w-4" />
-            <span className="text-[13px] font-medium text-white/80">
-              Typically replies within 1 business day
-            </span>
+            <div className="mt-8 inline-flex items-center gap-2 rounded-xl bg-white/5 px-4 py-3 ring-1 ring-white/10">
+              <Clock className="h-4 w-4 text-brand-200" />
+              <span className="text-[13px] font-medium text-white/80">
+                Typically replies within 1 business day
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Right — message form */}
+        <div className="bg-white p-8 sm:p-10 lg:p-12">
+          <h3 className="t-h4 text-ink-900">
+            {formTitle}
+          </h3>
+          <p className="mt-2 text-[15px] leading-relaxed text-ink-500">
+            {formSubtitle}
+          </p>
+          <div className="mt-6">
+            <BookingWidget topics={topics} cta={cta} simple={simpleForm} />
           </div>
         </div>
       </div>
-
-      <div className="bg-white p-8 sm:p-10 lg:p-12">
-        <h3 className="text-ink-900 text-xl font-bold tracking-[-0.01em]">{formTitle}</h3>
-        <p className="text-ink-500 mt-2 text-[15px] leading-relaxed">{formSubtitle}</p>
-        <div className="mt-6">
-          <MessageForm topics={topics} cta={cta} simple={simpleForm} />
-        </div>
-      </div>
-    </div>
+    </Section>
   );
 }

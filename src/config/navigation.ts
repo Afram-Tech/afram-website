@@ -69,7 +69,7 @@ export const FOOTER_SOCIAL_LINKS = [
 ];
 
 export const FOOTER_LEGAL_LINKS = [
-  { label: "Terms", href: "/privacy-policy" },
-  { label: "Privacy Policy", href: "/privacy-policy" },
-  { label: "Cookie Policy", href: "/privacy-policy" },
+  { label: "Terms", href: "/legal/terms" },
+  { label: "Privacy Policy", href: "/legal/privacy" },
+  { label: "Cookie Policy", href: "/legal/cookie-policy" },
 ];

@@ -1,14 +1,17 @@
 @import "tailwindcss";
 
+/* ============================================================
+   AFRAM: design tokens (Afram design system v1)
+   ============================================================ */
 @theme {
-  /* Afram design system v1 (afram-design/tokens). Teal is the brand;
-     neutrals carry a faint teal bias. */
+  /* Afram design system v1. Teal is the brand; neutrals carry a faint teal
+     bias. Same values as the exchange (src/styles/afram-tokens.css). */
   --color-brand-950: #00262a;
   --color-brand-900: #013a40;
   --color-brand-800: #003d44;
   --color-brand-700: #00565e;
   --color-brand-600: #005a64;
-  --color-brand-500: #007481;
+  --color-brand-500: #007481; /* primary: CTAs, links, brand accent */
   --color-brand-400: #2a99a2;
   --color-brand-300: #6bbfc6;
   --color-brand-200: #b3e1e6;
@@ -19,8 +22,10 @@
   --color-deep-950: #00262a;
   --color-deep-900: #013a40;
   --color-deep-800: #0a5961;
+  --color-glow: #0eaabb;
+  --color-ice: #7eeaf3;
 
-  /* Per-page accent — defaults to the brand teal */
+  /* Accent is one teal across every page; persona wrappers read these too. */
   --color-accent-50: #f0f9fa;
   --color-accent-100: #dcf3f4;
   --color-accent-200: #b3e1e6;
@@ -30,72 +35,156 @@
   --color-accent-600: #005a64;
   --color-accent-700: #00565e;
 
-  /* Gold — sparing secondary accent */
-  --color-gold-600: #d97706;
-  --color-gold-500: #f59e0b;
-  --color-gold-400: #fbbf24;
-  --color-gold-300: #fcd34d;
-  --color-gold-100: #fef3c7;
-  --color-gold-50: #fffbeb;
+  /* States (Align scale) */
+  --color-gold-600: #71330a;
+  --color-gold-500: #f6b51e;
+  --color-gold-400: #ffd57a;
+  --color-gold-300: #ffecc0;
+  --color-gold-100: #fff3eb;
+  --color-gold-50: #fffaeb;
+  --color-sky-600: #122368;
+  --color-sky-500: #335cff;
+  --color-sky-100: #ebf1ff;
+  --color-sky-50: #ebf1ff;
+  --color-coral-500: #fb3748;
+  --color-coral-100: #ffebec;
 
-  /* Sky — sparing data accent */
-  --color-sky-600: #0284c7;
-  --color-sky-500: #0ea5e9;
-  --color-sky-100: #e0f2fe;
-  --color-sky-50: #f0f9ff;
+  --color-success-lighter: #e3f7ec;
+  --color-success-dark: #1fc16b;
+  --color-success-darker: #0b4627;
+  --color-away-lighter: #fffaeb;
+  --color-away-darker: #624c18;
 
-  /* Coral — urgency only */
-  --color-coral-500: #f43f5e;
-  --color-coral-100: #ffe4e6;
-
-  /* Ink — neutrals (design system v1: text-strong, text-sub, text-soft) */
+  /* Neutrals */
   --color-ink-950: #0a1214;
-  --color-ink-900: #0f1a1c;
+  --color-ink-900: #0f1a1c; /* headings, primary text */
   --color-ink-800: #2a3538;
   --color-ink-700: #3d4a4d;
   --color-ink-600: #526063;
-  --color-ink-500: #526063;
-  --color-ink-400: #627176;
+  --color-ink-500: #526063; /* body text */
+  --color-ink-400: #627176; /* soft text, still AA on white */
   --color-ink-300: #b3bec0;
   --color-ink-200: #c9d1d3;
   --color-ink-100: #e3e8e9;
   --color-ink-50: #f6f8f8;
 
+  /* Fonts */
+  --font-sans: var(--font-brand), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-brand), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-brand), ui-monospace, monospace;
+
+  /* Gap between sibling cards in a row, used for every card collection. */
+  --spacing-card: 2rem;
+
+  /* Radius ladder: 12 fields, 16 insets, 20 cards, 24 heroes and modals */
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+
   /* Depth: a crisp 1px edge plus a soft shadow */
   --shadow-xs: 0 1px 2px 0 rgba(15, 26, 28, 0.05);
   --shadow-card: 0 1px 2px 0 rgba(15, 26, 28, 0.04), 0 2px 6px -2px rgba(15, 26, 28, 0.06);
   --shadow-raised: 0 1px 2px 0 rgba(15, 26, 28, 0.05), 0 10px 24px -10px rgba(0, 61, 68, 0.2);
-  --shadow-primary:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.16), inset 0 -1px 0 0 rgba(0, 38, 42, 0.28),
-    0 1px 2px 0 rgba(0, 61, 68, 0.24), 0 4px 12px -4px rgba(0, 116, 129, 0.45);
+  --shadow-float: 0 0 0 1px rgba(15, 26, 28, 0.05), 0 4px 8px -2px rgba(15, 26, 28, 0.06), 0 16px 32px -8px rgba(15, 26, 28, 0.14);
+  --shadow-modal: 0 0 0 1px rgba(15, 26, 28, 0.05), 0 10px 24px -6px rgba(15, 26, 28, 0.12), 0 24px 60px -12px rgba(15, 26, 28, 0.28);
+  --shadow-banner: 0 4px 12px -2px rgba(0, 116, 129, 0.12), 0 12px 32px -8px rgba(0, 116, 129, 0.25);
+  --shadow-primary: inset 0 1px 0 0 rgba(255, 255, 255, 0.16), inset 0 -1px 0 0 rgba(0, 38, 42, 0.28), 0 1px 2px 0 rgba(0, 61, 68, 0.24), 0 4px 12px -4px rgba(0, 116, 129, 0.45);
   --shadow-secondary: inset 0 -1px 0 0 rgba(15, 26, 28, 0.06), 0 1px 2px 0 rgba(15, 26, 28, 0.06);
   --shadow-focus: 0 0 0 1px #007481, 0 0 0 4px rgba(0, 116, 129, 0.18);
 
-  /* Gap between sibling cards in a row — the property grid's spacing, used
-     for every card collection on the site so they all read the same. */
-  --spacing-card: 2rem;
-
+  /* Motion: one curve for anything entering, one for state changes */
+  --default-transition-duration: 160ms;
+  --default-transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
-
-  /* Montserrat is the only typeface. The serif and mono stacks point at it
-     too, so a stray font-serif/font-mono utility (or preflight's monospace
-     default for code, kbd and pre) cannot fall back to another face. */
-  --font-sans: var(--font-montserrat), sans-serif;
-  --font-serif: var(--font-montserrat), sans-serif;
-  --font-mono: var(--font-montserrat), sans-serif;
 }
 
-body {
-  color: var(--color-ink-900);
-  font-family: var(--font-sans);
+/* ============================================================
+   Base
+   ============================================================ */
+@layer base {
+  html {
+    /* Montserrat's tight tracking crowds Outfit's narrower letters, so the
+       negative letter-spacing in the type scale is scaled down while the
+       Outfit experiment runs. Back to Montserrat: remove this line. */
+    --tracking-scale: 0.35;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  /* The site is drawn at 1440px. On smaller laptop screens the whole page
+     scales down in proportion, the way a browser zoom would, instead of
+     cramming desktop-sized type and spacing into less room. Phones and
+     tablets (below 1024px) keep their own layouts at full size. */
+  @media (min-width: 1024px) and (max-width: 1279.98px) {
+    html {
+      zoom: 0.85;
+    }
+  }
+  @media (min-width: 1280px) and (max-width: 1365.98px) {
+    html {
+      zoom: 0.9;
+    }
+  }
+  @media (min-width: 1366px) and (max-width: 1439.98px) {
+    html {
+      zoom: 0.95;
+    }
+  }
+  /* MapLibre reads pointer positions in unzoomed pixels, so a page with a
+     map keeps its natural size. */
+  html:has(.maplibregl-map) {
+    zoom: 1;
+  }
+  body {
+    background: #fff;
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--color-brand-500);
+    color: #fff;
+  }
+  h1,
+  h2,
+  h3 {
+    letter-spacing: calc(-0.02em * var(--tracking-scale, 1));
+    text-wrap: balance;
+  }
+  /* Tabular numerals in the brand sans (no mono) */
+  .tnum {
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink-100);
+    border: 3px solid #fff;
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-ink-300);
+  }
 }
 
-/* The type scale, from the design system. One size per role, so a page reads
-   top-down the same way everywhere. Size, weight and spacing only: colour
-   stays with the caller. At 1440: 52 / 36 / 24 / 17, 18 for a lead. */
+/* ============================================================
+   Components, from the design system's af-btn and af-control.
+   Size and width stay as utilities on the element.
+   ============================================================ */
 @layer components {
+  /* The type scale. One size per role, so a page reads top-down the same way
+     everywhere. Size, weight and spacing only: colour stays with the caller.
+     At 1440: 52 / 36 / 24 / 17, with 18 for a lead and 15 for body. */
   .t-h1,
+  .t-h1-sm,
   .t-h2 {
     font-weight: 600;
     text-wrap: balance;
@@ -103,23 +192,35 @@ body {
   .t-h1 {
     font-size: clamp(2.125rem, 3.7vw, 3.25rem);
     line-height: 1.08;
-    letter-spacing: -0.03em;
+    letter-spacing: calc(-0.03em * var(--tracking-scale, 1));
+  }
+  /* The title of a page you came to read: an article, a policy, a listing. */
+  .t-h1-sm {
+    font-size: clamp(1.875rem, 3vw, 2.5rem);
+    line-height: 1.12;
+    letter-spacing: calc(-0.025em * var(--tracking-scale, 1));
   }
   .t-h2 {
     font-size: clamp(1.75rem, 2.5vw, 2.25rem);
     line-height: 1.14;
-    letter-spacing: -0.025em;
+    letter-spacing: calc(-0.025em * var(--tracking-scale, 1));
+  }
+  .t-h3 {
+    font-size: clamp(1.25rem, 1.7vw, 1.5rem);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: calc(-0.018em * var(--tracking-scale, 1));
   }
   .t-h4 {
     font-size: 1.0625rem;
     font-weight: 600;
     line-height: 1.4;
-    letter-spacing: -0.01em;
+    letter-spacing: calc(-0.01em * var(--tracking-scale, 1));
   }
   .t-lead {
     font-size: clamp(1.0625rem, 1.25vw, 1.125rem);
     line-height: 1.55;
-    letter-spacing: -0.005em;
+    letter-spacing: calc(-0.005em * var(--tracking-scale, 1));
     text-wrap: pretty;
   }
   .t-overline {
@@ -129,9 +230,109 @@ body {
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
+  .t-stat {
+    font-size: clamp(1.875rem, 2.8vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: calc(-0.025em * var(--tracking-scale, 1));
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-on-deep {
+    border: 1px solid transparent;
+    font-weight: 600;
+    letter-spacing: calc(-0.01em * var(--tracking-scale, 1));
+    transition: background-color 160ms var(--ease-standard), border-color 160ms var(--ease-standard), box-shadow 160ms var(--ease-standard), color 160ms var(--ease-standard), transform 120ms var(--ease-standard);
+  }
+  .btn-primary:active:not(:disabled),
+  .btn-secondary:active:not(:disabled),
+  .btn-on-deep:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+  .btn-primary {
+    background-color: var(--color-brand-500);
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 60%);
+    color: #fff;
+    box-shadow: var(--shadow-primary);
+  }
+  .btn-primary:hover {
+    background-color: var(--color-brand-600);
+  }
+  .btn-primary:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-primary), var(--shadow-focus);
+  }
+  .btn-secondary {
+    border-color: var(--color-ink-100);
+    background-color: #fff;
+    color: var(--color-ink-900);
+    box-shadow: var(--shadow-secondary);
+  }
+  .btn-secondary:hover {
+    border-color: var(--color-ink-200);
+    background-color: var(--color-ink-50);
+  }
+  .btn-secondary:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+  }
+  .btn-on-deep {
+    background-color: #fff;
+    color: var(--color-deep-950);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25), inset 0 -1px 0 0 rgba(0, 38, 42, 0.12);
+  }
+  .btn-on-deep:hover {
+    background-color: #e6fbfd;
+  }
+  .btn-on-deep:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-deep-950), 0 0 0 4px rgba(255, 255, 255, 0.85);
+  }
+  /* The Afram field: a light-teal well, ringed in teal on focus. */
+  .field {
+    width: 100%;
+    border: 1px solid rgba(0, 116, 129, 0.1);
+    border-radius: 12px;
+    background-color: var(--color-brand-50);
+    padding-inline: 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-ink-900);
+    transition: border-color 160ms var(--ease-standard), box-shadow 160ms var(--ease-standard);
+  }
+  .field::placeholder {
+    color: var(--color-ink-400);
+    font-weight: 400;
+  }
+  .field:hover {
+    border-color: rgba(0, 116, 129, 0.28);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-brand-500);
+    box-shadow: var(--shadow-focus);
+  }
 }
 
-/* Halftone dot-grid decoration. Tint via text color. */
+/* ============================================================
+   Utilities
+   ============================================================ */
+
+/* Dark teal cover (footer bottom-bar / dark surfaces) */
+@utility mesh-emerald {
+  background-color: #00565e;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(0, 116, 129, 0.55) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(2, 65, 73, 0.6) 0px, transparent 50%);
+}
+
+/* Soft light teal wash */
+@utility wash-mint {
+  background-image: linear-gradient(180deg, #eef7f7 0%, rgba(238, 247, 247, 0) 100%);
+}
+
+/* Halftone dot-grid decoration (bottom-right of cards). Tint via text color. */
 @utility dot-grid {
   background-image: radial-gradient(currentColor 1.15px, transparent 1.15px);
   background-size: 13px 13px;
@@ -145,20 +346,57 @@ body {
   mix-blend-mode: color;
 }
 
-@utility wash-mint {
-  background-image: linear-gradient(180deg, #eef7f7 0%, rgba(238, 247, 247, 0) 100%);
-}
-
+/* Hairline ring used on premium cards */
 @utility ring-hairline {
   box-shadow: 0 0 0 1px rgba(37, 39, 44, 0.06);
 }
 
-/* Reveal + marquee animation primitives for the landing */
+/* Dual-range price slider — overlapping inputs, only the thumbs are interactive */
+.range-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background: transparent;
+  pointer-events: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: auto;
+  height: 20px;
+  width: 20px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 2px solid var(--color-brand-500);
+  box-shadow: 0 1px 5px rgba(15, 20, 25, 0.22);
+  cursor: pointer;
+}
+.range-input::-moz-range-thumb {
+  pointer-events: auto;
+  height: 20px;
+  width: 20px;
+  border: 2px solid var(--color-brand-500);
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: 0 1px 5px rgba(15, 20, 25, 0.22);
+  cursor: pointer;
+}
+.range-input::-webkit-slider-runnable-track {
+  background: transparent;
+}
+.range-input::-moz-range-track {
+  background: transparent;
+}
+
+/* Reveal animation primitives (paired with inline animation-delay) */
 @layer utilities {
   @keyframes afram-rise {
     from {
       opacity: 0;
-      transform: translateY(18px);
+      transform: translateY(14px);
     }
     to {
       opacity: 1;
@@ -193,6 +431,7 @@ body {
     width: max-content;
     animation: afram-marquee var(--marquee-duration, 55s) linear infinite;
   }
+  /* Dialog entrance — fast enough to feel like a direct response to the tap. */
   @keyframes afram-scrim-in {
     from {
       opacity: 0;
@@ -211,6 +450,19 @@ body {
       transform: translateY(0) scale(1);
     }
   }
+  @keyframes afram-page-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .page-in {
+    animation: afram-page-in 0.42s var(--ease-out-soft) both;
+  }
   @keyframes afram-shimmer {
     0% {
       background-position: 100% 0;
@@ -222,12 +474,7 @@ body {
   /* Loading placeholder, for images and skeleton blocks alike. */
   .skel {
     background-color: var(--color-ink-100);
-    background-image: linear-gradient(
-      90deg,
-      var(--color-ink-100) 0%,
-      var(--color-ink-50) 50%,
-      var(--color-ink-100) 100%
-    );
+    background-image: linear-gradient(90deg, var(--color-ink-100) 0%, var(--color-ink-50) 50%, var(--color-ink-100) 100%);
     background-size: 200% 100%;
     animation: afram-shimmer 1.4s ease-in-out infinite;
   }
@@ -240,23 +487,34 @@ body {
   @media (prefers-reduced-motion: reduce) {
     .rise,
     .fade,
-    .marquee-track,
-    .skel,
     .scrim-in,
-    .panel-in {
+    .panel-in,
+    .page-in,
+    .skel,
+    .marquee-track {
       animation: none;
       opacity: 1;
     }
     .panel-in {
       transform: none;
     }
+    html {
+      scroll-behavior: auto;
+    }
   }
+}
 
-  .tnum {
-    font-feature-settings: "tnum";
-    font-variant-numeric: tabular-nums;
+/* Printing a page (e.g. a legal policy): just the document. */
+@media print {
+  body > header,
+  body > footer,
+  [data-print="hide"] {
+    display: none !important;
   }
+}
 
+/* Dialog and confirmation motion used by the access and help forms. */
+@layer utilities {
   /* Entrance/exit animation for native <dialog> modals */
   .modal-pop {
     opacity: 0;

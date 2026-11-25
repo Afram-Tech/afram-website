@@ -47,7 +47,7 @@ export function MonthlyEstimate({
           Indicative only. Worked out using the average rate across all financiers on Afram. Subject
           to approval and to the lender&rsquo;s terms and conditions.{" "}
           <Link
-            href="/privacy-policy"
+            href="/legal/terms"
             className="text-brand-500 hover:text-brand-700 font-semibold underline underline-offset-2"
           >
             Full terms

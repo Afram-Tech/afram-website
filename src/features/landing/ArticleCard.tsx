@@ -2,14 +2,21 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { formatArticleDate, type Article } from "@/features/landing/data/articles";
+import { cn } from "@/lib/utils";
 
-export function ArticleCard({ article }: { article: Article }) {
+/** `wide` stretches the cover on a last row that has fewer than three cards. */
+export function ArticleCard({ article, wide }: { article: Article; wide?: boolean }) {
   return (
     <Link
       href={`/insights/${article.slug}`}
       className="group block rounded-2xl focus-visible:shadow-[var(--shadow-focus)] focus-visible:outline-none"
     >
-      <div className="bg-ink-100 relative aspect-16/11 overflow-hidden rounded-2xl">
+      <div
+        className={cn(
+          "bg-ink-100 relative aspect-16/11 overflow-hidden rounded-2xl",
+          wide && "lg:aspect-[2/1]",
+        )}
+      >
         <Image
           src={article.cover}
           alt={article.title}

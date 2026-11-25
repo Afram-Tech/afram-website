@@ -1,12 +1,11 @@
 import Image from "next/image";
-
 import { cn } from "@/lib/utils";
 
-export interface TickerLogo {
+export type TickerLogo = {
   name: string;
-  /** Logo file. Without one the name shows as a wordmark. */
+  /** Logo file in /public. Without one the name shows as a wordmark. */
   src?: string;
-}
+};
 
 /**
  * Partner logos moving in a slow loop, so the row keeps working as the list
@@ -42,28 +41,28 @@ export function LogoTicker({
         className="marquee-track flex gap-3 group-hover:[animation-play-state:paused]"
         style={{ ["--marquee-duration" as string]: `${half.length * 4}s` }}
       >
-        {[...half, ...half].map((logo, index) => (
+        {[...half, ...half].map((l, i) => (
           <li
-            key={`${logo.name}-${index}`}
-            aria-hidden={index >= logos.length || undefined}
+            key={`${l.name}-${i}`}
+            aria-hidden={i >= logos.length || undefined}
             className={cn(
               "flex h-20 w-40 shrink-0 items-center justify-center rounded-2xl bg-white px-5 sm:h-24 sm:w-44",
               tileClassName,
             )}
           >
-            {logo.src ? (
+            {l.src ? (
               <div className="relative h-10 w-full">
                 <Image
-                  src={logo.src}
-                  alt={index < logos.length ? logo.name : ""}
+                  src={l.src}
+                  alt={i < logos.length ? l.name : ""}
                   fill
                   sizes="140px"
                   className="object-contain"
                 />
               </div>
             ) : (
-              <span className="text-brand-700 text-[18px] font-bold tracking-[-0.01em]">
-                {logo.name}
+              <span className="text-[18px] font-bold tracking-[calc(-0.01em*var(--tracking-scale,1))] text-brand-700">
+                {l.name}
               </span>
             )}
           </li>

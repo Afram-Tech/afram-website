@@ -16,7 +16,7 @@ const STEPS = ["Sent", "Team on it", "Sorted"] as const;
 const STATES: Record<RequestState, { label: string; done: number; tone: string }> = {
   received: { label: "Waiting on team", done: 1, tone: "bg-ink-50 text-ink-700" },
   in_progress: { label: "Team on it", done: 2, tone: "bg-brand-50 text-brand-700" },
-  resolved: { label: "Sorted", done: 3, tone: "bg-emerald-50 text-emerald-700" },
+  resolved: { label: "Sorted", done: 3, tone: "bg-success-lighter text-success-darker" },
 };
 
 /** Where a request is, by the reference from its confirmation and the email
@@ -58,12 +58,12 @@ export function TrackRequest({
   return (
     <section
       aria-labelledby={`${id}-title`}
-      className="ring-ink-100 flex flex-col gap-3 rounded-[1.5rem] bg-white px-6 py-5 ring-1"
+      className="ring-ink-100 flex flex-col gap-3 rounded-3xl bg-white px-6 py-5 ring-1"
     >
-      <h2 id={`${id}-title`} className="text-ink-900 text-[15.5px] font-bold">
+      <h2 id={`${id}-title`} className="text-ink-900 text-[15px] font-bold">
         Track a request
       </h2>
-      <p className="text-ink-500 -mt-1 text-[13.5px] leading-relaxed">
+      <p className="text-ink-500 -mt-1 text-[14px] leading-relaxed">
         Enter the reference from your confirmation and the email you sent it with.
       </p>
       <div className="flex flex-col gap-2">
@@ -77,7 +77,7 @@ export function TrackRequest({
           placeholder="AF-XXXXXX"
           autoCapitalize="characters"
           spellCheck={false}
-          className="tnum text-ink-900 ring-ink-200 placeholder:text-ink-400 focus:ring-brand-400 h-11 min-w-0 rounded-[14px] bg-white px-4 text-[14.5px] font-semibold tracking-[0.04em] uppercase ring-1 placeholder:font-normal placeholder:tracking-normal placeholder:normal-case focus:ring-2 focus:outline-none sm:w-[150px] sm:shrink-0"
+          className="tnum text-ink-900 ring-ink-200 placeholder:text-ink-400 focus:ring-brand-400 h-11 min-w-0 rounded-[14px] bg-white px-4 text-[14px] font-semibold tracking-[0.04em] uppercase ring-1 placeholder:font-normal placeholder:tracking-normal placeholder:normal-case focus:ring-2 focus:outline-none sm:w-[150px] sm:shrink-0"
         />
         <label htmlFor={`${id}-email`} className="sr-only">
           Email
@@ -89,13 +89,13 @@ export function TrackRequest({
           onChange={(event) => setEmail(event.target.value)}
           placeholder="Your email"
           autoComplete="email"
-          className="tnum text-ink-900 ring-ink-200 placeholder:text-ink-400 focus:ring-brand-400 h-11 min-w-[350px] rounded-[14px] bg-white px-4 text-[14.5px] font-semibold tracking-[0.04em] ring-1 placeholder:font-normal placeholder:tracking-normal placeholder:normal-case focus:ring-2 focus:outline-none sm:w-[150px] sm:shrink-0"
+          className="tnum text-ink-900 ring-ink-200 placeholder:text-ink-400 focus:ring-brand-400 h-11 min-w-[350px] rounded-[14px] bg-white px-4 text-[14px] font-semibold tracking-[0.04em] ring-1 placeholder:font-normal placeholder:tracking-normal placeholder:normal-case focus:ring-2 focus:outline-none sm:w-[150px] sm:shrink-0"
         />
         <button
           type="button"
           onClick={check}
           disabled={pending || !value.trim() || !email.trim()}
-          className="text-brand-500 ring-brand-500 hover:bg-brand-50 inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full px-5 text-[14px] font-semibold ring-1 transition-colors disabled:opacity-60"
+          className="btn-secondary inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full px-5 text-[14px] font-semibold disabled:opacity-60"
         >
           {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Check"}
         </button>
@@ -104,14 +104,14 @@ export function TrackRequest({
       <div aria-live="polite">
         {result?.status === "found" && <TrackResult result={result} />}
         {result?.status === "not_found" && (
-          <p className="bg-ink-50 text-ink-700 rounded-2xl px-4 py-3 text-[13.5px] leading-relaxed">
+          <p className="bg-ink-50 text-ink-700 rounded-2xl px-4 py-3 text-[14px] leading-relaxed">
             We couldn&apos;t find <b className="font-semibold">{result.reference}</b> with that
             email. Check both against your confirmation: AF- and then 6 letters and numbers, and the
             email you sent it from.
           </p>
         )}
         {result?.status === "error" && (
-          <p className="bg-coral-100/60 text-ink-700 rounded-2xl px-4 py-3 text-[13.5px]">
+          <p className="bg-coral-100/60 text-ink-700 rounded-2xl px-4 py-3 text-[14px]">
             We couldn&apos;t check just now. Try again in a moment.
           </p>
         )}
@@ -123,7 +123,7 @@ export function TrackRequest({
 function TrackResult({ result }: { result: Extract<ReportCheck, { status: "found" }> }) {
   const state = STATES[result.state];
   const done = (step: number) => step < state.done;
-  const fill = result.state === "resolved" ? "bg-emerald-500" : "bg-brand-500";
+  const fill = result.state === "resolved" ? "bg-success-dark" : "bg-brand-500";
 
   return (
     <div className="ring-ink-100 flex flex-col gap-3 rounded-2xl px-4 py-4 ring-1">
@@ -152,7 +152,7 @@ function TrackResult({ result }: { result: Extract<ReportCheck, { status: "found
         ))}
       </ol>
       {result.updatedAt && (
-        <p className="text-ink-500 text-[12.5px]">Last update {when(result.updatedAt)}</p>
+        <p className="text-ink-500 text-[13px]">Last update {when(result.updatedAt)}</p>
       )}
     </div>
   );
