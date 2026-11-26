@@ -5,7 +5,7 @@ import { expect, test } from "@playwright/test";
    must return only listings whose price falls inside it. */
 test("price bands use the listings' currency and filter by it", async ({ page }) => {
   await page.goto("/properties");
-  await page.getByRole("button", { name: "Price" }).click();
+  const price = page.getByLabel("Price");
 
   const bands = [
     "Under GHS 100,000",
@@ -13,15 +13,16 @@ test("price bands use the listings' currency and filter by it", async ({ page })
     "GHS 300,000 – GHS 600,000",
     "Over GHS 600,000",
   ];
-  for (const band of bands) await expect(page.getByRole("button", { name: band })).toBeVisible();
-  await expect(page.getByRole("button", { name: /\$/ })).toHaveCount(0);
+  const options = (await price.locator("option").allTextContents()).slice(1);
+  expect(options).toEqual(bands);
 
-  await page.getByRole("button", { name: "GHS 300,000 – GHS 600,000" }).click();
+  await price.selectOption({ label: "GHS 300,000 – GHS 600,000" });
 
-  // Each card's headline price sits under its "From" label.
-  const prices = page.locator("p:text-is('From') + p");
+  // Each card's headline price is the line that opens with a "From" label.
+  const prices = page.locator("article p:has(> span:text-is('From'))");
   await expect(prices.first()).toBeVisible();
-  for (const text of await prices.allTextContents()) {
+  for (const line of await prices.allTextContents()) {
+    const text = line.replace(/^From\s*/, "");
     expect(text).toMatch(/^GHS\s/); // Intl puts a no-break space after the code
     const amount = Number(text.replace(/[^\d.]/g, ""));
     expect(amount).toBeGreaterThanOrEqual(300_000);

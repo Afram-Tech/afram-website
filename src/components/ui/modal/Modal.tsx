@@ -57,13 +57,13 @@ export function Modal({
     <div
       ref={rootRef}
       data-state={state}
-      className="group/overlay fixed inset-0 z-[100] flex items-end justify-center sm:items-center sm:p-6"
+      className="group/overlay fixed inset-0 z-[100] flex items-end justify-center sm:items-center sm:p-4"
     >
       <div
         aria-hidden
         onClick={onClose}
         className={cn(
-          "bg-ink-950/55 absolute inset-0 backdrop-blur-[6px]",
+          "bg-brand-950/50 absolute inset-0 backdrop-blur-[3px]",
           "opacity-0 transition-opacity duration-200 ease-out",
           "group-data-[state=open]/overlay:opacity-100 group-data-[state=open]/overlay:duration-500",
           "motion-reduce:transition-none",
@@ -78,9 +78,8 @@ export function Modal({
         tabIndex={-1}
         className={cn(
           "relative flex w-full flex-col bg-white outline-none",
-          "shadow-[0_40px_100px_-40px_rgba(0,38,42,0.6)]",
-          "max-h-[calc(100vh-1.5rem)] supports-[height:100dvh]:max-h-[calc(100dvh-1.5rem)]",
-          "rounded-t-[1.75rem] sm:max-h-[calc(100vh-3rem)] sm:rounded-[2.25rem] supports-[height:100dvh]:sm:max-h-[calc(100dvh-3rem)]",
+          "shadow-modal rounded-t-[1.75rem] sm:rounded-3xl",
+          "max-h-[calc(100vh-24px)] supports-[height:100dvh]:max-h-[calc(100dvh-24px)]",
           "translate-y-full transition-[transform,opacity] duration-[260ms] ease-in",
           "sm:translate-y-6 sm:scale-[0.96] sm:opacity-0",
           "group-data-[state=open]/overlay:translate-y-0 group-data-[state=open]/overlay:duration-[560ms] group-data-[state=open]/overlay:ease-[cubic-bezier(0.32,0.72,0,1)]",
@@ -91,7 +90,7 @@ export function Modal({
       >
         <div
           {...swipe}
-          className="flex shrink-0 cursor-grab touch-none justify-center pt-2.5 pb-1 sm:hidden"
+          className="absolute inset-x-0 top-0 flex h-7 cursor-grab touch-none justify-center pt-2.5 sm:hidden"
         >
           <span aria-hidden className="bg-ink-200 h-1 w-10 rounded-full" />
         </div>
@@ -101,12 +100,12 @@ export function Modal({
           onClick={onClose}
           aria-label="Close"
           className={cn(
-            "text-ink-500 hover:bg-ink-50 hover:text-ink-900 absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full sm:top-5 sm:right-5",
+            "text-ink-500 hover:bg-ink-50 hover:text-ink-900 absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full",
             "transition-[background-color,color,transform] duration-200 hover:rotate-90",
             "focus-visible:ring-brand-400 focus-visible:ring-2 focus-visible:outline-none",
           )}
         >
-          <X className="h-5 w-5" />
+          <X className="h-[18px] w-[18px]" />
         </button>
 
         <div

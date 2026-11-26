@@ -4,7 +4,7 @@ import { type ReactNode, useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-/** Scroll-triggered reveal: 600ms ease-out, 20px rise, once. */
+/** Scroll-triggered reveal: a short rise on the site's entering curve, once (500ms, 14px). */
 export function Reveal({
   children,
   className,
@@ -28,7 +28,7 @@ export function Reveal({
           observer.unobserve(entry.target);
         }
       },
-      { rootMargin: "-80px", threshold: 0 },
+      { rootMargin: "-64px", threshold: 0 },
     );
 
     observer.observe(element);
@@ -39,8 +39,9 @@ export function Reveal({
     <div
       ref={ref}
       className={cn(
-        "transition-[opacity,transform] duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
-        visible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
+        "transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+        visible ? "translate-y-0 opacity-100" : "translate-y-[14px] opacity-0",
+        "motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none",
         className,
       )}
       style={{ transitionDelay: `${delay}s` }}

@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 
 import { JsonLd } from "@/components/JsonLd";
 import { Section } from "@/components/ui/Section";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 import { AffordabilityCalculatorSection } from "@/features/landing/sections/AffordabilityCalculatorSection";
 import { FeaturedArticlesSection } from "@/features/landing/sections/FeaturedArticlesSection";
 import { FeaturedPropertiesSection } from "@/features/landing/sections/FeaturedPropertiesSection";
 import { HeroSection } from "@/features/landing/sections/HeroSection";
-import { MorePropertiesSection } from "@/features/landing/sections/MorePropertiesSection";
 import { PartnerLogosSection } from "@/features/landing/sections/PartnerLogosSection";
 import { getHomePageContent } from "@/features/landing/data/home";
 import { buildMetadata, buildWebSiteJsonLd } from "@/lib/seo";
@@ -26,28 +25,28 @@ export default async function HomePage() {
     <>
       <JsonLd data={buildWebSiteJsonLd()} />
       <HeroSection content={content ?? undefined} />
-      {/* <PartnerLogosSection heading={content?.partnerLogosHeading} partners={content?.partners} /> */}
+      <PartnerLogosSection heading={content?.partnerLogosHeading} partners={content?.partners} />
       <FeaturedPropertiesSection
         heading={content?.featuredPropertiesHeading}
         subheading={content?.featuredPropertiesSubheading}
         ctaLabel={content?.featuredPropertiesCtaLabel}
         ctaLink={content?.featuredPropertiesCtaLink}
       />
-      <MorePropertiesSection
-        heading={content?.morePropertiesHeading}
-        ctaLabel={content?.morePropertiesCtaLabel}
-        ctaLink={content?.morePropertiesCtaLink}
-      />
       <Section id="calculator" className="bg-accent-50/60">
-        <SectionHeading
-          align="center"
-          eyebrow={content?.affordabilityEyebrow ?? "Affordability"}
-          title={content?.affordabilityTitle ?? "What can you afford?"}
-          intro={
-            content?.affordabilityIntro ??
-            "Drag to set your monthly take-home. We'll show a comfortable home price, the deposit, and what the instalment looks like over five or ten years."
-          }
-        />
+        <div className="mx-auto max-w-2xl text-center">
+          {content?.affordabilityEyebrow && <Eyebrow>{content.affordabilityEyebrow}</Eyebrow>}
+          <h2
+            className={
+              content?.affordabilityEyebrow ? "t-h2 text-ink-900 mt-4" : "t-h2 text-ink-900"
+            }
+          >
+            {content?.affordabilityTitle ?? "What can you afford?"}
+          </h2>
+          <p className="t-lead text-ink-500 mt-4">
+            {content?.affordabilityIntro ??
+              "Drag to set your monthly take-home. We’ll show a comfortable home price, the deposit, and what the instalment looks like over five or ten years."}
+          </p>
+        </div>
         <AffordabilityCalculatorSection />
       </Section>
       <FeaturedArticlesSection

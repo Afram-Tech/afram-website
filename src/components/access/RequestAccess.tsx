@@ -13,8 +13,8 @@ export function RequestAccess() {
       open={isOpen}
       onClose={close}
       labelledBy="access-title"
-      className="sm:max-w-[640px]"
-      bodyClassName="px-5 pt-5 pb-[calc(1.75rem+env(safe-area-inset-bottom))] min-[400px]:px-7 sm:px-12 sm:pt-12 sm:pb-11"
+      className="sm:max-w-[560px]"
+      bodyClassName="px-6 pt-8 pb-[calc(1.75rem+env(safe-area-inset-bottom))] sm:px-10 sm:pt-10 sm:pb-9"
     >
       <AccessForm key={formKey} role={role} onRoleChange={setRole} onDone={close} />
     </Modal>

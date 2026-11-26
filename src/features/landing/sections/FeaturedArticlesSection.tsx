@@ -24,25 +24,27 @@ export async function FeaturedArticlesSection({
 
   return (
     <Section className="bg-ink-50/40">
-      <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="max-w-xl">
-          <h2 className="text-ink-900 text-[clamp(1.6rem,2.4vw,2rem)] leading-[1.18] font-bold tracking-[-0.02em]">
-            {heading ?? "Insights"}
-          </h2>
-          <p className="text-ink-500 mt-3 text-[16px] leading-relaxed">
+          <h2 className="t-h2 text-ink-900">{heading ?? "Insights"}</h2>
+          <p className="t-lead text-ink-500 mt-3">
             {subheading ?? "Guides, market data, and verification explainers from the Afram team."}
           </p>
         </div>
         <Link
           href={ctaLink ?? "/insights"}
-          className={buttonVariants("primary", "sm", "shrink-0 rounded-full")}
+          className={buttonVariants(
+            "primary",
+            "sm",
+            "h-8 w-fit shrink-0 gap-1.5 px-3.5 text-[13px] leading-[18px]",
+          )}
         >
           {ctaLabel ?? "See all"}
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
 
-      <div className="gap-x-card mt-8 grid grid-cols-1 gap-y-6 sm:mt-10 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12">
+      <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-6 sm:mt-10 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12">
         {featured.map((article) => (
           <ArticleCard key={article.slug} article={article} />
         ))}

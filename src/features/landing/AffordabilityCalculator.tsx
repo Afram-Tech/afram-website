@@ -91,7 +91,7 @@ export function AffordabilityCalculator({
   );
 
   return (
-    <div className="border-ink-100 mx-auto mt-10 max-w-5xl rounded-[1.75rem] border bg-white p-7 shadow-sm sm:mt-12 sm:p-10">
+    <div className="border-ink-100 mx-auto mt-10 max-w-5xl rounded-[20px] border bg-white p-7 shadow-sm sm:mt-12 sm:p-10">
       <div className="flex items-center justify-between gap-3">
         <label className="text-ink-600 block text-sm font-medium" htmlFor="affordability-income">
           Your monthly take-home
@@ -146,7 +146,7 @@ export function AffordabilityCalculator({
         <Stat label="Monthly · 10 yr" value={formatCurrency(snapshot.monthly10, currency)} accent />
       </div>
 
-      <p className="text-ink-400 mt-6 text-center text-[12.5px] leading-relaxed">
+      <p className="text-ink-400 mt-6 text-center text-[13px] leading-relaxed">
         Illustrative only. Assumes a {Math.round((1 - LTV) * 100)}% deposit, a{" "}
         {(ANNUAL_RATE * 100).toFixed(0)}% annual rate, and a comfortable payment of about 35% of
         take-home over ten years. The five-year instalment pays the same home off sooner, so it is
@@ -209,7 +209,7 @@ function RecommendationStrip({
   return (
     <div className="border-ink-100 mt-8 border-t pt-7">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h3 className="text-ink-900 text-[17px] font-bold tracking-[-0.01em]">
+        <h3 className="t-h4 text-ink-900">
           {withinBudget ? "Properties within this budget" : "Closest listings — above this budget"}
         </h3>
         <button
@@ -224,7 +224,7 @@ function RecommendationStrip({
         </button>
       </div>
 
-      <div className="gap-card mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {isMatching
           ? Array.from({ length: matches.length || RECOMMENDATION_COUNT }, (_, index) => (
               <PropertyCardCompactSkeleton key={index} />
@@ -235,7 +235,7 @@ function RecommendationStrip({
       </div>
 
       {!isMatching && !withinBudget && (
-        <p className="text-ink-500 mt-5 text-[13.5px] leading-relaxed">
+        <p className="text-ink-500 mt-5 text-[14px] leading-relaxed">
           Nothing on Afram is within this budget yet. These are the nearest listings — drag higher
           to see what comes into reach.
         </p>
@@ -259,14 +259,7 @@ function Stat({
     <div
       className={cn("rounded-2xl p-5 text-center", lead ? "bg-brand-700 text-white" : "bg-ink-50")}
     >
-      <p
-        className={cn(
-          "text-[11px] font-semibold tracking-wider uppercase",
-          lead ? "text-white/60" : "text-ink-400",
-        )}
-      >
-        {label}
-      </p>
+      <p className={cn("t-overline", lead ? "text-white/60" : "text-ink-400")}>{label}</p>
       <p
         className={cn(
           "tnum mt-1.5 text-[1.4rem] font-bold tracking-[-0.02em]",

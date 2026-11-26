@@ -1,0 +1,188 @@
+import { PHOTOS } from "./photos";
+import type { PersonaContent } from "./persona";
+
+/**
+ * Financier personas for /financiers.
+ * Afram works WITH and verifies against institutions (Lands Commission,
+ * NIA / Ghana Card). It does not itself hold a banking licence — copy here
+ * is careful never to claim one.
+ */
+export const PERSONAS: Record<string, PersonaContent> = {
+  bank: {
+    id: "bank",
+    tab: "Bank",
+    eyebrow: "For regulated lenders",
+    headline: "Lend Against Title-Searched Ghanaian Property",
+    subhead:
+      "Secured lending against verified title, with standard credit documentation.",
+    image: PHOTOS.building,
+    imageBadge: "Verified collateral",
+    stats: [
+      { label: "Pricing", value: "Your pricing, your terms", accent: true },
+      { label: "Security", value: "Documented security" },
+      { label: "KYC", value: "Ghana Card · Act 1044" },
+    ],
+    // Content doc §6.3. Two further blocks are held: data protection (pending
+    // the Act 843 confirmation, doc §4.4) and real-time portfolio visibility
+    // (pending §4.3). The "A session for your credit and risk team" callout is
+    // held until someone is confirmed to deliver those sessions.
+    blocks: [
+      {
+        title: "The instrument behind the record",
+        icon: "Landmark",
+        body: "Every verified record reconciles to a Lands Commission instrument. The digital record sits alongside the deed, it does not replace it — your security rests on the statutory register, not on our record alone.",
+      },
+      {
+        title: "Enforceability, backed by a legal opinion",
+        icon: "Scale",
+        body: "Start with a controlled pilot at limited exposure. Test the charge, test the recall process, and see the enforcement path in practice before it goes to credit committee at size.",
+      },
+      {
+        title: "Title work done before it reaches you",
+        icon: "FileCheck2",
+        body: "Title search and security documentation are standardised and completed up front, so the paper cycle that normally runs 4–12 weeks collapses into a review of a prepared file.",
+      },
+      {
+        title: "Your panel, your standards",
+        icon: "ClipboardCheck",
+        body: "Valuations run through your approved-valuer panel. We do not ask you to accept ours.",
+      },
+      {
+        title: "Documented for your file",
+        icon: "FileText",
+        body: "Source-of-funds and sanctions checks are documented per loan, with a full audit trail available to your compliance team and your auditors.",
+      },
+    ],
+    blocksCta: { label: "Request a briefing", href: "#briefing" },
+    faqs: [
+      {
+        q: "What is the legal standing of the verified record versus paper title?",
+        a: "The verified record is a digital reconciliation of the underlying paper title against Lands Commission data. It sits alongside the deed rather than replacing it. Development loans are secured by a registered first legal charge over the same parcel, so your security rests on the statutory register, not on our record alone. Home purchase loans are secured by the package agreed for that transaction.",
+      },
+      {
+        q: "How does the first legal charge work in practice?",
+        a: "Each development loan is documented with a charge registered against the title at the Lands Commission, ranking ahead of later interests. Home purchase loans use a different security package. On default, the charge is enforceable through the courts under Ghanaian law in the ordinary way. We prepare the standardised security pack; your counsel reviews and you hold the charge.",
+      },
+      {
+        q: "What does the KYC and AML stack look like?",
+        a: "Borrower identity is verified against the Ghana Card through the National Identification Authority, with screening and record-keeping aligned to the Anti-Money Laundering Act 1044 and Bank of Ghana guidance. Source-of-funds and sanctions checks are documented per loan, and the audit trail is available for your own file.",
+      },
+      {
+        q: "Can this integrate with our core banking and credit systems?",
+        a: "Loan tapes, collateral records and the document pack are available by structured export today, with API access on request, so positions can be booked and monitored in your existing systems. We will discuss your onboarding and reporting formats with you.",
+      },
+    ],
+  },
+  "private-credit": {
+    id: "private-credit",
+    tab: "Private credit",
+    eyebrow: "For private credit",
+    headline: "Your pricing, your terms.",
+    subhead:
+      "Set your rate, term and ticket. Onboard in days, against verified collateral.",
+    image: PHOTOS.interior2,
+    imageBadge: "Verified collateral",
+    stats: [
+      { label: "Pricing", value: "Your pricing, your terms", accent: true },
+      { label: "Onboard in", value: "≤5 business days" },
+      { label: "Your rules", value: "rate · term · ticket" },
+    ],
+    // Content doc §6.4. Block one claims Ghana Card / NIA verification only.
+    // The stronger "no ghost borrowers — a human check on top of the digital
+    // one" version is the highest-value line on this page, but it ships only
+    // once human verification is confirmed to happen (doc §4.3). A
+    // confidentiality block is held for the same reason.
+    blocks: [
+      {
+        title: "Borrowers verified against the national register",
+        icon: "IdCard",
+        body: "Every borrower is verified against the Ghana Card through the National Identification Authority before a deal reaches you, with source-of-funds and sanctions checks documented per loan.",
+      },
+      {
+        // "the public registry" is intentionally not a link: the brief requires
+        // it to route through a "You are leaving Afram" interstitial, and no
+        // such interstitial exists in this codebase yet.
+        title: "Title you can verify yourself",
+        icon: "Search",
+        body: "Run your own solicitor’s search against the public registry before you commit. We expect you to, and nothing here depends on you taking our word for it.",
+      },
+      {
+        title: "Your terms, your box",
+        icon: "SlidersHorizontal",
+        body: "Set the rate, the term band, the minimum and maximum ticket, and which project stages you will lend against. Only deals inside your box reach your desk.",
+      },
+      {
+        title: "Security registered, not promised",
+        icon: "ShieldCheck",
+        body: "A first legal charge is registered at the Lands Commission before disbursement, ranking ahead of later interests. Documentation stays with your lawyer.",
+      },
+      {
+        title: "Exit — the honest answer",
+        icon: "Clock3",
+        body: "Positions are currently held to maturity. On-selling a loan is on the roadmap, not live today. We say so plainly so you can size tickets to a hold-to-maturity assumption.",
+      },
+    ],
+    // #briefing is the form on this page. It must not point at /properties,
+    // which is the residential buyer marketplace.
+    blocksCta: { label: "Request a briefing", href: "#briefing" },
+    faqs: [
+      {
+        q: "How do I configure my own rules?",
+        a: "You set the rate, the term band, the minimum and maximum ticket, and which project stages you will lend against. We surface only the deals that match your mandate, so you review a curated pipeline rather than the whole market.",
+      },
+      {
+        q: "How fast is onboarding, really?",
+        a: "Once KYC and your mandate are agreed, most lenders are ready to review live deals within five business days. The slow part of private credit is usually documentation and collateral diligence. Both are standardised here, which is where the time is saved.",
+      },
+      {
+        q: "How does Afram reduce document fraud risk?",
+        a: "Every parcel is reconciled against Lands Commission records before it reaches you, and the loan is secured by documented security. You see the verified title result and the full paper trail, so you are not relying on a borrower’s photocopy.",
+      },
+      {
+        q: "Is there an exit or secondary market?",
+        a: "Not yet. Positions are currently held to maturity, and on-selling a loan is on the roadmap rather than live today. We say so plainly, so you can size tickets to a hold-to-maturity assumption.",
+      },
+    ],
+  },
+  impact: {
+    id: "impact",
+    tab: "Impact / Diaspora",
+    eyebrow: "For impact & diaspora capital",
+    headline: "Returns with measurable impact.",
+    subhead:
+      "Fund affordable, first-time homeownership with the governance, ESG reporting and currency flexibility your mandate requires.",
+    image: PHOTOS.house4,
+    imageBadge: "Verified collateral",
+    stats: [
+      { label: "Diaspora to Ghana", value: "USD 6.65B" },
+      { label: "Currency", value: "USD · EUR · GHS" },
+      { label: "Reporting", value: "ESG + audit trail" },
+    ],
+    faqs: [
+      {
+        q: "What ESG and impact reporting do you provide?",
+        a: "We report on the outcomes your mandate tracks: first-time buyers funded, locality, ticket size, and affordability of the monthly payment, drawn from the underlying loan records. Reports are delivered on your cadence and reference recognised affordable-housing measures rather than headline figures.",
+      },
+      {
+        q: "How is cross-border AML and FATF compliance handled?",
+        a: "Borrowers are verified against the Ghana Card through the National Identification Authority, with screening aligned to the Anti-Money Laundering Act 1044 and FATF recommendations. For diaspora capital, source-of-funds and sanctions checks are documented at the fund level so your own compliance file is complete.",
+      },
+      {
+        q: "How do FX and repatriation work?",
+        a: "Capital can be committed in USD, EUR or GHS. Conversion and any repatriation run through licensed banking partners under Bank of Ghana foreign-exchange rules. We work within that framework rather than around it, and the FX terms are set out before you commit.",
+      },
+      {
+        q: "What governance and audit do you offer?",
+        a: "Each position carries a registered first legal charge, documented terms and a full audit trail, and reporting is structured for independent review. Your auditors and mandate trustees can inspect the loan-level records directly, so governance does not depend on our summaries.",
+      },
+    ],
+  },
+};
+
+/**
+ * Impact / Diaspora is intentionally not rendered. The persona content is kept
+ * below so it can be restored by adding "impact" back to this list.
+ */
+export const ORDER = ["bank", "private-credit"];
+
+export const DEFAULT = "bank";

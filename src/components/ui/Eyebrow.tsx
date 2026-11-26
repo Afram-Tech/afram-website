@@ -1,24 +1,21 @@
-import type { ReactNode } from "react";
-
 import { cn } from "@/lib/utils";
-
-const tones = {
-  brand: "text-accent-600",
-  gold: "text-gold-600",
-  sky: "text-sky-600",
-  muted: "text-ink-500",
-  light: "text-brand-300",
-} as const;
 
 export function Eyebrow({
   children,
   className,
   tone = "brand",
 }: {
-  children: ReactNode;
+  children: React.ReactNode;
   className?: string;
-  tone?: keyof typeof tones;
+  tone?: "brand" | "gold" | "sky" | "muted" | "light";
 }) {
+  const tones = {
+    brand: "text-accent-600",
+    gold: "text-gold-600",
+    sky: "text-sky-600",
+    muted: "text-ink-500",
+    light: "text-brand-300",
+  };
   return (
     <span
       className={cn(

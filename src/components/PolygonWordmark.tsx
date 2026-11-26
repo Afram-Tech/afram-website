@@ -1,11 +1,18 @@
-export function PolygonWordmark({ className }: { className?: string }) {
+import type { SVGProps } from "react";
+
+/**
+ * Official Polygon wordmark (interlocking-hexagon mark + "polygon" lettering),
+ * exported from Figma (node 950:29417). Monochrome — colour it via `currentColor`
+ * (e.g. a Tailwind text-* class on the element). Intrinsic ratio ≈ 67×14.
+ */
+export function PolygonWordmark(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="0 -0.2 66.92 14.1"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={className}
       aria-hidden
+      {...props}
     >
       <path
         fill="currentColor"
@@ -15,15 +22,19 @@ export function PolygonWordmark({ className }: { className?: string }) {
   );
 }
 
-/** Icon-only mark — for tight "on-chain" indicators where the full wordmark would not fit. */
-export function PolygonMark({ className }: { className?: string }) {
+/**
+ * Polygon brand mark only (the interlocking double-hexagon, no lettering).
+ * Monochrome via `currentColor`. Intrinsic ratio ≈ 16×14 — use for compact
+ * "on-chain" indicators where the full wordmark would not fit.
+ */
+export function PolygonMark(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="0 -0.2 15.71 14.1"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={className}
       aria-hidden
+      {...props}
     >
       <path
         fill="currentColor"

@@ -18,8 +18,7 @@ import { TURNSTILE_SITE_KEY, TurnstileCheck } from "./TurnstileCheck";
 
 const INITIAL_STATE: ReportState = { status: "idle" };
 
-const fieldClass =
-  "w-full rounded-[14px] bg-white px-4 text-[15px] text-ink-900 ring-1 ring-ink-200 transition placeholder:text-ink-400 focus:outline-none focus:ring-2 focus:ring-brand-400 aria-[invalid=true]:ring-coral-500/60";
+const fieldClass = "field aria-[invalid=true]:border-coral-500";
 
 /** One message and an email — filed as a support request, like in-app Help.
  *  The email is required: it's how we reply, and with the reference it's the
@@ -96,7 +95,7 @@ export function ReportIssueForm({
           {values.message.trim()}
         </div>
         <div className="text-ink-900 ring-ink-100 max-w-[92%] self-start rounded-2xl rounded-bl-md bg-white px-4 py-3 text-[14px] leading-relaxed ring-1">
-          <span className="text-brand-700 mb-0.5 block text-[11.5px] font-bold">Afram Support</span>
+          <span className="text-brand-700 mb-0.5 block text-[12px] font-bold">Afram Support</span>
           Thanks, we&apos;ve got it. Your reference is{" "}
           <b className="tnum font-semibold">{state.reference}</b>. We&apos;ll reply to {email}.
           Check on it below with the reference and that email.
@@ -105,7 +104,7 @@ export function ReportIssueForm({
           <button
             type="button"
             onClick={onAgain}
-            className="text-brand-500 hover:text-brand-700 self-start text-[13.5px] font-semibold"
+            className="text-brand-500 hover:text-brand-700 self-start text-[14px] font-semibold"
           >
             Send another message
           </button>
@@ -117,7 +116,7 @@ export function ReportIssueForm({
   const error = state.status === "error" ? state : null;
   const errorFor = (field: ReportField) =>
     error?.field === field ? (
-      <span role="alert" className="mt-1.5 block text-[13px] font-medium text-red-600">
+      <span role="alert" className="text-coral-500 mt-1.5 block text-[13px] font-medium">
         {error.message}
       </span>
     ) : null;
@@ -149,7 +148,7 @@ export function ReportIssueForm({
           aria-invalid={error?.field === "email"}
           autoComplete="email"
           placeholder="Your email, so we can reply"
-          className={cn(fieldClass, "h-12")}
+          className={cn(fieldClass, "h-11")}
         />
         {errorFor("email")}
       </label>
@@ -162,7 +161,7 @@ export function ReportIssueForm({
       />
 
       {error && !error.field && (
-        <p role="alert" className="text-[13.5px] font-medium text-red-600">
+        <p role="alert" className="text-coral-500 text-[13px] font-medium">
           {error.message}
         </p>
       )}
@@ -171,7 +170,7 @@ export function ReportIssueForm({
         type="button"
         onClick={send}
         disabled={pending || waitingOnCheck || incomplete}
-        className="bg-brand-500 hover:bg-brand-600 mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-white transition-all active:scale-[0.99] disabled:cursor-wait disabled:opacity-70"
+        className="btn-primary mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold disabled:cursor-wait disabled:opacity-70"
       >
         {pending ? (
           <>

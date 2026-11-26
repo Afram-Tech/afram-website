@@ -1,67 +1,64 @@
-import Image from "next/image";
 import Link from "next/link";
-
+import { SecBadge } from "@/components/ui/SecBadge";
+import { CookieSettingsButton } from "@/components/shell/CookieConsent";
+import { Logo } from "@/components/ui/Logo";
 import { NewsletterForm } from "@/components/layout/NewsletterForm";
-import { PolygonWordmark } from "@/components/PolygonWordmark";
-import { FOOTER_COMPANY_LINKS, FOOTER_LEGAL_LINKS, FOOTER_SOCIAL_LINKS } from "@/config/navigation";
-import { siteConfig } from "@/config/site";
 import type { FooterContent } from "@/features/landing/data/footer";
 
-interface SiteFooterProps {
-  /** Overrides from the Sanity `footer` singleton — falls back to static config/copy when unset. */
-  content?: FooterContent | null;
-}
+const COMPANY = [
+  { label: "Home", href: "/" },
+  { label: "Browse properties", href: "/properties" },
+  { label: "How it works", href: "/how-it-works" },
+  { label: "Insights", href: "/insights" },
+  { label: "Fees", href: "/fees" },
+  { label: "About", href: "/about" },
+  { label: "Help", href: "/help" },
+];
 
-export function SiteFooter({ content }: SiteFooterProps) {
-  const year = new Date().getFullYear();
-  const companyLinks = content?.companyLinks ?? FOOTER_COMPANY_LINKS;
-  const socialLinks = content?.socialLinks ?? FOOTER_SOCIAL_LINKS;
-  const legalLinks = content?.legalLinks ?? FOOTER_LEGAL_LINKS;
-  const tagline = content?.tagline ?? siteConfig.tagline;
-  const newsletterHeading = content?.newsletterHeading ?? "Be the first to know.";
-  const newsletterBody =
-    content?.newsletterBody ??
-    "Stay ahead in real estate. Get updates, expert tips, and insider insights delivered monthly.";
-  const copyright = content?.copyrightTemplate
-    ? content.copyrightTemplate
-      .replace("{year}", String(year))
-      .replace("{name}", siteConfig.legalName)
-    : `© ${year} ${siteConfig.legalName}. All rights reserved.`;
+const SOCIAL = [
+  { label: "Facebook", href: "#" },
+  { label: "LinkedIn", href: "#" },
+  { label: "Instagram", href: "#" },
+  { label: "X", href: "#" },
+  { label: "TikTok", href: "#" },
+];
 
+const LEGAL = [
+  { label: "Terms", href: "/legal/terms" },
+  { label: "Privacy Policy", href: "/legal/privacy" },
+  { label: "Cookie Policy", href: "/legal/cookie-policy" },
+];
+
+/** Sanity's `footer` singleton can override any of the copy and link lists. */
+export function SiteFooter({ content }: { content?: FooterContent | null }) {
+  const company = content?.companyLinks ?? COMPANY;
+  const social = content?.socialLinks ?? SOCIAL;
+  const legal = content?.legalLinks ?? LEGAL;
   return (
     <footer>
+      {/* Light top */}
       <div className="border-ink-100 border-t bg-white">
-        <div className="mx-auto max-w-[1536px] px-6 py-14 sm:px-8 lg:px-16 lg:py-16">
-          <div className="flex flex-col gap-5 pb-10 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <Image
-                src="/afram-logo-dark.svg"
-                alt="Afram"
-                width={110}
-                height={32}
-                className="h-8 w-auto"
-              />
-              <p className="text-ink-400 mt-2 text-[13px]">{tagline}</p>
+        <div className="mx-auto max-w-[1536px] px-5 py-10 sm:py-12 lg:px-[34px] lg:py-16">
+          {/* brand row */}
+          <div className="border-ink-100 flex flex-col gap-5 border-b pb-6 sm:flex-row sm:items-center sm:justify-between sm:pb-8 lg:pb-10">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+              <Logo className="h-7" />
+              <SecBadge />
             </div>
-            <span className="text-ink-400 inline-flex items-center gap-2 text-[13px] font-medium">
-              POWERED BY
-              <PolygonWordmark className="h-[13px] w-auto text-[#002D30]" />
-            </span>
           </div>
 
-          <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-[1fr_1fr_1.6fr]">
+          {/* columns */}
+          <div className="mt-8 grid gap-6 sm:gap-8 lg:mt-12 lg:grid-cols-[1fr_1fr_1.6fr] lg:gap-10">
             <div>
-              <h2 className="text-ink-900 text-[13px] font-bold tracking-[0.1em] uppercase">
-                Company
-              </h2>
+              <h3 className="t-overline text-ink-400">Company</h3>
               <ul className="mt-4 space-y-2.5">
-                {companyLinks.map((link) => (
-                  <li key={link.label}>
+                {company.map((l) => (
+                  <li key={l.href}>
                     <Link
-                      href={link.href}
-                      className="text-ink-500 hover:text-brand-600 text-[15px] transition-colors"
+                      href={l.href}
+                      className="text-ink-600 hover:text-brand-500 text-[14px] font-medium transition-colors"
                     >
-                      {link.label}
+                      {l.label}
                     </Link>
                   </li>
                 ))}
@@ -69,17 +66,15 @@ export function SiteFooter({ content }: SiteFooterProps) {
             </div>
 
             <div>
-              <h2 className="text-ink-900 text-[13px] font-bold tracking-[0.1em] uppercase">
-                Follow us
-              </h2>
+              <h3 className="t-overline text-ink-400">Follow us</h3>
               <ul className="mt-4 space-y-2.5">
-                {socialLinks.map((link) => (
-                  <li key={link.label}>
+                {social.map((l) => (
+                  <li key={l.label}>
                     <a
-                      href={link.href}
-                      className="text-ink-500 hover:text-brand-600 text-[15px] transition-colors"
+                      href={l.href}
+                      className="text-ink-600 hover:text-brand-500 text-[14px] font-medium transition-colors"
                     >
-                      {link.label}
+                      {l.label}
                     </a>
                   </li>
                 ))}
@@ -87,33 +82,35 @@ export function SiteFooter({ content }: SiteFooterProps) {
             </div>
 
             <div>
-              <h2 className="text-ink-900 text-[18px] font-bold tracking-[-0.01em]">
-                {newsletterHeading}
-              </h2>
+              <h3 className="t-h4 text-ink-900">
+                {content?.newsletterHeading ?? "Be the first to know."}
+              </h3>
               <p className="text-ink-500 mt-2 max-w-md text-[14px] leading-relaxed">
-                {newsletterBody}
+                {content?.newsletterBody ??
+                  "Stay ahead in real estate. Get updates, expert tips, and insider insights delivered monthly."}
               </p>
               <div className="mt-4 max-w-md">
-                <NewsletterForm buttonLabel={content?.newsletterButtonLabel} />
+                <NewsletterForm />
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-brand-700 text-white/80">
-        <div className="mx-auto flex max-w-[1536px] flex-col gap-3 px-6 py-5 text-[13px] sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-16">
-          <p>{copyright}</p>
+      {/* Dark teal bottom bar */}
+      <div className="bg-deep-950 text-white/75">
+        <div className="mx-auto flex max-w-[1536px] flex-col gap-3 px-5 py-5 text-[13px] sm:flex-row sm:items-center sm:justify-between lg:px-[34px]">
+          <p>
+            {content?.copyrightTemplate?.replace("{year}", String(new Date().getFullYear())) ??
+              "© 2026 Afram Technologies. All rights reserved."}
+          </p>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
-            {legalLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="transition-colors hover:text-white"
-              >
-                {link.label}
+            {legal.map((l) => (
+              <Link key={l.href} href={l.href} className="transition-colors hover:text-white">
+                {l.label}
               </Link>
             ))}
+            <CookieSettingsButton className="transition-colors hover:text-white" />
           </div>
         </div>
       </div>

@@ -1,33 +1,86 @@
 "use client";
 
-import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ChevronDown, Menu, X, ArrowRight } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
+import { Button, buttonClass } from "@/components/ui/Button";
 import { VerifyTitleDialog } from "@/components/VerifyTitleDialog";
-import { buttonVariants } from "@/components/ui/button-variants";
-import { NAV_GROUPS, type NavGroup } from "@/config/navigation";
 import { siteConfig } from "@/config/site";
 import { INVITE_ONLY, REQUEST_ACCESS_LABEL } from "@/features/access/invite-only";
 import { REQUEST_ACCESS_ATTR } from "@/features/access/roles";
 import { cn } from "@/lib/utils";
+import { useSignedIn } from "@/lib/use-signed-in";
 
-/** The full menu plus both account buttons need ~1,110px, so the desktop
- *  bar starts at xl (1280px) — the hamburger covers everything below it.
- *  Tighter from xl, where it only just fits; roomier again from 2xl. */
-const navLinkClassName =
-  "whitespace-nowrap rounded-lg px-2 py-2 text-[14px] font-medium text-ink-700 transition-colors hover:text-brand-600 2xl:px-3 2xl:text-[15px]";
+type NavItem = { label: string; desc: string; href: string };
+type NavGroup = {
+  /** CTA text shown in the nav pill (per-role, e.g. "List Properties") */
+  label: string;
+  /** lowercase audience noun, used for the mega-menu "Explore {audience}" line */
+  audience?: string;
+  href: string;
+  items?: NavItem[];
+  /** Afram surface on its own domain — opens in a new tab. */
+  external?: boolean;
+  /** Spoken/tooltip context so an off-domain hop still reads as Afram. */
+  hint?: string;
+  /** Opens the in-site "You are leaving Afram" dialog for title checks. */
+  verify?: boolean;
+};
 
-interface SiteNavProps {
-  /** Overrides from the Sanity `navigation` singleton — falls back to the static config when unset. */
-  navGroups?: NavGroup[];
-  verifyLabel?: string;
-}
+/** Sign-up opens the request-access form while access is by invitation. */
+const SIGN_UP_LABEL = INVITE_ONLY ? REQUEST_ACCESS_LABEL : "Create Account";
+const signUpProps = INVITE_ONLY
+  ? { [REQUEST_ACCESS_ATTR]: "", "aria-haspopup": "dialog" as const }
+  : {};
 
-export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title" }: SiteNavProps) {
+const NAV: NavGroup[] = [
+  { label: "View Properties", href: "/properties" },
+  {
+    label: "List Properties",
+    audience: "developers",
+    href: "/developers",
+  },
+  {
+    label: "Financiers",
+    audience: "financiers",
+    href: "/financiers",
+  },
+  { label: "Insights", href: "/insights" },
+  {
+    label: "Verify a title",
+    href: siteConfig.registryUrl,
+    verify: true,
+  },
+  { label: "How Afram works", href: "/how-it-works" },
+];
+
+/** Simplified nav shown once a user returns signed in — no dropdowns. */
+const SIGNED_IN_NAV: NavGroup[] = [
+  { label: "View Properties", href: "/properties" },
+  { label: "List Properties", href: "/developers" },
+  { label: "Financiers", href: "/financiers" },
+  { label: "Insights", href: "/insights" },
+  {
+    label: "Verify a title",
+    href: siteConfig.registryUrl,
+    verify: true,
+  },
+  { label: "How Afram works", href: "/how-it-works" },
+];
+
+const linkClass =
+  "inline-flex h-9 items-center gap-1 whitespace-nowrap rounded-full px-3 text-[14px] font-medium text-ink-600 transition-colors hover:bg-ink-50 hover:text-ink-900 focus-visible:outline-none focus-visible:shadow-focus";
+const linkActive = "bg-brand-50 text-brand-500 hover:bg-brand-50 hover:text-brand-500";
+
+export function SiteNav({ verifyLabel = "Verify a title" }: { verifyLabel?: string }) {
+  const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const signedIn = useSignedIn();
+  const pathname = usePathname();
+  const isCurrent = (href: string) =>
+    href.startsWith("/") && (pathname === href || pathname.startsWith(`${href}/`));
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -37,230 +90,254 @@ export function SiteNav({ navGroups = NAV_GROUPS, verifyLabel = "Verify a title"
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+    document.body.style.overflow = open ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [mobileMenuOpen]);
+  }, [open]);
 
   return (
-    <>
-      <header
-        className={cn(
-          "sticky top-0 z-50 border-b transition-all duration-200",
-          scrolled ? "border-ink-100 bg-white/90 backdrop-blur-md" : "border-transparent bg-white",
-        )}
-      >
-        <div className="mx-auto flex h-[72px] max-w-[1536px] items-center justify-between gap-4 px-6 sm:px-8 lg:px-16">
-          <Link href="/" aria-label="Afram home" className="shrink-0">
-            <Image
-              src="/afram-logo.svg"
-              alt="Afram"
-              width={110}
-              height={40}
-              className="h-10 w-auto"
-              priority
-            />
-          </Link>
+    <header
+      className={cn(
+        "sticky top-0 z-50 transition-[background-color,border-color] duration-200",
+        scrolled
+          ? "border-ink-100 border-b bg-white/90 backdrop-blur-md"
+          : "border-b border-transparent bg-white",
+      )}
+    >
+      <div className="mx-auto flex h-16 max-w-[1536px] items-center justify-between gap-4 px-5 lg:px-[34px]">
+        <Link href="/" aria-label="Afram home" className="shrink-0">
+          <Logo className="h-6" />
+        </Link>
 
-          <nav className="hidden items-center gap-0.5 xl:flex 2xl:gap-1">
-            <Link href="/properties" className={navLinkClassName}>
-              View Properties
-            </Link>
-
-            {navGroups.map((group) => (
-              <div
-                key={group.label}
-                className="group relative"
-                style={{ "--role": group.accentColor } as React.CSSProperties}
-              >
-                <Link
-                  href={group.href}
-                  className="text-ink-700 inline-flex items-center gap-1 rounded-lg px-2 py-2 text-[14px] font-medium whitespace-nowrap transition-colors hover:[color:var(--role)] 2xl:px-3 2xl:text-[15px]"
-                >
-                  {group.label}
-                  <ChevronDown className="text-ink-300 h-3.5 w-3.5 transition-transform group-hover:rotate-180 group-hover:[color:var(--role)]" />
-                </Link>
-
-                <div className="invisible absolute top-full left-1/2 z-50 -translate-x-1/2 pt-3 opacity-0 transition-all duration-150 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
-                  <div className="border-ink-100 w-[360px] rounded-2xl border bg-white p-2 shadow-[0_16px_50px_-12px_rgba(0,86,94,0.18)]">
-                    {group.items.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="hover:bg-ink-50 flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors"
-                      >
-                        <span
-                          className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
-                          style={{ backgroundColor: group.accentColor }}
-                        />
-                        <span>
-                          <span className="text-ink-900 block text-sm font-semibold">
-                            {item.label}
-                          </span>
-                          <span className="text-ink-500 block text-[13px]">{item.description}</span>
-                        </span>
-                      </Link>
-                    ))}
+        {/* Desktop nav */}
+        <nav className="hidden items-center gap-0.5 xl:flex">
+          {signedIn
+            ? SIGNED_IN_NAV.map((item) =>
+                item.verify ? (
+                  <VerifyTitleDialog key={item.label} className={linkClass}>
+                    {verifyLabel}
+                  </VerifyTitleDialog>
+                ) : item.external ? (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={linkClass}
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className={cn(linkClass, isCurrent(item.href) && linkActive)}
+                  >
+                    {item.label}
+                  </Link>
+                ),
+              )
+            : NAV.map((group) => (
+                <div key={group.label} className="group relative">
+                  {group.verify ? (
+                    <VerifyTitleDialog className={linkClass}>{verifyLabel}</VerifyTitleDialog>
+                  ) : group.external ? (
+                    <a
+                      href={group.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={group.hint}
+                      aria-label={group.hint ? `${group.label} — ${group.hint}` : undefined}
+                      className={linkClass}
+                    >
+                      {group.label}
+                    </a>
+                  ) : (
                     <Link
                       href={group.href}
-                      className="bg-ink-50 hover:bg-ink-100 mt-1 flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors"
-                      style={{ color: group.accentColor }}
+                      className={cn(linkClass, isCurrent(group.href) && linkActive)}
                     >
-                      Explore {group.exploreLabel}
-                      <ArrowRight className="h-4 w-4" />
+                      {group.label}
+                      {group.items && (
+                        <ChevronDown className="text-ink-400 h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" />
+                      )}
                     </Link>
-                  </div>
+                  )}
+
+                  {group.items && (
+                    <div className="ease-out-soft invisible absolute top-full left-1/2 z-50 -translate-x-1/2 translate-y-1 pt-2 opacity-0 transition-[opacity,transform,visibility] duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                      <div className="shadow-float w-[340px] rounded-2xl bg-white p-2">
+                        {group.items.map((it) => (
+                          <Link
+                            key={it.href}
+                            href={it.href}
+                            className="hover:bg-ink-50 flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors"
+                          >
+                            <span>
+                              <span className="text-ink-900 block text-[14px] font-semibold">
+                                {it.label}
+                              </span>
+                              <span className="text-ink-500 block text-[13px]">{it.desc}</span>
+                            </span>
+                          </Link>
+                        ))}
+                        <Link
+                          href={group.href}
+                          className="bg-brand-50 text-brand-500 hover:bg-brand-100 mt-1 flex items-center justify-between rounded-xl px-3 py-2.5 text-[13px] font-semibold transition-colors"
+                        >
+                          Explore {group.audience ?? group.label.toLowerCase()}
+                          <ArrowRight className="h-4 w-4" />
+                        </Link>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              ))}
+        </nav>
 
-            <Link href="/insights" className={navLinkClassName}>
-              Insights
-            </Link>
-            <VerifyTitleDialog className={navLinkClassName}>{verifyLabel}</VerifyTitleDialog>
-            <Link href="/how-it-works" className={navLinkClassName}>
-              How Afram works
-            </Link>
-          </nav>
-
-          <div className="hidden shrink-0 items-center gap-2 xl:flex 2xl:gap-3">
+        {/* Right cluster */}
+        <div className="hidden items-center gap-1.5 xl:flex">
+          {signedIn ? (
             <Link
-              href={siteConfig.signInUrl}
-              // {...{ [REQUEST_ACCESS_ATTR]: "" }}
-              aria-haspopup="dialog"
-              className={buttonVariants("primary", "sm")}
+              href={siteConfig.appUrl ?? siteConfig.signInUrl}
+              data-direct
+              className={buttonClass("tinted")}
             >
-              Log In
+              Dashboard
             </Link>
-            {INVITE_ONLY ? (
-              /* One control, not two. "Create Account" and "Log In" both opened
-                 the request form anyway while access is by invitation, so the
-                 labels were promising a door that isn't there. Still a link to
-                 the app's sign-up, so a visitor without JS lands somewhere
-                 sensible instead of on a dead button. */
-              <Link
-                href={siteConfig.signUpUrl}
-                {...{ [REQUEST_ACCESS_ATTR]: "" }}
-                aria-haspopup="dialog"
-                className={buttonVariants("secondary", "sm")}
-              >
-                {REQUEST_ACCESS_LABEL}
-              </Link>
-            ) : (
-              <>
-                <Link
-                  href={siteConfig.signUpUrl}
-                  aria-haspopup="dialog"
-                  className="text-ink-800 hover:text-brand-600 rounded-lg px-2.5 py-2 text-[14px] font-semibold whitespace-nowrap transition-colors 2xl:px-3.5 2xl:text-[15px]"
-                >
-                  Create Account
-                </Link>
-              </>
-            )}
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen((open) => !open)}
-            className="text-ink-900 hover:bg-brand-50 inline-flex h-10 w-10 items-center justify-center rounded-full xl:hidden"
-            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileMenuOpen}
-          >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          ) : (
+            <>
+              <Button href={siteConfig.signUpUrl} variant="ghost" {...signUpProps}>
+                {SIGN_UP_LABEL}
+              </Button>
+              <Button href={siteConfig.signInUrl} variant="primary">
+                Log in
+              </Button>
+            </>
+          )}
         </div>
-      </header>
 
-      {mobileMenuOpen ? (
-        <div className="fixed inset-x-0 top-[72px] bottom-0 z-40 overflow-y-auto bg-white px-5 pt-3 pb-10 xl:hidden">
+        {/* Mobile trigger */}
+        <button
+          onClick={() => setOpen((v) => !v)}
+          className="text-ink-900 hover:bg-ink-50 inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors xl:hidden"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+        >
+          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+      </div>
+
+      {/* Mobile drawer */}
+      {open && (
+        <div className="scrim-in fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto bg-white px-5 pt-3 pb-10 xl:hidden">
           <div className="divide-ink-100 divide-y">
-            <Link
-              href="/properties"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-ink-900 block py-3 text-base font-semibold"
-            >
-              View Properties
-            </Link>
-
-            {navGroups.map((group) => (
-              <div key={group.label} className="py-3">
-                <Link
-                  href={group.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between text-base font-semibold"
-                  style={{ color: group.accentColor }}
-                >
-                  {group.label}
-                  <ArrowRight className="text-ink-300 h-4 w-4" />
-                </Link>
-                <div className="mt-2 space-y-1 pl-1">
-                  {group.items.map((item) => (
-                    <Link
-                      key={item.href}
+            {signedIn
+              ? SIGNED_IN_NAV.map((item) =>
+                  item.verify ? (
+                    <VerifyTitleDialog
+                      key={item.label}
+                      className="text-ink-900 block w-full py-3 text-left text-base font-semibold"
+                    >
+                      {verifyLabel}
+                    </VerifyTitleDialog>
+                  ) : item.external ? (
+                    <a
+                      key={item.label}
                       href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="text-ink-500 block py-1.5 text-[15px]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setOpen(false)}
+                      className="text-ink-900 block py-3 text-base font-semibold"
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className="text-ink-900 block py-3 text-base font-semibold"
                     >
                       {item.label}
                     </Link>
-                  ))}
-                </div>
-              </div>
-            ))}
-            <Link
-              href="/insights"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-ink-900 block py-3 text-base font-semibold"
-            >
-              Insights
-            </Link>
-            <Link
-              href="/how-it-works"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-ink-900 block py-3 text-base font-semibold"
-            >
-              How Afram works
-            </Link>
+                  ),
+                )
+              : NAV.map((group) => (
+                  <div key={group.label} className="py-3">
+                    {group.verify ? (
+                      <VerifyTitleDialog className="text-ink-900 flex w-full items-center justify-between text-left text-base font-semibold">
+                        {verifyLabel}
+                        <ArrowRight className="text-ink-300 h-4 w-4" />
+                      </VerifyTitleDialog>
+                    ) : group.external ? (
+                      <a
+                        href={group.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={group.hint}
+                        onClick={() => setOpen(false)}
+                        className="text-ink-900 flex items-center justify-between text-base font-semibold"
+                      >
+                        {group.label}
+                        <ArrowRight className="text-ink-300 h-4 w-4" />
+                      </a>
+                    ) : (
+                      <Link
+                        href={group.href}
+                        onClick={() => setOpen(false)}
+                        className="text-ink-900 flex items-center justify-between text-base font-semibold"
+                      >
+                        {group.label}
+                        <ArrowRight className="text-ink-300 h-4 w-4" />
+                      </Link>
+                    )}
+                    {group.items && (
+                      <div className="mt-2 space-y-1 pl-1">
+                        {group.items.map((it) => (
+                          <Link
+                            key={it.href}
+                            href={it.href}
+                            onClick={() => setOpen(false)}
+                            className="text-ink-500 block py-1.5 text-[15px]"
+                          >
+                            {it.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
           </div>
           <div className="mt-6 flex flex-col gap-2.5">
-            {INVITE_ONLY ? (
+            {signedIn ? (
               <Link
-                href={siteConfig.signUpUrl}
-                {...{ [REQUEST_ACCESS_ATTR]: "" }}
-                onClick={() => setMobileMenuOpen(false)}
-                aria-haspopup="dialog"
-                className={buttonVariants("primary", "lg", "w-full")}
+                href={siteConfig.appUrl ?? siteConfig.signInUrl}
+                data-direct
+                onClick={() => setOpen(false)}
+                className={buttonClass("tinted", "lg", "w-full")}
               >
-                {REQUEST_ACCESS_LABEL}
+                Dashboard
               </Link>
             ) : (
               <>
-                <Link
-                  href={siteConfig.signInUrl}
-                  {...{ [REQUEST_ACCESS_ATTR]: "" }}
-                  onClick={() => setMobileMenuOpen(false)}
-                  aria-haspopup="dialog"
-                  className={buttonVariants("primary", "lg", "w-full")}
-                >
-                  Log In
-                </Link>
+                <Button href={siteConfig.signInUrl} size="lg" className="w-full">
+                  Log in
+                </Button>
                 <Link
                   href={siteConfig.signUpUrl}
-                  onClick={() => setMobileMenuOpen(false)}
-                  aria-haspopup="dialog"
-                  className="bg-brand-50 text-brand-700 flex items-center justify-center rounded-xl px-4 py-3 text-base font-semibold"
+                  {...signUpProps}
+                  onClick={() => setOpen(false)}
+                  className={buttonClass("tinted", "lg", "w-full")}
                 >
-                  Create Account
+                  {SIGN_UP_LABEL}
                 </Link>
               </>
             )}
-            <VerifyTitleDialog className="bg-brand-50 text-brand-700 flex items-center justify-center rounded-xl px-4 py-3 text-base font-semibold">
-              {verifyLabel}
-            </VerifyTitleDialog>
           </div>
         </div>
-      ) : null}
-    </>
+      )}
+    </header>
   );
 }
