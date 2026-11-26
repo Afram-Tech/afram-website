@@ -126,7 +126,7 @@ manifest, `<html lang="en-GH">`, and the site-wide Organization JSON-LD.
 | `/properties/in/[location]`             | Properties for Sale in Adenta, Greater Accra — Afram                | Yes                        | ItemList, BreadcrumbList                | Yes, only when the location has listings                |
 | `/properties/type/[type]/in/[location]` | Apartments for Sale in Kumasi, Ashanti — Afram                      | Yes                        | ItemList, BreadcrumbList                | Yes, only when the pair has listings                    |
 | `/properties/map`                       | Browse Verified Properties — Map — Afram                            | **No** (`noindex, follow`) | Organization                            | No                                                      |
-| `/developers`, `/financiers`            | Persona titles                                                      | Yes                        | FAQPage                                 | Yes; no lastmod                                         |
+| `/vendors`, `/financiers`               | Persona titles                                                      | Yes                        | FAQPage                                 | Yes; no lastmod                                         |
 | `/how-it-works`, `/privacy-policy`      | Page name                                                           | Yes                        | Organization                            | Yes; no lastmod                                         |
 | `/insights`                             | Insights — Guides & Market Data — Afram                             | Yes                        | Organization                            | Yes; lastmod = newest article                           |
 | `/insights/[slug]`                      | Article title                                                       | Yes                        | Article, BreadcrumbList                 | Yes; lastmod = publish date                             |
@@ -182,7 +182,7 @@ Rendered with [`<JsonLd>`](../src/components/JsonLd.tsx), which escapes `<`.
 | The accommodation type only (no Product)                                                                                                                      | Listing pages with no price           | `buildPropertyJsonLd()`     |
 | `ItemList`                                                                                                                                                    | Collection pages                      | `buildItemListJsonLd()`     |
 | `BreadcrumbList`                                                                                                                                              | Listing, collection and article pages | `buildBreadcrumbJsonLd()`   |
-| `FAQPage`                                                                                                                                                     | `/developers`, `/financiers`          | `buildFaqJsonLd()`          |
+| `FAQPage`                                                                                                                                                     | `/vendors`, `/financiers`             | `buildFaqJsonLd()`          |
 | `Article`                                                                                                                                                     | `/insights/[slug]`                    | `buildArticleJsonLd()`      |
 
 Notes:

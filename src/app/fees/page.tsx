@@ -12,7 +12,7 @@ import { CapitalAtRiskBadge } from "@/components/ui/CapitalAtRiskBadge";
 export const metadata: Metadata = buildMetadata({
   title: "Fees",
   description:
-    "Simple, transparent fees on Afram. The key numbers for buyers, developers, financiers, and investors — no hidden charges.",
+    "Simple, transparent fees on Afram. The key numbers for buyers, vendors, financiers, and investors — no hidden charges.",
   path: "/fees",
 });
 
@@ -22,7 +22,7 @@ const BUYERS: FeeLine[] = [
   { label: "Early settlement", value: "No penalty" },
 ];
 
-const DEVELOPERS: FeeLine[] = [
+const VENDORS: FeeLine[] = [
   { label: "List a verified project", value: "Free" },
   { label: "Success fee", value: "from 2% per unit" },
   { label: "Buyer financing", value: "GHS 0 to you" },
@@ -44,17 +44,15 @@ export default function FeesPage() {
   return (
     <>
       {/* Hero */}
-      <Section className="pb-8 pt-8 sm:pt-10 lg:pb-12 lg:pt-14">
+      <Section className="pt-8 pb-8 sm:pt-10 lg:pt-14 lg:pb-12">
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:items-end lg:gap-16">
           <div>
             <SecBadge />
-            <h1 className="t-h1 mt-5 text-ink-900">
-              Simple, transparent fees.
-            </h1>
+            <h1 className="t-h1 text-ink-900 mt-5">Simple, transparent fees.</h1>
           </div>
-          <p className="t-lead max-w-xl text-ink-500 lg:pb-1.5">
-            No hidden charges. No surprises. Verification and listing are free.
-            You only pay when a deal completes.
+          <p className="t-lead text-ink-500 max-w-xl lg:pb-1.5">
+            No hidden charges. No surprises. Verification and listing are free. You only pay when a
+            deal completes.
           </p>
         </div>
       </Section>
@@ -71,9 +69,9 @@ export default function FeesPage() {
           </Reveal>
           <Reveal delay={0.06}>
             <FeeCard
-              title="Developers"
+              title="Vendors"
               intro="List a verified project for free. You pay only when a unit sells, and buyer financing is on us."
-              lines={DEVELOPERS}
+              lines={VENDORS}
             />
           </Reveal>
           <Reveal delay={0.12}>
@@ -108,7 +106,7 @@ export default function FeesPage() {
               sizes="100vw"
               className="absolute inset-0 h-full w-full"
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-950/78 via-brand-950/35 to-brand-900/15" />
+              <div className="from-brand-950/78 via-brand-950/35 to-brand-900/15 absolute inset-0 bg-gradient-to-t" />
             </DuotonePhoto>
 
             <div className="relative z-10 flex min-h-[360px] flex-col justify-end p-8 sm:p-12 lg:min-h-[440px] lg:p-14">
@@ -116,7 +114,7 @@ export default function FeesPage() {
                 <span className="h-1.5 w-1.5 rounded-full bg-white" />
                 No fee you didn’t see here
               </span>
-              <h2 className="mt-4 max-w-xl t-h1 text-white">
+              <h2 className="t-h1 mt-4 max-w-xl text-white">
                 Know exactly what you pay, before you start.
               </h2>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">

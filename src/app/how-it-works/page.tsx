@@ -39,10 +39,7 @@ const STEPS: {
     step: "Step 1",
     title: "Verify the title",
     body: "Every property is cross-checked against Lands Commission records before it’s listed, and the result is recorded on-chain. No clean title, no listing.",
-    points: [
-      "Lands Commission cross-check",
-      "Disputes flagged before you ever see it",
-    ],
+    points: ["Lands Commission cross-check", "Disputes flagged before you ever see it"],
     url: "app.afram.co/verify",
     mock: <VerifyMock />,
   },
@@ -66,10 +63,7 @@ const STEPS: {
     step: "Step 4",
     title: "Own and track",
     body: "Your money sits in escrow and is released as work is delivered, milestone by milestone. Your ownership record stays yours — on paper and on-chain.",
-    points: [
-      "Funds released against milestones",
-      "Ownership recorded on-chain",
-    ],
+    points: ["Funds released against milestones", "Ownership recorded on-chain"],
     url: "app.afram.co/escrow",
     mock: <TrackMock />,
   },
@@ -89,8 +83,8 @@ const FAQS: FaqItem[] = [
     a: "In a segregated client account held with a partner bank, kept apart from Afram’s own funds. It’s held in escrow and released against delivery milestones, not paid out all at once.",
   },
   {
-    q: "What if a developer doesn’t deliver?",
-    a: "Because your money is released against milestones rather than up front, the funds still held are protected. There’s a defined recovery process, so your deposit isn’t lost to a developer who disappears.",
+    q: "What if a vendor doesn’t deliver?",
+    a: "Because your money is released against milestones rather than up front, the funds still held are protected. There’s a defined recovery process, so your deposit isn’t lost to a vendor who disappears.",
   },
   {
     q: "Can I really start investing from GHS 1,500?",
@@ -115,20 +109,18 @@ export default function HowItWorksPage() {
             sizes="100vw"
             className="absolute inset-0 h-full w-full"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-950/85 via-brand-900/50 to-transparent" />
+            <div className="from-brand-950/85 via-brand-900/50 absolute inset-0 bg-gradient-to-r to-transparent" />
           </DuotonePhoto>
 
           <div className="relative z-10 flex min-h-[460px] max-w-[720px] flex-col justify-center p-8 sm:p-12 lg:min-h-[560px] lg:p-16">
             <SecBadge />
 
-            <h1 className="t-h1 mt-5 text-white">
-              From listing to keys, in four clear steps.
-            </h1>
+            <h1 className="t-h1 mt-5 text-white">From listing to keys, in four clear steps.</h1>
 
-            <p className="mt-6 max-w-lg t-lead text-white/85">
-              Afram is a blockchain-based title registry and property-financing
-              platform. Here’s exactly how we verify a title, hold your money
-              safely, and protect you before you commit.
+            <p className="t-lead mt-6 max-w-lg text-white/85">
+              Afram is a blockchain-based title registry and property-financing platform. Here’s
+              exactly how we verify a title, hold your money safely, and protect you before you
+              commit.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -147,7 +139,7 @@ export default function HowItWorksPage() {
       <Section className="pb-10">
         <SectionHeading
           title="See it on the platform."
-          intro="Each step removes a real risk — opaque titles, financing out of reach, and developers who can disappear with a deposit. This is what it looks like inside Afram."
+          intro="Each step removes a real risk — opaque titles, financing out of reach, and vendors who can disappear with a deposit. This is what it looks like inside Afram."
         />
 
         <div className="mt-8 space-y-6 sm:mt-10 lg:mt-14 lg:space-y-8">
@@ -156,57 +148,43 @@ export default function HowItWorksPage() {
             return (
               <div
                 key={s.step}
-                className="grid items-center gap-10 overflow-hidden rounded-3xl bg-gradient-to-br from-brand-50 via-brand-50/30 to-white p-7 ring-1 ring-brand-100/60 sm:p-10 lg:grid-cols-2 lg:gap-16 lg:p-12"
+                className="from-brand-50 via-brand-50/30 ring-brand-100/60 grid items-center gap-10 overflow-hidden rounded-3xl bg-gradient-to-br to-white p-7 ring-1 sm:p-10 lg:grid-cols-2 lg:gap-16 lg:p-12"
               >
                 {/* Copy */}
                 <Reveal className={cn(flip && "lg:order-2")}>
                   <div className="flex items-center gap-3">
-                    <span className="text-[13px] font-bold tabular-nums text-brand-600">
+                    <span className="text-brand-600 text-[13px] font-bold tabular-nums">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <span className="h-px w-10 bg-brand-300" />
-                    <span className="t-overline text-brand-600">
-                      {s.step}
-                    </span>
+                    <span className="bg-brand-300 h-px w-10" />
+                    <span className="t-overline text-brand-600">{s.step}</span>
                   </div>
 
-                  <h3 className="mt-5 t-h3 text-ink-900">
-                    {s.title}
-                  </h3>
-                  <p className="mt-4 max-w-lg t-lead text-ink-500">
-                    {s.body}
-                  </p>
+                  <h3 className="t-h3 text-ink-900 mt-5">{s.title}</h3>
+                  <p className="t-lead text-ink-500 mt-4 max-w-lg">{s.body}</p>
 
                   <ul className="mt-6 space-y-2.5">
                     {s.points.map((p) => (
                       <li key={p} className="flex items-center gap-2.5">
-                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-600 ring-1 ring-brand-100">
+                        <span className="bg-brand-50 text-brand-600 ring-brand-100 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ring-1">
                           <Check className="h-3 w-3" strokeWidth={3} />
                         </span>
-                        <span className="text-[15px] font-medium text-ink-700">
-                          {p}
-                        </span>
+                        <span className="text-ink-700 text-[15px] font-medium">{p}</span>
                       </li>
                     ))}
                   </ul>
                 </Reveal>
 
                 {/* Platform mock */}
-                <Reveal
-                  delay={0.1}
-                  className={cn("relative", flip && "lg:order-1")}
-                >
+                <Reveal delay={0.1} className={cn("relative", flip && "lg:order-1")}>
                   <div
                     className={cn(
-                      "pointer-events-none absolute -top-10 h-64 w-64 rounded-full bg-brand-200/30 blur-3xl",
+                      "bg-brand-200/30 pointer-events-none absolute -top-10 h-64 w-64 rounded-full blur-3xl",
                       flip ? "-left-10" : "-right-10",
                     )}
                     aria-hidden
                   />
-                  <BrowserFrame
-                    url={s.url}
-                    className="relative mx-auto max-w-[440px]"
-                  >
+                  <BrowserFrame url={s.url} className="relative mx-auto max-w-[440px]">
                     {s.mock}
                   </BrowserFrame>
                 </Reveal>
@@ -218,18 +196,16 @@ export default function HowItWorksPage() {
 
       {/* 3 · Dashboard showcase */}
       <Section>
-        <div className="grid items-center gap-8 overflow-hidden rounded-3xl bg-brand-950 p-6 sm:gap-10 sm:p-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:p-14">
+        <div className="bg-brand-950 grid items-center gap-8 overflow-hidden rounded-3xl p-6 sm:gap-10 sm:p-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:p-14">
           <Reveal>
-            <span className="inline-flex items-center gap-2 t-overline text-brand-200">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand-300" />
+            <span className="t-overline text-brand-200 inline-flex items-center gap-2">
+              <span className="bg-brand-300 h-1.5 w-1.5 rounded-full" />
               Your dashboard
             </span>
-            <h2 className="mt-5 t-h2 text-white">
-              Everything in one place.
-            </h2>
-            <p className="mt-5 max-w-md t-lead text-white/70">
-              Payments, escrow milestones, documents, and your verified
-              ownership record — all tracked in a single view, on any device.
+            <h2 className="t-h2 mt-5 text-white">Everything in one place.</h2>
+            <p className="t-lead mt-5 max-w-md text-white/70">
+              Payments, escrow milestones, documents, and your verified ownership record — all
+              tracked in a single view, on any device.
             </p>
             <ul className="mt-7 space-y-3">
               {[
@@ -238,19 +214,17 @@ export default function HowItWorksPage() {
                 "Title and ownership records on-chain",
               ].map((t) => (
                 <li key={t} className="flex items-center gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/10 text-brand-200 ring-1 ring-white/15">
+                  <span className="text-brand-200 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/15">
                     <Check className="h-3.5 w-3.5" strokeWidth={3} />
                   </span>
-                  <span className="text-[15px] font-medium text-white/85">
-                    {t}
-                  </span>
+                  <span className="text-[15px] font-medium text-white/85">{t}</span>
                 </li>
               ))}
             </ul>
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="overflow-hidden rounded-2xl shadow-modal ring-1 ring-white/10">
+            <div className="shadow-modal overflow-hidden rounded-2xl ring-1 ring-white/10">
               <Image
                 src="/dash-buyer.png"
                 alt="The Afram dashboard showing payments, escrow status and documents"
@@ -266,7 +240,7 @@ export default function HowItWorksPage() {
 
       {/* 4 · FAQ */}
       <Section>
-        <div className="grid gap-6 rounded-3xl bg-gradient-to-br from-brand-50 via-ink-50/30 to-white p-6 ring-1 ring-brand-100/50 sm:p-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-10 lg:p-14">
+        <div className="from-brand-50 via-ink-50/30 ring-brand-100/50 grid gap-6 rounded-3xl bg-gradient-to-br to-white p-6 ring-1 sm:p-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-10 lg:p-14">
           <div>
             <SectionHeading
               title="Questions, answered plainly"
@@ -288,7 +262,7 @@ export default function HowItWorksPage() {
               sizes="100vw"
               className="absolute inset-0 h-full w-full"
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-950/80 via-brand-950/38 to-brand-900/15" />
+              <div className="from-brand-950/80 via-brand-950/38 to-brand-900/15 absolute inset-0 bg-gradient-to-t" />
             </DuotonePhoto>
 
             <div className="relative z-10 flex min-h-[360px] flex-col justify-end p-8 sm:p-12 lg:min-h-[440px] lg:p-14">
@@ -296,7 +270,7 @@ export default function HowItWorksPage() {
                 <span className="h-1.5 w-1.5 rounded-full bg-white" />
                 Still have questions?
               </span>
-              <h2 className="mt-4 max-w-xl t-h1 text-white">
+              <h2 className="t-h1 mt-4 max-w-xl text-white">
                 Start with a verified home, or talk to a real person.
               </h2>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">

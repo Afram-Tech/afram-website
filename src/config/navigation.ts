@@ -15,19 +15,19 @@ export interface NavGroup {
 export const NAV_GROUPS: NavGroup[] = [
   {
     label: "List Properties",
-    href: "/developers",
+    href: "/vendors",
     accentColor: "#7e22ce",
     exploreLabel: "vendor options",
     items: [
       {
         label: "Individual vendor",
         description: "Sell faster, recover capital sooner",
-        href: "/developers#individual",
+        href: "/vendors#individual",
       },
       {
         label: "Corporate firm",
         description: "Scale sales without diluting your brand",
-        href: "/developers#corporate",
+        href: "/vendors#corporate",
       },
     ],
   },

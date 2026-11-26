@@ -95,7 +95,7 @@ export const PERSONAS: Record<string, PersonaContent> = {
     faqs: [
       {
         q: "What does curated deal access include?",
-        a: "A shortlisted pipeline of verified developments — including raises offered to private clients before they open more widely. Each comes with the title checks, developer track record, and terms laid out for review.",
+        a: "A shortlisted pipeline of verified developments — including raises offered to private clients before they open more widely. Each comes with the title checks, vendor track record, and terms laid out for review.",
       },
       {
         q: "How large can my allocation be?",
@@ -103,7 +103,7 @@ export const PERSONAS: Record<string, PersonaContent> = {
       },
       {
         q: "What diligence and governance sits behind a raise?",
-        a: "Title is verified against Lands Commission records, the developer’s delivery record is documented, funds are held in segregated client accounts, and the structure is set out in writing before you commit. Even with this, property values can fall and your capital is at risk.",
+        a: "Title is verified against Lands Commission records, the vendor’s delivery record is documented, funds are held in segregated client accounts, and the structure is set out in writing before you commit. Even with this, property values can fall and your capital is at risk.",
       },
       {
         q: "What does dedicated support look like?",

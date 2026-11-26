@@ -54,11 +54,11 @@ export const PHOTOS = {
   heroTownhouses: "/hero-townhouses-v5.webp",
   /** Couple-with-keys cutout — Buyers role card. */
   roleCouple: "/role-couple.webp",
-  /** Developer-with-blueprint cutout — Developers role card. */
-  roleDeveloper: "/role-developer.webp",
+  /** Vendor-with-blueprint cutout — Vendors role card. */
+  roleVendor: "/role-vendor.webp",
   /** Two-men-handshake cutout — Financiers role card. */
   roleFinancier: "/role-financier.webp",
-  /** Full-bleed sky photo — Developers/Vendor page hero (Figma 1343-12219). */
+  /** Full-bleed sky photo — Vendors page hero (Figma 1343-12219). */
   heroVendorPhoto: "/hero-vendor.webp",
   /** Full-bleed handshake photo — Financiers page hero (Figma 1343-12301). */
   heroFinancierPhoto: "/hero-financier-v2.webp",

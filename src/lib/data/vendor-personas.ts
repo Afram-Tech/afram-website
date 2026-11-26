@@ -6,7 +6,7 @@ export const PERSONAS: Record<string, PersonaContent> = {
   individual: {
     id: "individual",
     tab: "Individual",
-    eyebrow: "For individual developers",
+    eyebrow: "For individual vendors",
     headline: "Sell units faster.",
     subhead:
       "Unsold units lock up your capital. List your project or portfolio on Afram. Buyers arrive with financing in place. You recover your money, make profit, and start the next build.",

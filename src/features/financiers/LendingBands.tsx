@@ -1,11 +1,4 @@
-import {
-  ClipboardCheck,
-  FileSearch,
-  Home,
-  Landmark,
-  Scale,
-  Wallet,
-} from "lucide-react";
+import { ClipboardCheck, FileSearch, Home, Landmark, Scale, Wallet } from "lucide-react";
 import { StoryBand, type StoryPoint } from "@/components/persona/StoryBand";
 
 /**
@@ -60,7 +53,7 @@ export function LendingBands() {
     <>
       <StoryBand
         id="build"
-        title="Lend to developers to build or finish a phase."
+        title="Lend to vendors to build or finish a phase."
         lead="Verified projects, repaid from unit sales."
         cta={BRIEFING}
         points={BUILD}

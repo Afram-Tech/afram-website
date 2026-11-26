@@ -8,7 +8,7 @@ import type { Property } from "@/features/landing/data/properties";
 export function catalogueStats(properties: Property[]) {
   return {
     listings: properties.length,
-    /** External developers — Afram's own marketplace listings are not a partner. */
+    /** External vendors — Afram's own marketplace listings are not a partner. */
     vendors: new Set(properties.map((p) => p.developer).filter((d) => d !== "Afram Marketplace"))
       .size,
     cities: new Set(properties.map((p) => p.location.split(",")[0].trim())).size,

@@ -27,12 +27,12 @@ export const ROLE_CARDS: RoleCard[] = [
     art: { src: "/role-couple.webp", width: 756, height: 991, h: 180, drop: 86, right: 8 },
   },
   {
-    eyebrow: "For Developers",
+    eyebrow: "For Vendors",
     title: "Raise capital and accelerate sales",
-    href: "/developers",
+    href: "/vendors",
     background: "linear-gradient(180deg, #ccf8f6 0%, #ebfdfb 100%)",
     pillColor: "rgba(255,255,255,0.5)",
-    art: { src: "/role-developer.webp", width: 760, height: 855, h: 170, drop: 92, right: 0 },
+    art: { src: "/role-vendor.webp", width: 760, height: 855, h: 170, drop: 92, right: 0 },
   },
   {
     eyebrow: "For Financiers",

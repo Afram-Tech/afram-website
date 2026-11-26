@@ -7,14 +7,14 @@ import { PersonaQuickLinks } from "@/components/persona/PersonaQuickLinks";
 import { PersonaShell } from "@/components/persona/PersonaShell";
 import { Testimonials } from "@/components/persona/Testimonials";
 import { accessCta, signUpHref } from "@/features/access/cta";
-import { CapitalBand } from "@/features/developers/CapitalBand";
-import { SellSection } from "@/features/developers/SellSection";
-import { TalkToPartner } from "@/features/developers/TalkToPartner";
-import { VendorConcerns } from "@/features/developers/VendorConcerns";
+import { CapitalBand } from "@/features/vendors/CapitalBand";
+import { SellSection } from "@/features/vendors/SellSection";
+import { TalkToPartner } from "@/features/vendors/TalkToPartner";
+import { VendorConcerns } from "@/features/vendors/VendorConcerns";
 import { getAllProperties } from "@/features/landing/data/properties";
 import { catalogueStats } from "@/features/personas/catalogue";
 import { VERIFY_URL } from "@/lib/config";
-import { DEFAULT, ORDER, PERSONAS } from "@/lib/data/developer-personas";
+import { DEFAULT, ORDER, PERSONAS } from "@/lib/data/vendor-personas";
 import { PHOTOS } from "@/lib/data/photos";
 import { buildFaqJsonLd, buildMetadata } from "@/lib/seo";
 
@@ -22,14 +22,14 @@ export const metadata: Metadata = buildMetadata({
   title: "List, sell, and get paid faster",
   description:
     "List a verified project on Afram, bring buyers built-in financing, and recover capital faster without diluting your brand.",
-  path: "/developers",
+  path: "/vendors",
 });
 
 /** Reads "Request Access" while the site is invite-only. */
 const GET_STARTED = accessCta({ label: "Get Started", href: signUpHref("issuer") });
 
 /**
- * Listing and developer counts come from the live catalogue, so they cannot
+ * Listing and vendor counts come from the live catalogue, so they cannot
  * drift from /properties. The financier count is marketing-asserted — it is
  * not derivable from anything in this repo, so it lives here as a single
  * constant to update rather than being scattered through copy.
@@ -43,11 +43,11 @@ const LINKS = [
   { label: "Insights", href: "/insights" },
 ];
 
-export default async function DevelopersPage() {
+export default async function VendorsPage() {
   const catalogue = catalogueStats(await getAllProperties());
   const stats = [
     { value: `${catalogue.listings}`, label: "Verified listings live" },
-    { value: `${catalogue.vendors}`, label: "Developers listing with us" },
+    { value: `${catalogue.vendors}`, label: "Vendors listing with us" },
     { value: `${FINANCIERS_FUNDING}`, label: "Financiers funding projects" },
   ];
   const faqs = ORDER.flatMap((id) =>
@@ -67,14 +67,14 @@ export default async function DevelopersPage() {
         heroSlot={
           <PersonaHeroPhoto
             photo={PHOTOS.heroVendorPhoto}
-            photoAlt="A property developer reviewing plans on site"
+            photoAlt="A property vendor reviewing plans on site"
             photoPosition="xl:object-[center_12%]"
             headline="List on Afram for the opportunity to raise capital for your project and also enable financing for your buyers so they can afford your property."
             ctaLabel={GET_STARTED.label}
             ctaHref={GET_STARTED.href}
           />
         }
-        faqTitleSuffix="developers ask."
+        faqTitleSuffix="vendors ask."
         closingSlot={<TalkToPartner />}
         footerSlot={<PersonaQuickLinks links={LINKS} />}
       >
@@ -91,7 +91,7 @@ export default async function DevelopersPage() {
           ctaLabel="Browse all listings"
           ctaHref="/properties"
         />
-        <Testimonials title="Developers already selling on Afram." />
+        <Testimonials title="Vendors already selling on Afram." />
       </PersonaShell>
     </>
   );
