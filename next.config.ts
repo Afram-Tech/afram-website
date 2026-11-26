@@ -17,6 +17,14 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "picsum.photos" },
     ],
   },
+  /**
+   * /developers became /vendors (product naming: Member / Vendor / Financier).
+   * Permanent, so old links, bookmarks and search ranking carry over; the
+   * browser keeps any #individual / #corporate anchor across the redirect.
+   */
+  async redirects() {
+    return [{ source: "/developers", destination: "/vendors", permanent: true }];
+  },
 };
 
 export default nextConfig;

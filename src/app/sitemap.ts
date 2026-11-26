@@ -30,7 +30,7 @@ const STATIC_ROUTES: {
   listings: ListingSource;
 }[] = [
   { path: "/", priority: 1, changeFrequency: "weekly", listings: "all" },
-  { path: "/developers", priority: 0.9, changeFrequency: "monthly", listings: "none" },
+  { path: "/vendors", priority: 0.9, changeFrequency: "monthly", listings: "none" },
   { path: "/financiers", priority: 0.9, changeFrequency: "monthly", listings: "none" },
   { path: "/properties", priority: 0.8, changeFrequency: "daily", listings: "all" },
   { path: "/insights", priority: 0.7, changeFrequency: "weekly", listings: "none" },

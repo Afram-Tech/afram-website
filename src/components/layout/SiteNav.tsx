@@ -39,8 +39,8 @@ const NAV: NavGroup[] = [
   { label: "View Properties", href: "/properties" },
   {
     label: "List Properties",
-    audience: "developers",
-    href: "/developers",
+    audience: "vendors",
+    href: "/vendors",
   },
   {
     label: "Financiers",
@@ -59,7 +59,7 @@ const NAV: NavGroup[] = [
 /** Simplified nav shown once a user returns signed in — no dropdowns. */
 const SIGNED_IN_NAV: NavGroup[] = [
   { label: "View Properties", href: "/properties" },
-  { label: "List Properties", href: "/developers" },
+  { label: "List Properties", href: "/vendors" },
   { label: "Financiers", href: "/financiers" },
   { label: "Insights", href: "/insights" },
   {

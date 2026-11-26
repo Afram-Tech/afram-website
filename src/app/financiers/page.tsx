@@ -73,7 +73,7 @@ export default async function FinanciersPage() {
         closingSlot={<BriefingForm />}
         footerSlot={<PersonaQuickLinks links={LINKS} />}
       >
-        {/* The same shape as /developers: what you can finance, one band per
+        {/* The same shape as /vendors: what you can finance, one band per
             kind of loan (1, 2), on what terms (3), who does what (4), how it
             fits the way you lend (5), proof: the verified book (6), then the
             questions left (FAQ) and the briefing. */}

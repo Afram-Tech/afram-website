@@ -129,9 +129,7 @@ export function PropertyDetail({ property }: { property: Property }) {
         <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
           <div>
             <SecBadge className="mb-4" />
-            <h1 className="t-h1-sm text-ink-900">
-              {property.name}
-            </h1>
+            <h1 className="t-h1-sm text-ink-900">{property.name}</h1>
             <p className="text-ink-500 mt-2 inline-flex items-center gap-1.5 text-[15px]">
               <MapPin className="text-ink-400 h-4 w-4" />
               {property.location}
@@ -172,7 +170,7 @@ export function PropertyDetail({ property }: { property: Property }) {
           </div>
           <span className="text-ink-900 inline-flex items-center gap-1.5 text-[14px] font-semibold">
             <BadgeCheck className="text-brand-500 h-4 w-4" />
-            Verified Developer
+            Verified Vendor
           </span>
         </div>
 
@@ -220,7 +218,11 @@ export function PropertyDetail({ property }: { property: Property }) {
               <div className="mt-3">
                 <LockedSection label="the full title record">
                   <div className="grid gap-3 sm:grid-cols-2">
-                    <LegalCard icon={FileText} label="Title type" value={property.legal.titleType} />
+                    <LegalCard
+                      icon={FileText}
+                      label="Title type"
+                      value={property.legal.titleType}
+                    />
                     <LegalCard
                       icon={Map}
                       label="Land certificate"
@@ -249,9 +251,7 @@ export function PropertyDetail({ property }: { property: Property }) {
                   <div className="bg-ink-50 flex items-center gap-3 rounded-2xl p-4">
                     <Navigation className="text-brand-500 h-5 w-5 shrink-0" />
                     <span className="flex min-w-0 flex-col">
-                      <span className="text-ink-400 text-[12px] font-medium">
-                        Street address
-                      </span>
+                      <span className="text-ink-400 text-[12px] font-medium">Street address</span>
                       <span className="text-ink-900 truncate text-[14px] font-semibold">
                         {property.address.street}
                       </span>
@@ -261,9 +261,7 @@ export function PropertyDetail({ property }: { property: Property }) {
                     <div className="bg-ink-50 flex items-center gap-3 rounded-2xl p-4">
                       <Hash className="text-brand-500 h-5 w-5 shrink-0" />
                       <span className="flex min-w-0 flex-col">
-                        <span className="text-ink-400 text-[12px] font-medium">
-                          GPS address
-                        </span>
+                        <span className="text-ink-400 text-[12px] font-medium">GPS address</span>
                         <span className="tnum text-ink-900 truncate text-[14px] font-semibold">
                           {property.address.gps}
                         </span>
@@ -272,9 +270,7 @@ export function PropertyDetail({ property }: { property: Property }) {
                     <div className="bg-ink-50 flex items-center gap-3 rounded-2xl p-4">
                       <MapPin className="text-brand-500 h-5 w-5 shrink-0" />
                       <span className="flex min-w-0 flex-col">
-                        <span className="text-ink-400 text-[12px] font-medium">
-                          Property ID
-                        </span>
+                        <span className="text-ink-400 text-[12px] font-medium">Property ID</span>
                         <span className="tnum text-ink-900 truncate text-[14px] font-semibold">
                           {property.address.propertyId}
                         </span>
@@ -338,9 +334,7 @@ export function PropertyDetail({ property }: { property: Property }) {
                 </p>
 
                 <div className="bg-brand-50 mt-4 rounded-2xl p-4">
-                  <p className="text-brand-500 text-[12px] font-semibold">
-                    10% deposit to reserve
-                  </p>
+                  <p className="text-brand-500 text-[12px] font-semibold">10% deposit to reserve</p>
                   <p className="tnum text-ink-900 mt-0.5 text-[1.25rem] font-bold">
                     {formatMoney(deposit, property.currency)}
                   </p>

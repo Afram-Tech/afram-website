@@ -9,7 +9,7 @@ export type StoryPoint = { icon: LucideIcon; title: string; body: string };
 
 /**
  * A mint band: a promise and one button on the left, three points in a white
- * card on the right. /developers sells with it ("Sell to buyers who already
+ * card on the right. /vendors sells with it ("Sell to buyers who already
  * have financing.") and /financiers lends with it, one band per kind of loan.
  * `reverse` mirrors the band (points card on the left from desktop up), so
  * two bands in a row don't read as one. On phones the text always leads.
@@ -33,7 +33,7 @@ export function StoryBand({
     <Section id={id} className="scroll-mt-24">
       <div
         className={cn(
-          "relative overflow-hidden rounded-3xl from-brand-100/70 via-brand-50 to-brand-50/40 p-5 ring-1 ring-brand-500/10 sm:p-8 lg:p-12 xl:p-14",
+          "from-brand-100/70 via-brand-50 to-brand-50/40 ring-brand-500/10 relative overflow-hidden rounded-3xl p-5 ring-1 sm:p-8 lg:p-12 xl:p-14",
           reverse ? "bg-gradient-to-bl" : "bg-gradient-to-br",
         )}
       >
@@ -47,8 +47,8 @@ export function StoryBand({
           )}
         >
           <div>
-            <h2 className="t-h2 max-w-xl text-balance text-deep-950">{title}</h2>
-            <p className="t-lead mt-4 max-w-lg text-ink-600">{lead}</p>
+            <h2 className="t-h2 text-deep-950 max-w-xl text-balance">{title}</h2>
+            <p className="t-lead text-ink-600 mt-4 max-w-lg">{lead}</p>
             <Button href={cta.href} size="lg" className="mt-7 w-fit">
               {cta.label}
               <ArrowRight className="h-4 w-4" />
@@ -57,20 +57,20 @@ export function StoryBand({
 
           <ul
             className={cn(
-              "divide-y divide-ink-100 rounded-[20px] bg-white px-5 sm:px-7 lg:px-8",
+              "divide-ink-100 divide-y rounded-[20px] bg-white px-5 sm:px-7 lg:px-8",
               reverse && "lg:order-first",
             )}
           >
             {points.map((p) => (
               <li key={p.title} className="flex items-start gap-4 py-5 sm:py-6">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+                <span className="bg-brand-50 text-brand-600 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl">
                   <p.icon aria-hidden className="h-[18px] w-[18px]" />
                 </span>
                 <span>
-                  <span className="block text-[16px] font-semibold leading-snug text-ink-900">
+                  <span className="text-ink-900 block text-[16px] leading-snug font-semibold">
                     {p.title}
                   </span>
-                  <span className="mt-1 block text-[15px] leading-relaxed text-ink-500">
+                  <span className="text-ink-500 mt-1 block text-[15px] leading-relaxed">
                     {p.body}
                   </span>
                 </span>

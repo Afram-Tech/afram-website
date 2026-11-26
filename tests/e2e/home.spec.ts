@@ -26,7 +26,7 @@ test("role cards link each audience to its page", async ({ page }) => {
   const main = page.locator("main");
   const cards = [
     { name: /For Members.*Own verified property with flexible financing/, href: "/properties" },
-    { name: /For Developers.*Raise capital and accelerate sales/, href: "/developers" },
+    { name: /For Vendors.*Raise capital and accelerate sales/, href: "/vendors" },
     {
       name: /For Financiers.*Deploy capital securely against verified assets/,
       href: "/financiers",
@@ -92,8 +92,8 @@ test("affordability calculator updates as the income slider moves", async ({ pag
   await expect(homePrice).not.toHaveText(before ?? "");
 });
 
-test("nav links to the developers and financiers persona pages", async ({ page }) => {
+test("nav links to the vendors and financiers persona pages", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("link", { name: "List Properties" }).first().click();
-  await expect(page).toHaveURL(/\/developers/);
+  await expect(page).toHaveURL(/\/vendors/);
 });

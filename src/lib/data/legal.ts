@@ -10,12 +10,7 @@
  *   from lib/data/legal-documents.ts.
  */
 export type LegalSlug =
-  | "terms"
-  | "privacy"
-  | "cookie-policy"
-  | "key-risks"
-  | "complaints"
-  | "whistleblowing";
+  "terms" | "privacy" | "cookie-policy" | "key-risks" | "complaints" | "whistleblowing";
 
 export type LegalDoc = {
   /** Human title, also used for the page <title>. */
@@ -44,10 +39,9 @@ export const LEGAL: Record<LegalSlug, LegalDoc> = {
     title: "Terms of service",
     navLabel: "Terms",
     updated: "Coming soon",
-    description:
-      "The terms that govern your use of Afram. Full document coming soon.",
+    description: "The terms that govern your use of Afram. Full document coming soon.",
     body: [
-      "Our full terms of service are being prepared and reviewed by counsel. They will set out the rules for using Afram, the responsibilities of buyers, sellers, developers and investors, and the limits of our role as a property exchange.",
+      "Our full terms of service are being prepared and reviewed by counsel. They will set out the rules for using Afram, the responsibilities of buyers, sellers, vendors and investors, and the limits of our role as a property exchange.",
       "Until this page is published, your use of Afram is governed by the agreements you accept at sign-up and the disclosures linked from each product page. If you have a question in the meantime, email hello@afram.co and a person will reply.",
     ],
   },
@@ -90,8 +84,7 @@ export const LEGAL: Record<LegalSlug, LegalDoc> = {
     title: "Whistleblowing",
     navLabel: "Whistleblowing",
     updated: "Coming soon",
-    description:
-      "How to report wrongdoing at Afram, in confidence. Full policy coming soon.",
+    description: "How to report wrongdoing at Afram, in confidence. Full policy coming soon.",
     body: [
       "Our whistleblowing policy is being prepared. It will explain how anyone — staff, partners or customers — can report suspected fraud, misconduct or a breach of the law in confidence, and how we protect people who speak up.",
       "If you need to report something now, email hello@afram.co and mark it confidential. We take every report seriously and will handle it discreetly.",

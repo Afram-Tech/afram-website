@@ -44,21 +44,21 @@ export function PersonaShell({
   accent: AccentKey;
   /**
    * "scroller" stacks every audience down the page. "switcher" shows one at a
-   * time behind a toggle — the conversion layout for /developers and
+   * time behind a toggle — the conversion layout for /vendors and
    * /financiers. /invest still uses the scroller.
    */
   /** "none" leaves the audience panel out; the page tells its own story. */
   layout?: "scroller" | "switcher" | "none";
   faqTitleSuffix?: string;
   riskKind?: "investment" | "lending";
-  /** The closing photo band. Optional: /developers has none. */
+  /** The closing photo band. Optional: /vendors has none. */
   finalCta?: { title: string; subtitle: string; primary: Cta; secondary?: Cta };
   /** Rendered after the FAQ, so the contact form sits next to the end of
    *  the page, followed only by the closing band or the quick links. */
   closingSlot?: ReactNode;
   /** Rendered between the hero and the audience panel. */
   leadSlot?: ReactNode;
-  /** Tighter space between sections (/developers, /financiers). */
+  /** Tighter space between sections (/vendors, /financiers). */
   compact?: boolean;
   /** Rendered after the closing CTA — for low-priority secondary links. */
   footerSlot?: ReactNode;
@@ -123,10 +123,7 @@ export function PersonaShell({
             seed={`persona-${ordered[0].id}`}
             badge={ordered[0].imageBadge ?? "Verified titles"}
           >
-            <Button
-              href={primary.href}
-              size="lg"
-            >
+            <Button href={primary.href} size="lg">
               {primary.label}
               <ArrowRight className="h-4 w-4" />
             </Button>
@@ -175,41 +172,33 @@ export function PersonaShell({
 
       {/* Final CTA — duotone cover (stays Afram teal) */}
       {finalCta && (
-      <Section className="pt-0 sm:pt-0 lg:pt-0">
-        <div className="relative min-h-[260px] overflow-hidden rounded-3xl sm:min-h-[320px] lg:min-h-[440px]">
-          <DuotonePhoto
-            src={PHOTOS.glassTrees}
-            alt=""
-            sizes="100vw"
-            className="absolute inset-0 h-full w-full"
-          >
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-950/82 via-brand-950/45 to-brand-900/20" />
-          </DuotonePhoto>
-          <div className="relative z-10 flex min-h-[260px] flex-col justify-end p-6 sm:min-h-[320px] sm:p-12 lg:min-h-[440px] lg:p-14">
-            <h2 className="max-w-2xl t-h1 text-white">
-              {finalCta.title}
-            </h2>
-            <p className="mt-4 max-w-md t-lead text-white/75">
-              {finalCta.subtitle}
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button href={finalCta.primary.href} size="lg" variant="inverse">
-                {finalCta.primary.label}
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-              {finalCta.secondary && (
-                <Button
-                  href={finalCta.secondary.href}
-                  size="lg"
-                  variant="outline"
-                >
-                  {finalCta.secondary.label}
+        <Section className="pt-0 sm:pt-0 lg:pt-0">
+          <div className="relative min-h-[260px] overflow-hidden rounded-3xl sm:min-h-[320px] lg:min-h-[440px]">
+            <DuotonePhoto
+              src={PHOTOS.glassTrees}
+              alt=""
+              sizes="100vw"
+              className="absolute inset-0 h-full w-full"
+            >
+              <div className="from-brand-950/82 via-brand-950/45 to-brand-900/20 absolute inset-0 bg-gradient-to-t" />
+            </DuotonePhoto>
+            <div className="relative z-10 flex min-h-[260px] flex-col justify-end p-6 sm:min-h-[320px] sm:p-12 lg:min-h-[440px] lg:p-14">
+              <h2 className="t-h1 max-w-2xl text-white">{finalCta.title}</h2>
+              <p className="t-lead mt-4 max-w-md text-white/75">{finalCta.subtitle}</p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Button href={finalCta.primary.href} size="lg" variant="inverse">
+                  {finalCta.primary.label}
+                  <ArrowRight className="h-4 w-4" />
                 </Button>
-              )}
+                {finalCta.secondary && (
+                  <Button href={finalCta.secondary.href} size="lg" variant="outline">
+                    {finalCta.secondary.label}
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      </Section>
+        </Section>
       )}
 
       {footerSlot}
