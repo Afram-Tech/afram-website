@@ -4,6 +4,7 @@ import {
   bathroomsLabel,
   bathsLabel,
   listingStatusLabel,
+  listingStatusPill,
   titleTypeLabel,
   yesNoLabel,
 } from "@/features/properties/listing-display";
@@ -31,5 +32,28 @@ describe("listing facts, as both sites show them", () => {
 
   it("doesn't read an unanswered question as 'No'", () => {
     expect(yesNoLabel(null)).toBe("Not stated");
+    expect(yesNoLabel(undefined)).toBe("Not stated");
+    expect(yesNoLabel(false)).toBe("No");
+    expect(yesNoLabel(true)).toBe("Yes");
+  });
+
+  it("falls back to whole numbers, and says nothing it doesn't know", () => {
+    expect(bathroomsLabel(5, 0)).toBe("5");
+    expect(bathroomsLabel(5, null)).toBe("5");
+    expect(bathroomsLabel(null, null)).toBeNull();
+    expect(titleTypeLabel("  ")).toBe("Not yet on file");
+    expect(listingStatusLabel(null)).toBe("Unavailable");
+  });
+
+  it("names the status pill in the member app's words", () => {
+    expect(listingStatusPill("under_offer")).toBe("Under Offer");
+    expect(listingStatusPill("UNDER_OFFER")).toBe("Under Offer");
+    expect(listingStatusPill("listed")).toBe("Available");
+    expect(listingStatusPill("pending")).toBe("Under Review");
+    expect(listingStatusPill("sold")).toBe("Sold");
+    expect(listingStatusPill("delisted")).toBe("Delisted");
+    expect(listingStatusPill("unlisted")).toBe("Not Listed");
+    expect(listingStatusPill("divided")).toBe("Unlisted");
+    expect(listingStatusPill(null)).toBe("Unlisted");
   });
 });

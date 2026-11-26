@@ -52,6 +52,22 @@ export const LISTING_STATUS_LABEL: Record<string, string> = {
 export const listingStatusLabel = (status: string | null | undefined): string =>
   (status && LISTING_STATUS_LABEL[status.toLowerCase()]) || "Unavailable";
 
+/** The status pill at the top of a listing, in the member app's words
+ *  (afram-web: the pill on /member/browse/property/:id, from
+ *  propertyAvailability()). The raw status, title-cased, read "Under_offer"
+ *  and "Pending". A status not named here reads "Unlisted", as it does in the app. */
+export const LISTING_STATUS_PILL: Record<string, string> = {
+  listed: "Available",
+  under_offer: "Under Offer",
+  pending: "Under Review",
+  sold: "Sold",
+  delisted: "Delisted",
+  unlisted: "Not Listed",
+};
+
+export const listingStatusPill = (status: string | null | undefined): string =>
+  (status && LISTING_STATUS_PILL[status.toLowerCase()]) || "Unlisted";
+
 /** "Yes", "No", or "Not stated" when the vendor didn't say. */
 export const yesNoLabel = (value: boolean | null | undefined): string =>
   value == null ? "Not stated" : value ? "Yes" : "No";
