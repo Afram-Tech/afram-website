@@ -26,7 +26,7 @@ import { PropertyGallery } from "@/features/properties/PropertyGallery";
 import { ShareButton } from "@/features/properties/ShareButton";
 import { formatMoney, formatPropertySize, titleCase } from "@/lib/format";
 import { locationName, locationPath, locationTrail } from "@/lib/property-seo";
-import { bathsLabel } from "@/features/properties/listing-display";
+import { bathsLabel, listingStatusPill } from "@/features/properties/listing-display";
 import { cn } from "@/lib/utils";
 
 const DEPOSIT_RATE = 0.1;
@@ -39,6 +39,8 @@ const STATUS_TONE: Record<string, string> = {
   under_offer: "bg-away-lighter text-away-darker",
   pending: "bg-away-lighter text-away-darker",
   sold: "bg-ink-50 text-ink-600",
+  delisted: "bg-ink-50 text-ink-600",
+  unlisted: "bg-ink-50 text-ink-600",
 };
 
 function Spec({ icon: Icon, label, value }: { icon: typeof Home; label: string; value: string }) {
@@ -142,7 +144,7 @@ export function PropertyDetail({ property }: { property: Property }) {
             )}
           >
             <span className="h-1.5 w-1.5 rounded-full bg-current" />
-            {titleCase(property.status)}
+            {listingStatusPill(property.status)}
           </span>
         </div>
 
