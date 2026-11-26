@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-import { Section } from "@/components/ui/Section";
 import { getAllProperties } from "@/features/landing/data/properties";
 import { PropertiesBrowser } from "@/features/properties/PropertiesBrowser";
 import { buildMetadata } from "@/lib/seo";
@@ -39,11 +38,13 @@ export default async function PropertiesMapPage() {
   const allProperties = await getAllProperties();
 
   return (
-    <Section className="py-6 sm:py-6 lg:py-8">
-      <h1 className="sr-only">Map of verified properties for sale in Ghana</h1>
-      <Suspense fallback={<PropertiesBrowserFallback />}>
-        <PropertiesBrowser properties={allProperties} />
-      </Suspense>
-    </Section>
+    <section className="bg-white px-5 py-6 lg:px-[34px] lg:py-8">
+      <div className="mx-auto max-w-[1536px]">
+        <h1 className="sr-only">Map of verified properties for sale in Ghana</h1>
+        <Suspense fallback={<PropertiesBrowserFallback />}>
+          <PropertiesBrowser properties={allProperties} />
+        </Suspense>
+      </div>
+    </section>
   );
 }

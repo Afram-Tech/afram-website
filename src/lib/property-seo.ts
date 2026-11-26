@@ -26,6 +26,7 @@ import {
   REGIONS,
   type LocationNode,
 } from "@/lib/location-taxonomy";
+import { bathsLabel } from "@/features/properties/listing-display";
 
 /** "Under_Offer " → "under offer" — for comparing the API's free-text
  *  type/status values. */
@@ -225,7 +226,7 @@ export function propertyDescription(property: Property): string {
   const beds = property.beds > 0 ? `${property.beds}-bedroom ` : "";
   const price = property.price > 0 ? ` for ${formatMoney(property.price, property.currency)}` : "";
   const specs = [
-    property.baths > 0 ? `${property.baths} bath` : null,
+    property.baths > 0 ? `${bathsLabel(property)} bath` : null,
     property.sqft > 0 ? formatPropertySize(property.sqft) : null,
   ]
     .filter(Boolean)
@@ -291,7 +292,11 @@ export function buildPropertyJsonLd(property: Property) {
     sku: property.id,
     category: `Real Estate > ${type?.plural ?? titleCase(property.type)}`,
     ...(property.beds > 0 && { numberOfBedrooms: property.beds, numberOfRooms: property.beds }),
-    ...(property.baths > 0 && { numberOfBathroomsTotal: property.baths }),
+    ...(property.baths > 0 && {
+      numberOfBathroomsTotal: property.baths,
+      numberOfFullBathrooms: property.baths - (property.halfBaths ?? 0),
+      ...(property.halfBaths ? { numberOfPartialBathrooms: property.halfBaths } : {}),
+    }),
     ...(property.sqft > 0 && {
       floorSize: { "@type": "QuantitativeValue", value: property.sqft, unitCode: "FTK" },
     }),

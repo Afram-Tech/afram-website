@@ -1,13 +1,9 @@
 "use client";
 
-import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 
-interface NewsletterFormProps {
-  buttonLabel?: string;
-}
-
-export function NewsletterForm({ buttonLabel = "Subscribe" }: NewsletterFormProps) {
+export function NewsletterForm() {
   const [done, setDone] = useState(false);
 
   if (done) {
@@ -21,8 +17,8 @@ export function NewsletterForm({ buttonLabel = "Subscribe" }: NewsletterFormProp
 
   return (
     <form
-      onSubmit={(event) => {
-        event.preventDefault();
+      onSubmit={(e) => {
+        e.preventDefault();
         setDone(true);
       }}
       className="flex flex-col gap-2 sm:flex-row"
@@ -32,13 +28,13 @@ export function NewsletterForm({ buttonLabel = "Subscribe" }: NewsletterFormProp
         required
         placeholder="name@email.com"
         aria-label="Email address"
-        className="border-ink-200 text-ink-900 placeholder:text-ink-400 focus:border-brand-500 flex-1 rounded-full border bg-white px-5 py-[12px] text-[15px] focus:outline-none"
+        className="field h-11 flex-1"
       />
       <button
         type="submit"
-        className="bg-brand-500 hover:bg-brand-600 inline-flex h-12 items-center justify-center gap-1.5 rounded-full px-6 text-[15px] font-semibold text-white transition-all active:scale-[0.98]"
+        className="btn-primary inline-flex h-11 items-center justify-center gap-1.5 rounded-full px-6 text-[15px] font-semibold"
       >
-        {buttonLabel}
+        Subscribe
         <ArrowRight className="h-4 w-4" />
       </button>
     </form>

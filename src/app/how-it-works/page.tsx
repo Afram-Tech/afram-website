@@ -1,35 +1,31 @@
-import { Check } from "lucide-react";
+import { SecBadge } from "@/components/ui/SecBadge";
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
 import type { ReactNode } from "react";
-
+import Image from "next/image";
+import { Check } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { DuotonePhoto } from "@/components/ui/DuotonePhoto";
+import { Section, SectionHeading } from "@/components/ui/Section";
+import { Reveal } from "@/components/ui/Reveal";
+import { FaqAccordion, type FaqItem } from "@/components/ui/FaqAccordion";
+import { CapitalAtRiskBadge } from "@/components/ui/CapitalAtRiskBadge";
 import {
   BrowserFrame,
-  FinanceMock,
-  PayMock,
-  TrackMock,
   VerifyMock,
+  PayMock,
+  FinanceMock,
+  TrackMock,
 } from "@/components/how/platform-mockups";
-import { CapitalAtRiskBadge } from "@/components/ui/CapitalAtRiskBadge";
-import { DuotonePhoto } from "@/components/ui/DuotonePhoto";
-import { buttonVariants } from "@/components/ui/button-variants";
-import { FaqAccordion, type FaqItem } from "@/components/ui/FaqAccordion";
-import { Reveal } from "@/components/ui/Reveal";
-import { Section } from "@/components/ui/Section";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { buildMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
+import { PHOTOS } from "@/lib/data/photos";
+import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "How It Works",
+  title: "How it works",
   description:
     "Four simple steps: verify the title, choose how you pay, finance or invest, then own and track it — shown on the real Afram platform.",
   path: "/how-it-works",
 });
-
-const unsplash = (id: string, width = 1600, quality = 68) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=${quality}`;
 
 const STEPS: {
   step: string;
@@ -42,7 +38,7 @@ const STEPS: {
   {
     step: "Step 1",
     title: "Verify the title",
-    body: "Every property is cross-checked against Lands Commission records before it's listed, and the result is recorded on-chain. No clean title, no listing.",
+    body: "Every property is cross-checked against Lands Commission records before it’s listed, and the result is recorded on-chain. No clean title, no listing.",
     points: ["Lands Commission cross-check", "Disputes flagged before you ever see it"],
     url: "app.afram.co/verify",
     mock: <VerifyMock />,
@@ -76,7 +72,7 @@ const STEPS: {
 const FAQS: FaqItem[] = [
   {
     q: "Is the title really verified?",
-    a: "Yes. We check every property against Lands Commission records before it's listed, and we show you the result plainly. You can also verify any title yourself, free, before you commit a cedi.",
+    a: "Yes. We check every property against Lands Commission records before it’s listed, and we show you the result plainly. You can also verify any title yourself, free, before you commit a cedi.",
   },
   {
     q: "How does the financing work?",
@@ -84,11 +80,11 @@ const FAQS: FaqItem[] = [
   },
   {
     q: "Where does my deposit sit?",
-    a: "In a segregated client account held with a partner bank, kept apart from Afram's own funds. It's held in escrow and released against delivery milestones, not paid out all at once.",
+    a: "In a segregated client account held with a partner bank, kept apart from Afram’s own funds. It’s held in escrow and released against delivery milestones, not paid out all at once.",
   },
   {
-    q: "What if a developer doesn't deliver?",
-    a: "Because your money is released against milestones rather than up front, the funds still held are protected. There's a defined recovery process, so your deposit isn't lost to a developer who disappears.",
+    q: "What if a vendor doesn’t deliver?",
+    a: "Because your money is released against milestones rather than up front, the funds still held are protected. There’s a defined recovery process, so your deposit isn’t lost to a vendor who disappears.",
   },
   {
     q: "Can I really start investing from GHS 1,500?",
@@ -104,49 +100,46 @@ export default function HowItWorksPage() {
   return (
     <>
       {/* 1 · Hero */}
-      <section className="bg-white px-6 pt-4 sm:px-8 lg:px-16">
-        <div className="relative mx-auto min-h-[460px] max-w-[1536px] overflow-hidden rounded-[2rem] lg:min-h-[560px]">
+      <section className="bg-white px-4 pt-4 lg:px-[34px]">
+        <div className="relative mx-auto min-h-[460px] max-w-[1536px] overflow-hidden rounded-3xl lg:min-h-[560px]">
           <DuotonePhoto
-            src={unsplash("photo-1449157291145-7efd050a4d0e")}
+            src={PHOTOS.heroBuilding2}
             alt="A verified building"
+            priority
+            sizes="100vw"
             className="absolute inset-0 h-full w-full"
           >
             <div className="from-brand-950/85 via-brand-900/50 absolute inset-0 bg-gradient-to-r to-transparent" />
           </DuotonePhoto>
 
           <div className="relative z-10 flex min-h-[460px] max-w-[720px] flex-col justify-center p-8 sm:p-12 lg:min-h-[560px] lg:p-16">
-            <span className="inline-flex w-fit items-center gap-2 rounded-full bg-white/12 px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] text-white/85 uppercase ring-1 ring-white/20 backdrop-blur-sm">
-              <span className="h-1.5 w-1.5 rounded-full bg-white" />
-              How it works
-            </span>
+            <SecBadge />
 
-            <h1 className="mt-6 text-[clamp(2.5rem,5.4vw,4.25rem)] leading-[0.98] font-extrabold tracking-[-0.03em] text-white">
-              From listing to keys, in four clear steps.
-            </h1>
+            <h1 className="t-h1 mt-5 text-white">From listing to keys, in four clear steps.</h1>
 
-            <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/85">
-              Afram is a blockchain-based title registry and property-financing platform.
-              Here&rsquo;s exactly how we verify a title, hold your money safely, and protect you
-              before you commit.
+            <p className="t-lead mt-6 max-w-lg text-white/85">
+              Afram is a blockchain-based title registry and property-financing platform. Here’s
+              exactly how we verify a title, hold your money safely, and protect you before you
+              commit.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href="/properties" className={buttonVariants("inverse", "lg")}>
+              <Button href="/properties" size="lg" variant="inverse">
                 Find a property
-              </Link>
-              <Link href="#faq" className={buttonVariants("outline", "lg")}>
-                See the FAQ
-              </Link>
+              </Button>
+              <Button href="/fees" size="lg" variant="outline">
+                See the fees
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
       {/* 2 · Steps — copy paired with real platform screens */}
-      <Section className="pb-10 sm:pb-10">
+      <Section className="pb-10">
         <SectionHeading
           title="See it on the platform."
-          intro="Each step removes a real risk — opaque titles, financing out of reach, and developers who can disappear with a deposit. This is what it looks like inside Afram."
+          intro="Each step removes a real risk — opaque titles, financing out of reach, and vendors who can disappear with a deposit. This is what it looks like inside Afram."
         />
 
         <div className="mt-8 space-y-6 sm:mt-10 lg:mt-14 lg:space-y-8">
@@ -155,24 +148,20 @@ export default function HowItWorksPage() {
             return (
               <div
                 key={s.step}
-                className="from-brand-50 via-brand-50/30 ring-brand-100/60 grid items-center gap-10 overflow-hidden rounded-[2rem] bg-gradient-to-br to-white p-7 ring-1 sm:p-10 lg:grid-cols-2 lg:gap-16 lg:p-12"
+                className="from-brand-50 via-brand-50/30 ring-brand-100/60 grid items-center gap-10 overflow-hidden rounded-3xl bg-gradient-to-br to-white p-7 ring-1 sm:p-10 lg:grid-cols-2 lg:gap-16 lg:p-12"
               >
                 {/* Copy */}
                 <Reveal className={cn(flip && "lg:order-2")}>
                   <div className="flex items-center gap-3">
-                    <span className="tnum text-brand-600 text-[13px] font-bold">
+                    <span className="text-brand-600 text-[13px] font-bold tabular-nums">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span className="bg-brand-300 h-px w-10" />
-                    <span className="text-brand-600 text-[12px] font-bold tracking-[0.16em] uppercase">
-                      {s.step}
-                    </span>
+                    <span className="t-overline text-brand-600">{s.step}</span>
                   </div>
 
-                  <h3 className="text-ink-900 mt-5 text-[clamp(1.8rem,3.2vw,2.6rem)] leading-[1.08] font-bold tracking-[-0.02em]">
-                    {s.title}
-                  </h3>
-                  <p className="text-ink-500 mt-4 max-w-lg text-[17px] leading-relaxed">{s.body}</p>
+                  <h3 className="t-h3 text-ink-900 mt-5">{s.title}</h3>
+                  <p className="t-lead text-ink-500 mt-4 max-w-lg">{s.body}</p>
 
                   <ul className="mt-6 space-y-2.5">
                     {s.points.map((p) => (
@@ -207,16 +196,14 @@ export default function HowItWorksPage() {
 
       {/* 3 · Dashboard showcase */}
       <Section>
-        <div className="bg-brand-950 grid items-center gap-8 overflow-hidden rounded-[2rem] p-6 sm:gap-10 sm:p-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:p-14">
+        <div className="bg-brand-950 grid items-center gap-8 overflow-hidden rounded-3xl p-6 sm:gap-10 sm:p-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:p-14">
           <Reveal>
-            <span className="text-brand-200 inline-flex items-center gap-2 text-[12px] font-bold tracking-[0.16em] uppercase">
+            <span className="t-overline text-brand-200 inline-flex items-center gap-2">
               <span className="bg-brand-300 h-1.5 w-1.5 rounded-full" />
               Your dashboard
             </span>
-            <h2 className="mt-5 text-[clamp(1.9rem,3.6vw,2.9rem)] leading-[1.06] font-bold tracking-[-0.02em] text-white">
-              Everything in one place.
-            </h2>
-            <p className="mt-5 max-w-md text-lg leading-relaxed text-white/70">
+            <h2 className="t-h2 mt-5 text-white">Everything in one place.</h2>
+            <p className="t-lead mt-5 max-w-md text-white/70">
               Payments, escrow milestones, documents, and your verified ownership record — all
               tracked in a single view, on any device.
             </p>
@@ -237,9 +224,9 @@ export default function HowItWorksPage() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="overflow-hidden rounded-2xl shadow-[0_50px_120px_-40px_rgba(0,0,0,0.7)] ring-1 ring-white/10">
+            <div className="shadow-modal overflow-hidden rounded-2xl ring-1 ring-white/10">
               <Image
-                src="/dash-buyer.webp"
+                src="/dash-buyer.png"
                 alt="The Afram dashboard showing payments, escrow status and documents"
                 width={1200}
                 height={838}
@@ -252,12 +239,12 @@ export default function HowItWorksPage() {
       </Section>
 
       {/* 4 · FAQ */}
-      <Section id="faq" className="scroll-mt-24">
-        <div className="from-brand-50 via-ink-50/30 ring-brand-100/50 grid gap-6 rounded-[2rem] bg-gradient-to-br to-white p-6 ring-1 sm:p-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-10 lg:p-14">
+      <Section>
+        <div className="from-brand-50 via-ink-50/30 ring-brand-100/50 grid gap-6 rounded-3xl bg-gradient-to-br to-white p-6 ring-1 sm:p-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-10 lg:p-14">
           <div>
             <SectionHeading
               title="Questions, answered plainly"
-              intro="The questions members and investors actually ask us — with straight answers."
+              intro="The questions buyers and investors actually ask us — with straight answers."
             />
             <CapitalAtRiskBadge variant="block" className="mt-8 max-w-sm" />
           </div>
@@ -266,12 +253,13 @@ export default function HowItWorksPage() {
       </Section>
 
       {/* 5 · Closing CTA */}
-      <section className="bg-white px-6 py-10 sm:px-8 lg:px-16 lg:py-16">
+      <section className="bg-white px-5 py-10 lg:px-[34px] lg:py-16">
         <div className="mx-auto max-w-[1536px]">
-          <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] lg:min-h-[440px]">
+          <div className="relative min-h-[360px] overflow-hidden rounded-3xl lg:min-h-[440px]">
             <DuotonePhoto
-              src={unsplash("photo-1518005020951-eccb494ad742")}
+              src={PHOTOS.cityTrees}
               alt="Make your next move"
+              sizes="100vw"
               className="absolute inset-0 h-full w-full"
             >
               <div className="from-brand-950/80 via-brand-950/38 to-brand-900/15 absolute inset-0 bg-gradient-to-t" />
@@ -282,16 +270,16 @@ export default function HowItWorksPage() {
                 <span className="h-1.5 w-1.5 rounded-full bg-white" />
                 Still have questions?
               </span>
-              <h2 className="mt-4 max-w-xl text-[clamp(2rem,3.8vw,3rem)] leading-[1.06] font-extrabold tracking-[-0.02em] text-white">
+              <h2 className="t-h1 mt-4 max-w-xl text-white">
                 Start with a verified home, or talk to a real person.
               </h2>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link href="/properties" className={buttonVariants("inverse", "lg")}>
+                <Button href="/buyers" size="lg" variant="inverse">
                   Find a property
-                </Link>
-                <a href="mailto:support@afram.co" className={buttonVariants("outline", "lg")}>
+                </Button>
+                <Button href="/about#contact" size="lg" variant="outline">
                   Contact us
-                </a>
+                </Button>
               </div>
             </div>
           </div>

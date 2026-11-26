@@ -1,7 +1,7 @@
-import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-
+import { ArrowUpRight } from "lucide-react";
 import { Section } from "@/components/ui/Section";
+import { EXTERNAL_LINK } from "@/lib/config";
 
 export type QuickLink = {
   label: string;
@@ -19,33 +19,36 @@ export type QuickLink = {
 export function PersonaQuickLinks({ links }: { links: QuickLink[] }) {
   return (
     <Section className="pt-0 sm:pt-0 lg:pt-0">
-      <div className="border-ink-100 flex flex-col gap-x-8 gap-y-3 border-t pt-6 sm:flex-row sm:flex-wrap sm:items-center">
-        <span className="text-ink-400 text-[12px] font-semibold tracking-[0.14em] uppercase">
-          More
+      <div className="flex flex-col gap-x-8 gap-y-3 border-t border-ink-100 pt-6 sm:flex-row sm:flex-wrap sm:items-center">
+        <span className="text-[15px] font-semibold text-ink-900">
+          More from Afram
         </span>
         {links.map((l) => {
           const inner = (
             <>
               {l.label}
-              {l.on && <span className="text-ink-400 text-[13px] font-normal">on {l.on}</span>}
-              <ArrowUpRight className="text-ink-300 group-hover:text-brand-600 h-3.5 w-3.5 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              {l.on && (
+                <span className="text-[13px] font-normal text-ink-400">
+                  on {l.on}
+                </span>
+              )}
+              <ArrowUpRight className="h-3.5 w-3.5 text-ink-300 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand-600" />
             </>
           );
-          const className =
-            "text-ink-700 hover:text-brand-700 group focus-visible:outline-brand-500 inline-flex items-center gap-1.5 text-[15px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2";
+          const cls =
+            "group inline-flex items-center gap-1.5 text-[15px] font-medium text-ink-700 transition-colors hover:text-brand-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500";
           return l.external ? (
             <a
               key={l.label}
               href={l.href}
-              target="_blank"
-              rel="noopener noreferrer"
+              className={cls}
               title={l.on ? `Opens ${l.on} in a new tab` : undefined}
-              className={className}
+              {...EXTERNAL_LINK}
             >
               {inner}
             </a>
           ) : (
-            <Link key={l.label} href={l.href} className={className}>
+            <Link key={l.label} href={l.href} className={cls}>
               {inner}
             </Link>
           );

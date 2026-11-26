@@ -1,16 +1,38 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Expand, X, ZoomIn, ZoomOut } from "lucide-react";
+import {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  type TouchEvent,
+} from "react";
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState, type TouchEvent } from "react";
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Expand,
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
 
-export function PropertyGallery({ images, title }: { images: string[]; title: string }) {
+export function PropertyGallery({
+  images,
+  title,
+}: {
+  images: string[];
+  title: string;
+}) {
   const [index, setIndex] = useState<number | null>(null);
   const open = index !== null;
 
   const close = useCallback(() => setIndex(null), []);
   const prev = useCallback(
-    () => setIndex((i) => (i === null ? i : (i - 1 + images.length) % images.length)),
+    () =>
+      setIndex((i) =>
+        i === null ? i : (i - 1 + images.length) % images.length,
+      ),
     [images.length],
   );
   const next = useCallback(
@@ -19,6 +41,7 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
   );
 
   const [zoomed, setZoomed] = useState(false);
+  // Each new image opens unzoomed — reset during render, not in an effect.
   const [prevIndex, setPrevIndex] = useState(index);
   if (index !== prevIndex) {
     setPrevIndex(index);
@@ -54,11 +77,12 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
 
   return (
     <>
-      <div className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-[1.9fr_1fr]">
+      {/* Gallery grid */}
+      <div className="mt-6 grid gap-3 lg:grid-cols-[1.9fr_1fr]">
         <button
           type="button"
           onClick={() => setIndex(0)}
-          className="group bg-ink-50 relative aspect-[16/11] cursor-zoom-in overflow-hidden rounded-[1.25rem] lg:aspect-auto lg:h-[460px]"
+          className="group relative aspect-[16/11] cursor-zoom-in overflow-hidden rounded-[20px] bg-ink-50 lg:aspect-auto lg:h-[460px]"
         >
           <Image
             src={images[0]}
@@ -66,9 +90,9 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 60vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            className="object-cover transition-transform duration-700 ease-out-soft group-hover:scale-[1.03]"
           />
-          <span className="absolute right-3 bottom-3 inline-flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 text-[12px] font-medium text-white opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
+          <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 text-[12px] font-medium text-white opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
             <Expand className="h-3.5 w-3.5" />
             View
           </span>
@@ -80,14 +104,14 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
               key={i}
               type="button"
               onClick={() => setIndex(i + 1)}
-              className="group bg-ink-50 relative aspect-[4/3] cursor-zoom-in overflow-hidden rounded-2xl lg:aspect-auto"
+              className="group relative aspect-[4/3] cursor-zoom-in overflow-hidden rounded-[1rem] bg-ink-50 lg:aspect-auto"
             >
               <Image
                 src={src}
                 alt={`${title} photo ${i + 2}`}
                 fill
                 sizes="(max-width: 1024px) 50vw, 22vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                className="object-cover transition-transform duration-700 ease-out-soft group-hover:scale-[1.03]"
               />
               {i === 3 && images.length > 5 && (
                 <span className="absolute inset-0 flex items-center justify-center bg-black/45 text-[15px] font-semibold text-white">
@@ -99,12 +123,13 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
         </div>
       </div>
 
+      {/* Spotlight lightbox */}
       {index !== null && (
         <div
           onClick={(e) => {
             if (e.target === e.currentTarget) close();
           }}
-          className="bg-ink-950/95 fixed inset-0 z-[120] flex flex-col backdrop-blur-sm"
+          className="fade fixed inset-0 z-[120] flex flex-col bg-ink-950/95 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-label={`${title} gallery`}
@@ -120,7 +145,11 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
                 aria-label={zoomed ? "Zoom out" : "Zoom in"}
                 className="flex h-10 w-10 items-center justify-center rounded-full text-white/80 ring-1 ring-white/20 transition-colors hover:bg-white/10 hover:text-white"
               >
-                {zoomed ? <ZoomOut className="h-5 w-5" /> : <ZoomIn className="h-5 w-5" />}
+                {zoomed ? (
+                  <ZoomOut className="h-5 w-5" />
+                ) : (
+                  <ZoomIn className="h-5 w-5" />
+                )}
               </button>
               <button
                 type="button"
@@ -164,7 +193,7 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
                 alt={`${title} photo ${index + 1}`}
                 fill
                 sizes="100vw"
-                className={`object-contain transition-transform duration-300 ${
+                className={`fade object-contain transition-transform duration-300 ${
                   zoomed ? "scale-[1.8]" : ""
                 }`}
               />
@@ -187,10 +216,18 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
                 onClick={() => setIndex(i)}
                 aria-label={`View photo ${i + 1}`}
                 className={`relative h-14 w-20 shrink-0 overflow-hidden rounded-lg ring-2 transition ${
-                  i === index ? "ring-white" : "opacity-55 ring-transparent hover:opacity-100"
+                  i === index
+                    ? "ring-white"
+                    : "opacity-55 ring-transparent hover:opacity-100"
                 }`}
               >
-                <Image src={src} alt="" fill sizes="80px" className="object-cover" />
+                <Image
+                  src={src}
+                  alt=""
+                  fill
+                  sizes="80px"
+                  className="object-cover"
+                />
               </button>
             ))}
           </div>

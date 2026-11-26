@@ -1,32 +1,47 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-
-import { PersonaBlocks } from "@/components/persona/PersonaBlocks";
-import type { PersonaContent } from "@/features/personas/types";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { WavePattern } from "@/components/ui/WavePattern";
+import { BlockIcon, type PersonaBlock } from "@/components/persona/PersonaBlocks";
+
+export type SwitchItem = {
+  id: string;
+  tab: string;
+  eyebrow: string;
+  headline: string;
+  subhead: string;
+  metrics?: { label: string; value: string }[];
+  blocks?: PersonaBlock[];
+  blocksCta?: { label: string; href: string };
+  callout?: {
+    title: string;
+    body: string;
+    cta: { label: string; href: string };
+  };
+};
 
 /**
  * One page, one audience at a time.
  *
- * The toggle leads — it is the first decision the visitor makes and every
- * word below depends on it, so it sits top-left rather than tucked in a
- * corner. The persona ids stay in the URL hash so links elsewhere on the
- * site can land directly on the right audience.
+ * The toggle leads: it is the first decision the visitor makes and every word
+ * below depends on it. The pitch sits under it on the left, and the right half
+ * carries what this audience weighs up, either its numbers or its reasons.
+ * The persona ids stay in the URL hash so the header's dropdown links still
+ * land on the right audience.
  */
 /** Fired when the audience changes, so sections further down the page
  *  (see PersonaAnswers) can follow the toggle. */
 export const PERSONA_EVENT = "afram:persona";
 
 export function PersonaSwitcher({
-  personas,
+  items,
   blocksInPanel = true,
 }: {
-  personas: PersonaContent[];
-  /** false when the page shows each audience's blocks further down instead
-   *  (PersonaAnswers) rather than inside this panel. */
+  items: SwitchItem[];
+  /** false when the page shows the blocks further down instead. */
   blocksInPanel?: boolean;
 }) {
   const [active, setActive] = useState(0);
@@ -34,125 +49,137 @@ export function PersonaSwitcher({
   useEffect(() => {
     const fromHash = () => {
       const id = window.location.hash.replace("#", "");
-      const i = personas.findIndex((p) => p.id === id);
+      const i = items.findIndex((p) => p.id === id);
       if (i >= 0) setActive(i);
     };
     fromHash();
     window.addEventListener("hashchange", fromHash);
     return () => window.removeEventListener("hashchange", fromHash);
-  }, [personas]);
+  }, [items]);
 
   const select = (i: number) => {
     setActive(i);
-    window.history.replaceState(null, "", `#${personas[i].id}`);
-    window.dispatchEvent(new CustomEvent(PERSONA_EVENT, { detail: personas[i].id }));
+    window.history.replaceState(null, "", `#${items[i].id}`);
+    window.dispatchEvent(new CustomEvent(PERSONA_EVENT, { detail: items[i].id }));
   };
 
-  const p = personas[active];
-  const metrics = p.stats.slice(0, 3);
+  const p = items[active];
+  const metrics = p.metrics ?? [];
+  const reasons = blocksInPanel && metrics.length === 0 ? (p.blocks ?? []) : [];
 
   return (
     <section
       id="audience"
-      className="mx-auto mb-10 max-w-[1536px] scroll-mt-24 px-6 sm:mb-14 sm:px-8 lg:mb-20 lg:px-16"
+      className="mx-auto mb-[var(--section-y,3rem)] mt-[var(--switcher-top,0px)] max-w-[1536px] scroll-mt-24 px-5 sm:mb-[var(--section-y-sm,4rem)] sm:mt-[var(--switcher-top-sm,0px)] lg:mb-[var(--section-y-lg,6rem)] lg:mt-[var(--switcher-top-lg,0px)] lg:px-[34px]"
     >
-      <div className="from-accent-50 via-accent-50/40 ring-accent-100/70 overflow-hidden rounded-[2rem] bg-gradient-to-br to-white p-6 ring-1 sm:p-10 lg:p-12">
-        <div className="flex flex-col gap-3">
-          <p className="text-accent-700 text-[12px] font-semibold tracking-[0.18em] uppercase">
-            I am a…
-          </p>
-          <div
-            role="tablist"
-            aria-label="Choose your audience"
-            className="ring-accent-100 flex w-fit max-w-full flex-wrap gap-1.5 rounded-full bg-white/70 p-1.5 ring-1"
-          >
-            {personas.map((it, i) => (
-              <button
-                key={it.id}
-                role="tab"
-                type="button"
-                aria-selected={i === active}
-                aria-controls="audience-panel"
-                onClick={() => select(i)}
-                className={cn(
-                  "rounded-full px-4 py-2 text-[14px] font-semibold transition-all duration-200",
-                  "focus-visible:outline-accent-600 focus-visible:outline-2 focus-visible:outline-offset-2",
-                  i === active
-                    ? "bg-accent-600 text-white shadow-sm"
-                    : "text-ink-500 hover:text-ink-900 hover:bg-white",
-                )}
-              >
-                {it.tab}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div
-          id="audience-panel"
-          role="tabpanel"
-          className={cn(
-            "mt-8 grid gap-8 sm:mt-10 lg:gap-14",
-            // No stats panel → the pitch takes the full width.
-            metrics.length > 0 && "lg:grid-cols-[1.1fr_0.9fr]",
-          )}
-        >
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-100/70 via-brand-50 to-brand-50/40 p-5 ring-1 ring-brand-500/10 sm:p-8 lg:p-12 xl:p-14">
+        <WavePattern />
+        <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-14 xl:gap-20">
           <div className="flex flex-col justify-center">
-            <h2 className="text-ink-900 text-[clamp(1.8rem,3.2vw,2.6rem)] leading-[1.08] font-semibold tracking-[-0.025em]">
-              {p.headline}
-            </h2>
-            <p className="text-ink-500 mt-4 max-w-lg text-[16px] leading-relaxed">{p.subhead}</p>
-            {p.blocksCta && (
-              <Link
-                href={p.blocksCta.href}
-                className="bg-brand-500 hover:bg-brand-600 focus-visible:outline-brand-500 mt-7 inline-flex h-12 w-fit items-center justify-center gap-2 rounded-full px-6 text-[15px] font-semibold text-white shadow-sm transition-all focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98]"
+            {/* The choice comes first, when there is one to make */}
+            {items.length > 1 && (
+            <div>
+              <div
+                role="tablist"
+                aria-label="Choose your audience"
+                className="flex w-fit max-w-full flex-wrap gap-1 rounded-full bg-brand-500/10 p-1"
               >
-                {p.blocksCta.label}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+                {items.map((it, i) => (
+                  <button
+                    key={it.id}
+                    role="tab"
+                    type="button"
+                    aria-selected={i === active}
+                    aria-controls="audience-panel"
+                    onClick={() => select(i)}
+                    className={cn(
+                      "h-9 rounded-full px-4 text-[14px] font-semibold transition-[background-color,color,box-shadow] duration-200 ease-out-soft",
+                      "focus-visible:outline-none focus-visible:shadow-focus",
+                      i === active
+                        ? "bg-white text-deep-950 shadow-xs"
+                        : "text-ink-600 hover:text-deep-950",
+                    )}
+                  >
+                    {it.tab}
+                  </button>
+                ))}
+              </div>
+            </div>
             )}
+
+            <div
+              key={p.id}
+              id="audience-panel"
+              role="tabpanel"
+              className={cn("page-in", items.length > 1 && "mt-8 sm:mt-10")}
+            >
+              <h2 className="t-h2 text-deep-950">{p.headline}</h2>
+              <p className="t-lead mt-4 max-w-xl text-ink-600">{p.subhead}</p>
+              {p.blocksCta && (
+                <Link
+                  href={p.blocksCta.href}
+                  className="btn-primary mt-7 inline-flex h-12 w-fit items-center justify-center gap-2 rounded-full px-6 text-[15px] font-semibold"
+                >
+                  {p.blocksCta.label}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              )}
+            </div>
           </div>
 
-          {metrics.length > 0 && (
-            <dl className="bg-brand-700 divide-y divide-white/10 self-center rounded-[1.5rem] p-7 text-white sm:p-8">
-              {metrics.map((m, i) => (
+          {/* What this audience weighs up: its numbers, or its reasons as
+              headlines only (the FAQ below carries the detail) */}
+          {metrics.length > 0 ? (
+            <dl
+              key={p.id}
+              className="page-in divide-y divide-ink-100 self-center rounded-[20px] bg-white px-6 py-2 sm:px-8 lg:px-10"
+            >
+              {metrics.map((m) => (
                 <div
                   key={m.label}
-                  className={cn("py-4", i === 0 && "pt-0", i === metrics.length - 1 && "pb-0")}
+                  className="flex flex-col-reverse gap-1.5 py-5 sm:py-6"
                 >
-                  <dd className="tnum text-[clamp(1.75rem,3vw,2.25rem)] leading-none font-bold tracking-[-0.02em]">
-                    {m.value}
-                  </dd>
-                  <dt className="mt-2 text-[13px] tracking-[0.12em] text-white/60 uppercase">
-                    {m.label}
-                  </dt>
+                  <dt className="text-[14px] leading-5 text-ink-500">{m.label}</dt>
+                  <dd className="tnum t-h3 text-deep-950">{m.value}</dd>
                 </div>
               ))}
             </dl>
+          ) : (
+            reasons.length > 0 && (
+              <ul
+                key={p.id}
+                className="page-in divide-y divide-ink-100 self-center rounded-[20px] bg-white px-5 sm:px-7 lg:px-8"
+              >
+                {reasons.map((b) => {
+                  return (
+                    <li key={b.title} className="flex items-center gap-4 py-5">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+                        <BlockIcon name={b.icon} className="h-[18px] w-[18px]" />
+                      </span>
+                      <h3 className="t-h4 min-w-0 text-deep-950">{b.title}</h3>
+                    </li>
+                  );
+                })}
+              </ul>
+            )
           )}
         </div>
 
-        {blocksInPanel && p.blocks && p.blocks.length > 0 && (
-          <div className="border-accent-100/80 mt-9 border-t pt-8 sm:mt-10 sm:pt-10">
-            <PersonaBlocks key={p.id} blocks={p.blocks} cta={p.blocksCta} />
-          </div>
-        )}
-
         {p.callout && (
-          <div className="bg-brand-700 mt-6 rounded-[1.5rem] p-6 text-white sm:p-8 lg:p-10">
-            <h3 className="max-w-xl text-[clamp(1.35rem,2.2vw,1.75rem)] leading-[1.15] font-bold tracking-[-0.02em]">
-              {p.callout.title}
-            </h3>
-            <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-white/75">
+          <div className="relative mt-8 rounded-[20px] bg-white/70 p-6 ring-1 ring-ink-100 sm:p-8">
+            <h3 className="t-h4 text-deep-950">{p.callout.title}</h3>
+            <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-ink-500">
               {p.callout.body}
             </p>
-            <a
-              href={p.callout.cta.href}
-              className="text-ink-900 hover:bg-brand-50 mt-6 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white px-6 text-[15px] font-semibold shadow-sm transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:scale-[0.98]"
-            >
-              {p.callout.cta.label}
-              <ArrowRight className="h-4 w-4" />
-            </a>
+            {p.callout.cta.href !== p.blocksCta?.href && (
+              <a
+                href={p.callout.cta.href}
+                className="mt-4 inline-flex items-center gap-1.5 text-[15px] font-semibold text-brand-600 underline-offset-4 hover:underline"
+              >
+                {p.callout.cta.label}
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            )}
           </div>
         )}
       </div>

@@ -10,6 +10,7 @@ import { formatMoney, formatPropertySize, titleCase } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 import { isMarkerUnavailable, type PropertyMapMarker } from "./markers";
+import { bathsLabel } from "@/features/properties/listing-display";
 
 /** Card width in px — PropertyMap clamps the card inside the map with it. */
 export const MAP_PREVIEW_WIDTH = 300;
@@ -49,7 +50,7 @@ export function MapPreviewCard({
 
   const specs = [
     marker.beds > 0 && `${marker.beds} bed${marker.beds === 1 ? "" : "s"}`,
-    marker.baths > 0 && `${marker.baths} bath${marker.baths === 1 ? "" : "s"}`,
+    marker.baths > 0 && `${bathsLabel(marker)} bath${bathsLabel(marker) === "1" ? "" : "s"}`,
     marker.sqft > 0 && formatPropertySize(marker.sqft),
   ].filter(Boolean);
 

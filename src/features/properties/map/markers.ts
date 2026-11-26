@@ -29,6 +29,7 @@ export interface PropertyMapMarker {
   images: string[];
   beds: number;
   baths: number;
+  halfBaths?: number;
   sqft: number;
   /** The site boundary, only when it's a real 3+ point shape — see
    *  Property.boundary's own doc. */
@@ -77,6 +78,7 @@ export function deriveMapMarkers(properties: Property[]): PropertyMapMarker[] {
       images: property.images,
       beds: property.beds,
       baths: property.baths,
+      halfBaths: property.halfBaths,
       sqft: property.sqft,
       boundary: property.boundary,
     });

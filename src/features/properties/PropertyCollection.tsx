@@ -97,7 +97,7 @@ export function PropertyCollection({
     .sort(
       (a, b) =>
         Number(REGIONS.some((r) => r.id === b.node.id)) -
-        Number(REGIONS.some((r) => r.id === a.node.id)) ||
+          Number(REGIONS.some((r) => r.id === a.node.id)) ||
         b.properties.length - a.properties.length,
     )
     .slice(0, 16)

@@ -4,7 +4,7 @@ export type AccessRole = (typeof ACCESS_ROLES)[number];
 
 /** Pages that imply a role, so the form opens on the likely answer. */
 export const ROLE_FOR_PATH: Record<string, AccessRole> = {
-  "/developers": "Vendor",
+  "/vendors": "Vendor",
   "/financiers": "Financier",
 };
 

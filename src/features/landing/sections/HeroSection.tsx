@@ -2,18 +2,18 @@ import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { PolygonWordmark } from "@/components/PolygonWordmark";
+import { SecBadge } from "@/components/ui/SecBadge";
+import { buttonVariants } from "@/components/ui/button-variants";
 import type { HomePageContent } from "@/features/landing/data/home";
 import { ROLE_CARDS } from "@/features/landing/data/role-cards";
-import { lighten } from "@/lib/utils";
 
 interface HeroSectionProps {
   content?: HomePageContent;
 }
 
 export function HeroSection({ content }: HeroSectionProps) {
-  // Backgrounds, pill colors, and art positioning stay design-locked — only
-  // the copy/link/image for each role card is overridable from Sanity, and
+  // Backgrounds, pill colours and art geometry stay design-locked; only the
+  // copy, link and image for each role card is overridable from Sanity, and
   // only when there's an override for that specific slot.
   const roleCards = ROLE_CARDS.map((card, index) => {
     const override = content?.roleCards?.[index];
@@ -26,108 +26,103 @@ export function HeroSection({ content }: HeroSectionProps) {
     };
   });
 
-  const heroEyebrow = content?.heroEyebrow ?? "Regulated and licensed by the SEC";
-  const heroImage = content?.heroImage ?? "/town-house-image.webp";
+  const heroEyebrow = content?.heroEyebrow;
+  const heroImage = content?.heroImage ?? "/hero-townhouses-v5.webp";
   const primaryCtaLabel = content?.heroPrimaryCtaLabel ?? "View Properties";
   const primaryCtaLink = content?.heroPrimaryCtaLink ?? "/properties";
   const secondaryCtaLabel = content?.heroSecondaryCtaLabel ?? "How it works";
   const secondaryCtaLink = content?.heroSecondaryCtaLink ?? "/how-it-works";
 
   return (
-    <section className="flex min-h-[calc(100dvh-72px)] flex-col bg-white pt-4">
-      <div className="relative min-h-140 flex-1 overflow-hidden bg-[linear-gradient(to_bottom,#c0f8f5_0%,#eafcfb_45%,#f7fefe_100%)] sm:min-h-90">
-        <div className="pointer-events-none absolute inset-x-0 top-[60%] bottom-0 select-none sm:top-[30%] lg:top-[15%] xl:top-[17%] 2xl:top-[-2%]">
+    <section className="bg-white pt-4 lg:pt-[25px]">
+      {/* Hero band: a cyan gradient. The cut-out render (transparent sky)
+          fills the band on desktop and sits below the copy on phones. */}
+      <div className="relative flex flex-col overflow-hidden bg-[linear-gradient(180deg,var(--color-brand-100)_0px,var(--color-brand-50)_320px,#fff_620px)] [--hero-band-h:clamp(640px,41.9vw,880px)] lg:block lg:h-[var(--hero-band-h)]">
+        {/* Copy, on the same container as the nav. */}
+        <div className="relative z-10 mx-auto w-full max-w-[1536px] px-6 sm:px-8 lg:px-16">
+          <div className="rise pt-10 sm:pt-12 lg:pt-[64px]">
+            <SecBadge label={heroEyebrow} />
+
+            <h1 className="t-h1 text-deep-950 mt-5 text-[clamp(1.875rem,3.1vw,2.75rem)] leading-[1.12] whitespace-pre-line">
+              {content?.heroHeading ?? (
+                <>
+                  A transparent Real estate marketplace
+                  <br className="hidden sm:block" /> powered by Blockchain
+                </>
+              )}
+            </h1>
+
+            <div className="mt-[27px] flex flex-col gap-2 sm:flex-row">
+              <Link href={primaryCtaLink} className={buttonVariants("primary", "lg")}>
+                {primaryCtaLabel}
+              </Link>
+              <Link href={secondaryCtaLink} className={buttonVariants("secondary", "lg")}>
+                {secondaryCtaLabel}
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Townhouse render, uncropped by a mask. Phones and tablets: its own
+            strip under the copy. Desktop: full band width at its natural
+            aspect, bleeding off the band's bottom (and, on wide screens, its
+            top). Its top offset is the larger of 10% of the overflow (wins
+            from ~1800px up) and a laptop floor that slides the houses down as
+            the viewport narrows, so the middle roof never runs under the CTAs.
+            54.458vw is the render's height at full viewport width
+            (1307 / 2400). */}
+        <div className="pointer-events-none relative mt-8 h-[260px] w-full select-none [--hero-img-top:max(calc((var(--hero-band-h)_-_54.458vw)_*_0.1),calc(40px_+_(1536px_-_100vw)_*_0.22))] sm:mt-10 sm:h-[340px] md:h-[400px] lg:absolute lg:inset-x-0 lg:top-[var(--hero-img-top)] lg:mt-0 lg:aspect-[2400/1307] lg:h-auto">
           <Image
             src={heroImage}
             alt="A row of modern verified homes"
             fill
             priority
             sizes="100vw"
-            className="object-cover object-[50%_10%]"
+            className="object-cover object-top"
           />
-        </div>
-
-        <div className="relative z-10 mx-auto h-full max-w-[1536px] px-6 sm:px-8 lg:px-16">
-          <div className="max-w-[840px] pt-8 sm:pt-10 lg:pt-12">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#B2E9F0] pl-[6px] pr-[14px] py-[8px] text-[11px] font-semibold text-[#002D30]">
-              <Image
-                src="/SEC_logo-96.png"
-                alt="SEC Logo"
-                width={30}
-                height={30}
-                className="shrink-0 rounded-full bg-white object-contain p-[3px]"
-              />
-              {heroEyebrow}
-            </div>
-
-            {content?.heroHeading ? (
-              <h1 className="mt-4 text-[clamp(1.75rem,2.9vw,2.375rem)] leading-[1.16] font-semibold tracking-[-0.035em] whitespace-pre-line text-[#002d30]">
-                {content.heroHeading}
-              </h1>
-            ) : (
-              <h1 className="mt-4 text-[clamp(1.75rem,2.9vw,2.375rem)] leading-[1.16] font-semibold tracking-[-0.035em] text-[#002d30]">
-                A Transparent Real Estate Marketplace For <br className="hidden sm:block" />
-                Members, Vendors, and Financiers <br className="hidden sm:block" />
-                Powered by Blockchain
-              </h1>
-            )}
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href={primaryCtaLink}
-                className="inline-flex h-11 items-center justify-center rounded-full bg-[#002d30] px-7 text-[15px] font-semibold text-white transition-all hover:bg-[#06474c] active:scale-[0.98]"
-              >
-                {primaryCtaLabel}
-              </Link>
-              <Link
-                href={secondaryCtaLink}
-                className="inline-flex h-11 items-center justify-center rounded-full bg-[#d9f1f4] px-7 text-[15px] font-semibold text-[#002d30] backdrop-blur-sm transition-all hover:bg-[#c5e8ec] active:scale-[0.98]"
-              >
-                {secondaryCtaLabel}
-              </Link>
-            </div>
-          </div>
         </div>
       </div>
 
-      {/* Same column as the nav, the hero copy above and every Section
-          (max-w-[1536px], px-6 → px-16), so the cards' outer edges line up
-          with everything else on the page. */}
-      <div className="mx-auto mt-2 w-full max-w-[1536px] shrink-0 px-6 pb-4 sm:px-8 sm:pb-6 lg:px-16">
-        {/* Stacked until lg: three across a tablet leaves each card ~210px,
-            too narrow for its title beside the illustration. */}
-        <div className="gap-card grid grid-cols-1 lg:grid-cols-3">
-          {roleCards.map((card, index) => (
+      {/* Role cards: three separate cards on the site container. The gap
+          above them matches the gap between them. */}
+      <div className="mx-auto mt-3 max-w-[1536px] px-6 sm:px-8 lg:mt-6 lg:px-16 xl:mt-[36px]">
+        <div className="grid gap-3 lg:grid-cols-3 lg:gap-6 xl:gap-[36px]">
+          {roleCards.map((card) => (
             <Link
-              key={index}
+              key={card.href}
               href={card.href}
-              style={{
-                background: `linear-gradient(to bottom, ${card.backgroundColor}, ${lighten(card.backgroundColor, 0.6)})`,
-              }}
-              className="group relative h-[135px] overflow-hidden rounded-[18px] px-5 pt-4 transition-shadow duration-300 hover:shadow-[0_18px_40px_-26px_rgba(0,45,48,0.45)] sm:h-[160px] lg:h-[185px] xl:h-[175px]"
+              style={{ backgroundImage: card.background }}
+              className="group relative min-h-[176px] overflow-hidden rounded-[20px] px-5 pt-[19px] pb-4 transition-shadow duration-300 [--art-k:0.72] hover:shadow-[0_18px_40px_-26px_rgba(0,45,48,0.45)] sm:px-[23px] sm:[--art-k:1] lg:min-h-[214px] lg:[--art-k:0.72] xl:min-h-[194px] xl:[--art-k:1]"
             >
               <Image
                 src={card.art.src}
-                alt={card.art.alt}
-                width={100}
-                height={100}
-                className={`pointer-events-none transition-transform duration-500 ease-out select-none group-hover:scale-[1.03] ${card.art.class}`}
+                alt=""
+                width={card.art.width}
+                height={card.art.height}
+                sizes="220px"
+                style={{
+                  height: `calc(${card.art.h}px * var(--art-k))`,
+                  bottom: `calc(${-card.art.drop}px * var(--art-k))`,
+                  right: `calc(${card.art.right}px * var(--art-k))`,
+                }}
+                className="pointer-events-none absolute w-auto max-w-none origin-bottom transition-transform duration-500 ease-out select-none group-hover:scale-[1.03]"
               />
 
-              <div className="relative z-10 flex h-full max-w-57.5 flex-col sm:max-w-80 lg:max-w-[66%] xl:max-w-[72%] 2xl:max-w-95">
+              <div className="relative z-10">
                 <span
                   style={{ backgroundColor: card.pillColor }}
-                  className="inline-flex w-fit items-center rounded-full px-3 py-1 text-[12px] font-medium tracking-[-0.02em] text-[#002d30] sm:text-[13px]"
+                  className="text-deep-950 flex h-7 w-fit items-center rounded-full px-[14px] pt-[2px] text-[15px] font-medium tracking-[-0.035em]"
                 >
                   {card.eyebrow}
                 </span>
 
-                <h3 className="mt-2 max-w-87.5 text-[1rem] leading-[1.2] font-semibold tracking-[-0.03em] text-[#002d30] sm:mt-2.5 sm:text-[1.15rem] sm:leading-[1.22] lg:text-[1.05rem] xl:text-[1.15rem] 2xl:text-[1.25rem]">
+                <h3 className="text-deep-950 mt-3 max-w-[min(400px,62%)] text-[20px] leading-[1.27] font-semibold tracking-[-0.03em] text-pretty sm:max-w-[min(400px,78%)] xl:max-w-[400px] xl:text-[22px]">
                   {card.title}
                 </h3>
 
-                <span className="inline-flex items-center gap-2 pb-1 text-[13px] font-medium text-[#002d30]/70 sm:text-[15px]">
+                <span className="text-deep-950/70 mt-px flex w-fit items-center gap-2 text-[16px] leading-6 font-medium">
                   Explore
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
                 </span>
               </div>
             </Link>

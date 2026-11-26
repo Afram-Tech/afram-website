@@ -30,6 +30,7 @@
   "dependencies": {
     "@apollo/client": "^4.2.12",
     "@apollo/client-integration-nextjs": "^0.14.5",
+    "@marsidev/react-turnstile": "^1.6.1",
     "@portabletext/react": "^7.0.1",
     "@sanity/client": "^7.25.0",
     "@sanity/image-url": "^2.1.1",

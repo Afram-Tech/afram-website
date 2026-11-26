@@ -1,3 +1,4 @@
+import { LEGAL_SLUGS } from "@/lib/data/legal";
 import type { MetadataRoute } from "next";
 
 import { siteConfig } from "@/config/site";
@@ -29,12 +30,20 @@ const STATIC_ROUTES: {
   listings: ListingSource;
 }[] = [
   { path: "/", priority: 1, changeFrequency: "weekly", listings: "all" },
-  { path: "/developers", priority: 0.9, changeFrequency: "monthly", listings: "none" },
+  { path: "/vendors", priority: 0.9, changeFrequency: "monthly", listings: "none" },
   { path: "/financiers", priority: 0.9, changeFrequency: "monthly", listings: "none" },
   { path: "/properties", priority: 0.8, changeFrequency: "daily", listings: "all" },
   { path: "/insights", priority: 0.7, changeFrequency: "weekly", listings: "none" },
   { path: "/how-it-works", priority: 0.6, changeFrequency: "monthly", listings: "none" },
-  { path: "/privacy-policy", priority: 0.2, changeFrequency: "yearly", listings: "none" },
+  { path: "/help", priority: 0.4, changeFrequency: "monthly", listings: "none" },
+  { path: "/fees", priority: 0.5, changeFrequency: "monthly", listings: "none" },
+  { path: "/about", priority: 0.5, changeFrequency: "yearly", listings: "none" },
+  ...LEGAL_SLUGS.map((slug) => ({
+    path: `/legal/${slug}`,
+    priority: 0.2,
+    changeFrequency: "yearly" as const,
+    listings: "none" as const,
+  })),
 ];
 
 /** The most recent `updatedAt` among the listings, if any has one. */

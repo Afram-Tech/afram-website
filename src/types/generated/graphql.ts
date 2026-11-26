@@ -1,37 +1,34 @@
-import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = {
-  [_ in K]?: never;
-};
-export type Incremental<T> =
-  T | { [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
-  String: { input: string; output: string };
-  Boolean: { input: boolean; output: boolean };
-  Int: { input: number; output: number };
-  Float: { input: number; output: number };
-  Any: { input: any; output: any };
-  Date: { input: string; output: string };
-  DateTime: { input: any; output: any };
-  Int64: { input: any; output: any };
-  JSON: { input: Record<string, any>; output: Record<string, any> };
-  JSONObject: { input: any; output: any };
-  Money: { input: any; output: any };
-  Token: { input: any; output: any };
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  Any: { input: any; output: any; }
+  Date: { input: string; output: string; }
+  DateTime: { input: any; output: any; }
+  Int64: { input: any; output: any; }
+  JSON: { input: Record<string, any>; output: Record<string, any>; }
+  JSONObject: { input: any; output: any; }
+  Money: { input: any; output: any; }
+  Token: { input: any; output: any; }
 };
 
 /** Who an invite link is for. Never carries the temporary password. */
 export type AccessInvite = {
-  __typename?: "AccessInvite";
-  email: Scalars["String"]["output"];
-  expiresAt?: Maybe<Scalars["DateTime"]["output"]>;
-  firstName: Scalars["String"]["output"];
+  __typename?: 'AccessInvite';
+  email: Scalars['String']['output'];
+  expiresAt?: Maybe<Scalars['DateTime']['output']>;
+  firstName: Scalars['String']['output'];
   role: AccessRole;
   status: AccessInviteStatus;
 };
@@ -47,20 +44,20 @@ export type AccessInviteFilter = {
 /** Where an approved invite stands. */
 export type AccessInviteStatus =
   /** Redeemed — the account exists. */
-  | "activated"
+  | 'activated'
   /** Past its 72 hours, or too many wrong temporary passwords. */
-  | "expired"
+  | 'expired'
   /** Usable. */
-  | "pending";
+  | 'pending';
 
 export type AccessRequest = {
-  __typename?: "AccessRequest";
-  createdAt: Scalars["DateTime"]["output"];
-  decidedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  email: Scalars["String"]["output"];
-  fullName: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
-  phone: Scalars["String"]["output"];
+  __typename?: 'AccessRequest';
+  createdAt: Scalars['DateTime']['output'];
+  decidedAt?: Maybe<Scalars['DateTime']['output']>;
+  email: Scalars['String']['output'];
+  fullName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  phone: Scalars['String']['output'];
   role: AccessRole;
   status: AccessRequestStatus;
 };
@@ -75,7 +72,10 @@ export type AccessRequestFilter = {
   status?: InputMaybe<AccessRequestStatusOperator>;
 };
 
-export type AccessRequestStatus = "approved" | "declined" | "pending";
+export type AccessRequestStatus =
+  | 'approved'
+  | 'declined'
+  | 'pending';
 
 export type AccessRequestStatusOperator = {
   eq?: InputMaybe<AccessRequestStatus>;
@@ -84,7 +84,10 @@ export type AccessRequestStatusOperator = {
 };
 
 /** Wire values; the website labels them Member, Vendor, Financier. */
-export type AccessRole = "buyer" | "financier" | "issuer";
+export type AccessRole =
+  | 'buyer'
+  | 'financier'
+  | 'issuer';
 
 export type AccessRoleOperator = {
   eq?: InputMaybe<AccessRole>;
@@ -93,24 +96,32 @@ export type AccessRoleOperator = {
 };
 
 export type AddParticipantInput = {
-  conversationId: Scalars["ID"]["input"];
+  conversationId: Scalars['ID']['input'];
   participant: ParticipantInput;
-  userId: Scalars["ID"]["input"];
+  userId: Scalars['ID']['input'];
+};
+
+export type AddSupportMessageInput = {
+  attachments?: InputMaybe<Array<SupportAttachmentInput>>;
+  /** Up to 4,000 characters. May be empty when files are attached. */
+  body?: InputMaybe<Scalars['String']['input']>;
+  idempotencyKey: Scalars['String']['input'];
+  reference: Scalars['String']['input'];
 };
 
 export type AddUserForPushInput = {
-  pushToken?: InputMaybe<Scalars["String"]["input"]>;
-  userId: Scalars["String"]["input"];
+  pushToken?: InputMaybe<Scalars['String']['input']>;
+  userId: Scalars['String']['input'];
 };
 
 export type AdminDashboardSummary = {
-  __typename?: "AdminDashboardSummary";
-  activeCount: Scalars["Int"]["output"];
-  completedCount: Scalars["Int"]["output"];
-  overdueCount: Scalars["Int"]["output"];
-  paidCount: Scalars["Int"]["output"];
-  totalAmount: Scalars["Float"]["output"];
-  totalTransactions: Scalars["Int"]["output"];
+  __typename?: 'AdminDashboardSummary';
+  activeCount: Scalars['Int']['output'];
+  completedCount: Scalars['Int']['output'];
+  overdueCount: Scalars['Int']['output'];
+  paidCount: Scalars['Int']['output'];
+  totalAmount: Scalars['Float']['output'];
+  totalTransactions: Scalars['Int']['output'];
 };
 
 /**
@@ -127,15 +138,15 @@ export type AdminDashboardSummary = {
  * and supplies.
  */
 export type ApproachDiligenceItem = {
-  __typename?: "ApproachDiligenceItem";
-  approachId: Scalars["ID"]["output"];
-  categoryId: Scalars["String"]["output"];
+  __typename?: 'ApproachDiligenceItem';
+  approachId: Scalars['ID']['output'];
+  categoryId: Scalars['String']['output'];
   /** issuer_to_buyer (seller asks) | buyer_to_issuer (buyer asks) */
-  direction: Scalars["String"]["output"];
+  direction: Scalars['String']['output'];
   documents: Array<DiligenceDocument>;
-  hint: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
-  label: Scalars["String"]["output"];
+  hint: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  label: Scalars['String']['output'];
   /**
    * The buyer's own documents already on file that answer this ask — verified in
    * their readiness assessment, or accepted by a seller on an earlier deal. Offer
@@ -148,12 +159,12 @@ export type ApproachDiligenceItem = {
    */
   onFile: Array<HeldDocument>;
   /** What the requester said needs addressing. Set while status is `queried`. */
-  query?: Maybe<Scalars["String"]["output"]>;
+  query?: Maybe<Scalars['String']['output']>;
   /** not_requested | requested | submitted | queried | accepted | waived */
-  status: Scalars["String"]["output"];
-  updatedAt: Scalars["String"]["output"];
+  status: Scalars['String']['output'];
+  updatedAt: Scalars['String']['output'];
   /** Why the requester let this go. Set when status is `waived`. */
-  waiverReason?: Maybe<Scalars["String"]["output"]>;
+  waiverReason?: Maybe<Scalars['String']['output']>;
 };
 
 /**
@@ -169,107 +180,121 @@ export type ApproachDiligenceItem = {
  * off than one handed none.
  */
 export type ApproachDocument = {
-  __typename?: "ApproachDocument";
-  documentUrl: Scalars["String"]["output"];
-  fileName: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
+  __typename?: 'ApproachDocument';
+  documentUrl: Scalars['String']['output'];
+  fileName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   /** `spa` for now — the sale and purchase agreement. */
-  kind: Scalars["String"]["output"];
-  uploadedAt: Scalars["String"]["output"];
+  kind: Scalars['String']['output'];
+  uploadedAt: Scalars['String']['output'];
 };
 
 export type ApproachDocumentInput = {
-  documentUrl: Scalars["String"]["input"];
-  fileName: Scalars["String"]["input"];
+  documentUrl: Scalars['String']['input'];
+  fileName: Scalars['String']['input'];
 };
 
-export type ApprovalStatus = "approved" | "declined" | "pending";
+export type ApprovalStatus =
+  | 'approved'
+  | 'declined'
+  | 'pending';
 
 export type Assessment = {
-  __typename?: "Assessment";
-  activatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  __typename?: 'Assessment';
+  activatedAt?: Maybe<Scalars['DateTime']['output']>;
   alerts?: Maybe<Array<AssessmentAlertSnapshot>>;
-  applicantUserId: Scalars["ID"]["output"];
-  applicationId: Scalars["String"]["output"];
-  categoryScores?: Maybe<Scalars["JSONObject"]["output"]>;
-  compositeScore?: Maybe<Scalars["Float"]["output"]>;
-  consentGivenAt?: Maybe<Scalars["DateTime"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  declarationGivenAt?: Maybe<Scalars["DateTime"]["output"]>;
+  applicantUserId: Scalars['ID']['output'];
+  applicationId: Scalars['String']['output'];
+  categoryScores?: Maybe<Scalars['JSONObject']['output']>;
+  compositeScore?: Maybe<Scalars['Float']['output']>;
+  consentGivenAt?: Maybe<Scalars['DateTime']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  declarationGivenAt?: Maybe<Scalars['DateTime']['output']>;
   documents: Array<AssessmentDocument>;
   /** @deprecated Use shareGrants, which carries counterpartyKind. This field lists only the financier ones. */
   financierShareGrants: Array<AssessmentFinancierShareGrant>;
-  id: Scalars["ID"]["output"];
-  officerId?: Maybe<Scalars["ID"]["output"]>;
-  officerNotes?: Maybe<Scalars["String"]["output"]>;
-  readinessBandCode?: Maybe<Scalars["String"]["output"]>;
+  id: Scalars['ID']['output'];
+  officerId?: Maybe<Scalars['ID']['output']>;
+  officerNotes?: Maybe<Scalars['String']['output']>;
+  readinessBandCode?: Maybe<Scalars['String']['output']>;
   responses: Array<AssessmentResponse>;
-  scoredAt?: Maybe<Scalars["DateTime"]["output"]>;
+  scoredAt?: Maybe<Scalars['DateTime']['output']>;
   /** Every share the subject has granted on this assessment, of any kind. */
   shareGrants: Array<AssessmentShareGrant>;
   status: AssessmentStatus;
   subjectEntity?: Maybe<Entity>;
-  subjectEntityId?: Maybe<Scalars["ID"]["output"]>;
-  submittedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  subjectEntityId?: Maybe<Scalars['ID']['output']>;
+  submittedAt?: Maybe<Scalars['DateTime']['output']>;
   template?: Maybe<AssessmentTemplate>;
-  templateId: Scalars["ID"]["output"];
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  templateId: Scalars['ID']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
-export type AssessmentAlertOperator = "eq" | "gt" | "gte" | "in" | "lt" | "lte" | "neq";
+export type AssessmentAlertOperator =
+  | 'eq'
+  | 'gt'
+  | 'gte'
+  | 'in'
+  | 'lt'
+  | 'lte'
+  | 'neq';
 
 export type AssessmentAlertRule = {
-  __typename?: "AssessmentAlertRule";
-  code: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
-  message: Scalars["String"]["output"];
+  __typename?: 'AssessmentAlertRule';
+  code: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  message: Scalars['String']['output'];
   operator: AssessmentAlertOperator;
   severity: AssessmentAlertSeverity;
-  templateId: Scalars["ID"]["output"];
-  threshold: Scalars["JSONObject"]["output"];
-  triggerQuestionCode: Scalars["String"]["output"];
+  templateId: Scalars['ID']['output'];
+  threshold: Scalars['JSONObject']['output'];
+  triggerQuestionCode: Scalars['String']['output'];
 };
 
 export type AssessmentAlertRuleFilter = {
-  code?: InputMaybe<Scalars["String"]["input"]>;
+  code?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<IdOperator>;
   templateId?: InputMaybe<IdOperator>;
 };
 
-export type AssessmentAlertSeverity = "critical" | "info" | "ok" | "warn";
+export type AssessmentAlertSeverity =
+  | 'critical'
+  | 'info'
+  | 'ok'
+  | 'warn';
 
 export type AssessmentAlertSnapshot = {
-  __typename?: "AssessmentAlertSnapshot";
-  code: Scalars["String"]["output"];
-  message: Scalars["String"]["output"];
+  __typename?: 'AssessmentAlertSnapshot';
+  code: Scalars['String']['output'];
+  message: Scalars['String']['output'];
   severity: AssessmentAlertSeverity;
 };
 
 export type AssessmentAnswerType =
-  | "boolean"
-  | "currency_ghs"
-  | "date"
-  | "multi_select"
-  | "number"
-  | "percentage"
-  | "single_select"
-  | "text"
-  | "years";
+  | 'boolean'
+  | 'currency_ghs'
+  | 'date'
+  | 'multi_select'
+  | 'number'
+  | 'percentage'
+  | 'single_select'
+  | 'text'
+  | 'years';
 
 export type AssessmentCategory = {
-  __typename?: "AssessmentCategory";
-  code: Scalars["String"]["output"];
-  description?: Maybe<Scalars["String"]["output"]>;
-  displayOrder: Scalars["Int"]["output"];
-  id: Scalars["ID"]["output"];
-  label: Scalars["String"]["output"];
+  __typename?: 'AssessmentCategory';
+  code: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  displayOrder: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  label: Scalars['String']['output'];
   questions: Array<AssessmentQuestion>;
-  templateId: Scalars["ID"]["output"];
-  weight: Scalars["Float"]["output"];
+  templateId: Scalars['ID']['output'];
+  weight: Scalars['Float']['output'];
 };
 
 export type AssessmentCategoryFilter = {
-  code?: InputMaybe<Scalars["String"]["input"]>;
+  code?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<IdOperator>;
   templateId?: InputMaybe<IdOperator>;
 };
@@ -279,39 +304,48 @@ export type AssessmentCategoryFilter = {
  * roles, and the counterparty entity must actually hold the one it is granted
  * under — the kind is a fact about them, not a label the sharer picks.
  */
-export type AssessmentCounterpartyKind = "financier" | "issuer";
+export type AssessmentCounterpartyKind =
+  | 'financier'
+  | 'issuer';
 
 export type AssessmentDocument = {
-  __typename?: "AssessmentDocument";
-  assessmentId: Scalars["ID"]["output"];
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  documentCode: Scalars["String"]["output"];
+  __typename?: 'AssessmentDocument';
+  assessmentId: Scalars['ID']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  documentCode: Scalars['String']['output'];
   /** @deprecated Renamed to fileUrl — this holds the document's storage URL, not a UUID. */
-  fileId?: Maybe<Scalars["ID"]["output"]>;
+  fileId?: Maybe<Scalars['ID']['output']>;
   /** Storage (e.g. Firebase) download URL of the uploaded document. */
-  fileUrl?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  notes?: Maybe<Scalars["String"]["output"]>;
+  fileUrl?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
   requirement: AssessmentDocumentRequirement;
   status: AssessmentDocumentStatus;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  uploadedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  verifiedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  verifiedBy?: Maybe<Scalars["ID"]["output"]>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  uploadedAt?: Maybe<Scalars['DateTime']['output']>;
+  verifiedAt?: Maybe<Scalars['DateTime']['output']>;
+  verifiedBy?: Maybe<Scalars['ID']['output']>;
 };
 
 export type AssessmentDocumentFilter = {
   assessmentId?: InputMaybe<IdOperator>;
-  documentCode?: InputMaybe<Scalars["String"]["input"]>;
+  documentCode?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<IdOperator>;
   status?: InputMaybe<AssessmentDocumentStatusOperator>;
 };
 
 export type AssessmentDocumentRequirement =
-  "advisory" | "financier" | "if_applicable" | "mandatory";
+  | 'advisory'
+  | 'financier'
+  | 'if_applicable'
+  | 'mandatory';
 
 export type AssessmentDocumentStatus =
-  "not_applicable" | "pending" | "rejected" | "uploaded" | "verified";
+  | 'not_applicable'
+  | 'pending'
+  | 'rejected'
+  | 'uploaded'
+  | 'verified';
 
 export type AssessmentDocumentStatusOperator = {
   eq?: InputMaybe<AssessmentDocumentStatus>;
@@ -319,7 +353,7 @@ export type AssessmentDocumentStatusOperator = {
 };
 
 export type AssessmentEntryState = {
-  __typename?: "AssessmentEntryState";
+  __typename?: 'AssessmentEntryState';
   activeAssessment?: Maybe<Assessment>;
   inProgressAssessment?: Maybe<Assessment>;
   latestTemplate?: Maybe<AssessmentTemplate>;
@@ -327,7 +361,7 @@ export type AssessmentEntryState = {
 
 export type AssessmentFilter = {
   applicantUserId?: InputMaybe<IdOperator>;
-  applicationId?: InputMaybe<Scalars["String"]["input"]>;
+  applicationId?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<IdOperator>;
   officerId?: InputMaybe<IdOperator>;
   status?: InputMaybe<AssessmentStatusOperator>;
@@ -336,19 +370,19 @@ export type AssessmentFilter = {
 };
 
 export type AssessmentFinancierShareGrant = {
-  __typename?: "AssessmentFinancierShareGrant";
-  assessmentId: Scalars["ID"]["output"];
-  counterpartyEntityId: Scalars["ID"]["output"];
+  __typename?: 'AssessmentFinancierShareGrant';
+  assessmentId: Scalars['ID']['output'];
+  counterpartyEntityId: Scalars['ID']['output'];
   counterpartyKind: AssessmentCounterpartyKind;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  expiresAt?: Maybe<Scalars["DateTime"]["output"]>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  expiresAt?: Maybe<Scalars['DateTime']['output']>;
   /** @deprecated Renamed to counterpartyEntityId on AssessmentShareGrant. */
-  financierEntityId: Scalars["ID"]["output"];
-  grantedAt: Scalars["DateTime"]["output"];
-  id: Scalars["ID"]["output"];
-  revokedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  financierEntityId: Scalars['ID']['output'];
+  grantedAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  revokedAt?: Maybe<Scalars['DateTime']['output']>;
   scope: AssessmentShareScope;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type AssessmentFinancierShareGrantFilter = {
@@ -361,7 +395,9 @@ export type AssessmentFinancierShareGrantFilter = {
  * Renamed to AssessmentShareScope when sharing stopped being financier-only
  * (AFR-230). Same two values, same column — kept so no client has to move.
  */
-export type AssessmentFinancierShareScope = "financing_request" | "profile_only";
+export type AssessmentFinancierShareScope =
+  | 'financing_request'
+  | 'profile_only';
 
 /**
  * The conclusion of an assessment, as shown to a counterparty it was shared with
@@ -380,29 +416,33 @@ export type AssessmentFinancierShareScope = "financing_request" | "profile_only"
  * we will widen it — the reverse is not available.
  */
 export type AssessmentOutput = {
-  __typename?: "AssessmentOutput";
+  __typename?: 'AssessmentOutput';
   alerts: Array<AssessmentAlertSnapshot>;
-  assessmentId: Scalars["ID"]["output"];
-  compositeScore?: Maybe<Scalars["Float"]["output"]>;
+  assessmentId: Scalars['ID']['output'];
+  compositeScore?: Maybe<Scalars['Float']['output']>;
   counterpartyKind: AssessmentCounterpartyKind;
-  readinessBandCode?: Maybe<Scalars["String"]["output"]>;
+  readinessBandCode?: Maybe<Scalars['String']['output']>;
   /** The band's human label, resolved from the template. */
-  readinessBandLabel?: Maybe<Scalars["String"]["output"]>;
+  readinessBandLabel?: Maybe<Scalars['String']['output']>;
   scope: AssessmentShareScope;
-  scoredAt?: Maybe<Scalars["DateTime"]["output"]>;
+  scoredAt?: Maybe<Scalars['DateTime']['output']>;
   /** When the subject shared it with you. */
-  sharedAt: Scalars["DateTime"]["output"];
+  sharedAt: Scalars['DateTime']['output'];
   /** Where the assessment itself has got to. Null scores until it is `activated`. */
   status: AssessmentStatus;
   /** Set instead when it is scored against an entity. */
-  subjectEntityId?: Maybe<Scalars["ID"]["output"]>;
+  subjectEntityId?: Maybe<Scalars['ID']['output']>;
   /** Display name of whichever of the two the assessment is about. */
-  subjectName?: Maybe<Scalars["String"]["output"]>;
+  subjectName?: Maybe<Scalars['String']['output']>;
   /** Set when the assessment is scored against a person. */
-  subjectUserId?: Maybe<Scalars["ID"]["output"]>;
+  subjectUserId?: Maybe<Scalars['ID']['output']>;
 };
 
-export type AssessmentPlatformRole = "agent" | "buyer" | "financier" | "issuer";
+export type AssessmentPlatformRole =
+  | 'agent'
+  | 'buyer'
+  | 'financier'
+  | 'issuer';
 
 export type AssessmentPlatformRoleOperator = {
   eq?: InputMaybe<AssessmentPlatformRole>;
@@ -410,111 +450,111 @@ export type AssessmentPlatformRoleOperator = {
 };
 
 export type AssessmentQuestion = {
-  __typename?: "AssessmentQuestion";
+  __typename?: 'AssessmentQuestion';
   answerType: AssessmentAnswerType;
-  categoryId?: Maybe<Scalars["ID"]["output"]>;
-  code: Scalars["String"]["output"];
-  displayOrder: Scalars["Int"]["output"];
-  guidance?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  isKycAutofill: Scalars["Boolean"]["output"];
-  isRequired: Scalars["Boolean"]["output"];
-  isScored: Scalars["Boolean"]["output"];
-  kycSourceField?: Maybe<Scalars["String"]["output"]>;
+  categoryId?: Maybe<Scalars['ID']['output']>;
+  code: Scalars['String']['output'];
+  displayOrder: Scalars['Int']['output'];
+  guidance?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  isKycAutofill: Scalars['Boolean']['output'];
+  isRequired: Scalars['Boolean']['output'];
+  isScored: Scalars['Boolean']['output'];
+  kycSourceField?: Maybe<Scalars['String']['output']>;
   options: Array<AssessmentQuestionOption>;
-  prompt: Scalars["String"]["output"];
-  retiredAt?: Maybe<Scalars["DateTime"]["output"]>;
+  prompt: Scalars['String']['output'];
+  retiredAt?: Maybe<Scalars['DateTime']['output']>;
   scoringBands: Array<AssessmentScoringBand>;
-  scoringLogicText?: Maybe<Scalars["String"]["output"]>;
-  templateId: Scalars["ID"]["output"];
-  unit?: Maybe<Scalars["String"]["output"]>;
-  verification?: Maybe<Scalars["String"]["output"]>;
-  weight: Scalars["Float"]["output"];
+  scoringLogicText?: Maybe<Scalars['String']['output']>;
+  templateId: Scalars['ID']['output'];
+  unit?: Maybe<Scalars['String']['output']>;
+  verification?: Maybe<Scalars['String']['output']>;
+  weight: Scalars['Float']['output'];
 };
 
 export type AssessmentQuestionFilter = {
   categoryId?: InputMaybe<IdOperator>;
-  code?: InputMaybe<Scalars["String"]["input"]>;
+  code?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<IdOperator>;
   templateId?: InputMaybe<IdOperator>;
 };
 
 export type AssessmentQuestionOption = {
-  __typename?: "AssessmentQuestionOption";
-  code: Scalars["String"]["output"];
-  displayOrder: Scalars["Int"]["output"];
-  id: Scalars["ID"]["output"];
-  label: Scalars["String"]["output"];
-  questionId: Scalars["ID"]["output"];
-  score: Scalars["Int"]["output"];
+  __typename?: 'AssessmentQuestionOption';
+  code: Scalars['String']['output'];
+  displayOrder: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  label: Scalars['String']['output'];
+  questionId: Scalars['ID']['output'];
+  score: Scalars['Int']['output'];
 };
 
 export type AssessmentQuestionOptionFilter = {
-  code?: InputMaybe<Scalars["String"]["input"]>;
+  code?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<IdOperator>;
   questionId?: InputMaybe<IdOperator>;
 };
 
 export type AssessmentReadinessBand = {
-  __typename?: "AssessmentReadinessBand";
-  action?: Maybe<Scalars["String"]["output"]>;
-  code: Scalars["String"]["output"];
-  displayOrder: Scalars["Int"]["output"];
-  guidance?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  label: Scalars["String"]["output"];
-  maxScore: Scalars["Int"]["output"];
-  minScore: Scalars["Int"]["output"];
-  templateId: Scalars["ID"]["output"];
+  __typename?: 'AssessmentReadinessBand';
+  action?: Maybe<Scalars['String']['output']>;
+  code: Scalars['String']['output'];
+  displayOrder: Scalars['Int']['output'];
+  guidance?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  label: Scalars['String']['output'];
+  maxScore: Scalars['Int']['output'];
+  minScore: Scalars['Int']['output'];
+  templateId: Scalars['ID']['output'];
 };
 
 export type AssessmentReadinessBandFilter = {
-  code?: InputMaybe<Scalars["String"]["input"]>;
+  code?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<IdOperator>;
   templateId?: InputMaybe<IdOperator>;
 };
 
 export type AssessmentResponse = {
-  __typename?: "AssessmentResponse";
-  assessmentId: Scalars["ID"]["output"];
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  id: Scalars["ID"]["output"];
-  questionCode: Scalars["String"]["output"];
-  questionId: Scalars["ID"]["output"];
-  score?: Maybe<Scalars["Int"]["output"]>;
-  scoredByRuleId?: Maybe<Scalars["ID"]["output"]>;
-  selectedOptionIds?: Maybe<Array<Scalars["ID"]["output"]>>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  valueBoolean?: Maybe<Scalars["Boolean"]["output"]>;
-  valueDate?: Maybe<Scalars["Date"]["output"]>;
-  valueNumber?: Maybe<Scalars["Float"]["output"]>;
-  valueText?: Maybe<Scalars["String"]["output"]>;
-  weightedScore?: Maybe<Scalars["Float"]["output"]>;
+  __typename?: 'AssessmentResponse';
+  assessmentId: Scalars['ID']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  questionCode: Scalars['String']['output'];
+  questionId: Scalars['ID']['output'];
+  score?: Maybe<Scalars['Int']['output']>;
+  scoredByRuleId?: Maybe<Scalars['ID']['output']>;
+  selectedOptionIds?: Maybe<Array<Scalars['ID']['output']>>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  valueBoolean?: Maybe<Scalars['Boolean']['output']>;
+  valueDate?: Maybe<Scalars['Date']['output']>;
+  valueNumber?: Maybe<Scalars['Float']['output']>;
+  valueText?: Maybe<Scalars['String']['output']>;
+  weightedScore?: Maybe<Scalars['Float']['output']>;
 };
 
 export type AssessmentResponseFilter = {
   assessmentId?: InputMaybe<IdOperator>;
   id?: InputMaybe<IdOperator>;
-  questionCode?: InputMaybe<Scalars["String"]["input"]>;
+  questionCode?: InputMaybe<Scalars['String']['input']>;
   questionId?: InputMaybe<IdOperator>;
 };
 
 export type AssessmentScoreResult = {
-  __typename?: "AssessmentScoreResult";
+  __typename?: 'AssessmentScoreResult';
   alerts: Array<AssessmentAlertSnapshot>;
-  categoryScores: Scalars["JSONObject"]["output"];
-  compositeScore: Scalars["Float"]["output"];
-  readinessBandCode?: Maybe<Scalars["String"]["output"]>;
+  categoryScores: Scalars['JSONObject']['output'];
+  compositeScore: Scalars['Float']['output'];
+  readinessBandCode?: Maybe<Scalars['String']['output']>;
 };
 
 export type AssessmentScoringBand = {
-  __typename?: "AssessmentScoringBand";
-  displayOrder: Scalars["Int"]["output"];
-  id: Scalars["ID"]["output"];
-  maxValue?: Maybe<Scalars["Float"]["output"]>;
-  minValue?: Maybe<Scalars["Float"]["output"]>;
-  questionId: Scalars["ID"]["output"];
-  score: Scalars["Int"]["output"];
+  __typename?: 'AssessmentScoringBand';
+  displayOrder: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  maxValue?: Maybe<Scalars['Float']['output']>;
+  minValue?: Maybe<Scalars['Float']['output']>;
+  questionId: Scalars['ID']['output'];
+  score: Scalars['Int']['output'];
 };
 
 export type AssessmentScoringBandFilter = {
@@ -530,17 +570,17 @@ export type AssessmentScoringBandFilter = {
  * row.
  */
 export type AssessmentShareGrant = {
-  __typename?: "AssessmentShareGrant";
-  assessmentId: Scalars["ID"]["output"];
-  counterpartyEntityId: Scalars["ID"]["output"];
+  __typename?: 'AssessmentShareGrant';
+  assessmentId: Scalars['ID']['output'];
+  counterpartyEntityId: Scalars['ID']['output'];
   counterpartyKind: AssessmentCounterpartyKind;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  expiresAt?: Maybe<Scalars["DateTime"]["output"]>;
-  grantedAt: Scalars["DateTime"]["output"];
-  id: Scalars["ID"]["output"];
-  revokedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  expiresAt?: Maybe<Scalars['DateTime']['output']>;
+  grantedAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  revokedAt?: Maybe<Scalars['DateTime']['output']>;
   scope: AssessmentShareScope;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type AssessmentShareGrantFilter = {
@@ -552,17 +592,25 @@ export type AssessmentShareGrantFilter = {
 
 export type AssessmentShareScope =
   /** For the transaction in hand rather than the standing profile. */
-  "financing_request" | "profile_only";
+  | 'financing_request'
+  | 'profile_only';
 
 export type AssessmentStatus =
-  "activated" | "archived" | "draft" | "officer_review" | "returned" | "submitted";
+  | 'activated'
+  | 'archived'
+  | 'draft'
+  | 'officer_review'
+  | 'returned'
+  | 'submitted';
 
 export type AssessmentStatusOperator = {
   eq?: InputMaybe<AssessmentStatus>;
   in?: InputMaybe<Array<AssessmentStatus>>;
 };
 
-export type AssessmentSubjectType = "entity" | "user";
+export type AssessmentSubjectType =
+  | 'entity'
+  | 'user';
 
 export type AssessmentSubjectTypeOperator = {
   eq?: InputMaybe<AssessmentSubjectType>;
@@ -570,54 +618,61 @@ export type AssessmentSubjectTypeOperator = {
 };
 
 export type AssessmentTemplate = {
-  __typename?: "AssessmentTemplate";
+  __typename?: 'AssessmentTemplate';
   alertRules: Array<AssessmentAlertRule>;
   categories: Array<AssessmentCategory>;
-  code: Scalars["String"]["output"];
-  consentText?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  declarationText?: Maybe<Scalars["String"]["output"]>;
+  code: Scalars['String']['output'];
+  consentText?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  declarationText?: Maybe<Scalars['String']['output']>;
   history: Array<AssessmentTemplateHistory>;
-  id: Scalars["ID"]["output"];
-  legalNotice?: Maybe<Scalars["String"]["output"]>;
-  maxScorePerParameter: Scalars["Int"]["output"];
-  name: Scalars["String"]["output"];
+  id: Scalars['ID']['output'];
+  legalNotice?: Maybe<Scalars['String']['output']>;
+  maxScorePerParameter: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
   platformRole: AssessmentPlatformRole;
-  publishedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  publishedAt?: Maybe<Scalars['DateTime']['output']>;
   questions: Array<AssessmentQuestion>;
   readinessBands: Array<AssessmentReadinessBand>;
   status: AssessmentTemplateStatus;
   subjectType: AssessmentSubjectType;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  version: Scalars["String"]["output"];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  version: Scalars['String']['output'];
 };
 
 export type AssessmentTemplateFilter = {
-  code?: InputMaybe<Scalars["String"]["input"]>;
+  code?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<IdOperator>;
   platformRole?: InputMaybe<AssessmentPlatformRoleOperator>;
   status?: InputMaybe<AssessmentTemplateStatusOperator>;
   subjectType?: InputMaybe<AssessmentSubjectTypeOperator>;
-  version?: InputMaybe<Scalars["String"]["input"]>;
+  version?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type AssessmentTemplateHistory = {
-  __typename?: "AssessmentTemplateHistory";
+  __typename?: 'AssessmentTemplateHistory';
   action: AssessmentTemplateHistoryAction;
-  actorEmail?: Maybe<Scalars["String"]["output"]>;
-  actorId?: Maybe<Scalars["String"]["output"]>;
-  actorType?: Maybe<Scalars["String"]["output"]>;
-  createdAt: Scalars["DateTime"]["output"];
+  actorEmail?: Maybe<Scalars['String']['output']>;
+  actorId?: Maybe<Scalars['String']['output']>;
+  actorType?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
   fromStatus?: Maybe<AssessmentTemplateStatus>;
-  id: Scalars["ID"]["output"];
-  templateId: Scalars["ID"]["output"];
+  id: Scalars['ID']['output'];
+  templateId: Scalars['ID']['output'];
   toStatus: AssessmentTemplateStatus;
 };
 
 export type AssessmentTemplateHistoryAction =
-  "created" | "published" | "reactivated" | "retired" | "updated";
+  | 'created'
+  | 'published'
+  | 'reactivated'
+  | 'retired'
+  | 'updated';
 
-export type AssessmentTemplateStatus = "active" | "draft" | "retired";
+export type AssessmentTemplateStatus =
+  | 'active'
+  | 'draft'
+  | 'retired';
 
 export type AssessmentTemplateStatusOperator = {
   eq?: InputMaybe<AssessmentTemplateStatus>;
@@ -625,38 +680,44 @@ export type AssessmentTemplateStatusOperator = {
 };
 
 export type AssetValueSnapshot = {
-  __typename?: "AssetValueSnapshot";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  id: Scalars["ID"]["output"];
-  metadata?: Maybe<Scalars["JSONObject"]["output"]>;
-  ownerId: Scalars["ID"]["output"];
-  properties?: Maybe<Array<Maybe<Scalars["JSONObject"]["output"]>>>;
-  timestamp: Scalars["DateTime"]["output"];
-  totalValue: Scalars["Float"]["output"];
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  valueByPropertyType?: Maybe<Scalars["JSONObject"]["output"]>;
-  valueByRegion?: Maybe<Scalars["JSONObject"]["output"]>;
-  valueByStatus?: Maybe<Scalars["JSONObject"]["output"]>;
+  __typename?: 'AssetValueSnapshot';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  metadata?: Maybe<Scalars['JSONObject']['output']>;
+  ownerId: Scalars['ID']['output'];
+  properties?: Maybe<Array<Maybe<Scalars['JSONObject']['output']>>>;
+  timestamp: Scalars['DateTime']['output'];
+  totalValue: Scalars['Float']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  valueByPropertyType?: Maybe<Scalars['JSONObject']['output']>;
+  valueByRegion?: Maybe<Scalars['JSONObject']['output']>;
+  valueByStatus?: Maybe<Scalars['JSONObject']['output']>;
 };
 
 export type AssetValueSnapshotFilter = {
-  id?: InputMaybe<Scalars["ID"]["input"]>;
-  ownerId?: InputMaybe<Scalars["ID"]["input"]>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  ownerId?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type AssignSupportRequestInput = {
+  reference: Scalars['String']['input'];
+  /** The support user who owns it. Null unassigns. */
+  supportUserId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type AuditLog = {
-  __typename?: "AuditLog";
-  action: Scalars["String"]["output"];
-  actorEmail?: Maybe<Scalars["String"]["output"]>;
-  actorId?: Maybe<Scalars["ID"]["output"]>;
-  actorType?: Maybe<Scalars["String"]["output"]>;
-  changes?: Maybe<Scalars["JSONObject"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  entity: Scalars["String"]["output"];
-  entityId?: Maybe<Scalars["String"]["output"]>;
-  errorMessage?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  metadata?: Maybe<Scalars["JSONObject"]["output"]>;
+  __typename?: 'AuditLog';
+  action: Scalars['String']['output'];
+  actorEmail?: Maybe<Scalars['String']['output']>;
+  actorId?: Maybe<Scalars['ID']['output']>;
+  actorType?: Maybe<Scalars['String']['output']>;
+  changes?: Maybe<Scalars['JSONObject']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  entity: Scalars['String']['output'];
+  entityId?: Maybe<Scalars['String']['output']>;
+  errorMessage?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  metadata?: Maybe<Scalars['JSONObject']['output']>;
   status: AuditLogStatus;
 };
 
@@ -672,11 +733,13 @@ export type AuditLogFilter = {
   status?: InputMaybe<AuditLogStatus>;
 };
 
-export type AuditLogStatus = "FAILURE" | "SUCCESS";
+export type AuditLogStatus =
+  | 'FAILURE'
+  | 'SUCCESS';
 
 /** One period end on the loan-book value chart. */
 export type AumPoint = {
-  __typename?: "AumPoint";
+  __typename?: 'AumPoint';
   /**
    * What `value` is denominated in.
    *
@@ -684,11 +747,11 @@ export type AumPoint = {
    * currency most of it is in rather than silently adding cedis to dollars; a
    * genuinely mixed book wants a series per currency, which is a different shape.
    */
-  currency: Scalars["String"]["output"];
+  currency: Scalars['String']['output'];
   /** Period end, so the client can label it in the viewer's locale. */
-  periodEnd: Scalars["DateTime"]["output"];
+  periodEnd: Scalars['DateTime']['output'];
   /** Total outstanding across the lender's loans that were live at that date. */
-  value: Scalars["Float"]["output"];
+  value: Scalars['Float']['output'];
 };
 
 /**
@@ -696,83 +759,86 @@ export type AumPoint = {
  * emailed OTP via `verifyLoginOtp` to obtain a session.
  */
 export type AuthPayload = {
-  __typename?: "AuthPayload";
-  accessToken?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'AuthPayload';
+  accessToken?: Maybe<Scalars['String']['output']>;
   /** Masked address the OTP was sent to, e.g. `jo***@example.com`. */
-  email?: Maybe<Scalars["String"]["output"]>;
-  message?: Maybe<Scalars["String"]["output"]>;
+  email?: Maybe<Scalars['String']['output']>;
+  message?: Maybe<Scalars['String']['output']>;
   /** True when the account has 2FA enabled and an OTP has been emailed. */
-  mfaRequired?: Maybe<Scalars["Boolean"]["output"]>;
-  refreshToken?: Maybe<Scalars["String"]["output"]>;
+  mfaRequired?: Maybe<Scalars['Boolean']['output']>;
+  refreshToken?: Maybe<Scalars['String']['output']>;
   user?: Maybe<User>;
   /** Present only on an MFA challenge; pass back to `verifyLoginOtp`. */
-  userId?: Maybe<Scalars["ID"]["output"]>;
+  userId?: Maybe<Scalars['ID']['output']>;
 };
 
 export type BankDetailInput = {
-  accountName: Scalars["String"]["input"];
-  accountNumber: Scalars["String"]["input"];
-  accountType?: InputMaybe<Scalars["String"]["input"]>;
-  bankBranch?: InputMaybe<Scalars["String"]["input"]>;
-  bankName: Scalars["String"]["input"];
-  swiftCode?: InputMaybe<Scalars["String"]["input"]>;
+  accountName: Scalars['String']['input'];
+  accountNumber: Scalars['String']['input'];
+  accountType?: InputMaybe<Scalars['String']['input']>;
+  bankBranch?: InputMaybe<Scalars['String']['input']>;
+  bankName: Scalars['String']['input'];
+  swiftCode?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type BondSubType = "FLOATING_RATE" | "PLAIN_VANILLA" | "ZERO_COUPON";
+export type BondSubType =
+  | 'FLOATING_RATE'
+  | 'PLAIN_VANILLA'
+  | 'ZERO_COUPON';
 
 export type BooleanOperator = {
-  eq?: InputMaybe<Scalars["Boolean"]["input"]>;
+  eq?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** A borrower-raised request against a loan (review-window banner + lender alerts panel). */
 export type BorrowerLoanRequest = {
-  __typename?: "BorrowerLoanRequest";
-  borrowerName: Scalars["String"]["output"];
-  createdAt: Scalars["DateTime"]["output"];
+  __typename?: 'BorrowerLoanRequest';
+  borrowerName: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
   /** The StatusDeclaration being queried, when kind = declaration_review. */
-  declarationId?: Maybe<Scalars["ID"]["output"]>;
+  declarationId?: Maybe<Scalars['ID']['output']>;
   /** Optional supporting-file URL. */
-  doc?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
+  doc?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
   kind: LoanRequestKind;
-  loanId?: Maybe<Scalars["ID"]["output"]>;
-  offerRequestId: Scalars["ID"]["output"];
-  reason?: Maybe<Scalars["String"]["output"]>;
+  loanId?: Maybe<Scalars['ID']['output']>;
+  offerRequestId: Scalars['ID']['output'];
+  reason?: Maybe<Scalars['String']['output']>;
   status: LoanRequestStatus;
 };
 
 export type BulkCreatePreTokenizedUnitsResponse = {
-  __typename?: "BulkCreatePreTokenizedUnitsResponse";
+  __typename?: 'BulkCreatePreTokenizedUnitsResponse';
   /** Units inserted for the first time. */
-  created: Scalars["Int"]["output"];
-  success: Scalars["Boolean"]["output"];
+  created: Scalars['Int']['output'];
+  success: Scalars['Boolean']['output'];
   units: Array<PreTokenizedUnit>;
   /** Units that already existed on the portfolio and were overwritten. */
-  updated: Scalars["Int"]["output"];
+  updated: Scalars['Int']['output'];
 };
 
 export type BulkUpdatePreTokenizedUnitsResponse = {
-  __typename?: "BulkUpdatePreTokenizedUnitsResponse";
-  success: Scalars["Boolean"]["output"];
-  updated: Scalars["Int"]["output"];
+  __typename?: 'BulkUpdatePreTokenizedUnitsResponse';
+  success: Scalars['Boolean']['output'];
+  updated: Scalars['Int']['output'];
 };
 
 export type BuyerProject = {
-  __typename?: "BuyerProject";
-  buyerId: Scalars["ID"]["output"];
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  depositAmount?: Maybe<Scalars["Float"]["output"]>;
-  id: Scalars["ID"]["output"];
-  isArchived?: Maybe<Scalars["Boolean"]["output"]>;
-  propertyId: Scalars["ID"]["output"];
-  status: Scalars["String"]["output"];
-  tokensOwned?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  __typename?: 'BuyerProject';
+  buyerId: Scalars['ID']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  depositAmount?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  isArchived?: Maybe<Scalars['Boolean']['output']>;
+  propertyId: Scalars['ID']['output'];
+  status: Scalars['String']['output'];
+  tokensOwned?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type BuyerProjectFilter = {
-  buyerId?: InputMaybe<Scalars["ID"]["input"]>;
-  id?: InputMaybe<Scalars["ID"]["input"]>;
+  buyerId?: InputMaybe<Scalars['ID']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
 };
 
 /**
@@ -781,7 +847,7 @@ export type BuyerProjectFilter = {
  * and `owned` (financing discharged/closed, or paid outright in cash).
  */
 export type BuyerPropertyHoldings = {
-  __typename?: "BuyerPropertyHoldings";
+  __typename?: 'BuyerPropertyHoldings';
   inProgress: Array<Property>;
   owned: Array<Property>;
 };
@@ -797,50 +863,50 @@ export type BuyerPropertyHoldings = {
  */
 export type CashPurchaseStage =
   /** Terminal — tokens minted, title transferred. */
-  | "closed"
+  | 'closed'
   /** The deposit is paid. The issuer responds next. */
-  | "commitment_deposit_paid"
+  | 'commitment_deposit_paid'
   /** The issuer confirmed every completion condition. */
-  | "completion_conditions_confirmed"
+  | 'completion_conditions_confirmed'
   /** Every request accepted or waived, both directions. */
-  | "diligence_complete"
+  | 'diligence_complete'
   /** The outstanding balance is paid into escrow. */
-  | "escrow_funded"
+  | 'escrow_funded'
   /** The escrowed funds reached the issuer. */
-  | "funds_released"
+  | 'funds_released'
   /** The buyer signed off inspection and valuation. */
-  | "inspection_complete"
+  | 'inspection_complete'
   /** The issuer accepted the offer. */
-  | "offer_responded"
+  | 'offer_responded'
   /** Placed. The buyer pays the 10% commitment deposit from their wallet here. */
-  | "request_submitted"
+  | 'request_submitted'
   /** An agreement exists. Draft or out for signature — see saleAgreementStatus. */
-  | "sale_agreement_pending"
+  | 'sale_agreement_pending'
   /** Executed by the issuer's countersignature. The balance is paid next. */
-  | "sale_agreement_signed"
+  | 'sale_agreement_signed'
   /** Price, structure and completion date agreed — the diligence exchange opens. */
-  | "terms_agreed"
+  | 'terms_agreed'
   /** The buyer let the withdrawal window close. Past here they cannot walk away. */
-  | "withdrawal_window_closed";
+  | 'withdrawal_window_closed';
 
 export type CashPurchaseTxn = {
-  __typename?: "CashPurchaseTxn";
+  __typename?: 'CashPurchaseTxn';
   /**
    * What is still to be paid: max(0, unitPrice − confirmed escrow in).
    *
    * The commitment deposit is already in the same pot and nets off, so this falls
    * as money clears. Returned and reversed legs do not count as confirmed.
    */
-  balanceDue: Scalars["Float"]["output"];
+  balanceDue: Scalars['Float']['output'];
   /** The buyer paying with personal funds. */
   buyer?: Maybe<User>;
   /** The buyer's signature. Recorded first; does not execute the agreement. */
   buyerSignature?: Maybe<SpaSignature>;
-  createdAt: Scalars["String"]["output"];
-  currency: Scalars["String"]["output"];
-  depositAmount: Scalars["Float"]["output"];
+  createdAt: Scalars['String']['output'];
+  currency: Scalars['String']['output'];
+  depositAmount: Scalars['Float']['output'];
   /** The reference the buyer quotes when transferring the 10% deposit. */
-  depositReference: Scalars["String"]["output"];
+  depositReference: Scalars['String']['output'];
   /**
    * The §4 exchange, both directions. Seeded at `agreeTerms` — before terms are
    * agreed there is no deal to run diligence on, so this is empty rather than
@@ -854,7 +920,7 @@ export type CashPurchaseTxn = {
   events: Array<CashStageEvent>;
   /** The issuer's closing document. `completeTitleTransfer` is gated on it. */
   finalDisclosure?: Maybe<FinalDisclosure>;
-  id: Scalars["ID"]["output"];
+  id: Scalars['ID']['output'];
   /** §2.1-2.3. Null on deals placed before the inspection contract shipped. */
   inspection?: Maybe<TransactionInspection>;
   /** The issuer selling the unit — the counterparty on the issuer tracker. */
@@ -865,12 +931,12 @@ export type CashPurchaseTxn = {
    * The PERSONAL_FUNDS offer request this purchase realizes. Use it to reach the
    * offer-request-anchored surfaces (documents, holdings) for this deal.
    */
-  offerRequestId?: Maybe<Scalars["ID"]["output"]>;
+  offerRequestId?: Maybe<Scalars['ID']['output']>;
   /**
    * The parent portfolio's display name. Kept on the transaction because
    * Property.portfolio is only populated by the listing brokers.
    */
-  projectName?: Maybe<Scalars["String"]["output"]>;
+  projectName?: Maybe<Scalars['String']['output']>;
   /** The unit being bought. Read live off the properties table, never a snapshot. */
   property?: Maybe<Property>;
   /**
@@ -881,22 +947,22 @@ export type CashPurchaseTxn = {
    */
   receipts?: Maybe<Array<SellerReceipt>>;
   /** Human-facing code, e.g. AFR-CASH-2026-1234 — display this, route on `id`. */
-  reference: Scalars["String"]["output"];
+  reference: Scalars['String']['output'];
   /** When the agreement was sent to the buyer for signature. */
-  saleAgreementSentAt?: Maybe<Scalars["String"]["output"]>;
+  saleAgreementSentAt?: Maybe<Scalars['String']['output']>;
   /** Null until the issuer uploads an agreement. */
   saleAgreementStatus?: Maybe<SaleAgreementStatus>;
   /**
    * The unsigned SPA the issuer uploaded. Null for the buyer while
    * `saleAgreementStatus` is `draft` — the draft is issuer-only until it is sent.
    */
-  saleAgreementUrl?: Maybe<Scalars["String"]["output"]>;
+  saleAgreementUrl?: Maybe<Scalars['String']['output']>;
   /** Counts reissues — 1 for the first round, incremented on every reissue. */
-  saleAgreementVersion: Scalars["Int"]["output"];
+  saleAgreementVersion: Scalars['Int']['output'];
   /** Only present once the balance has been paid. */
   settlement?: Maybe<CashSettlement>;
   /** The deadline the issuer set at send time, if any. */
-  signingDeadline?: Maybe<Scalars["String"]["output"]>;
+  signingDeadline?: Maybe<Scalars['String']['output']>;
   stage: CashPurchaseStage;
   /**
    * The same history as `events`, in the flow-agnostic `StageEvent` shape (§6).
@@ -907,31 +973,31 @@ export type CashPurchaseTxn = {
    */
   stageEvents: Array<StageEvent>;
   /** active | withdrawn | closed */
-  status: Scalars["String"]["output"];
+  status: Scalars['String']['output'];
   /** Set at settlement; 1 token = GHS 1.00 at issuance. */
-  tokensTransferred?: Maybe<Scalars["Float"]["output"]>;
-  unitPrice: Scalars["Float"]["output"];
-  updatedAt: Scalars["String"]["output"];
+  tokensTransferred?: Maybe<Scalars['Float']['output']>;
+  unitPrice: Scalars['Float']['output'];
+  updatedAt: Scalars['String']['output'];
   /** Set when either party walked away inside the withdrawal window. */
   withdrawal?: Maybe<CashWithdrawal>;
 };
 
 export type CashSettlement = {
-  __typename?: "CashSettlement";
-  amount: Scalars["Float"]["output"];
-  method: Scalars["String"]["output"];
-  paidAt: Scalars["String"]["output"];
-  reference: Scalars["String"]["output"];
+  __typename?: 'CashSettlement';
+  amount: Scalars['Float']['output'];
+  method: Scalars['String']['output'];
+  paidAt: Scalars['String']['output'];
+  reference: Scalars['String']['output'];
 };
 
 export type CashStageEvent = {
-  __typename?: "CashStageEvent";
-  actor: Scalars["String"]["output"];
+  __typename?: 'CashStageEvent';
+  actor: Scalars['String']['output'];
   /** Null on the initial event. */
   fromStage?: Maybe<CashPurchaseStage>;
-  id: Scalars["ID"]["output"];
-  note: Scalars["String"]["output"];
-  timestamp: Scalars["String"]["output"];
+  id: Scalars['ID']['output'];
+  note: Scalars['String']['output'];
+  timestamp: Scalars['String']['output'];
   toStage: CashPurchaseStage;
 };
 
@@ -945,17 +1011,17 @@ export type CashStageEvent = {
  * what is printed on it.
  */
 export type CashTransactionDocument = {
-  __typename?: "CashTransactionDocument";
-  documentUrl: Scalars["String"]["output"];
-  fileName?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
+  __typename?: 'CashTransactionDocument';
+  documentUrl: Scalars['String']['output'];
+  fileName?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
   /** spa_annex | invoice | receipt */
-  kind: Scalars["String"]["output"];
+  kind: Scalars['String']['output'];
   /** Required on an annex, optional on a receipt, null on the invoice. */
-  label?: Maybe<Scalars["String"]["output"]>;
-  uploadedAt: Scalars["String"]["output"];
+  label?: Maybe<Scalars['String']['output']>;
+  uploadedAt: Scalars['String']['output'];
   /** Issuer */
-  uploadedBy: Scalars["String"]["output"];
+  uploadedBy: Scalars['String']['output'];
 };
 
 /**
@@ -968,7 +1034,7 @@ export type CashTransactionDocument = {
  * `walletTxn` is the row the payer will see on their wallet activity list.
  */
 export type CashWalletPaymentResult = {
-  __typename?: "CashWalletPaymentResult";
+  __typename?: 'CashWalletPaymentResult';
   escrowEvent: EscrowEvent;
   transaction: CashPurchaseTxn;
   /**
@@ -980,68 +1046,68 @@ export type CashWalletPaymentResult = {
 
 /** Who walked away, when, and why. The reason is kept permanently. */
 export type CashWithdrawal = {
-  __typename?: "CashWithdrawal";
+  __typename?: 'CashWithdrawal';
   /** Buyer | Issuer */
-  by: Scalars["String"]["output"];
-  reason: Scalars["String"]["output"];
-  withdrawnAt: Scalars["String"]["output"];
+  by: Scalars['String']['output'];
+  reason: Scalars['String']['output'];
+  withdrawnAt: Scalars['String']['output'];
 };
 
 export type CheckLandInput = {
-  boundary: Scalars["JSONObject"]["input"];
+  boundary: Scalars['JSONObject']['input'];
 };
 
 export type CompleteOnboardingInput = {
-  address?: InputMaybe<Scalars["String"]["input"]>;
+  address?: InputMaybe<Scalars['String']['input']>;
   bankDetails?: InputMaybe<Array<BankDetailInput>>;
-  city?: InputMaybe<Scalars["String"]["input"]>;
-  countryCode?: InputMaybe<Scalars["String"]["input"]>;
-  countryOfResidence?: InputMaybe<Scalars["String"]["input"]>;
-  defaultRole?: InputMaybe<Scalars["String"]["input"]>;
-  digitalSignature?: InputMaybe<Scalars["String"]["input"]>;
-  district?: InputMaybe<Scalars["String"]["input"]>;
-  employer?: InputMaybe<Scalars["String"]["input"]>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  countryCode?: InputMaybe<Scalars['String']['input']>;
+  countryOfResidence?: InputMaybe<Scalars['String']['input']>;
+  defaultRole?: InputMaybe<Scalars['String']['input']>;
+  digitalSignature?: InputMaybe<Scalars['String']['input']>;
+  district?: InputMaybe<Scalars['String']['input']>;
+  employer?: InputMaybe<Scalars['String']['input']>;
   entity?: InputMaybe<EntityProfileInput>;
-  faceImageUrl?: InputMaybe<Scalars["String"]["input"]>;
-  firstName?: InputMaybe<Scalars["String"]["input"]>;
-  gender?: InputMaybe<Scalars["String"]["input"]>;
+  faceImageUrl?: InputMaybe<Scalars['String']['input']>;
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  gender?: InputMaybe<Scalars['String']['input']>;
   ghanaCard?: InputMaybe<IdentityDocumentInput>;
-  gpsAddress?: InputMaybe<Scalars["String"]["input"]>;
-  lastName?: InputMaybe<Scalars["String"]["input"]>;
-  momoNumber?: InputMaybe<Scalars["String"]["input"]>;
-  monthlyNetIncome?: InputMaybe<Scalars["Float"]["input"]>;
-  nationality?: InputMaybe<Scalars["String"]["input"]>;
-  occupation?: InputMaybe<Scalars["String"]["input"]>;
+  gpsAddress?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  momoNumber?: InputMaybe<Scalars['String']['input']>;
+  monthlyNetIncome?: InputMaybe<Scalars['Float']['input']>;
+  nationality?: InputMaybe<Scalars['String']['input']>;
+  occupation?: InputMaybe<Scalars['String']['input']>;
   passport?: InputMaybe<IdentityDocumentInput>;
-  phoneNumber?: InputMaybe<Scalars["String"]["input"]>;
-  postalCode?: InputMaybe<Scalars["String"]["input"]>;
-  profileImage?: InputMaybe<Scalars["String"]["input"]>;
-  region?: InputMaybe<Scalars["String"]["input"]>;
-  streetAddress?: InputMaybe<Scalars["String"]["input"]>;
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  postalCode?: InputMaybe<Scalars['String']['input']>;
+  profileImage?: InputMaybe<Scalars['String']['input']>;
+  region?: InputMaybe<Scalars['String']['input']>;
+  streetAddress?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CompleteOnboardingPayload = {
-  __typename?: "CompleteOnboardingPayload";
-  accessToken?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'CompleteOnboardingPayload';
+  accessToken?: Maybe<Scalars['String']['output']>;
   entity?: Maybe<Entity>;
   user: User;
 };
 
 export type ComplianceAdminSectionResponse = {
-  __typename?: "ComplianceAdminSectionResponse";
+  __typename?: 'ComplianceAdminSectionResponse';
   section?: Maybe<ComplianceSection>;
-  success: Scalars["Boolean"]["output"];
+  success: Scalars['Boolean']['output'];
 };
 
 export type ComplianceAdminSubmissionResponse = {
-  __typename?: "ComplianceAdminSubmissionResponse";
+  __typename?: 'ComplianceAdminSubmissionResponse';
   submission?: Maybe<ComplianceSubmission>;
-  success: Scalars["Boolean"]["output"];
+  success: Scalars['Boolean']['output'];
 };
 
 export type ComplianceAdminTemplateResponse = {
-  __typename?: "ComplianceAdminTemplateResponse";
-  success: Scalars["Boolean"]["output"];
+  __typename?: 'ComplianceAdminTemplateResponse';
+  success: Scalars['Boolean']['output'];
   template?: Maybe<ComplianceDocumentTemplate>;
 };
 
@@ -1051,20 +1117,20 @@ export type ComplianceAdminTemplateResponse = {
  * reviewer/note diffs, who reviewed what). Append-only.
  */
 export type ComplianceAuditEvent = {
-  __typename?: "ComplianceAuditEvent";
-  action: Scalars["String"]["output"];
-  actorEmail?: Maybe<Scalars["String"]["output"]>;
-  actorId?: Maybe<Scalars["String"]["output"]>;
-  actorType?: Maybe<Scalars["String"]["output"]>;
-  changes?: Maybe<Scalars["JSONObject"]["output"]>;
-  createdAt: Scalars["DateTime"]["output"];
-  entity: Scalars["String"]["output"];
-  entityId: Scalars["ID"]["output"];
+  __typename?: 'ComplianceAuditEvent';
+  action: Scalars['String']['output'];
+  actorEmail?: Maybe<Scalars['String']['output']>;
+  actorId?: Maybe<Scalars['String']['output']>;
+  actorType?: Maybe<Scalars['String']['output']>;
+  changes?: Maybe<Scalars['JSONObject']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  entity: Scalars['String']['output'];
+  entityId: Scalars['ID']['output'];
   fromStatus?: Maybe<DocStatus>;
-  id: Scalars["ID"]["output"];
+  id: Scalars['ID']['output'];
   roleType?: Maybe<ComplianceRoleType>;
-  subjectUserId?: Maybe<Scalars["ID"]["output"]>;
-  submissionId?: Maybe<Scalars["ID"]["output"]>;
+  subjectUserId?: Maybe<Scalars['ID']['output']>;
+  submissionId?: Maybe<Scalars['ID']['output']>;
   toStatus?: Maybe<DocStatus>;
 };
 
@@ -1084,29 +1150,31 @@ export type ComplianceAuditEventFilter = {
 };
 
 export type ComplianceDeleteResponse = {
-  __typename?: "ComplianceDeleteResponse";
-  message?: Maybe<Scalars["String"]["output"]>;
-  success: Scalars["Boolean"]["output"];
+  __typename?: 'ComplianceDeleteResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export type ComplianceDismissResponse = {
-  __typename?: "ComplianceDismissResponse";
-  dismissed: Scalars["Boolean"]["output"];
-  notificationId: Scalars["ID"]["output"];
-  success: Scalars["Boolean"]["output"];
+  __typename?: 'ComplianceDismissResponse';
+  dismissed: Scalars['Boolean']['output'];
+  notificationId: Scalars['ID']['output'];
+  success: Scalars['Boolean']['output'];
 };
 
 export type ComplianceDocItem = {
-  __typename?: "ComplianceDocItem";
-  description: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
-  lastUpdated?: Maybe<Scalars["String"]["output"]>;
-  name: Scalars["String"]["output"];
-  note?: Maybe<Scalars["String"]["output"]>;
-  required: Scalars["Boolean"]["output"];
-  reviewer?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'ComplianceDocItem';
+  description: Scalars['String']['output'];
+  /** URL of the most recently uploaded file; null while the document is missing */
+  fileUrl?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  lastUpdated?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  note?: Maybe<Scalars['String']['output']>;
+  required: Scalars['Boolean']['output'];
+  reviewer?: Maybe<Scalars['String']['output']>;
   status: DocStatus;
-  templateId: Scalars["ID"]["output"];
+  templateId: Scalars['ID']['output'];
 };
 
 export type ComplianceDocumentFilter = {
@@ -1116,36 +1184,36 @@ export type ComplianceDocumentFilter = {
 };
 
 export type ComplianceDocumentTemplate = {
-  __typename?: "ComplianceDocumentTemplate";
-  description: Scalars["String"]["output"];
-  documentCode?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'ComplianceDocumentTemplate';
+  description: Scalars['String']['output'];
+  documentCode?: Maybe<Scalars['String']['output']>;
   gatedActions: Array<GatedAction>;
-  id: Scalars["ID"]["output"];
-  name: Scalars["String"]["output"];
-  required: Scalars["Boolean"]["output"];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  required: Scalars['Boolean']['output'];
 };
 
 export type ComplianceDocumentsResponse = {
-  __typename?: "ComplianceDocumentsResponse";
+  __typename?: 'ComplianceDocumentsResponse';
   sections: Array<ComplianceSection>;
   stats: ComplianceStats;
 };
 
 export type ComplianceFile = {
-  __typename?: "ComplianceFile";
-  fileName: Scalars["String"]["output"];
-  fileSizeBytes: Scalars["Int"]["output"];
-  id: Scalars["ID"]["output"];
-  mimeType: Scalars["String"]["output"];
-  storagePath: Scalars["String"]["output"];
-  uploadedAt: Scalars["String"]["output"];
+  __typename?: 'ComplianceFile';
+  fileName: Scalars['String']['output'];
+  fileSizeBytes: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  mimeType: Scalars['String']['output'];
+  storagePath: Scalars['String']['output'];
+  uploadedAt: Scalars['String']['output'];
 };
 
 export type ComplianceNotification = {
-  __typename?: "ComplianceNotification";
-  action?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  message: Scalars["String"]["output"];
+  __typename?: 'ComplianceNotification';
+  action?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  message: Scalars['String']['output'];
   type: ComplianceNotificationType;
 };
 
@@ -1155,9 +1223,16 @@ export type ComplianceNotificationFilter = {
   type?: InputMaybe<ComplianceNotificationType>;
 };
 
-export type ComplianceNotificationType = "info" | "success" | "warning";
+export type ComplianceNotificationType =
+  | 'info'
+  | 'success'
+  | 'warning';
 
-export type ComplianceRoleType = "agent" | "buyer" | "financier" | "issuer";
+export type ComplianceRoleType =
+  | 'agent'
+  | 'buyer'
+  | 'financier'
+  | 'issuer';
 
 export type ComplianceRoleTypeOperator = {
   eq?: InputMaybe<ComplianceRoleType>;
@@ -1165,26 +1240,31 @@ export type ComplianceRoleTypeOperator = {
 };
 
 export type ComplianceSection = {
-  __typename?: "ComplianceSection";
-  bg: Scalars["String"]["output"];
-  color: Scalars["String"]["output"];
+  __typename?: 'ComplianceSection';
+  bg: Scalars['String']['output'];
+  color: Scalars['String']['output'];
   docs: Array<ComplianceDocItem>;
-  id: Scalars["ID"]["output"];
+  /**
+   * Which entity type this section's requirements apply to. Null means "every
+   * entity type" — the value for roles that are not entity-scoped.
+   */
+  entityType?: Maybe<EntityType>;
+  id: Scalars['ID']['output'];
   key: ComplianceSectionKey;
   roleType: ComplianceRoleType;
   templates: Array<ComplianceDocumentTemplate>;
-  title: Scalars["String"]["output"];
+  title: Scalars['String']['output'];
 };
 
 export type ComplianceSectionKey =
-  | "agreements"
-  | "company_reg"
-  | "esg"
-  | "financials"
-  | "identity"
-  | "legal_risk"
-  | "ownership"
-  | "property_insurance";
+  | 'agreements'
+  | 'company_reg'
+  | 'esg'
+  | 'financials'
+  | 'identity'
+  | 'legal_risk'
+  | 'ownership'
+  | 'property_insurance';
 
 export type ComplianceSectionKeyOperator = {
   eq?: InputMaybe<ComplianceSectionKey>;
@@ -1192,32 +1272,32 @@ export type ComplianceSectionKeyOperator = {
 };
 
 export type ComplianceStats = {
-  __typename?: "ComplianceStats";
-  missing: Scalars["Int"]["output"];
-  overallPct: Scalars["Int"]["output"];
-  requiredMissing: Scalars["Int"]["output"];
-  submitted: Scalars["Int"]["output"];
-  total: Scalars["Int"]["output"];
-  under_review: Scalars["Int"]["output"];
-  verified: Scalars["Int"]["output"];
+  __typename?: 'ComplianceStats';
+  missing: Scalars['Int']['output'];
+  overallPct: Scalars['Int']['output'];
+  requiredMissing: Scalars['Int']['output'];
+  submitted: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+  under_review: Scalars['Int']['output'];
+  verified: Scalars['Int']['output'];
 };
 
 export type ComplianceSubmission = {
-  __typename?: "ComplianceSubmission";
-  createdAt: Scalars["String"]["output"];
+  __typename?: 'ComplianceSubmission';
+  createdAt: Scalars['String']['output'];
   files: Array<ComplianceFile>;
   history: Array<ComplianceAuditEvent>;
-  id: Scalars["ID"]["output"];
-  lastUpdated?: Maybe<Scalars["String"]["output"]>;
-  note?: Maybe<Scalars["String"]["output"]>;
-  reviewer?: Maybe<Scalars["String"]["output"]>;
+  id: Scalars['ID']['output'];
+  lastUpdated?: Maybe<Scalars['String']['output']>;
+  note?: Maybe<Scalars['String']['output']>;
+  reviewer?: Maybe<Scalars['String']['output']>;
   roleType: ComplianceRoleType;
   status: DocStatus;
   template?: Maybe<ComplianceDocumentTemplate>;
-  templateId: Scalars["ID"]["output"];
-  updatedAt: Scalars["String"]["output"];
+  templateId: Scalars['ID']['output'];
+  updatedAt: Scalars['String']['output'];
   user?: Maybe<ComplianceSubmissionUser>;
-  userId: Scalars["ID"]["output"];
+  userId: Scalars['ID']['output'];
 };
 
 export type ComplianceSubmissionFilter = {
@@ -1229,28 +1309,28 @@ export type ComplianceSubmissionFilter = {
 };
 
 export type ComplianceSubmissionUser = {
-  __typename?: "ComplianceSubmissionUser";
-  email: Scalars["String"]["output"];
-  firstName?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  lastName?: Maybe<Scalars["String"]["output"]>;
-  phoneNumber?: Maybe<Scalars["String"]["output"]>;
-  profileImage?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'ComplianceSubmissionUser';
+  email: Scalars['String']['output'];
+  firstName?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  lastName?: Maybe<Scalars['String']['output']>;
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+  profileImage?: Maybe<Scalars['String']['output']>;
 };
 
 export type ComplianceUploadResponse = {
-  __typename?: "ComplianceUploadResponse";
+  __typename?: 'ComplianceUploadResponse';
   document?: Maybe<ComplianceUploadedDoc>;
-  success: Scalars["Boolean"]["output"];
+  success: Scalars['Boolean']['output'];
 };
 
 export type ComplianceUploadedDoc = {
-  __typename?: "ComplianceUploadedDoc";
-  fileName: Scalars["String"]["output"];
-  fileSizeBytes: Scalars["Int"]["output"];
-  id: Scalars["ID"]["output"];
-  lastUpdated: Scalars["String"]["output"];
-  name: Scalars["String"]["output"];
+  __typename?: 'ComplianceUploadedDoc';
+  fileName: Scalars['String']['output'];
+  fileSizeBytes: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  lastUpdated: Scalars['String']['output'];
+  name: Scalars['String']['output'];
   status: DocStatus;
 };
 
@@ -1268,9 +1348,9 @@ export type ComplianceUploadedDoc = {
  */
 export type ConditionPhase =
   /** Must be satisfied before the facility can be drawn. Gates disbursement. */
-  | "PRECEDENT"
+  | 'PRECEDENT'
   /** Survives closing — tracked through servicing, and never gates disbursement. */
-  | "SUBSEQUENT";
+  | 'SUBSEQUENT';
 
 /**
  * A single condition-precedent line item (Act 9). Items are ad hoc — extracted from
@@ -1278,125 +1358,132 @@ export type ConditionPhase =
  * blocked until every item is CONFIRMED or WAIVED.
  */
 export type ConditionPrecedent = {
-  __typename?: "ConditionPrecedent";
+  __typename?: 'ConditionPrecedent';
   /** Stable list ordering. */
-  createdAt: Scalars["DateTime"]["output"];
+  createdAt: Scalars['DateTime']['output'];
   /** Optional sub-text under the title. */
-  description?: Maybe<Scalars["String"]["output"]>;
+  description?: Maybe<Scalars['String']['output']>;
   /** True if AI-extracted from the uploaded agreement / CP schedule. */
-  extracted: Scalars["Boolean"]["output"];
-  id: Scalars["ID"]["output"];
+  extracted: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
   /** The condition text (frontend title). */
-  label: Scalars["String"]["output"];
+  label: Scalars['String']['output'];
   /** Which loan (offer request) this CP belongs to. */
-  offerRequestId: Scalars["ID"]["output"];
+  offerRequestId: Scalars['ID']['output'];
   /** Which side of closing this condition sits on. Rows predating the split are PRECEDENT. */
   phase: ConditionPhase;
   /** Waiver reason (present when WAIVED). */
-  reason?: Maybe<Scalars["String"]["output"]>;
+  reason?: Maybe<Scalars['String']['output']>;
   /** When confirmed/waived — audit line. */
-  resolvedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  resolvedAt?: Maybe<Scalars['DateTime']['output']>;
   /** Borrower | Financier — gates who uploads evidence. */
   responsibleParty: ResponsibleParty;
   /** Who confirmed/waived (name or id) — audit line. */
-  signedOffBy?: Maybe<Scalars["String"]["output"]>;
+  signedOffBy?: Maybe<Scalars['String']['output']>;
   status: ConditionPrecedentStatus;
   /** Display name for the supporting document. */
-  supportingDocumentName?: Maybe<Scalars["String"]["output"]>;
+  supportingDocumentName?: Maybe<Scalars['String']['output']>;
   /** Evidence/attachment (borrower SUBMITTED, or financier CONFIRMED). */
-  supportingDocumentUrl?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  supportingDocumentUrl?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type ConditionPrecedentStatus =
   /** Financier signed it off as satisfied. */
-  | "CONFIRMED"
+  | 'CONFIRMED'
   /** Created, no action yet. */
-  | "PENDING"
+  | 'PENDING'
   /** Responsible party uploaded evidence, awaiting financier sign-off. */
-  | "SUBMITTED"
+  | 'SUBMITTED'
   /** Financier elected to proceed without it (reason required). */
-  | "WAIVED";
+  | 'WAIVED';
 
 export type ConditionPrecedentStatusInput = {
   /** Optional sub-text under the title. */
-  description?: InputMaybe<Scalars["String"]["input"]>;
+  description?: InputMaybe<Scalars['String']['input']>;
   /** True if AI-extracted from the uploaded agreement / CP schedule. */
-  extracted?: InputMaybe<Scalars["Boolean"]["input"]>;
+  extracted?: InputMaybe<Scalars['Boolean']['input']>;
   /** Existing item id, if updating one already recorded. */
-  id?: InputMaybe<Scalars["ID"]["input"]>;
+  id?: InputMaybe<Scalars['ID']['input']>;
   /** Label to upsert by when no id is given (e.g. the CP text from the agreement). */
-  label?: InputMaybe<Scalars["String"]["input"]>;
+  label?: InputMaybe<Scalars['String']['input']>;
   /** Required when status is WAIVED. */
-  reason?: InputMaybe<Scalars["String"]["input"]>;
+  reason?: InputMaybe<Scalars['String']['input']>;
   /** Which party is responsible for satisfying this item. Required when creating a new item. */
   responsibleParty?: InputMaybe<ResponsibleParty>;
   status: ConditionPrecedentStatus;
   /** Display name for the supporting document. */
-  supportingDocumentName?: InputMaybe<Scalars["String"]["input"]>;
+  supportingDocumentName?: InputMaybe<Scalars['String']['input']>;
   /** Supporting/evidence document for this item. */
-  supportingDocumentUrl?: InputMaybe<Scalars["String"]["input"]>;
+  supportingDocumentUrl?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ConfirmSupportResolutionInput = {
+  reference: Scalars['String']['input'];
+  resolved: Scalars['Boolean']['input'];
+  /** 1 (not good) to 3 (good). Optional. */
+  satisfaction?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Construction = {
-  __typename?: "Construction";
-  civilContractor?: Maybe<Scalars["String"]["output"]>;
-  insurance?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
-  leadArchitect?: Maybe<Scalars["String"]["output"]>;
-  otherConsultants?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
-  procurementType?: Maybe<Scalars["String"]["output"]>;
-  timelines?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
-  warranties?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
+  __typename?: 'Construction';
+  civilContractor?: Maybe<Scalars['String']['output']>;
+  insurance?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  leadArchitect?: Maybe<Scalars['String']['output']>;
+  otherConsultants?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  procurementType?: Maybe<Scalars['String']['output']>;
+  timelines?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  warranties?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
 };
 
 export type ConstructionInput = {
-  civilContractor?: InputMaybe<Scalars["String"]["input"]>;
-  insurance?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  leadArchitect?: InputMaybe<Scalars["String"]["input"]>;
-  otherConsultants?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  procurementType?: InputMaybe<Scalars["String"]["input"]>;
-  timelines?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  warranties?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  civilContractor?: InputMaybe<Scalars['String']['input']>;
+  insurance?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  leadArchitect?: InputMaybe<Scalars['String']['input']>;
+  otherConsultants?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  procurementType?: InputMaybe<Scalars['String']['input']>;
+  timelines?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  warranties?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type ContactUsInput = {
-  email: Scalars["String"]["input"];
-  message: Scalars["String"]["input"];
-  name: Scalars["String"]["input"];
-  subject?: InputMaybe<Scalars["String"]["input"]>;
+  email: Scalars['String']['input'];
+  message: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  subject?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ContactUsResponse = {
-  __typename?: "ContactUsResponse";
-  message?: Maybe<Scalars["String"]["output"]>;
-  success: Scalars["Boolean"]["output"];
+  __typename?: 'ContactUsResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export type Conversation = {
-  __typename?: "Conversation";
-  conversationKey?: Maybe<Scalars["String"]["output"]>;
-  convoType?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  id: Scalars["ID"]["output"];
-  initialDeposit?: Maybe<Scalars["Float"]["output"]>;
+  __typename?: 'Conversation';
+  conversationKey?: Maybe<Scalars['String']['output']>;
+  convoType?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  initialDeposit?: Maybe<Scalars['Float']['output']>;
   kind?: Maybe<ConversationKind>;
-  lastMessageId?: Maybe<Scalars["ID"]["output"]>;
-  offerRequestId?: Maybe<Scalars["ID"]["output"]>;
+  lastMessageId?: Maybe<Scalars['ID']['output']>;
+  offerRequestId?: Maybe<Scalars['ID']['output']>;
   parentConversation?: Maybe<Conversation>;
-  parentConversationId?: Maybe<Scalars["ID"]["output"]>;
-  participants?: Maybe<Scalars["JSONObject"]["output"]>;
+  parentConversationId?: Maybe<Scalars['ID']['output']>;
+  participants?: Maybe<Scalars['JSONObject']['output']>;
   paymentStatus?: Maybe<ConversationPaymentStatus>;
   property?: Maybe<Property>;
-  propertyId?: Maybe<Scalars["ID"]["output"]>;
+  propertyId?: Maybe<Scalars['ID']['output']>;
   /** @deprecated Stale snapshot taken when the conversation was created. Use `property` (live) or `propertyId`. */
-  propertyInfo?: Maybe<Scalars["JSONObject"]["output"]>;
-  propertyValue?: Maybe<Scalars["Float"]["output"]>;
-  referenceNumber?: Maybe<Scalars["String"]["output"]>;
-  totalMessageCount?: Maybe<Scalars["Int"]["output"]>;
-  transactionId?: Maybe<Scalars["String"]["output"]>;
-  transferDocument?: Maybe<Scalars["String"]["output"]>;
-  unreadCount?: Maybe<Scalars["Int"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  propertyInfo?: Maybe<Scalars['JSONObject']['output']>;
+  propertyValue?: Maybe<Scalars['Float']['output']>;
+  referenceNumber?: Maybe<Scalars['String']['output']>;
+  totalMessageCount?: Maybe<Scalars['Int']['output']>;
+  transactionId?: Maybe<Scalars['String']['output']>;
+  transferDocument?: Maybe<Scalars['String']['output']>;
+  unreadCount?: Maybe<Scalars['Int']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type ConversationFilter = {
@@ -1412,14 +1499,20 @@ export type ConversationFilter = {
   updatedAt?: InputMaybe<DateOperator>;
 };
 
-export type ConversationKind = "DIRECT_CHAT" | "GROUP_CHAT";
+export type ConversationKind =
+  | 'DIRECT_CHAT'
+  | 'GROUP_CHAT';
 
 export type ConversationKindOperator = {
   eq?: InputMaybe<ConversationKind>;
   in?: InputMaybe<Array<ConversationKind>>;
 };
 
-export type ConversationPaymentStatus = "failed" | "paid" | "pending" | "verifying";
+export type ConversationPaymentStatus =
+  | 'failed'
+  | 'paid'
+  | 'pending'
+  | 'verifying';
 
 export type ConversationPaymentStatusOperator = {
   eq?: InputMaybe<ConversationPaymentStatus>;
@@ -1427,434 +1520,472 @@ export type ConversationPaymentStatusOperator = {
 };
 
 export type Coordinates = {
-  __typename?: "Coordinates";
-  X?: Maybe<Scalars["Float"]["output"]>;
-  Y?: Maybe<Scalars["Float"]["output"]>;
-  bearing?: Maybe<Scalars["String"]["output"]>;
-  distance?: Maybe<Scalars["Int"]["output"]>;
-  from?: Maybe<Scalars["Int"]["output"]>;
-  fromPt?: Maybe<Scalars["Int"]["output"]>;
-  lat?: Maybe<Scalars["Float"]["output"]>;
-  lng?: Maybe<Scalars["Float"]["output"]>;
-  to?: Maybe<Scalars["Int"]["output"]>;
-  toPt?: Maybe<Scalars["Int"]["output"]>;
+  __typename?: 'Coordinates';
+  X?: Maybe<Scalars['Float']['output']>;
+  Y?: Maybe<Scalars['Float']['output']>;
+  bearing?: Maybe<Scalars['String']['output']>;
+  distance?: Maybe<Scalars['Int']['output']>;
+  from?: Maybe<Scalars['Int']['output']>;
+  fromPt?: Maybe<Scalars['Int']['output']>;
+  lat?: Maybe<Scalars['Float']['output']>;
+  lng?: Maybe<Scalars['Float']['output']>;
+  to?: Maybe<Scalars['Int']['output']>;
+  toPt?: Maybe<Scalars['Int']['output']>;
 };
 
-export type CountryCode = "FR" | "GB" | "GH" | "NG" | "US" | "ZA";
+export type CountryCode =
+  | 'FR'
+  | 'GB'
+  | 'GH'
+  | 'NG'
+  | 'US'
+  | 'ZA';
 
 export type CreateAdminConversationInput = {
-  initialDeposit?: InputMaybe<Scalars["Float"]["input"]>;
-  participants: Scalars["JSONObject"]["input"];
-  referenceNumber?: InputMaybe<Scalars["String"]["input"]>;
+  initialDeposit?: InputMaybe<Scalars['Float']['input']>;
+  participants: Scalars['JSONObject']['input'];
+  referenceNumber?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateAssessmentAlertRuleInput = {
-  code: Scalars["String"]["input"];
-  message: Scalars["String"]["input"];
+  code: Scalars['String']['input'];
+  message: Scalars['String']['input'];
   operator: AssessmentAlertOperator;
   severity?: InputMaybe<AssessmentAlertSeverity>;
-  templateId: Scalars["ID"]["input"];
-  threshold: Scalars["JSONObject"]["input"];
-  triggerQuestionCode: Scalars["String"]["input"];
+  templateId: Scalars['ID']['input'];
+  threshold: Scalars['JSONObject']['input'];
+  triggerQuestionCode: Scalars['String']['input'];
 };
 
 export type CreateAssessmentCategoryInput = {
-  code: Scalars["String"]["input"];
-  description?: InputMaybe<Scalars["String"]["input"]>;
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  label: Scalars["String"]["input"];
-  templateId: Scalars["ID"]["input"];
-  weight?: InputMaybe<Scalars["Float"]["input"]>;
+  code: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  label: Scalars['String']['input'];
+  templateId: Scalars['ID']['input'];
+  weight?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type CreateAssessmentDocumentInput = {
-  assessmentId: Scalars["ID"]["input"];
-  documentCode: Scalars["String"]["input"];
-  fileUrl?: InputMaybe<Scalars["String"]["input"]>;
-  notes?: InputMaybe<Scalars["String"]["input"]>;
+  assessmentId: Scalars['ID']['input'];
+  documentCode: Scalars['String']['input'];
+  fileUrl?: InputMaybe<Scalars['String']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
   requirement?: InputMaybe<AssessmentDocumentRequirement>;
 };
 
 export type CreateAssessmentInput = {
-  applicantUserId?: InputMaybe<Scalars["ID"]["input"]>;
-  consentGivenAt?: InputMaybe<Scalars["DateTime"]["input"]>;
-  declarationGivenAt?: InputMaybe<Scalars["DateTime"]["input"]>;
+  applicantUserId?: InputMaybe<Scalars['ID']['input']>;
+  consentGivenAt?: InputMaybe<Scalars['DateTime']['input']>;
+  declarationGivenAt?: InputMaybe<Scalars['DateTime']['input']>;
   platformRole?: InputMaybe<AssessmentPlatformRole>;
-  subjectEntityId?: InputMaybe<Scalars["ID"]["input"]>;
-  templateId?: InputMaybe<Scalars["ID"]["input"]>;
+  subjectEntityId?: InputMaybe<Scalars['ID']['input']>;
+  templateId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type CreateAssessmentQuestionInput = {
   answerType: AssessmentAnswerType;
-  categoryId?: InputMaybe<Scalars["ID"]["input"]>;
-  code: Scalars["String"]["input"];
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  guidance?: InputMaybe<Scalars["String"]["input"]>;
-  isKycAutofill?: InputMaybe<Scalars["Boolean"]["input"]>;
-  isRequired?: InputMaybe<Scalars["Boolean"]["input"]>;
-  isScored?: InputMaybe<Scalars["Boolean"]["input"]>;
-  kycSourceField?: InputMaybe<Scalars["String"]["input"]>;
-  prompt: Scalars["String"]["input"];
-  scoringLogicText?: InputMaybe<Scalars["String"]["input"]>;
-  templateId: Scalars["ID"]["input"];
-  unit?: InputMaybe<Scalars["String"]["input"]>;
-  verification?: InputMaybe<Scalars["String"]["input"]>;
-  weight?: InputMaybe<Scalars["Float"]["input"]>;
+  categoryId?: InputMaybe<Scalars['ID']['input']>;
+  code: Scalars['String']['input'];
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  guidance?: InputMaybe<Scalars['String']['input']>;
+  isKycAutofill?: InputMaybe<Scalars['Boolean']['input']>;
+  isRequired?: InputMaybe<Scalars['Boolean']['input']>;
+  isScored?: InputMaybe<Scalars['Boolean']['input']>;
+  kycSourceField?: InputMaybe<Scalars['String']['input']>;
+  prompt: Scalars['String']['input'];
+  scoringLogicText?: InputMaybe<Scalars['String']['input']>;
+  templateId: Scalars['ID']['input'];
+  unit?: InputMaybe<Scalars['String']['input']>;
+  verification?: InputMaybe<Scalars['String']['input']>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type CreateAssessmentQuestionOptionInput = {
-  code: Scalars["String"]["input"];
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  label: Scalars["String"]["input"];
-  questionId: Scalars["ID"]["input"];
-  score?: InputMaybe<Scalars["Int"]["input"]>;
+  code: Scalars['String']['input'];
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  label: Scalars['String']['input'];
+  questionId: Scalars['ID']['input'];
+  score?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type CreateAssessmentReadinessBandInput = {
-  action?: InputMaybe<Scalars["String"]["input"]>;
-  code: Scalars["String"]["input"];
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  guidance?: InputMaybe<Scalars["String"]["input"]>;
-  label: Scalars["String"]["input"];
-  maxScore: Scalars["Int"]["input"];
-  minScore: Scalars["Int"]["input"];
-  templateId: Scalars["ID"]["input"];
+  action?: InputMaybe<Scalars['String']['input']>;
+  code: Scalars['String']['input'];
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  guidance?: InputMaybe<Scalars['String']['input']>;
+  label: Scalars['String']['input'];
+  maxScore: Scalars['Int']['input'];
+  minScore: Scalars['Int']['input'];
+  templateId: Scalars['ID']['input'];
 };
 
 export type CreateAssessmentScoringBandInput = {
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  maxValue?: InputMaybe<Scalars["Float"]["input"]>;
-  minValue?: InputMaybe<Scalars["Float"]["input"]>;
-  questionId: Scalars["ID"]["input"];
-  score: Scalars["Int"]["input"];
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  maxValue?: InputMaybe<Scalars['Float']['input']>;
+  minValue?: InputMaybe<Scalars['Float']['input']>;
+  questionId: Scalars['ID']['input'];
+  score: Scalars['Int']['input'];
 };
 
 export type CreateAssessmentTemplateInput = {
-  code: Scalars["String"]["input"];
-  consentText?: InputMaybe<Scalars["String"]["input"]>;
-  declarationText?: InputMaybe<Scalars["String"]["input"]>;
-  legalNotice?: InputMaybe<Scalars["String"]["input"]>;
-  maxScorePerParameter?: InputMaybe<Scalars["Int"]["input"]>;
-  name: Scalars["String"]["input"];
+  code: Scalars['String']['input'];
+  consentText?: InputMaybe<Scalars['String']['input']>;
+  declarationText?: InputMaybe<Scalars['String']['input']>;
+  legalNotice?: InputMaybe<Scalars['String']['input']>;
+  maxScorePerParameter?: InputMaybe<Scalars['Int']['input']>;
+  name: Scalars['String']['input'];
   platformRole?: InputMaybe<AssessmentPlatformRole>;
   status?: InputMaybe<AssessmentTemplateStatus>;
   subjectType?: InputMaybe<AssessmentSubjectType>;
-  version: Scalars["String"]["input"];
+  version: Scalars['String']['input'];
 };
 
 export type CreateAssetValueSnapshotInput = {
-  metadata?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  ownerId: Scalars["ID"]["input"];
-  properties?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  timestamp: Scalars["DateTime"]["input"];
-  totalValue: Scalars["Float"]["input"];
-  valueByPropertyType?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  valueByRegion?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  valueByStatus?: InputMaybe<Scalars["JSONObject"]["input"]>;
+  metadata?: InputMaybe<Scalars['JSONObject']['input']>;
+  ownerId: Scalars['ID']['input'];
+  properties?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  timestamp: Scalars['DateTime']['input'];
+  totalValue: Scalars['Float']['input'];
+  valueByPropertyType?: InputMaybe<Scalars['JSONObject']['input']>;
+  valueByRegion?: InputMaybe<Scalars['JSONObject']['input']>;
+  valueByStatus?: InputMaybe<Scalars['JSONObject']['input']>;
 };
 
 export type CreateBareLandProjectInput = {
-  additionalFiles?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  construction?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  gpsAddress?: InputMaybe<Scalars["String"]["input"]>;
-  metadata?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  projectCost?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  projectDescription?: InputMaybe<Scalars["String"]["input"]>;
-  projectImages?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  projectName: Scalars["String"]["input"];
-  projectStatus?: InputMaybe<Scalars["String"]["input"]>;
-  propertyTypes?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  readiness?: InputMaybe<Scalars["Int"]["input"]>;
-  sharedAmenities?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  squareFeet?: InputMaybe<Scalars["Float"]["input"]>;
-  streetAddress?: InputMaybe<Scalars["String"]["input"]>;
+  additionalFiles?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  construction?: InputMaybe<Scalars['JSONObject']['input']>;
+  gpsAddress?: InputMaybe<Scalars['String']['input']>;
+  metadata?: InputMaybe<Scalars['JSONObject']['input']>;
+  projectCost?: InputMaybe<Scalars['JSONObject']['input']>;
+  projectDescription?: InputMaybe<Scalars['String']['input']>;
+  projectImages?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  projectName: Scalars['String']['input'];
+  projectStatus?: InputMaybe<Scalars['String']['input']>;
+  propertyTypes?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  readiness?: InputMaybe<Scalars['Int']['input']>;
+  sharedAmenities?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  squareFeet?: InputMaybe<Scalars['Float']['input']>;
+  streetAddress?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateBuyerProjectInput = {
-  buyerId: Scalars["ID"]["input"];
-  depositAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  isArchived?: InputMaybe<Scalars["Boolean"]["input"]>;
-  propertyId: Scalars["ID"]["input"];
-  status: Scalars["String"]["input"];
-  tokensOwned?: InputMaybe<Scalars["String"]["input"]>;
+  buyerId: Scalars['ID']['input'];
+  depositAmount?: InputMaybe<Scalars['Float']['input']>;
+  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
+  propertyId: Scalars['ID']['input'];
+  status: Scalars['String']['input'];
+  tokensOwned?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateComplianceSectionInput = {
-  bg: Scalars["String"]["input"];
-  color: Scalars["String"]["input"];
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
+  bg: Scalars['String']['input'];
+  color: Scalars['String']['input'];
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   * Required for entity-scoped roles (issuer), refused for every other role.
+   * Fixed once set: to move a section, delete it and create it on the other side.
+   */
+  entityType?: InputMaybe<EntityType>;
   key: ComplianceSectionKey;
   roleType: ComplianceRoleType;
-  title: Scalars["String"]["input"];
+  title: Scalars['String']['input'];
 };
 
 export type CreateComplianceTemplateInput = {
-  description: Scalars["String"]["input"];
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  documentCode?: InputMaybe<Scalars["String"]["input"]>;
+  description: Scalars['String']['input'];
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  documentCode?: InputMaybe<Scalars['String']['input']>;
   gatedActions?: InputMaybe<Array<GatedAction>>;
-  name: Scalars["String"]["input"];
-  required: Scalars["Boolean"]["input"];
-  sectionId: Scalars["ID"]["input"];
+  name: Scalars['String']['input'];
+  required: Scalars['Boolean']['input'];
+  sectionId: Scalars['ID']['input'];
 };
 
 export type CreateConversationInput = {
-  convoType?: InputMaybe<Scalars["String"]["input"]>;
-  initialDeposit?: InputMaybe<Scalars["Float"]["input"]>;
+  convoType?: InputMaybe<Scalars['String']['input']>;
+  initialDeposit?: InputMaybe<Scalars['Float']['input']>;
   kind?: InputMaybe<ConversationKind>;
-  offerRequestId?: InputMaybe<Scalars["ID"]["input"]>;
-  parentConversationId?: InputMaybe<Scalars["ID"]["input"]>;
-  participants: Scalars["JSONObject"]["input"];
+  offerRequestId?: InputMaybe<Scalars['ID']['input']>;
+  parentConversationId?: InputMaybe<Scalars['ID']['input']>;
+  participants: Scalars['JSONObject']['input'];
   paymentStatus?: InputMaybe<ConversationPaymentStatus>;
-  propertyInfo?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  propertyValue?: InputMaybe<Scalars["Float"]["input"]>;
-  referenceNumber?: InputMaybe<Scalars["String"]["input"]>;
-  shouldCreateInitialMessage?: InputMaybe<Scalars["Boolean"]["input"]>;
+  propertyInfo?: InputMaybe<Scalars['JSONObject']['input']>;
+  propertyValue?: InputMaybe<Scalars['Float']['input']>;
+  referenceNumber?: InputMaybe<Scalars['String']['input']>;
+  shouldCreateInitialMessage?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type CreateDueDiligenceInput = {
-  dueDiligenceInitiatedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
-  dueDiligenceReportDate?: InputMaybe<Scalars["DateTime"]["input"]>;
-  dueDiligenceReportImages?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  dueDiligenceReportMessage?: InputMaybe<Scalars["String"]["input"]>;
+  dueDiligenceInitiatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  dueDiligenceReportDate?: InputMaybe<Scalars['DateTime']['input']>;
+  dueDiligenceReportImages?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  dueDiligenceReportMessage?: InputMaybe<Scalars['String']['input']>;
   dueDiligenceStatus?: InputMaybe<DueDiligenceStatus>;
-  legalDocuments?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  ownerId?: InputMaybe<Scalars["ID"]["input"]>;
-  propertyId: Scalars["ID"]["input"];
-  updatedBy?: InputMaybe<Scalars["JSONObject"]["input"]>;
+  legalDocuments?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  ownerId?: InputMaybe<Scalars['ID']['input']>;
+  propertyId: Scalars['ID']['input'];
+  updatedBy?: InputMaybe<Scalars['JSONObject']['input']>;
 };
 
 export type CreateEntityRoleInput = {
-  badgeColor?: InputMaybe<Scalars["String"]["input"]>;
-  description?: InputMaybe<Scalars["String"]["input"]>;
-  name: Scalars["String"]["input"];
-  permissions: Array<Scalars["String"]["input"]>;
+  badgeColor?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  permissions: Array<Scalars['String']['input']>;
 };
 
 export type CreateLandInput = {
-  boundary: Scalars["JSONObject"]["input"];
+  boundary: Scalars['JSONObject']['input'];
 };
 
 export type CreateOfferInput = {
-  acceptedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
-  availabilityPeriodDays?: InputMaybe<Scalars["Int"]["input"]>;
+  acceptedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  availabilityPeriodDays?: InputMaybe<Scalars['Int']['input']>;
   bondSubType?: InputMaybe<BondSubType>;
-  commitmentFeeRate?: InputMaybe<Scalars["Float"]["input"]>;
-  conditions?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  covenants?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  currency?: InputMaybe<Scalars["String"]["input"]>;
-  depositPercentage?: InputMaybe<Scalars["Float"]["input"]>;
-  drawdownSchedule?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  dsraMonths?: InputMaybe<Scalars["Int"]["input"]>;
-  financierId: Scalars["ID"]["input"];
-  interestRate?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  issuedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
-  lenderName?: InputMaybe<Scalars["String"]["input"]>;
+  commitmentFeeRate?: InputMaybe<Scalars['Float']['input']>;
+  conditions?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  covenants?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  depositPercentage?: InputMaybe<Scalars['Float']['input']>;
+  drawdownSchedule?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  dsraMonths?: InputMaybe<Scalars['Int']['input']>;
+  financierId: Scalars['ID']['input'];
+  interestRate?: InputMaybe<Scalars['JSONObject']['input']>;
+  issuedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  lenderName?: InputMaybe<Scalars['String']['input']>;
   loanSubType?: InputMaybe<LoanSubType>;
-  loanTenor?: InputMaybe<Scalars["JSONObject"]["input"]>;
+  loanTenor?: InputMaybe<Scalars['JSONObject']['input']>;
   loanType?: InputMaybe<LoanType>;
-  ltv?: InputMaybe<Scalars["Float"]["input"]>;
-  maxLoanAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  moratorium?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  offerExpiryDate?: InputMaybe<Scalars["DateTime"]["input"]>;
-  offerRequestId?: InputMaybe<Scalars["ID"]["input"]>;
+  ltv?: InputMaybe<Scalars['Float']['input']>;
+  maxLoanAmount?: InputMaybe<Scalars['Float']['input']>;
+  moratorium?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  offerExpiryDate?: InputMaybe<Scalars['DateTime']['input']>;
+  offerRequestId?: InputMaybe<Scalars['ID']['input']>;
   offerStatus?: InputMaybe<OfferStatus>;
-  otherFees?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  processingTimeline?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  propertyId?: InputMaybe<Scalars["ID"]["input"]>;
-  propertyName?: InputMaybe<Scalars["String"]["input"]>;
+  otherFees?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  processingTimeline?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  propertyId?: InputMaybe<Scalars['ID']['input']>;
+  propertyName?: InputMaybe<Scalars['String']['input']>;
   rateType?: InputMaybe<RateType>;
-  recipientId?: InputMaybe<Scalars["ID"]["input"]>;
+  recipientId?: InputMaybe<Scalars['ID']['input']>;
   repaymentFrequency?: InputMaybe<RepaymentFrequency>;
   repaymentType?: InputMaybe<RepaymentType>;
-  revokedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
-  schedule?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  security?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  sources?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  revokedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  schedule?: InputMaybe<Scalars['JSONObject']['input']>;
+  security?: InputMaybe<Scalars['JSONObject']['input']>;
+  sources?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type CreateOfferRequestInput = {
-  agreedAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  buyerId?: InputMaybe<Scalars["ID"]["input"]>;
-  convoType?: InputMaybe<Scalars["String"]["input"]>;
-  financierId?: InputMaybe<Scalars["ID"]["input"]>;
-  initialDeposit?: InputMaybe<Scalars["Float"]["input"]>;
-  issuerId?: InputMaybe<Scalars["ID"]["input"]>;
+  agreedAmount?: InputMaybe<Scalars['Float']['input']>;
+  buyerId?: InputMaybe<Scalars['ID']['input']>;
+  convoType?: InputMaybe<Scalars['String']['input']>;
+  financierId?: InputMaybe<Scalars['ID']['input']>;
+  initialDeposit?: InputMaybe<Scalars['Float']['input']>;
+  issuerId?: InputMaybe<Scalars['ID']['input']>;
   modeOfFinancing: ModeOfFinancing;
-  offer?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  propertyId?: InputMaybe<Scalars["ID"]["input"]>;
-  refNo?: InputMaybe<Scalars["String"]["input"]>;
-  requestedAmount: Scalars["Float"]["input"];
-  type?: InputMaybe<Scalars["String"]["input"]>;
+  offer?: InputMaybe<Scalars['JSONObject']['input']>;
+  propertyId?: InputMaybe<Scalars['ID']['input']>;
+  refNo?: InputMaybe<Scalars['String']['input']>;
+  requestedAmount: Scalars['Float']['input'];
+  type?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreatePaymentScheduleInput = {
-  conversationId: Scalars["ID"]["input"];
-  createdForId?: InputMaybe<Scalars["ID"]["input"]>;
-  interestRate?: InputMaybe<Scalars["Float"]["input"]>;
-  loanId?: InputMaybe<Scalars["ID"]["input"]>;
-  maxLoanAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  metadata?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  offerRequestId?: InputMaybe<Scalars["ID"]["input"]>;
-  repaymentFrequency?: InputMaybe<Scalars["String"]["input"]>;
-  repaymentTerms?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  totalInterest?: InputMaybe<Scalars["String"]["input"]>;
-  totalRepayment?: InputMaybe<Scalars["String"]["input"]>;
+  conversationId: Scalars['ID']['input'];
+  createdForId?: InputMaybe<Scalars['ID']['input']>;
+  interestRate?: InputMaybe<Scalars['Float']['input']>;
+  loanId?: InputMaybe<Scalars['ID']['input']>;
+  maxLoanAmount?: InputMaybe<Scalars['Float']['input']>;
+  metadata?: InputMaybe<Scalars['JSONObject']['input']>;
+  offerRequestId?: InputMaybe<Scalars['ID']['input']>;
+  repaymentFrequency?: InputMaybe<Scalars['String']['input']>;
+  repaymentTerms?: InputMaybe<Scalars['JSONObject']['input']>;
+  totalInterest?: InputMaybe<Scalars['String']['input']>;
+  totalRepayment?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreatePortfolioInput = {
-  additionalFiles?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
+  additionalFiles?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
   construction?: InputMaybe<ConstructionInput>;
-  constructionCommencementDate?: InputMaybe<Scalars["String"]["input"]>;
-  epaPermitNumber?: InputMaybe<Scalars["String"]["input"]>;
-  gpsAddress: Scalars["String"]["input"];
-  grossDevelopmentValue?: InputMaybe<Scalars["Float"]["input"]>;
-  landValuationAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  landValuer?: InputMaybe<Scalars["String"]["input"]>;
-  listingObjective?: InputMaybe<Scalars["String"]["input"]>;
-  metadata?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  planningPermitNumber?: InputMaybe<Scalars["String"]["input"]>;
-  portfolioType: Scalars["String"]["input"];
-  practicalCompletionDate?: InputMaybe<Scalars["String"]["input"]>;
+  constructionCommencementDate?: InputMaybe<Scalars['String']['input']>;
+  epaPermitNumber?: InputMaybe<Scalars['String']['input']>;
+  gpsAddress: Scalars['String']['input'];
+  grossDevelopmentValue?: InputMaybe<Scalars['Float']['input']>;
+  landValuationAmount?: InputMaybe<Scalars['Float']['input']>;
+  landValuer?: InputMaybe<Scalars['String']['input']>;
+  listingObjective?: InputMaybe<Scalars['String']['input']>;
+  metadata?: InputMaybe<Scalars['JSONObject']['input']>;
+  planningPermitNumber?: InputMaybe<Scalars['String']['input']>;
+  portfolioType: Scalars['String']['input'];
+  practicalCompletionDate?: InputMaybe<Scalars['String']['input']>;
   projectCost?: InputMaybe<ProjectCostInput>;
-  projectDescription: Scalars["String"]["input"];
-  projectImages?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  projectName?: InputMaybe<Scalars["String"]["input"]>;
-  projectStatus?: InputMaybe<Scalars["String"]["input"]>;
-  projectType?: InputMaybe<Scalars["String"]["input"]>;
-  properties?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  projectDescription: Scalars['String']['input'];
+  projectImages?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  projectName?: InputMaybe<Scalars['String']['input']>;
+  projectStatus?: InputMaybe<Scalars['String']['input']>;
+  projectType?: InputMaybe<Scalars['String']['input']>;
+  properties?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   propertyTypes?: InputMaybe<Array<InputMaybe<PropertyTypesInput>>>;
-  readiness?: InputMaybe<Scalars["Int"]["input"]>;
-  sessionId?: InputMaybe<Scalars["String"]["input"]>;
-  sharedAmenities?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  squareFeet: Scalars["Int"]["input"];
-  streetAddress: Scalars["String"]["input"];
-  titleNumber?: InputMaybe<Scalars["String"]["input"]>;
-  totalDevelopmentCost?: InputMaybe<Scalars["Float"]["input"]>;
-  yearBuilt?: InputMaybe<Scalars["String"]["input"]>;
+  readiness?: InputMaybe<Scalars['Int']['input']>;
+  sessionId?: InputMaybe<Scalars['String']['input']>;
+  sharedAmenities?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  squareFeet: Scalars['Int']['input'];
+  streetAddress: Scalars['String']['input'];
+  titleNumber?: InputMaybe<Scalars['String']['input']>;
+  totalDevelopmentCost?: InputMaybe<Scalars['Float']['input']>;
+  yearBuilt?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreatePortfolioProjectWithUnitsInput = {
-  listingType?: InputMaybe<Scalars["String"]["input"]>;
-  portfolio: Scalars["JSONObject"]["input"];
+  listingType?: InputMaybe<Scalars['String']['input']>;
+  portfolio: Scalars['JSONObject']['input'];
   units: Array<PortfolioProjectUnitInput>;
 };
 
 export type CreateRepaymentInput = {
-  conversationId?: InputMaybe<Scalars["ID"]["input"]>;
-  createdById?: InputMaybe<Scalars["ID"]["input"]>;
-  createdForId?: InputMaybe<Scalars["ID"]["input"]>;
-  interestRate?: InputMaybe<Scalars["Float"]["input"]>;
-  isSubscribedToReferenceRate?: InputMaybe<Scalars["Boolean"]["input"]>;
-  loanId?: InputMaybe<Scalars["ID"]["input"]>;
-  maxLoanAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  metadata?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  offerRequestId?: InputMaybe<Scalars["ID"]["input"]>;
-  propertyId?: InputMaybe<Scalars["ID"]["input"]>;
-  repaymentFrequency?: InputMaybe<Scalars["String"]["input"]>;
-  repaymentTerms?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  scheduleType?: InputMaybe<Scalars["String"]["input"]>;
-  totalInterest?: InputMaybe<Scalars["String"]["input"]>;
-  totalRepayment?: InputMaybe<Scalars["String"]["input"]>;
+  conversationId?: InputMaybe<Scalars['ID']['input']>;
+  createdById?: InputMaybe<Scalars['ID']['input']>;
+  createdForId?: InputMaybe<Scalars['ID']['input']>;
+  interestRate?: InputMaybe<Scalars['Float']['input']>;
+  isSubscribedToReferenceRate?: InputMaybe<Scalars['Boolean']['input']>;
+  loanId?: InputMaybe<Scalars['ID']['input']>;
+  maxLoanAmount?: InputMaybe<Scalars['Float']['input']>;
+  metadata?: InputMaybe<Scalars['JSONObject']['input']>;
+  offerRequestId?: InputMaybe<Scalars['ID']['input']>;
+  propertyId?: InputMaybe<Scalars['ID']['input']>;
+  repaymentFrequency?: InputMaybe<Scalars['String']['input']>;
+  repaymentTerms?: InputMaybe<Scalars['JSONObject']['input']>;
+  scheduleType?: InputMaybe<Scalars['String']['input']>;
+  totalInterest?: InputMaybe<Scalars['String']['input']>;
+  totalRepayment?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateReviewInput = {
-  comment: Scalars["String"]["input"];
-  conversationId?: InputMaybe<Scalars["String"]["input"]>;
-  propertyId: Scalars["ID"]["input"];
-  rating: Scalars["Int"]["input"];
-  replies?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  user: Scalars["ID"]["input"];
-  userAvatar?: InputMaybe<Scalars["String"]["input"]>;
-  userName?: InputMaybe<Scalars["String"]["input"]>;
+  comment: Scalars['String']['input'];
+  conversationId?: InputMaybe<Scalars['String']['input']>;
+  propertyId: Scalars['ID']['input'];
+  rating: Scalars['Int']['input'];
+  replies?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  user: Scalars['ID']['input'];
+  userAvatar?: InputMaybe<Scalars['String']['input']>;
+  userName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateSimpleConversationInput = {
-  participants: Scalars["JSONObject"]["input"];
+  participants: Scalars['JSONObject']['input'];
+};
+
+export type CreateSupportRequestInput = {
+  area: SupportArea;
+  attachments?: InputMaybe<Array<SupportAttachmentInput>>;
+  /** 10 to 4,000 characters. */
+  body: Scalars['String']['input'];
+  context: SupportContextInput;
+  /** Any unique string per send attempt (a UUID). Reused on a retry, so repeats return the first result. */
+  idempotencyKey: Scalars['String']['input'];
+  kind: SupportKind;
+  subject?: InputMaybe<SupportSubjectInput>;
+  /** 5 to 120 characters. */
+  title: Scalars['String']['input'];
 };
 
 export type CreateSupportRoleInput = {
-  description?: InputMaybe<Scalars["String"]["input"]>;
-  name: Scalars["String"]["input"];
-  permissions: Array<Scalars["String"]["input"]>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  permissions: Array<Scalars['String']['input']>;
 };
 
 export type CreateSupportUserInput = {
-  email: Scalars["String"]["input"];
-  firstName: Scalars["String"]["input"];
-  lastName: Scalars["String"]["input"];
-  supportRoleId: Scalars["ID"]["input"];
+  email: Scalars['String']['input'];
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  supportRoleId: Scalars['ID']['input'];
 };
 
 export type CreateTailoringRuleInput = {
-  description?: InputMaybe<Scalars["String"]["input"]>;
-  documentCodes: Array<Scalars["String"]["input"]>;
-  entityType?: InputMaybe<Scalars["String"]["input"]>;
-  isActive?: InputMaybe<Scalars["Boolean"]["input"]>;
-  name: Scalars["String"]["input"];
-  platformRole?: InputMaybe<Scalars["String"]["input"]>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  documentCodes: Array<Scalars['String']['input']>;
+  entityType?: InputMaybe<Scalars['String']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  name: Scalars['String']['input'];
+  platformRole?: InputMaybe<Scalars['String']['input']>;
   requirement?: InputMaybe<RequirementLevel>;
 };
 
 export type CreateTempProjectInput = {
-  payload: Scalars["JSONObject"]["input"];
-  sessionId: Scalars["ID"]["input"];
+  payload: Scalars['JSONObject']['input'];
+  sessionId: Scalars['ID']['input'];
 };
 
 export type CreateTermSheetInput = {
-  buyerId?: InputMaybe<Scalars["ID"]["input"]>;
-  conversationId?: InputMaybe<Scalars["ID"]["input"]>;
-  financierId?: InputMaybe<Scalars["ID"]["input"]>;
-  initialDeposit?: InputMaybe<Scalars["Float"]["input"]>;
-  issuerId?: InputMaybe<Scalars["ID"]["input"]>;
-  loanTenor?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  modeOfFinancing?: InputMaybe<Scalars["String"]["input"]>;
-  offerRequestId?: InputMaybe<Scalars["ID"]["input"]>;
-  parentTermSheetId?: InputMaybe<Scalars["ID"]["input"]>;
-  projectId: Scalars["ID"]["input"];
-  requestedAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  transactionRefNo?: InputMaybe<Scalars["String"]["input"]>;
+  buyerId?: InputMaybe<Scalars['ID']['input']>;
+  conversationId?: InputMaybe<Scalars['ID']['input']>;
+  financierId?: InputMaybe<Scalars['ID']['input']>;
+  initialDeposit?: InputMaybe<Scalars['Float']['input']>;
+  issuerId?: InputMaybe<Scalars['ID']['input']>;
+  loanTenor?: InputMaybe<Scalars['JSONObject']['input']>;
+  modeOfFinancing?: InputMaybe<Scalars['String']['input']>;
+  offerRequestId?: InputMaybe<Scalars['ID']['input']>;
+  parentTermSheetId?: InputMaybe<Scalars['ID']['input']>;
+  projectId: Scalars['ID']['input'];
+  requestedAmount?: InputMaybe<Scalars['Float']['input']>;
+  transactionRefNo?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<TermSheetType>;
 };
 
 export type CreateTransactionInput = {
-  amount?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  description: Scalars["String"]["input"];
-  from?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  propertyId: Scalars["ID"]["input"];
-  quantity: Scalars["Int"]["input"];
-  referenceNo: Scalars["String"]["input"];
-  state: Scalars["String"]["input"];
-  status: Scalars["String"]["input"];
-  to?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  tokens: Scalars["Int"]["input"];
-  transactionId: Scalars["String"]["input"];
-  type: Scalars["String"]["input"];
+  amount?: InputMaybe<Scalars['JSONObject']['input']>;
+  description: Scalars['String']['input'];
+  from?: InputMaybe<Scalars['JSONObject']['input']>;
+  propertyId: Scalars['ID']['input'];
+  quantity: Scalars['Int']['input'];
+  referenceNo: Scalars['String']['input'];
+  state: Scalars['String']['input'];
+  status: Scalars['String']['input'];
+  to?: InputMaybe<Scalars['JSONObject']['input']>;
+  tokens: Scalars['Int']['input'];
+  transactionId: Scalars['String']['input'];
+  type: Scalars['String']['input'];
 };
 
-export type CurrencyCode = "EUR" | "GBP" | "GHS" | "NGN" | "USD" | "ZAR";
+export type CurrencyCode =
+  | 'EUR'
+  | 'GBP'
+  | 'GHS'
+  | 'NGN'
+  | 'USD'
+  | 'ZAR';
 
-export type CurrencyType = "base" | "fiat" | "points";
+export type CurrencyType =
+  | 'base'
+  | 'fiat'
+  | 'points';
 
 export type CurrencyTypeOperator = {
   eq?: InputMaybe<CurrencyType>;
 };
 
 export type DashboardKpi = {
-  __typename?: "DashboardKpi";
-  currency?: Maybe<Scalars["String"]["output"]>;
-  deltaAbsolute?: Maybe<Scalars["Float"]["output"]>;
-  deltaPercent?: Maybe<Scalars["Float"]["output"]>;
-  hint?: Maybe<Scalars["String"]["output"]>;
-  previousValue: Scalars["Float"]["output"];
+  __typename?: 'DashboardKpi';
+  currency?: Maybe<Scalars['String']['output']>;
+  deltaAbsolute?: Maybe<Scalars['Float']['output']>;
+  deltaPercent?: Maybe<Scalars['Float']['output']>;
+  hint?: Maybe<Scalars['String']['output']>;
+  previousValue: Scalars['Float']['output'];
   trend: Trend;
-  value: Scalars["Float"]["output"];
+  value: Scalars['Float']['output'];
 };
 
-export type DashboardRange = "NINETY_DAYS" | "SEVEN_DAYS" | "THIRTY_DAYS" | "YTD";
+export type DashboardRange =
+  | 'NINETY_DAYS'
+  | 'SEVEN_DAYS'
+  | 'THIRTY_DAYS'
+  | 'YTD';
 
 export type DashboardSummary = {
-  __typename?: "DashboardSummary";
+  __typename?: 'DashboardSummary';
   activeProperties: DashboardKpi;
   openTickets: DashboardKpi;
   totalVolume: DashboardKpi;
@@ -1862,27 +1993,27 @@ export type DashboardSummary = {
 };
 
 export type DateOperator = {
-  after?: InputMaybe<Scalars["DateTime"]["input"]>;
-  before?: InputMaybe<Scalars["DateTime"]["input"]>;
+  after?: InputMaybe<Scalars['DateTime']['input']>;
+  before?: InputMaybe<Scalars['DateTime']['input']>;
   between?: InputMaybe<DateRange>;
-  eq?: InputMaybe<Scalars["DateTime"]["input"]>;
+  eq?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type DateRange = {
-  end: Scalars["DateTime"]["input"];
-  start: Scalars["DateTime"]["input"];
+  end: Scalars['DateTime']['input'];
+  start: Scalars['DateTime']['input'];
 };
 
 /** Nature of a servicing amendment reported alongside a declaration. */
 export type DeclarationAmendmentType =
-  | "FacilityIncrease"
-  | "None"
-  | "Other"
-  | "PartialSecurityRelease"
-  | "PaymentHoliday"
-  | "RateChange"
-  | "Restructure"
-  | "TenorExtension";
+  | 'FacilityIncrease'
+  | 'None'
+  | 'Other'
+  | 'PartialSecurityRelease'
+  | 'PaymentHoliday'
+  | 'RateChange'
+  | 'Restructure'
+  | 'TenorExtension';
 
 /**
  * Where a schedule-generated declaration's approval stands. The financier may
@@ -1891,52 +2022,65 @@ export type DeclarationAmendmentType =
  * borrower. A financier who disagrees amends the schedule, which retires the
  * declaration — there is no rejection. Hand-filed declarations are `not_required`.
  */
-export type DeclarationApprovalStatus = "approved" | "deemed_approved" | "not_required" | "pending";
+export type DeclarationApprovalStatus =
+  | 'approved'
+  | 'deemed_approved'
+  | 'not_required'
+  | 'pending';
 
 /** Declared lifecycle state of the loan for the period (mirrors the loan master's status). */
 export type DeclarationLoanStatus =
-  | "Active"
-  | "Defaulted"
-  | "Draft"
-  | "FullyRepaid"
-  | "InArrears"
-  | "PaymentHoliday"
-  | "Restructured"
-  | "WrittenOff";
+  | 'Active'
+  | 'Defaulted'
+  | 'Draft'
+  | 'FullyRepaid'
+  | 'InArrears'
+  | 'PaymentHoliday'
+  | 'Restructured'
+  | 'WrittenOff';
 
 /** Period payment posture reported by the financier (distinct from the loan's declared lifecycle state). */
-export type DeclarationPaymentStatus = "Late" | "NotReceived" | "OnTime" | "Partial";
+export type DeclarationPaymentStatus =
+  | 'Late'
+  | 'NotReceived'
+  | 'OnTime'
+  | 'Partial';
 
 /**
  * Whether the borrower has paid a filing. Afram's own observation, derived from
  * the payments recorded against it — never the lender's word, and never written
  * back onto the lender's declared figures.
  */
-export type DeclarationSettlementStatus = "PartiallyPaid" | "Settled" | "Unpaid";
+export type DeclarationSettlementStatus =
+  | 'PartiallyPaid'
+  | 'Settled'
+  | 'Unpaid';
 
 /**
  * Who produced a declaration (AFR-310). `financier` — filed by hand by the lender.
  * `schedule` — generated by the platform from an installment of the loan's
  * repayment schedule.
  */
-export type DeclarationSource = "financier" | "schedule";
+export type DeclarationSource =
+  | 'financier'
+  | 'schedule';
 
 export type DefaultFee = {
-  __typename?: "DefaultFee";
-  amount: Scalars["Float"]["output"];
+  __typename?: 'DefaultFee';
+  amount: Scalars['Float']['output'];
   feeType: PrepaymentFeeType;
-  percentage: Scalars["Float"]["output"];
+  percentage: Scalars['Float']['output'];
 };
 
 export type DefaultFeeInput = {
-  amount?: InputMaybe<Scalars["Float"]["input"]>;
+  amount?: InputMaybe<Scalars['Float']['input']>;
   feeType?: InputMaybe<PrepaymentFeeType>;
-  percentage?: InputMaybe<Scalars["Float"]["input"]>;
+  percentage?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type DeleteAllNotificationsResponse = {
-  __typename?: "DeleteAllNotificationsResponse";
-  deleted: Scalars["Int"]["output"];
+  __typename?: 'DeleteAllNotificationsResponse';
+  deleted: Scalars['Int']['output'];
 };
 
 /**
@@ -1946,13 +2090,13 @@ export type DeleteAllNotificationsResponse = {
  * than replacing it, and answering a query leaves the earlier files in place.
  */
 export type DiligenceDocument = {
-  __typename?: "DiligenceDocument";
-  fileName: Scalars["String"]["output"];
+  __typename?: 'DiligenceDocument';
+  fileName: Scalars['String']['output'];
   /** Bytes, as reported by the client. Display only. */
-  fileSize?: Maybe<Scalars["Int"]["output"]>;
+  fileSize?: Maybe<Scalars['Int']['output']>;
   /** MIME type, as reported by the client. Display only. */
-  fileType?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
+  fileType?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
   /**
    * Where the file came from: `upload` when someone supplied it against this
    * request, or `listing` / `portfolio` / `approach` / `compliance` when the
@@ -1964,25 +2108,25 @@ export type DiligenceDocument = {
    * Show it. A requester deciding whether to accept is entitled to know whether
    * they are looking at a document produced for them or one carried over.
    */
-  source: Scalars["String"]["output"];
+  source: Scalars['String']['output'];
   /** One line saying where a carried-over file came from. Null on an upload. */
-  sourceNote?: Maybe<Scalars["String"]["output"]>;
-  uploadedAt: Scalars["String"]["output"];
+  sourceNote?: Maybe<Scalars['String']['output']>;
+  uploadedAt: Scalars['String']['output'];
   /** Buyer | Issuer */
-  uploadedBy: Scalars["String"]["output"];
-  url: Scalars["String"]["output"];
+  uploadedBy: Scalars['String']['output'];
+  url: Scalars['String']['output'];
 };
 
 export type DiligenceDocumentInput = {
-  documentUrl: Scalars["String"]["input"];
-  fileName: Scalars["String"]["input"];
+  documentUrl: Scalars['String']['input'];
+  fileName: Scalars['String']['input'];
 };
 
 export type DiligenceDocumentUpload = {
-  documentUrl: Scalars["String"]["input"];
-  fileName: Scalars["String"]["input"];
-  fileSize?: InputMaybe<Scalars["Int"]["input"]>;
-  fileType?: InputMaybe<Scalars["String"]["input"]>;
+  documentUrl: Scalars['String']['input'];
+  fileName: Scalars['String']['input'];
+  fileSize?: InputMaybe<Scalars['Int']['input']>;
+  fileType?: InputMaybe<Scalars['String']['input']>;
 };
 
 /**
@@ -1997,14 +2141,14 @@ export type DiligenceDocumentUpload = {
  * so a copy edit reaches every existing deal.
  */
 export type DiligenceItem = {
-  __typename?: "DiligenceItem";
-  categoryId: Scalars["String"]["output"];
+  __typename?: 'DiligenceItem';
+  categoryId: Scalars['String']['output'];
   /** issuer_to_buyer | buyer_to_issuer */
-  direction: Scalars["String"]["output"];
+  direction: Scalars['String']['output'];
   documents: Array<DiligenceDocument>;
-  hint: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
-  label: Scalars["String"]["output"];
+  hint: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  label: Scalars['String']['output'];
   /**
    * The buyer's own documents already on file that answer this ask — verified in
    * their readiness assessment, or accepted by a seller on an earlier deal. Offer
@@ -2017,21 +2161,21 @@ export type DiligenceItem = {
    */
   onFile: Array<HeldDocument>;
   /** What the requester said needs addressing. Set while status is `queried`. */
-  query?: Maybe<Scalars["String"]["output"]>;
+  query?: Maybe<Scalars['String']['output']>;
   /** requested | submitted | queried | accepted | waived */
-  status: Scalars["String"]["output"];
-  transactionId: Scalars["ID"]["output"];
-  updatedAt: Scalars["String"]["output"];
+  status: Scalars['String']['output'];
+  transactionId: Scalars['ID']['output'];
+  updatedAt: Scalars['String']['output'];
   /** Why the requester let this go. Set when status is `waived`. */
-  waiverReason?: Maybe<Scalars["String"]["output"]>;
+  waiverReason?: Maybe<Scalars['String']['output']>;
 };
 
 export type DisburseFacilityInput = {
-  amount: Scalars["Float"]["input"];
+  amount: Scalars['Float']['input'];
   /** e.g. lump-sum, tranche, GhIPSS — free text. */
-  method?: InputMaybe<Scalars["String"]["input"]>;
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  reference?: InputMaybe<Scalars["String"]["input"]>;
+  method?: InputMaybe<Scalars['String']['input']>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  reference?: InputMaybe<Scalars['String']['input']>;
 };
 
 /**
@@ -2039,15 +2183,15 @@ export type DisburseFacilityInput = {
  * admin/reviewer later flips it to VERIFIED or UNVERIFIABLE.
  */
 export type DisbursementRecord = {
-  __typename?: "DisbursementRecord";
-  amount: Scalars["Float"]["output"];
-  disbursedAt: Scalars["DateTime"]["output"];
-  id: Scalars["ID"]["output"];
-  method?: Maybe<Scalars["String"]["output"]>;
-  note?: Maybe<Scalars["String"]["output"]>;
-  reference?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'DisbursementRecord';
+  amount: Scalars['Float']['output'];
+  disbursedAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  method?: Maybe<Scalars['String']['output']>;
+  note?: Maybe<Scalars['String']['output']>;
+  reference?: Maybe<Scalars['String']['output']>;
   verificationStatus: DisbursementVerificationStatus;
-  verifiedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  verifiedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 /**
@@ -2055,9 +2199,16 @@ export type DisbursementRecord = {
  * by the financier and independently verified afterward — Afram does not move or
  * confirm funds itself. UNVERIFIABLE is a visible risk flag, not a silent state.
  */
-export type DisbursementVerificationStatus = "PENDING" | "UNVERIFIABLE" | "VERIFIED";
+export type DisbursementVerificationStatus =
+  | 'PENDING'
+  | 'UNVERIFIABLE'
+  | 'VERIFIED';
 
-export type DocStatus = "missing" | "submitted" | "under_review" | "verified";
+export type DocStatus =
+  | 'missing'
+  | 'submitted'
+  | 'under_review'
+  | 'verified';
 
 export type DocStatusOperator = {
   eq?: InputMaybe<DocStatus>;
@@ -2065,9 +2216,9 @@ export type DocStatusOperator = {
 };
 
 export type DocumentRequestItem = {
-  acceptedFileTypes?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  count?: InputMaybe<Scalars["Int"]["input"]>;
-  description?: InputMaybe<Scalars["String"]["input"]>;
+  acceptedFileTypes?: InputMaybe<Array<Scalars['String']['input']>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   /**
    * Stable code for this request. Unique per offer request.
    *
@@ -2082,10 +2233,10 @@ export type DocumentRequestItem = {
    * borrower's own identity, income or funds is ever pre-filled, whatever it is
    * coded as.
    */
-  documentCode?: InputMaybe<Scalars["String"]["input"]>;
-  dueDate?: InputMaybe<Scalars["String"]["input"]>;
-  name: Scalars["String"]["input"];
-  required?: InputMaybe<Scalars["Boolean"]["input"]>;
+  documentCode?: InputMaybe<Scalars['String']['input']>;
+  dueDate?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  required?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /**
@@ -2093,70 +2244,73 @@ export type DocumentRequestItem = {
  * `bothSigned` is true only once each side has a signature on record.
  */
 export type DocumentSignatures = {
-  __typename?: "DocumentSignatures";
+  __typename?: 'DocumentSignatures';
   borrower?: Maybe<SignatureRecord>;
-  bothSigned: Scalars["Boolean"]["output"];
+  bothSigned: Scalars['Boolean']['output'];
   financier?: Maybe<SignatureRecord>;
 };
 
 export type DueDiligence = {
-  __typename?: "DueDiligence";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  dueDiligenceInitiatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  dueDiligenceReportDate?: Maybe<Scalars["DateTime"]["output"]>;
-  dueDiligenceReportImages?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
-  dueDiligenceReportMessage?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'DueDiligence';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  dueDiligenceInitiatedAt?: Maybe<Scalars['DateTime']['output']>;
+  dueDiligenceReportDate?: Maybe<Scalars['DateTime']['output']>;
+  dueDiligenceReportImages?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  dueDiligenceReportMessage?: Maybe<Scalars['String']['output']>;
   dueDiligenceStatus?: Maybe<DueDiligenceStatus>;
-  id: Scalars["ID"]["output"];
-  legalDocuments?: Maybe<Array<Maybe<Scalars["JSONObject"]["output"]>>>;
-  ownerId?: Maybe<Scalars["ID"]["output"]>;
-  propertyId: Scalars["ID"]["output"];
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  updatedBy?: Maybe<Scalars["JSONObject"]["output"]>;
+  id: Scalars['ID']['output'];
+  legalDocuments?: Maybe<Array<Maybe<Scalars['JSONObject']['output']>>>;
+  ownerId?: Maybe<Scalars['ID']['output']>;
+  propertyId: Scalars['ID']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  updatedBy?: Maybe<Scalars['JSONObject']['output']>;
 };
 
 export type DueDiligenceFilter = {
-  id?: InputMaybe<Scalars["ID"]["input"]>;
-  ownerId?: InputMaybe<Scalars["ID"]["input"]>;
-  propertyId?: InputMaybe<Scalars["ID"]["input"]>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  ownerId?: InputMaybe<Scalars['ID']['input']>;
+  propertyId?: InputMaybe<Scalars['ID']['input']>;
 };
 
-export type DueDiligenceStatus = "completed" | "issue" | "pending";
+export type DueDiligenceStatus =
+  | 'completed'
+  | 'issue'
+  | 'pending';
 
 export type EmailRecipientInput = {
-  body?: InputMaybe<Scalars["String"]["input"]>;
-  email: Scalars["String"]["input"];
-  name?: InputMaybe<Scalars["String"]["input"]>;
-  payload?: InputMaybe<Scalars["JSON"]["input"]>;
-  phone?: InputMaybe<Scalars["String"]["input"]>;
-  pushToken?: InputMaybe<Scalars["String"]["input"]>;
-  title?: InputMaybe<Scalars["String"]["input"]>;
-  userId?: InputMaybe<Scalars["String"]["input"]>;
+  body?: InputMaybe<Scalars['String']['input']>;
+  email: Scalars['String']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  payload?: InputMaybe<Scalars['JSON']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
+  pushToken?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Entity = {
-  __typename?: "Entity";
-  address?: Maybe<Scalars["String"]["output"]>;
-  companyRegNumber?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  displayName?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'Entity';
+  address?: Maybe<Scalars['String']['output']>;
+  companyRegNumber?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  displayName?: Maybe<Scalars['String']['output']>;
   entityType: EntityType;
-  id: Scalars["ID"]["output"];
-  licenceNumber?: Maybe<Scalars["String"]["output"]>;
-  loanTerm?: Maybe<Scalars["JSON"]["output"]>;
+  id: Scalars['ID']['output'];
+  licenceNumber?: Maybe<Scalars['String']['output']>;
+  loanTerm?: Maybe<Scalars['JSON']['output']>;
   members?: Maybe<Array<Maybe<EntityMember>>>;
   owner?: Maybe<User>;
-  ownerId?: Maybe<Scalars["ID"]["output"]>;
-  platformRoles?: Maybe<Array<Scalars["String"]["output"]>>;
+  ownerId?: Maybe<Scalars['ID']['output']>;
+  platformRoles?: Maybe<Array<Scalars['String']['output']>>;
   /**
    * Entity-owned policies (issuer/financier settings) for this entity.
    * Only returned to members of the entity or platform admins; empty otherwise.
    */
   policies?: Maybe<Array<UserPolicy>>;
-  position?: Maybe<Scalars["String"]["output"]>;
-  profileImage?: Maybe<Scalars["String"]["output"]>;
-  projectsFinanced?: Maybe<Scalars["Int"]["output"]>;
-  proofOfAffiliation?: Maybe<Scalars["String"]["output"]>;
+  position?: Maybe<Scalars['String']['output']>;
+  profileImage?: Maybe<Scalars['String']['output']>;
+  projectsFinanced?: Maybe<Scalars['Int']['output']>;
+  proofOfAffiliation?: Maybe<Scalars['String']['output']>;
   /**
    * Where a borrower reaches this lender's loan-servicing desk.
    *
@@ -2168,13 +2322,13 @@ export type Entity = {
    * Business contact details for the lending entity, not personal contact data for
    * whoever owns the record.
    */
-  servicingEmail?: Maybe<Scalars["String"]["output"]>;
+  servicingEmail?: Maybe<Scalars['String']['output']>;
   /** The servicing desk's phone number. Null on the same terms as `servicingEmail`. */
-  servicingPhone?: Maybe<Scalars["String"]["output"]>;
-  taxIdNumber?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  servicingPhone?: Maybe<Scalars['String']['output']>;
+  taxIdNumber?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
   verificationStatus: EntityVerificationStatus;
-  walletAddress?: Maybe<Scalars["String"]["output"]>;
+  walletAddress?: Maybe<Scalars['String']['output']>;
 };
 
 /**
@@ -2182,44 +2336,44 @@ export type Entity = {
  * status (resolved from the entity owner's compliance submission).
  */
 export type EntityDocumentRequirement = {
-  __typename?: "EntityDocumentRequirement";
-  documentCode: Scalars["String"]["output"];
+  __typename?: 'EntityDocumentRequirement';
+  documentCode: Scalars['String']['output'];
   gatedActions: Array<GatedAction>;
-  id: Scalars["ID"]["output"];
-  name: Scalars["String"]["output"];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
   requirement: RequirementLevel;
-  satisfied: Scalars["Boolean"]["output"];
+  satisfied: Scalars['Boolean']['output'];
   status: DocStatus;
-  templateId?: Maybe<Scalars["ID"]["output"]>;
+  templateId?: Maybe<Scalars['ID']['output']>;
 };
 
 export type EntityGate = {
-  __typename?: "EntityGate";
+  __typename?: 'EntityGate';
   action: GatedAction;
-  allowed: Scalars["Boolean"]["output"];
+  allowed: Scalars['Boolean']['output'];
   blockingDocuments: Array<EntityDocumentRequirement>;
 };
 
 export type EntityMember = {
-  __typename?: "EntityMember";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  email?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'EntityMember';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
   entity?: Maybe<Entity>;
-  entityId: Scalars["ID"]["output"];
-  entityRoleId?: Maybe<Scalars["ID"]["output"]>;
-  fullName?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  invitedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  entityId: Scalars['ID']['output'];
+  entityRoleId?: Maybe<Scalars['ID']['output']>;
+  fullName?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  invitedAt?: Maybe<Scalars['DateTime']['output']>;
   invitedBy?: Maybe<User>;
-  invitedById?: Maybe<Scalars["ID"]["output"]>;
-  joinedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  invitedById?: Maybe<Scalars['ID']['output']>;
+  joinedAt?: Maybe<Scalars['DateTime']['output']>;
   memberRole: EntityMemberRole;
-  phone?: Maybe<Scalars["String"]["output"]>;
+  phone?: Maybe<Scalars['String']['output']>;
   role?: Maybe<EntityRole>;
   status: EntityMemberStatus;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
   user?: Maybe<User>;
-  userId?: Maybe<Scalars["ID"]["output"]>;
+  userId?: Maybe<Scalars['ID']['output']>;
 };
 
 export type EntityMemberFilter = {
@@ -2237,14 +2391,21 @@ export type EntityMemberFilter = {
   userId?: InputMaybe<IdOperator>;
 };
 
-export type EntityMemberRole = "admin" | "member" | "viewer";
+export type EntityMemberRole =
+  | 'admin'
+  | 'member'
+  | 'viewer';
 
 export type EntityMemberRoleOperator = {
   eq?: InputMaybe<EntityMemberRole>;
   in?: InputMaybe<Array<EntityMemberRole>>;
 };
 
-export type EntityMemberStatus = "ACTIVE" | "PENDING" | "REMOVED" | "SUSPENDED";
+export type EntityMemberStatus =
+  | 'ACTIVE'
+  | 'PENDING'
+  | 'REMOVED'
+  | 'SUSPENDED';
 
 export type EntityMemberStatusOperator = {
   eq?: InputMaybe<EntityMemberStatus>;
@@ -2253,42 +2414,42 @@ export type EntityMemberStatusOperator = {
 };
 
 export type EntityProfileInput = {
-  address?: InputMaybe<Scalars["String"]["input"]>;
-  companyRegNumber?: InputMaybe<Scalars["String"]["input"]>;
-  displayName?: InputMaybe<Scalars["String"]["input"]>;
+  address?: InputMaybe<Scalars['String']['input']>;
+  companyRegNumber?: InputMaybe<Scalars['String']['input']>;
+  displayName?: InputMaybe<Scalars['String']['input']>;
   entityType?: InputMaybe<EntityType>;
-  licenceNumber?: InputMaybe<Scalars["String"]["input"]>;
-  position?: InputMaybe<Scalars["String"]["input"]>;
-  profileImage?: InputMaybe<Scalars["String"]["input"]>;
-  proofOfAffiliation?: InputMaybe<Scalars["String"]["input"]>;
+  licenceNumber?: InputMaybe<Scalars['String']['input']>;
+  position?: InputMaybe<Scalars['String']['input']>;
+  profileImage?: InputMaybe<Scalars['String']['input']>;
+  proofOfAffiliation?: InputMaybe<Scalars['String']['input']>;
   /**
    * The lender's real servicing contact channels. Omit to leave unchanged; send an
    * empty string to clear one back to null.
    */
-  servicingEmail?: InputMaybe<Scalars["String"]["input"]>;
-  servicingPhone?: InputMaybe<Scalars["String"]["input"]>;
-  taxIdNumber?: InputMaybe<Scalars["String"]["input"]>;
+  servicingEmail?: InputMaybe<Scalars['String']['input']>;
+  servicingPhone?: InputMaybe<Scalars['String']['input']>;
+  taxIdNumber?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type EntityRequirementsResponse = {
-  __typename?: "EntityRequirementsResponse";
-  entityId: Scalars["ID"]["output"];
+  __typename?: 'EntityRequirementsResponse';
+  entityId: Scalars['ID']['output'];
   gates: Array<EntityGate>;
   requirements: Array<EntityDocumentRequirement>;
 };
 
 export type EntityRole = {
-  __typename?: "EntityRole";
-  badgeColor?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
-  entityId: Scalars["ID"]["output"];
-  id: Scalars["ID"]["output"];
-  isSystem: Scalars["Boolean"]["output"];
+  __typename?: 'EntityRole';
+  badgeColor?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  entityId: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
+  isSystem: Scalars['Boolean']['output'];
   members?: Maybe<Array<Maybe<EntityMember>>>;
-  name: Scalars["String"]["output"];
-  permissions: Array<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  name: Scalars['String']['output'];
+  permissions: Array<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type EntityRoleFilter = {
@@ -2299,9 +2460,14 @@ export type EntityRoleFilter = {
   name?: InputMaybe<StringOperator>;
 };
 
-export type EntityType = "individual" | "organization";
+export type EntityType =
+  | 'individual'
+  | 'organization';
 
-export type EntityVerificationStatus = "pending" | "rejected" | "verified";
+export type EntityVerificationStatus =
+  | 'pending'
+  | 'rejected'
+  | 'verified';
 
 /**
  * A leg of money through escrow.
@@ -2315,97 +2481,97 @@ export type EntityVerificationStatus = "pending" | "rejected" | "verified";
  * Returned and reversed legs never count.
  */
 export type EscrowEvent = {
-  __typename?: "EscrowEvent";
-  amount: Scalars["Float"]["output"];
-  confirmedAt?: Maybe<Scalars["String"]["output"]>;
-  currency: Scalars["String"]["output"];
+  __typename?: 'EscrowEvent';
+  amount: Scalars['Float']['output'];
+  confirmedAt?: Maybe<Scalars['String']['output']>;
+  currency: Scalars['String']['output'];
   /** in (buyer → escrow) | out (escrow → issuer) */
-  direction: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
-  instructedAt: Scalars["String"]["output"];
+  direction: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  instructedAt: Scalars['String']['output'];
   /** Commitment deposit | Purchase price balance | Release to issuer */
-  label: Scalars["String"]["output"];
-  providerReference?: Maybe<Scalars["String"]["output"]>;
+  label: Scalars['String']['output'];
+  providerReference?: Maybe<Scalars['String']['output']>;
   /** commitment_deposit | purchase_price | release_to_issuer */
-  purpose: Scalars["String"]["output"];
+  purpose: Scalars['String']['output'];
   /**
    * Why this leg ended where it did. Always set on failed / returned / reversed —
    * a refunded deposit that cannot say why is one the payer has to ring someone
    * about. Null on the ordinary path.
    */
-  reason?: Maybe<Scalars["String"]["output"]>;
+  reason?: Maybe<Scalars['String']['output']>;
   /** pending | received | settled | failed | returned | reversed */
-  status: Scalars["String"]["output"];
-  transactionId: Scalars["ID"]["output"];
+  status: Scalars['String']['output'];
+  transactionId: Scalars['ID']['output'];
 };
 
 export type FavoriteOffer = {
-  __typename?: "FavoriteOffer";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  entityId?: Maybe<Scalars["ID"]["output"]>;
-  id: Scalars["ID"]["output"];
-  property?: Maybe<Scalars["JSONObject"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  userId: Scalars["ID"]["output"];
+  __typename?: 'FavoriteOffer';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  entityId?: Maybe<Scalars['ID']['output']>;
+  id: Scalars['ID']['output'];
+  property?: Maybe<Scalars['JSONObject']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  userId: Scalars['ID']['output'];
 };
 
 export type FavoriteOfferFilter = {
-  id?: InputMaybe<Scalars["ID"]["input"]>;
-  userId?: InputMaybe<Scalars["ID"]["input"]>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  userId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 /** An AFRAM / lender fee record for a loan. */
 export type FeeRecord = {
-  __typename?: "FeeRecord";
-  amount: Scalars["Float"]["output"];
-  currency: Scalars["String"]["output"];
-  feeType: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
-  loanId?: Maybe<Scalars["ID"]["output"]>;
-  offerRequestId: Scalars["ID"]["output"];
-  recordedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  __typename?: 'FeeRecord';
+  amount: Scalars['Float']['output'];
+  currency: Scalars['String']['output'];
+  feeType: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  loanId?: Maybe<Scalars['ID']['output']>;
+  offerRequestId: Scalars['ID']['output'];
+  recordedAt?: Maybe<Scalars['DateTime']['output']>;
   /** "AFRAM" | "Lender". */
-  revenueOwner: Scalars["String"]["output"];
+  revenueOwner: Scalars['String']['output'];
   /** "deductedFromProceeds" | "invoiced". */
-  settlement: Scalars["String"]["output"];
-  whoPays: Scalars["String"]["output"];
+  settlement: Scalars['String']['output'];
+  whoPays: Scalars['String']['output'];
 };
 
 export type FileDeclarationInput = {
   /** Required when amendmentType is not None. */
-  amendmentDetails?: InputMaybe<Scalars["String"]["input"]>;
-  amendmentDoc?: InputMaybe<Scalars["String"]["input"]>;
+  amendmentDetails?: InputMaybe<Scalars['String']['input']>;
+  amendmentDoc?: InputMaybe<Scalars['String']['input']>;
   amendmentType?: InputMaybe<DeclarationAmendmentType>;
-  amountCollectedThisMonth?: InputMaybe<Scalars["Float"]["input"]>;
-  amountDisbursedThisPeriod?: InputMaybe<Scalars["Float"]["input"]>;
-  coversReportingGap?: InputMaybe<Scalars["Boolean"]["input"]>;
-  currentPeriodInterestRate?: InputMaybe<Scalars["Float"]["input"]>;
+  amountCollectedThisMonth?: InputMaybe<Scalars['Float']['input']>;
+  amountDisbursedThisPeriod?: InputMaybe<Scalars['Float']['input']>;
+  coversReportingGap?: InputMaybe<Scalars['Boolean']['input']>;
+  currentPeriodInterestRate?: InputMaybe<Scalars['Float']['input']>;
   /** Required when loanStatus is FullyRepaid or WrittenOff. */
-  dischargeDoc?: InputMaybe<Scalars["String"]["input"]>;
-  loanBook?: InputMaybe<Scalars["String"]["input"]>;
+  dischargeDoc?: InputMaybe<Scalars['String']['input']>;
+  loanBook?: InputMaybe<Scalars['String']['input']>;
   /** Optional — resolved from the term sheet / financier repayment when omitted. */
-  loanId?: InputMaybe<Scalars["ID"]["input"]>;
+  loanId?: InputMaybe<Scalars['ID']['input']>;
   loanStatus: DeclarationLoanStatus;
-  nextPaymentAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  nextPaymentDate?: InputMaybe<Scalars["DateTime"]["input"]>;
-  notes?: InputMaybe<Scalars["String"]["input"]>;
-  offerRequestId: Scalars["ID"]["input"];
-  outstandingInterest: Scalars["Float"]["input"];
-  outstandingPenalties?: InputMaybe<Scalars["Float"]["input"]>;
-  outstandingPrincipal: Scalars["Float"]["input"];
+  nextPaymentAmount?: InputMaybe<Scalars['Float']['input']>;
+  nextPaymentDate?: InputMaybe<Scalars['DateTime']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
+  offerRequestId: Scalars['ID']['input'];
+  outstandingInterest: Scalars['Float']['input'];
+  outstandingPenalties?: InputMaybe<Scalars['Float']['input']>;
+  outstandingPrincipal: Scalars['Float']['input'];
   paymentStatus: DeclarationPaymentStatus;
-  prepaymentFlag?: InputMaybe<Scalars["Boolean"]["input"]>;
-  prepaymentPenaltyAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  reportingDate: Scalars["DateTime"]["input"];
+  prepaymentFlag?: InputMaybe<Scalars['Boolean']['input']>;
+  prepaymentPenaltyAmount?: InputMaybe<Scalars['Float']['input']>;
+  reportingDate: Scalars['DateTime']['input'];
 };
 
 /** The issuer's final disclosure — the document that gates closing. */
 export type FinalDisclosure = {
-  __typename?: "FinalDisclosure";
-  fileName: Scalars["String"]["output"];
-  note?: Maybe<Scalars["String"]["output"]>;
-  uploadedAt: Scalars["String"]["output"];
-  url: Scalars["String"]["output"];
+  __typename?: 'FinalDisclosure';
+  fileName: Scalars['String']['output'];
+  note?: Maybe<Scalars['String']['output']>;
+  uploadedAt: Scalars['String']['output'];
+  url: Scalars['String']['output'];
 };
 
 export type FinancierFilter = {
@@ -2418,10 +2584,10 @@ export type FinancierFilter = {
 
 /** The five cards across the top of the financier dashboard. */
 export type FinancierPipelineCounts = {
-  __typename?: "FinancierPipelineCounts";
+  __typename?: 'FinancierPipelineCounts';
   /** Live loans — DISBURSED or REPAYING. */
-  approved: Scalars["Int"]["output"];
-  closed: Scalars["Int"]["output"];
+  approved: Scalars['Int']['output'];
+  closed: Scalars['Int']['output'];
   /**
    * Past PENDING, before CLOSED.
    *
@@ -2430,10 +2596,10 @@ export type FinancierPipelineCounts = {
    * and an enumerated list here would drift out of step with them silently,
    * leaving requests counted in `total` and shown on no card.
    */
-  inProgress: Scalars["Int"]["output"];
+  inProgress: Scalars['Int']['output'];
   /** requestStatus PENDING. */
-  new: Scalars["Int"]["output"];
-  total: Scalars["Int"]["output"];
+  new: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
 };
 
 /**
@@ -2443,70 +2609,73 @@ export type FinancierPipelineCounts = {
  * so there is no `owned` section.
  */
 export type FinancierPropertyHoldings = {
-  __typename?: "FinancierPropertyHoldings";
+  __typename?: 'FinancierPropertyHoldings';
   inProgress: Array<Property>;
   settled: Array<Property>;
 };
 
 export type FloorArea = {
-  __typename?: "FloorArea";
-  unit?: Maybe<Scalars["String"]["output"]>;
-  value?: Maybe<Scalars["Int"]["output"]>;
+  __typename?: 'FloorArea';
+  unit?: Maybe<Scalars['String']['output']>;
+  value?: Maybe<Scalars['Int']['output']>;
 };
 
 export type FloorAreaInput = {
-  unit?: InputMaybe<Scalars["String"]["input"]>;
-  value?: InputMaybe<Scalars["Int"]["input"]>;
+  unit?: InputMaybe<Scalars['String']['input']>;
+  value?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type GatedAction = "drawdown" | "listing" | "transaction";
+export type GatedAction =
+  | 'drawdown'
+  | 'listing'
+  | 'transaction';
 
 export type GrantAssessmentFinancierShareInput = {
-  assessmentId: Scalars["ID"]["input"];
-  expiresAt?: InputMaybe<Scalars["DateTime"]["input"]>;
-  financierEntityId: Scalars["ID"]["input"];
+  assessmentId: Scalars['ID']['input'];
+  expiresAt?: InputMaybe<Scalars['DateTime']['input']>;
+  financierEntityId: Scalars['ID']['input'];
   scope?: InputMaybe<AssessmentFinancierShareScope>;
 };
 
 export type GrantAssessmentShareInput = {
-  assessmentId: Scalars["ID"]["input"];
-  counterpartyEntityId: Scalars["ID"]["input"];
+  assessmentId: Scalars['ID']['input'];
+  counterpartyEntityId: Scalars['ID']['input'];
   /** The entity must actually hold this platform role. */
   counterpartyKind: AssessmentCounterpartyKind;
   /** Null means the share stands until it is revoked. */
-  expiresAt?: InputMaybe<Scalars["DateTime"]["input"]>;
+  expiresAt?: InputMaybe<Scalars['DateTime']['input']>;
   scope?: InputMaybe<AssessmentShareScope>;
 };
 
 export type GrantOfferRequestInput = {
-  availabilityPeriodDays?: InputMaybe<Scalars["Int"]["input"]>;
+  availabilityPeriodDays?: InputMaybe<Scalars['Int']['input']>;
   bondSubType?: InputMaybe<BondSubType>;
-  commitmentFeeRate?: InputMaybe<Scalars["Float"]["input"]>;
-  conditions?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  covenants?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  currency?: InputMaybe<Scalars["String"]["input"]>;
-  depositPercentage?: InputMaybe<Scalars["Float"]["input"]>;
-  drawdownSchedule?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  dsraMonths?: InputMaybe<Scalars["Int"]["input"]>;
-  interestRate?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  lenderName?: InputMaybe<Scalars["String"]["input"]>;
+  commitmentFeeRate?: InputMaybe<Scalars['Float']['input']>;
+  conditions?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  covenants?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  depositPercentage?: InputMaybe<Scalars['Float']['input']>;
+  drawdownSchedule?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  dsraMonths?: InputMaybe<Scalars['Int']['input']>;
+  interestRate?: InputMaybe<Scalars['JSONObject']['input']>;
+  lenderName?: InputMaybe<Scalars['String']['input']>;
   loanSubType?: InputMaybe<LoanSubType>;
-  loanTenor?: InputMaybe<Scalars["JSONObject"]["input"]>;
+  loanTenor?: InputMaybe<Scalars['JSONObject']['input']>;
   loanType?: InputMaybe<LoanType>;
-  ltv?: InputMaybe<Scalars["Float"]["input"]>;
-  maxLoanAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  metadata?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  moratorium?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  offerExpiryDate?: InputMaybe<Scalars["DateTime"]["input"]>;
-  otherFees?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
+  ltv?: InputMaybe<Scalars['Float']['input']>;
+  maxLoanAmount?: InputMaybe<Scalars['Float']['input']>;
+  metadata?: InputMaybe<Scalars['JSONObject']['input']>;
+  moratorium?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  offerExpiryDate?: InputMaybe<Scalars['DateTime']['input']>;
+  otherFees?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
   paymentTermsAndSchedule?: InputMaybe<PaymentTermsAndScheduleInput>;
-  processingTimeline?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
+  processingTimeline?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
   rateType?: InputMaybe<RateType>;
   repaymentFrequency?: InputMaybe<RepaymentFrequency>;
   repaymentType?: InputMaybe<RepaymentType>;
-  schedule?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  security?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  sources?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  schedule?: InputMaybe<Scalars['JSONObject']['input']>;
+  security?: InputMaybe<Scalars['JSONObject']['input']>;
+  sources?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 /**
@@ -2518,17 +2687,17 @@ export type GrantOfferRequestInput = {
  * whether to grant access to it should be able to tell.
  */
 export type HeldDocument = {
-  __typename?: "HeldDocument";
+  __typename?: 'HeldDocument';
   /**
    * The canonical category this satisfies. Aliases are resolved — ask for
    * `site_plan` and you are answered about `land_documents`, because they are the
    * same document under two catalogues' names.
    */
-  categoryId: Scalars["String"]["output"];
-  documentUrl: Scalars["String"]["output"];
-  fileName: Scalars["String"]["output"];
+  categoryId: Scalars['String']['output'];
+  documentUrl: Scalars['String']['output'];
+  fileName: Scalars['String']['output'];
   /** When we came by it, so the age shown is the real age. Null where unknown. */
-  heldSince?: Maybe<Scalars["DateTime"]["output"]>;
+  heldSince?: Maybe<Scalars['DateTime']['output']>;
   /**
    * listing | portfolio | approach | compliance on a property; readiness |
    * diligence on a person (`getMyHeldDocuments`). `portfolio` is a document filed
@@ -2536,22 +2705,22 @@ export type HeldDocument = {
    * belonging to this unit alone. A development's document is never offered for a
    * category the unit answers with its own.
    */
-  source: Scalars["String"]["output"];
+  source: Scalars['String']['output'];
   /** One line saying where it came from, for whoever is deciding whether to use it. */
-  sourceNote: Scalars["String"]["output"];
+  sourceNote: Scalars['String']['output'];
 };
 
 export type IdOperator = {
-  eq?: InputMaybe<Scalars["ID"]["input"]>;
-  in?: InputMaybe<Array<Scalars["ID"]["input"]>>;
-  notIn?: InputMaybe<Array<Scalars["ID"]["input"]>>;
+  eq?: InputMaybe<Scalars['ID']['input']>;
+  in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  notIn?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 export type IdentityAttestation = {
-  __typename?: "IdentityAttestation";
+  __typename?: 'IdentityAttestation';
   status: IdentityAttestationStatus;
   /** When the NIA confirmed it. Set only on VERIFIED. */
-  verifiedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  verifiedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 /**
@@ -2560,31 +2729,31 @@ export type IdentityAttestation = {
  * which is not gated — and must read as "not checked", not as a failure.
  */
 export type IdentityAttestationStatus =
-  | "FAILED"
-  | "NONE"
+  | 'FAILED'
+  | 'NONE'
   /** Requested and not yet settled, including a check waiting on a human. */
-  | "PENDING"
-  | "VERIFIED";
+  | 'PENDING'
+  | 'VERIFIED';
 
 export type IdentityDocumentInput = {
-  country?: InputMaybe<Scalars["String"]["input"]>;
-  dateOfBirth?: InputMaybe<Scalars["String"]["input"]>;
-  expiryDate?: InputMaybe<Scalars["String"]["input"]>;
-  firstName?: InputMaybe<Scalars["String"]["input"]>;
-  idNumber: Scalars["String"]["input"];
-  imageUrl?: InputMaybe<Scalars["String"]["input"]>;
-  issueDate?: InputMaybe<Scalars["String"]["input"]>;
-  lastName?: InputMaybe<Scalars["String"]["input"]>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  dateOfBirth?: InputMaybe<Scalars['String']['input']>;
+  expiryDate?: InputMaybe<Scalars['String']['input']>;
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  idNumber: Scalars['String']['input'];
+  imageUrl?: InputMaybe<Scalars['String']['input']>;
+  issueDate?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IdentityVerification = {
-  __typename?: "IdentityVerification";
+  __typename?: 'IdentityVerification';
   /** Set on VERIFIED / FAILED / UNVERIFIABLE. */
-  checkedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  checkedAt?: Maybe<Scalars['DateTime']['output']>;
   /** For support. Never rendered raw to the registrant. */
-  reason?: Maybe<Scalars["String"]["output"]>;
+  reason?: Maybe<Scalars['String']['output']>;
   /** "NIA" in production, "SIMULATED" until the keys land, "ADMIN" on override. */
-  source: Scalars["String"]["output"];
+  source: Scalars['String']['output'];
   status: IdentityVerificationStatus;
 };
 
@@ -2593,78 +2762,82 @@ export type IdentityVerification = {
  * check runs; UNVERIFIABLE means no match and a human has to look — or the
  * verifier never answered — rather than "this person lied".
  */
-export type IdentityVerificationStatus = "FAILED" | "PENDING" | "UNVERIFIABLE" | "VERIFIED";
+export type IdentityVerificationStatus =
+  | 'FAILED'
+  | 'PENDING'
+  | 'UNVERIFIABLE'
+  | 'VERIFIED';
 
 export type ImportAssessmentAlertRuleInput = {
-  code: Scalars["String"]["input"];
-  message: Scalars["String"]["input"];
+  code: Scalars['String']['input'];
+  message: Scalars['String']['input'];
   operator: AssessmentAlertOperator;
   severity: AssessmentAlertSeverity;
-  threshold: Scalars["JSON"]["input"];
-  triggerQuestionCode: Scalars["String"]["input"];
+  threshold: Scalars['JSON']['input'];
+  triggerQuestionCode: Scalars['String']['input'];
 };
 
 export type ImportAssessmentCategoryInput = {
-  code: Scalars["String"]["input"];
-  description?: InputMaybe<Scalars["String"]["input"]>;
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  label: Scalars["String"]["input"];
-  weight?: InputMaybe<Scalars["Float"]["input"]>;
+  code: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  label: Scalars['String']['input'];
+  weight?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type ImportAssessmentQuestionInput = {
   answerType: AssessmentAnswerType;
-  categoryCode?: InputMaybe<Scalars["String"]["input"]>;
-  code: Scalars["String"]["input"];
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  guidance?: InputMaybe<Scalars["String"]["input"]>;
-  isKycAutofill?: InputMaybe<Scalars["Boolean"]["input"]>;
-  isRequired?: InputMaybe<Scalars["Boolean"]["input"]>;
-  isScored?: InputMaybe<Scalars["Boolean"]["input"]>;
-  kycSourceField?: InputMaybe<Scalars["String"]["input"]>;
-  prompt: Scalars["String"]["input"];
-  scoringLogicText?: InputMaybe<Scalars["String"]["input"]>;
-  unit?: InputMaybe<Scalars["String"]["input"]>;
-  verification?: InputMaybe<Scalars["String"]["input"]>;
-  weight?: InputMaybe<Scalars["Float"]["input"]>;
+  categoryCode?: InputMaybe<Scalars['String']['input']>;
+  code: Scalars['String']['input'];
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  guidance?: InputMaybe<Scalars['String']['input']>;
+  isKycAutofill?: InputMaybe<Scalars['Boolean']['input']>;
+  isRequired?: InputMaybe<Scalars['Boolean']['input']>;
+  isScored?: InputMaybe<Scalars['Boolean']['input']>;
+  kycSourceField?: InputMaybe<Scalars['String']['input']>;
+  prompt: Scalars['String']['input'];
+  scoringLogicText?: InputMaybe<Scalars['String']['input']>;
+  unit?: InputMaybe<Scalars['String']['input']>;
+  verification?: InputMaybe<Scalars['String']['input']>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type ImportAssessmentQuestionOptionInput = {
-  code: Scalars["String"]["input"];
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  label: Scalars["String"]["input"];
-  questionCode: Scalars["String"]["input"];
-  score: Scalars["Int"]["input"];
+  code: Scalars['String']['input'];
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  label: Scalars['String']['input'];
+  questionCode: Scalars['String']['input'];
+  score: Scalars['Int']['input'];
 };
 
 export type ImportAssessmentReadinessBandInput = {
-  action?: InputMaybe<Scalars["String"]["input"]>;
-  code: Scalars["String"]["input"];
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  guidance?: InputMaybe<Scalars["String"]["input"]>;
-  label: Scalars["String"]["input"];
-  maxScore: Scalars["Int"]["input"];
-  minScore: Scalars["Int"]["input"];
+  action?: InputMaybe<Scalars['String']['input']>;
+  code: Scalars['String']['input'];
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  guidance?: InputMaybe<Scalars['String']['input']>;
+  label: Scalars['String']['input'];
+  maxScore: Scalars['Int']['input'];
+  minScore: Scalars['Int']['input'];
 };
 
 export type ImportAssessmentScoringBandInput = {
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  maxValue?: InputMaybe<Scalars["Float"]["input"]>;
-  minValue?: InputMaybe<Scalars["Float"]["input"]>;
-  questionCode: Scalars["String"]["input"];
-  score: Scalars["Int"]["input"];
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  maxValue?: InputMaybe<Scalars['Float']['input']>;
+  minValue?: InputMaybe<Scalars['Float']['input']>;
+  questionCode: Scalars['String']['input'];
+  score: Scalars['Int']['input'];
 };
 
 export type ImportAssessmentTemplateBaseInput = {
-  code: Scalars["String"]["input"];
-  consentText?: InputMaybe<Scalars["String"]["input"]>;
-  declarationText?: InputMaybe<Scalars["String"]["input"]>;
-  legalNotice?: InputMaybe<Scalars["String"]["input"]>;
-  maxScorePerParameter?: InputMaybe<Scalars["Int"]["input"]>;
-  name: Scalars["String"]["input"];
+  code: Scalars['String']['input'];
+  consentText?: InputMaybe<Scalars['String']['input']>;
+  declarationText?: InputMaybe<Scalars['String']['input']>;
+  legalNotice?: InputMaybe<Scalars['String']['input']>;
+  maxScorePerParameter?: InputMaybe<Scalars['Int']['input']>;
+  name: Scalars['String']['input'];
   platformRole?: InputMaybe<AssessmentPlatformRole>;
   subjectType?: InputMaybe<AssessmentSubjectType>;
-  version: Scalars["String"]["input"];
+  version: Scalars['String']['input'];
 };
 
 export type ImportAssessmentTemplateInput = {
@@ -2678,35 +2851,35 @@ export type ImportAssessmentTemplateInput = {
 };
 
 export type InitiateDepositResult = {
-  __typename?: "InitiateDepositResult";
-  id: Scalars["ID"]["output"];
-  reference: Scalars["String"]["output"];
+  __typename?: 'InitiateDepositResult';
+  id: Scalars['ID']['output'];
+  reference: Scalars['String']['output'];
 };
 
 /** A defect found at inspection, and the negotiation that followed it. */
 export type InspectionIssue = {
-  __typename?: "InspectionIssue";
+  __typename?: 'InspectionIssue';
   /** Null until the logger has decided. False means escalated, not cancelled. */
-  accepted?: Maybe<Scalars["Boolean"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  detail?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  loggedAt: Scalars["DateTime"]["output"];
+  accepted?: Maybe<Scalars['Boolean']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  detail?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  loggedAt: Scalars['DateTime']['output'];
   /** Which side logged it. Only this side may accept or reject the remedy. */
   loggedBy: TransactionPartyRole;
   /** The current proposal. Replaced, not accumulated, when a new one is made. */
-  remedy?: Maybe<Scalars["String"]["output"]>;
+  remedy?: Maybe<Scalars['String']['output']>;
   /** When the remedy is promised by. A date, not a deadline anything enforces. */
-  remedyByDate?: Maybe<Scalars["Date"]["output"]>;
-  remedyProposedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  remedyByDate?: Maybe<Scalars['Date']['output']>;
+  remedyProposedAt?: Maybe<Scalars['DateTime']['output']>;
   remedyProposedBy?: Maybe<TransactionPartyRole>;
-  resolutionNote?: Maybe<Scalars["String"]["output"]>;
-  resolvedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  resolutionNote?: Maybe<Scalars['String']['output']>;
+  resolvedAt?: Maybe<Scalars['DateTime']['output']>;
   status: InspectionIssueStatus;
-  summary: Scalars["String"]["output"];
+  summary: Scalars['String']['output'];
   /** The deal this was logged against, whichever flow it belongs to. */
-  transactionId: Scalars["ID"]["output"];
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  transactionId: Scalars['ID']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 /**
@@ -2723,49 +2896,49 @@ export type InspectionIssueStatus =
    * further remedy may be proposed, which is what stops a rejection being a dead
    * end. Counts as unresolved: the stage will not advance over one.
    */
-  | "escalated"
+  | 'escalated'
   /** Logged. Nobody has proposed a remedy yet. */
-  | "open"
+  | 'open'
   /** The other side has offered a remedy; the logger decides. */
-  | "remedy_proposed"
+  | 'remedy_proposed'
   /** The logger accepted the remedy. The only settled state. */
-  | "resolved";
+  | 'resolved';
 
 export type InstallmentFilter = {
-  currency?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["ID"]["input"]>;
-  refNo?: InputMaybe<Scalars["String"]["input"]>;
-  repaymentId?: InputMaybe<Scalars["ID"]["input"]>;
-  status?: InputMaybe<Scalars["String"]["input"]>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  refNo?: InputMaybe<Scalars['String']['input']>;
+  repaymentId?: InputMaybe<Scalars['ID']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** A revised figure for one installment. Its due date stays as it is. */
 export type InstallmentRevisionInput = {
-  amount: Scalars["Float"]["input"];
+  amount: Scalars['Float']['input'];
   /** Annual effective interest rate, in percent (24.5 = 24.5% a year). Zero or more. */
-  effectiveInterestRate: Scalars["Float"]["input"];
-  fees?: InputMaybe<Scalars["Float"]["input"]>;
-  interest?: InputMaybe<Scalars["Float"]["input"]>;
+  effectiveInterestRate: Scalars['Float']['input'];
+  fees?: InputMaybe<Scalars['Float']['input']>;
+  interest?: InputMaybe<Scalars['Float']['input']>;
   /** Optional split; when given, principal, interest and fees must add up to amount. */
-  principal?: InputMaybe<Scalars["Float"]["input"]>;
+  principal?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type InterestRate = {
-  __typename?: "InterestRate";
-  kind: Scalars["String"]["output"];
-  rate: Scalars["Float"]["output"];
+  __typename?: 'InterestRate';
+  kind: Scalars['String']['output'];
+  rate: Scalars['Float']['output'];
 };
 
 export type InterestRateInput = {
-  kind?: InputMaybe<Scalars["String"]["input"]>;
-  rate?: InputMaybe<Scalars["Float"]["input"]>;
+  kind?: InputMaybe<Scalars['String']['input']>;
+  rate?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type InviteCompanyMemberInput = {
-  email: Scalars["String"]["input"];
-  entityRoleId: Scalars["ID"]["input"];
-  fullName?: InputMaybe<Scalars["String"]["input"]>;
-  phone?: InputMaybe<Scalars["String"]["input"]>;
+  email: Scalars['String']['input'];
+  entityRoleId: Scalars['ID']['input'];
+  fullName?: InputMaybe<Scalars['String']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IssuerFilter = {
@@ -2778,10 +2951,10 @@ export type IssuerFilter = {
 
 /** The five cards across the top of the issuer dashboard. */
 export type IssuerPortfolioCounts = {
-  __typename?: "IssuerPortfolioCounts";
+  __typename?: 'IssuerPortfolioCounts';
   /** Listed and still claimable. */
-  available: Scalars["Int"]["output"];
-  currency: Scalars["String"]["output"];
+  available: Scalars['Int']['output'];
+  currency: Scalars['String']['output'];
   /**
    * Units on the market — available plus under offer.
    *
@@ -2789,71 +2962,71 @@ export type IssuerPortfolioCounts = {
    * So the three read as one row: 40 listed, of which 32 available and 8 under
    * offer.
    */
-  listed: Scalars["Int"]["output"];
+  listed: Scalars['Int']['output'];
   /**
    * List value of unsold stock — the hero's headline figure.
    *
    * The same `status != sold` definition the series uses, so this equals the last
    * point of `getIssuerPipelineSeries`.
    */
-  pipelineValue: Scalars["Float"]["output"];
-  sold: Scalars["Int"]["output"];
+  pipelineValue: Scalars['Float']['output'];
+  sold: Scalars['Int']['output'];
   /** Sum of purchasePrice across EXECUTED / COMPLETED term sheets. */
-  totalRevenue: Scalars["Float"]["output"];
+  totalRevenue: Scalars['Float']['output'];
   /** Claimed by a buyer who has committed money, not yet sold. */
-  underOffer: Scalars["Int"]["output"];
+  underOffer: Scalars['Int']['output'];
 };
 
 export type Land = {
-  __typename?: "Land";
-  boundary?: Maybe<Scalars["JSONObject"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  id: Scalars["ID"]["output"];
-  ownerId?: Maybe<Scalars["ID"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  __typename?: 'Land';
+  boundary?: Maybe<Scalars['JSONObject']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  ownerId?: Maybe<Scalars['ID']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type LandCheckResult = {
-  __typename?: "LandCheckResult";
-  message?: Maybe<Scalars["String"]["output"]>;
-  ok: Scalars["Boolean"]["output"];
+  __typename?: 'LandCheckResult';
+  message?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type LandFilter = {
-  id?: InputMaybe<Scalars["ID"]["input"]>;
-  ownerId?: InputMaybe<Scalars["ID"]["input"]>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  ownerId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type LedgerLoan = {
-  __typename?: "LedgerLoan";
-  borrowerName?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  currency?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'LedgerLoan';
+  borrowerName?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  currency?: Maybe<Scalars['String']['output']>;
   /** Facility amount — the disbursable principal (OfferRequest.agreedAmount). */
-  facilityAmount?: Maybe<Scalars["Float"]["output"]>;
+  facilityAmount?: Maybe<Scalars['Float']['output']>;
   /** False when no active declaration exists yet (portfolio row tone = RED). */
-  hasDeclaration: Scalars["Boolean"]["output"];
+  hasDeclaration: Scalars['Boolean']['output'];
   /** Loan row key — equals the anchoring offerRequestId. */
-  id: Scalars["ID"]["output"];
-  interestRate?: Maybe<Scalars["JSONObject"]["output"]>;
+  id: Scalars['ID']['output'];
+  interestRate?: Maybe<Scalars['JSONObject']['output']>;
   /** reportingDate of the latest active declaration (drives staleness). */
-  lastDeclarationDate?: Maybe<Scalars["DateTime"]["output"]>;
+  lastDeclarationDate?: Maybe<Scalars['DateTime']['output']>;
   latestDeclaration?: Maybe<StatusDeclaration>;
-  lenderName?: Maybe<Scalars["String"]["output"]>;
+  lenderName?: Maybe<Scalars['String']['output']>;
   /** Human-readable loan reference (OfferRequest.refNo). */
-  loanRef?: Maybe<Scalars["String"]["output"]>;
+  loanRef?: Maybe<Scalars['String']['output']>;
   /** Declared loan status from the latest active declaration. */
   loanStatus?: Maybe<DeclarationLoanStatus>;
-  modeOfFinancing?: Maybe<Scalars["String"]["output"]>;
+  modeOfFinancing?: Maybe<Scalars['String']['output']>;
   offerRequest: OfferRequest;
-  offerRequestId: Scalars["ID"]["output"];
+  offerRequestId: Scalars['ID']['output'];
   /** Origination reference (OfferRequest.approvedAt). */
-  originationDate?: Maybe<Scalars["DateTime"]["output"]>;
-  propertyName?: Maybe<Scalars["String"]["output"]>;
+  originationDate?: Maybe<Scalars['DateTime']['output']>;
+  propertyName?: Maybe<Scalars['String']['output']>;
   requestStatus?: Maybe<OfferRequestStatus>;
   /** Total outstanding from the latest active declaration; null when none filed yet. */
-  totalOutstanding?: Maybe<Scalars["Float"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  totalOutstanding?: Maybe<Scalars['Float']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
   /**
    * The side this viewer sits on for this row — LENDER where their entity is the
    * financier (or the issuer under seller financing), BORROWER where they are the
@@ -2865,8 +3038,8 @@ export type LedgerLoan = {
 
 export type LedgerLoanFilter = {
   /** Filter to a single loan by its anchoring offer request (id and offerRequestId are equivalent). */
-  id?: InputMaybe<Scalars["ID"]["input"]>;
-  offerRequestId?: InputMaybe<Scalars["ID"]["input"]>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  offerRequestId?: InputMaybe<Scalars['ID']['input']>;
   /** Narrow to one servicing status (must be a status the loan book already surfaces). */
   requestStatus?: InputMaybe<OfferRequestStatus>;
   /**
@@ -2894,14 +3067,14 @@ export type LedgerLoanFilter = {
 /** Which side of a loan a row is being read from. */
 export type LedgerLoanRole =
   /** The viewer is the buyer on this loan. */
-  | "BORROWER"
+  | 'BORROWER'
   /** The viewer's entity lends on this loan — financier, or issuer under seller financing. */
-  | "LENDER";
+  | 'LENDER';
 
 export type LegalDocs = {
-  __typename?: "LegalDocs";
-  name?: Maybe<Scalars["String"]["output"]>;
-  url?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'LegalDocs';
+  name?: Maybe<Scalars['String']['output']>;
+  url?: Maybe<Scalars['String']['output']>;
 };
 
 export type LegalDocsInput = {
@@ -2921,26 +3094,26 @@ export type LegalDocsInput = {
    * list is rejected rather than stored: a typo that silently never matched would
    * look exactly like a feature that does not work.
    */
-  categoryId?: InputMaybe<Scalars["String"]["input"]>;
-  name?: InputMaybe<Scalars["String"]["input"]>;
-  url?: InputMaybe<Scalars["String"]["input"]>;
+  categoryId?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  url?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Loan = {
-  __typename?: "Loan";
-  conversationId: Scalars["String"]["output"];
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  id: Scalars["ID"]["output"];
-  interestRate?: Maybe<Scalars["JSONObject"]["output"]>;
-  loanAmount: Scalars["Float"]["output"];
-  loanStatus?: Maybe<Scalars["String"]["output"]>;
-  loanTenor?: Maybe<Scalars["JSONObject"]["output"]>;
-  repaymentFrequency?: Maybe<Scalars["String"]["output"]>;
-  totalInterest?: Maybe<Scalars["Float"]["output"]>;
-  totalRepayment?: Maybe<Scalars["Float"]["output"]>;
-  transactionId?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  userId?: Maybe<Scalars["ID"]["output"]>;
+  __typename?: 'Loan';
+  conversationId: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  interestRate?: Maybe<Scalars['JSONObject']['output']>;
+  loanAmount: Scalars['Float']['output'];
+  loanStatus?: Maybe<Scalars['String']['output']>;
+  loanTenor?: Maybe<Scalars['JSONObject']['output']>;
+  repaymentFrequency?: Maybe<Scalars['String']['output']>;
+  totalInterest?: Maybe<Scalars['Float']['output']>;
+  totalRepayment?: Maybe<Scalars['Float']['output']>;
+  transactionId?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  userId?: Maybe<Scalars['ID']['output']>;
 };
 
 /**
@@ -2957,41 +3130,43 @@ export type Loan = {
  * server enforces.
  */
 export type LoanAgreement = {
-  __typename?: "LoanAgreement";
-  fileName?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'LoanAgreement';
+  fileName?: Maybe<Scalars['String']['output']>;
   /**
    * The current agreement document. The borrower's signed copy replaces the
    * unsigned one in place when they sign, and the lender's executed copy replaces
    * that on countersignature — this is always the latest of the three.
    */
-  fileUrl?: Maybe<Scalars["String"]["output"]>;
+  fileUrl?: Maybe<Scalars['String']['output']>;
   /** When the lender issued it, which is also when the borrower was notified. */
-  issuedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
   /** The date the lender set for signing, or null if they set none. */
-  signingDeadline?: Maybe<Scalars["DateTime"]["output"]>;
+  signingDeadline?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type LoanDocument = {
-  __typename?: "LoanDocument";
-  fileName: Scalars["String"]["output"];
-  fileSize?: Maybe<Scalars["Float"]["output"]>;
-  fileType?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  loanId?: Maybe<Scalars["ID"]["output"]>;
-  name: Scalars["String"]["output"];
-  offerRequestId: Scalars["ID"]["output"];
+  __typename?: 'LoanDocument';
+  fileName: Scalars['String']['output'];
+  fileSize?: Maybe<Scalars['Float']['output']>;
+  fileType?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  loanId?: Maybe<Scalars['ID']['output']>;
+  name: Scalars['String']['output'];
+  offerRequestId: Scalars['ID']['output'];
   source: LoanDocumentSource;
-  tag?: Maybe<Scalars["String"]["output"]>;
-  uploadedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  tag?: Maybe<Scalars['String']['output']>;
+  uploadedAt?: Maybe<Scalars['DateTime']['output']>;
   /** Vault download / preview target. */
-  url?: Maybe<Scalars["String"]["output"]>;
+  url?: Maybe<Scalars['String']['output']>;
 };
 
-export type LoanDocumentSource = "borrower" | "financier";
+export type LoanDocumentSource =
+  | 'borrower'
+  | 'financier';
 
 export type LoanFilter = {
-  conversationId?: InputMaybe<Scalars["ID"]["input"]>;
-  id?: InputMaybe<Scalars["ID"]["input"]>;
+  conversationId?: InputMaybe<Scalars['ID']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type LoanPaymentSource =
@@ -2999,52 +3174,71 @@ export type LoanPaymentSource =
    * PSP / mobile-money / bank rail outside Afram. Not yet available — the
    * mutation refuses it. Gate the option in the modal until the webhook ships.
    */
-  | "external"
+  | 'external'
   /** Pay from the caller's wallet cash balance. */
-  | "wallet";
+  | 'wallet';
 
-export type LoanRequestKind = "declaration_review" | "formal_request";
+export type LoanRequestKind =
+  | 'declaration_review'
+  | 'formal_request';
 
-export type LoanRequestStatus = "acknowledged" | "open";
+export type LoanRequestStatus =
+  | 'acknowledged'
+  | 'open';
 
-export type LoanScheduleType = "ANNUITY" | "BALLOON" | "BULLET" | "EQUAL_PRINCIPAL";
+export type LoanScheduleType =
+  | 'ANNUITY'
+  | 'BALLOON'
+  | 'BULLET'
+  | 'EQUAL_PRINCIPAL';
 
-export type LoanSubType = "FLAT" | "REDUCING";
+export type LoanSubType =
+  | 'FLAT'
+  | 'REDUCING';
 
 export type LoanType =
-  "BRIDGE_LOAN" | "COMMERCIAL" | "CONSTRUCTION_LOAN" | "EQUITY_RELEASE" | "MEZZANINE" | "MORTGAGE";
+  | 'BRIDGE_LOAN'
+  | 'COMMERCIAL'
+  | 'CONSTRUCTION_LOAN'
+  | 'EQUITY_RELEASE'
+  | 'MEZZANINE'
+  | 'MORTGAGE';
 
 export type MarkAllAsReadResponse = {
-  __typename?: "MarkAllAsReadResponse";
-  updated: Scalars["Int"]["output"];
+  __typename?: 'MarkAllAsReadResponse';
+  updated: Scalars['Int']['output'];
+};
+
+export type MarkSupportRequestSeenInput = {
+  reference: Scalars['String']['input'];
 };
 
 export type Message = {
-  __typename?: "Message";
-  attachmentComment?: Maybe<Scalars["String"]["output"]>;
-  attachmentComments?: Maybe<Array<Maybe<Scalars["JSONObject"]["output"]>>>;
-  content: Scalars["JSONObject"]["output"];
-  conversationId: Scalars["ID"]["output"];
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedBy?: Maybe<Scalars["String"]["output"]>;
-  deletedForEveryone?: Maybe<Scalars["Boolean"]["output"]>;
-  deletedForUsers?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
-  editedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  fileUrl?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  isDeleted?: Maybe<Scalars["Boolean"]["output"]>;
-  isEdited?: Maybe<Scalars["Boolean"]["output"]>;
-  isRead?: Maybe<Scalars["Boolean"]["output"]>;
-  messageType: Scalars["String"]["output"];
-  pollData?: Maybe<Scalars["JSONObject"]["output"]>;
-  reactions?: Maybe<Array<Maybe<Scalars["JSONObject"]["output"]>>>;
-  replies?: Maybe<Array<Maybe<Scalars["JSONObject"]["output"]>>>;
-  replyTo?: Maybe<Scalars["JSONObject"]["output"]>;
-  senderId: Scalars["String"]["output"];
-  senderPicture?: Maybe<Scalars["String"]["output"]>;
-  transactionId?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  __typename?: 'Message';
+  attachmentComment?: Maybe<Scalars['String']['output']>;
+  attachmentComments?: Maybe<Array<Maybe<Scalars['JSONObject']['output']>>>;
+  content: Scalars['JSONObject']['output'];
+  conversationId: Scalars['ID']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  deletedBy?: Maybe<Scalars['String']['output']>;
+  deletedForEveryone?: Maybe<Scalars['Boolean']['output']>;
+  deletedForUsers?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  editedAt?: Maybe<Scalars['DateTime']['output']>;
+  fileUrl?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  isDeleted?: Maybe<Scalars['Boolean']['output']>;
+  isEdited?: Maybe<Scalars['Boolean']['output']>;
+  isRead?: Maybe<Scalars['Boolean']['output']>;
+  messageType: Scalars['String']['output'];
+  pollData?: Maybe<Scalars['JSONObject']['output']>;
+  reactions?: Maybe<Array<Maybe<Scalars['JSONObject']['output']>>>;
+  replies?: Maybe<Array<Maybe<Scalars['JSONObject']['output']>>>;
+  replyTo?: Maybe<Scalars['JSONObject']['output']>;
+  senderId: Scalars['String']['output'];
+  senderPicture?: Maybe<Scalars['String']['output']>;
+  transactionId?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type MessageFilter = {
@@ -3057,64 +3251,64 @@ export type MessageFilter = {
 };
 
 export type MfaOtpPayload = {
-  __typename?: "MfaOtpPayload";
-  email?: Maybe<Scalars["String"]["output"]>;
-  message: Scalars["String"]["output"];
-  phoneNumber?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'MfaOtpPayload';
+  email?: Maybe<Scalars['String']['output']>;
+  message: Scalars['String']['output'];
+  phoneNumber?: Maybe<Scalars['String']['output']>;
 };
 
 export type MfaSetupPayload = {
-  __typename?: "MfaSetupPayload";
-  message: Scalars["String"]["output"];
+  __typename?: 'MfaSetupPayload';
+  message: Scalars['String']['output'];
   user: User;
 };
 
 export type MfaVerifyPayload = {
-  __typename?: "MfaVerifyPayload";
-  message: Scalars["String"]["output"];
-  verified: Scalars["Boolean"]["output"];
+  __typename?: 'MfaVerifyPayload';
+  message: Scalars['String']['output'];
+  verified: Scalars['Boolean']['output'];
 };
 
 export type ModeOfFinancing =
-  | "FINANCIER_OFFER"
-  | "ISSUER_LOAN_FINANCING"
-  | "PERSONAL_FUNDS"
+  | 'FINANCIER_OFFER'
+  | 'ISSUER_LOAN_FINANCING'
+  | 'PERSONAL_FUNDS'
   /**
    * Rent to buy — the buyer is a tenant for a term and owns nothing until they
    * exercise the option. The request anchors the deal's conversation; the
    * tenancy itself lives on RentToBuyTxn, and nothing is lent, so nothing about
    * this request should be read as debt.
    */
-  | "RENT_TO_BUY"
-  | "SELLER_FINANCING";
+  | 'RENT_TO_BUY'
+  | 'SELLER_FINANCING';
 
 export type MoneyOperator = {
   between?: InputMaybe<MoneyRange>;
-  eq?: InputMaybe<Scalars["Money"]["input"]>;
-  gt?: InputMaybe<Scalars["Money"]["input"]>;
-  gte?: InputMaybe<Scalars["Money"]["input"]>;
-  lt?: InputMaybe<Scalars["Money"]["input"]>;
-  lte?: InputMaybe<Scalars["Money"]["input"]>;
+  eq?: InputMaybe<Scalars['Money']['input']>;
+  gt?: InputMaybe<Scalars['Money']['input']>;
+  gte?: InputMaybe<Scalars['Money']['input']>;
+  lt?: InputMaybe<Scalars['Money']['input']>;
+  lte?: InputMaybe<Scalars['Money']['input']>;
 };
 
 export type MoneyRange = {
-  end: Scalars["Money"]["input"];
-  start: Scalars["Money"]["input"];
+  end: Scalars['Money']['input'];
+  start: Scalars['Money']['input'];
 };
 
 export type MonthlyPayment = {
-  __typename?: "MonthlyPayment";
-  amount: Scalars["Float"]["output"];
-  date: Scalars["DateTime"]["output"];
-  interestComponent: Scalars["Float"]["output"];
-  principalComponent: Scalars["Float"]["output"];
-  refNo: Scalars["String"]["output"];
-  remainingPrincipal: Scalars["Float"]["output"];
+  __typename?: 'MonthlyPayment';
+  amount: Scalars['Float']['output'];
+  date: Scalars['DateTime']['output'];
+  interestComponent: Scalars['Float']['output'];
+  principalComponent: Scalars['Float']['output'];
+  refNo: Scalars['String']['output'];
+  remainingPrincipal: Scalars['Float']['output'];
   status: PaymentStatus;
 };
 
 export type Mutation = {
-  __typename?: "Mutation";
+  __typename?: 'Mutation';
   /** Requester accepts what was supplied. Terminal for that category. */
   acceptApproachItem: SellerApproach;
   /** Requester — from `submitted` to `accepted`. Terminal. */
@@ -3163,13 +3357,15 @@ export type Mutation = {
   acknowledgeTitleReceipt: RentToBuyTxn;
   /** Public. Creates the account and signs the person in — the same payload as `login`. */
   activateAccount: AuthPayload;
-  activateAssessment: Scalars["Boolean"]["output"];
+  activateAssessment: Scalars['Boolean']['output'];
   addAttachmentComment: Message;
   /** Member: reply in a ticket's thread. Refused once the ticket is closed. */
   addMyTicketComment: TicketComment;
   addParticipant: Conversation;
   addReaction: Message;
   addReply: Message;
+  /** Signed in: add a message, with words, files or both. Reopens a resolved request; refused (REQUEST_CLOSED) on a closed one. */
+  addSupportMessage: SupportMessagePayload;
   addTicketComment: TicketComment;
   addUserForPush: NotificationSuccessResponse;
   /**
@@ -3197,10 +3393,12 @@ export type Mutation = {
    */
   approveScheduledDeclaration: StatusDeclaration;
   approveUserVerification: User;
-  archiveAssessment: Scalars["Boolean"]["output"];
+  archiveAssessment: Scalars['Boolean']['output'];
+  /** Staff (support_request:assign). Null unassigns. */
+  assignSupportRequest: SupportRequest;
   assignSupportRole: SupportRoleMember;
   assignTicket: Ticket;
-  attachAssessmentDocumentFile: Scalars["Boolean"]["output"];
+  attachAssessmentDocumentFile: Scalars['Boolean']['output'];
   /**
    * From CONDITIONS_PRECEDENT_CONFIRMED ("Ready to Disburse") → REPAYING. The
    * financier supplies the repayment schedule and the grace period (AFR-310): the
@@ -3210,7 +3408,7 @@ export type Mutation = {
    * payment counts as missed only once the grace period lapses.
    */
   beginLoanDeclaration: OfferRequest;
-  beginOfficerReview: Scalars["Boolean"]["output"];
+  beginOfficerReview: Scalars['Boolean']['output'];
   beginRequestReview: OfferRequest;
   /**
    * Take one of the vendor's published slots.
@@ -3236,7 +3434,7 @@ export type Mutation = {
   cancelPropertyViewing: PropertyViewing;
   checkLand: LandCheckResult;
   /** Computer. Auth + key. Ends the session and deletes the photo. */
-  closeSelfieSession: Scalars["Boolean"]["output"];
+  closeSelfieSession: Scalars['Boolean']['output'];
   /**
    * Issuer — title_settled → repaying. Creates/activates the loan record in the
    * servicing domain with principal = financedAmount and the plan's
@@ -3346,6 +3544,8 @@ export type Mutation = {
   confirmRentFullyPaid: RentToBuyTxn;
   confirmRentInspection: RentToBuyTxn;
   confirmSellerInspection: SellerFinancingTxn;
+  /** Signed in: "Yes, thanks" closes a resolved request; "No, still a problem" reopens it. NOT_RESOLVED otherwise. */
+  confirmSupportResolution: SupportRequest;
   /**
    * Issuer — down_payment_released → title_settled. Under
    * retained_until_settlement, this records the buyer's contractual right to
@@ -3400,34 +3600,36 @@ export type Mutation = {
   createAssessmentReadinessBand: AssessmentReadinessBand;
   createAssessmentScoringBand: AssessmentScoringBand;
   createAssessmentTemplate: AssessmentTemplate;
-  createAssetValueSnapshot: Scalars["Boolean"]["output"];
+  createAssetValueSnapshot: Scalars['Boolean']['output'];
   createBareLandProject: PortfolioProjectWithUnitsResult;
-  createBuyerProject: Scalars["Boolean"]["output"];
+  createBuyerProject: Scalars['Boolean']['output'];
   createCompanyRole: EntityRole;
   /** Admin: create a compliance section for a role type */
   createComplianceSection: ComplianceAdminSectionResponse;
   /** Admin: add a document template to a section */
   createComplianceTemplate: ComplianceAdminTemplateResponse;
   createConversation: Conversation;
-  createDueDiligence: Scalars["Boolean"]["output"];
-  createLand: Scalars["Boolean"]["output"];
-  createOffer: Scalars["Boolean"]["output"];
+  createDueDiligence: Scalars['Boolean']['output'];
+  createLand: Scalars['Boolean']['output'];
+  createOffer: Scalars['Boolean']['output'];
   createOfferRequest: OfferRequest;
-  createPaymentSchedule: Scalars["Boolean"]["output"];
-  createPortfolio: Scalars["Boolean"]["output"];
+  createPaymentSchedule: Scalars['Boolean']['output'];
+  createPortfolio: Scalars['Boolean']['output'];
   createPortfolioProjectWithUnits: PortfolioProjectWithUnitsResult;
   createPreTokenizedUnit: PreTokenizedUnit;
-  createProject: Scalars["Boolean"]["output"];
-  createProperty: Scalars["Boolean"]["output"];
-  createRepayment: Scalars["Boolean"]["output"];
-  createReview: Scalars["Boolean"]["output"];
+  createProject: Scalars['Boolean']['output'];
+  createProperty: Scalars['Boolean']['output'];
+  createRepayment: Scalars['Boolean']['output'];
+  createReview: Scalars['Boolean']['output'];
   createSimpleConversation: Conversation;
+  /** Signed in: start a request. The first message is the body and its files. */
+  createSupportRequest: SupportRequest;
   createSupportRole: SupportRole;
   createSupportUser: SupportUser;
   createTailoringRule: TailoringRuleResponse;
-  createTempProject: Scalars["Boolean"]["output"];
+  createTempProject: Scalars['Boolean']['output'];
   createTermSheet: TermSheet;
-  createTransaction: Scalars["Boolean"]["output"];
+  createTransaction: Scalars['Boolean']['output'];
   /** The vendor accepts or declines. Declining releases the slot. */
   decidePropertyViewing: PropertyViewing;
   /**
@@ -3470,15 +3672,15 @@ export type Mutation = {
    * Decrypt every value of a metadata object previously produced by
    * encryptMetadata, restoring each original value (with its JSON type intact).
    */
-  decryptMetadata: Scalars["JSON"]["output"];
+  decryptMetadata: Scalars['JSON']['output'];
   deleteAllNotifications: DeleteAllNotificationsResponse;
-  deleteCompanyRole: Scalars["Boolean"]["output"];
+  deleteCompanyRole: Scalars['Boolean']['output'];
   /** Admin: delete a compliance section and all its templates */
   deleteComplianceSection: ComplianceDeleteResponse;
   /** Admin: delete a document template */
   deleteComplianceTemplate: ComplianceDeleteResponse;
-  deleteConversation: Scalars["Boolean"]["output"];
-  deleteMessage: Scalars["Boolean"]["output"];
+  deleteConversation: Scalars['Boolean']['output'];
+  deleteMessage: Scalars['Boolean']['output'];
   /**
    * Remove the stored signature, since it is biometric-adjacent data and its
    * owner is entitled to withdraw it. Signatures already applied to signed
@@ -3487,9 +3689,9 @@ export type Mutation = {
    */
   deleteMySignature: User;
   deleteNotification: NotificationSuccessResponse;
-  deleteSupportRole: Scalars["Boolean"]["output"];
+  deleteSupportRole: Scalars['Boolean']['output'];
   deleteTailoringRule: ComplianceDeleteResponse;
-  deleteTicket: Scalars["Boolean"]["output"];
+  deleteTicket: Scalars['Boolean']['output'];
   disburseFacility: OfferRequest;
   dismissComplianceNotification: ComplianceDismissResponse;
   editMessage: Message;
@@ -3498,7 +3700,7 @@ export type Mutation = {
    * object with the same keys whose values are base64-encoded AES-GCM ciphertext.
    * Reverse the operation with decryptMetadata.
    */
-  encryptMetadata: Scalars["JSON"]["output"];
+  encryptMetadata: Scalars['JSON']['output'];
   /** Lender extends the offer letter's acceptance deadline. */
   extendOfferLetterDeadline: OfferRequest;
   /**
@@ -3527,9 +3729,9 @@ export type Mutation = {
    * already committed to the unit — before anything is taken.
    */
   fundApproachDeposit: SellerApproach;
-  generateToken: Scalars["String"]["output"];
+  generateToken: Scalars['String']['output'];
   /** @deprecated Use grantAssessmentShare with counterpartyKind: financier. */
-  grantAssessmentFinancierShare: Scalars["ID"]["output"];
+  grantAssessmentFinancierShare: Scalars['ID']['output'];
   /**
    * Share an assessment's conclusion with a counterparty.
    *
@@ -3545,7 +3747,7 @@ export type Mutation = {
    * ⚠ Confers the conclusion ONLY — see AssessmentOutput. Never the responses or
    * the documents behind it.
    */
-  grantAssessmentShare: Scalars["ID"]["output"];
+  grantAssessmentShare: Scalars['ID']['output'];
   grantOfferRequest: OfferRequest;
   importAssessmentTemplate: AssessmentTemplate;
   /**
@@ -3686,14 +3888,14 @@ export type Mutation = {
    * expired. Always true. The session's access token is not revoked; it expires
    * within the hour, and the client should discard it now.
    */
-  logout: Scalars["Boolean"]["output"];
+  logout: Scalars['Boolean']['output'];
   /**
    * End every session the caller has, on every device, including the one making
    * this call: every access and refresh token already issued stops working.
    */
-  logoutAllSessions: Scalars["Boolean"]["output"];
+  logoutAllSessions: Scalars['Boolean']['output'];
   markAllNotificationsAsRead: MarkAllAsReadResponse;
-  markAsPaid: Scalars["Boolean"]["output"];
+  markAsPaid: Scalars['Boolean']['output'];
   /**
    * Issuer — terms_agreed → diligence_complete. Re-derives completeness from the
    * rows rather than trusting the caller: every item in both directions must be
@@ -3702,8 +3904,10 @@ export type Mutation = {
   markDiligenceComplete: CashPurchaseTxn;
   markNotificationAsRead: Notification;
   /** Phone. NO auth. Lights 'Phone connected' on the computer. Rate limited by IP. */
-  markSelfieSessionOpened: Scalars["Boolean"]["output"];
-  nudgeFinancier: Scalars["Boolean"]["output"];
+  markSelfieSessionOpened: Scalars['Boolean']['output'];
+  /** Signed in: they've looked at it. Clears "Updated" on every device. Safe to call often. */
+  markSupportRequestSeen: SupportRequest;
+  nudgeFinancier: Scalars['Boolean']['output'];
   /**
    * The buyer reminds a silent seller (D90).
    *
@@ -3716,6 +3920,11 @@ export type Mutation = {
   nudgeSeller: SellerApproach;
   /** Computer. Auth required. `id` = base64url(SHA-256(key)). Never returns the photo. */
   openSelfieSession: SelfieSession;
+  /**
+   * Emergency stop: pause transfers of the property's token (pauser wallet).
+   * Returns true if a transaction was sent, false if it was already paused.
+   */
+  pausePropertyToken: Scalars['Boolean']['output'];
   /**
    * Pay the commitment deposit from the caller's wallet cash balance.
    *
@@ -3828,8 +4037,8 @@ export type Mutation = {
    * terms are a starting point for the builder, not a rule.
    */
   proposeRentPlan: RentToBuyTxn;
-  publishAssessmentTemplate: Scalars["Boolean"]["output"];
-  publishPortfolioUnits: Scalars["Boolean"]["output"];
+  publishAssessmentTemplate: Scalars['Boolean']['output'];
+  publishPortfolioUnits: Scalars['Boolean']['output'];
   /** Requester — from `submitted` to `queried`, with a non-empty note. */
   queryCashDiligenceItem: CashPurchaseTxn;
   /** Requester — send it back with a question. submitted → queried. */
@@ -3837,7 +4046,7 @@ export type Mutation = {
   /** Requester — sends it back with a question. */
   queryRentDiligenceItem: RentToBuyTxn;
   reGenerateAccessToken: AuthPayload;
-  reactivateAssessmentTemplate: Scalars["Boolean"]["output"];
+  reactivateAssessmentTemplate: Scalars['Boolean']['output'];
   reactivateCompanyMember: EntityMember;
   /**
    * The vendor records whether it happened — the end of the state machine the
@@ -3885,8 +4094,8 @@ export type Mutation = {
    * Rejected once settlement has begun (settlement_pending / closed).
    */
   reissueSaleAgreement: CashPurchaseTxn;
-  rejectAssessmentDocument: Scalars["Boolean"]["output"];
-  rejectOfferRequest: Scalars["Boolean"]["output"];
+  rejectAssessmentDocument: Scalars['Boolean']['output'];
+  rejectOfferRequest: Scalars['Boolean']['output'];
   /**
    * Issuer — releases the price from escrow to the issuing entity's payout
    * balance. completion_conditions_confirmed → funds_released, in one call.
@@ -3930,12 +4139,12 @@ export type Mutation = {
    * itself close the loan; when fully released the client prompts issueDischarge.
    */
   releaseTokensToBuyer: TokenEvent;
-  removeAssessmentAlertRule: Scalars["Boolean"]["output"];
-  removeAssessmentCategory: Scalars["Boolean"]["output"];
-  removeAssessmentDocument: Scalars["Boolean"]["output"];
-  removeAssessmentQuestionOption: Scalars["Boolean"]["output"];
-  removeAssessmentReadinessBand: Scalars["Boolean"]["output"];
-  removeAssessmentScoringBand: Scalars["Boolean"]["output"];
+  removeAssessmentAlertRule: Scalars['Boolean']['output'];
+  removeAssessmentCategory: Scalars['Boolean']['output'];
+  removeAssessmentDocument: Scalars['Boolean']['output'];
+  removeAssessmentQuestionOption: Scalars['Boolean']['output'];
+  removeAssessmentReadinessBand: Scalars['Boolean']['output'];
+  removeAssessmentScoringBand: Scalars['Boolean']['output'];
   /**
    * A party removes their OWN upload, while the category is still open (D88).
    *
@@ -3949,7 +4158,7 @@ export type Mutation = {
    * status is the requester's to move.
    */
   removeCashDiligenceDocument: CashPurchaseTxn;
-  removeCompanyMember: Scalars["Boolean"]["output"];
+  removeCompanyMember: Scalars['Boolean']['output'];
   /**
    * The uploader withdraws a document they attached.
    *
@@ -3958,19 +4167,19 @@ export type Mutation = {
    * uploader's to withdraw afterwards.
    */
   removeDiligenceDocument: SellerFinancingTxn;
-  removeDueDiligence: Scalars["Boolean"]["output"];
-  removeLand: Scalars["Boolean"]["output"];
-  removeLoan: Scalars["Boolean"]["output"];
-  removeOffer: Scalars["Boolean"]["output"];
+  removeDueDiligence: Scalars['Boolean']['output'];
+  removeLand: Scalars['Boolean']['output'];
+  removeLoan: Scalars['Boolean']['output'];
+  removeOffer: Scalars['Boolean']['output'];
   /** Financier: remove a document request that has not yet been submitted */
-  removeOfferDocumentRequest: Scalars["Boolean"]["output"];
-  removeOfferRequest: Scalars["Boolean"]["output"];
-  removePaymentSchedule: Scalars["Boolean"]["output"];
-  removePortfolio: Scalars["Boolean"]["output"];
-  removeProject: Scalars["Boolean"]["output"];
+  removeOfferDocumentRequest: Scalars['Boolean']['output'];
+  removeOfferRequest: Scalars['Boolean']['output'];
+  removePaymentSchedule: Scalars['Boolean']['output'];
+  removePortfolio: Scalars['Boolean']['output'];
+  removeProject: Scalars['Boolean']['output'];
   /** Remove a milestone. Refused once released — it would orphan the tranche paid against it. */
   removeProjectMilestone: OfferRequest;
-  removeProperty: Scalars["Boolean"]["output"];
+  removeProperty: Scalars['Boolean']['output'];
   removeReaction: Message;
   /**
    * The uploader withdraws a document they attached.
@@ -3980,13 +4189,13 @@ export type Mutation = {
    * uploader's to withdraw afterwards.
    */
   removeRentDiligenceDocument: RentToBuyTxn;
-  removeRepayment: Scalars["Boolean"]["output"];
-  removeReview: Scalars["Boolean"]["output"];
+  removeRepayment: Scalars['Boolean']['output'];
+  removeReview: Scalars['Boolean']['output'];
   /** The draft's owner, or platform staff. */
-  removeTempProject: Scalars["Boolean"]["output"];
-  removeTermSheet: Scalars["Boolean"]["output"];
-  removeTicketComment: Scalars["Boolean"]["output"];
-  removeTransaction: Scalars["Boolean"]["output"];
+  removeTempProject: Scalars['Boolean']['output'];
+  removeTermSheet: Scalars['Boolean']['output'];
+  removeTicketComment: Scalars['Boolean']['output'];
+  removeTransaction: Scalars['Boolean']['output'];
   /**
    * Platform admin — catch-up pass for parties on deals past offer acceptance or
    * SPA execution who have no wallet, because `wallet.provision` is
@@ -3997,6 +4206,13 @@ export type Mutation = {
    * whose profile has since been completed.
    */
   replayWalletProvisioning: WalletProvisioningReplayResult;
+  /**
+   * Staff (support_request:reply). A public reply is the team's answer: the
+   * first one starts the response clock, an open request moves to in_progress,
+   * and the member is told in-app and by email (by email alone when they were
+   * signed out). An internal note changes nothing the member sees.
+   */
+  replySupportRequest: SupportMessagePayload;
   /** Public. `success: false` carries a message to show as written. */
   requestAccess: RequestAccessResponse;
   /**
@@ -4062,7 +4278,7 @@ export type Mutation = {
   requestLoanAgreementChanges: OfferRequest;
   /** Financier: attach one or more document requests to an offer request */
   requestOfferDocuments: Array<OfferRequestDocument>;
-  requestPasswordReset: Scalars["Boolean"]["output"];
+  requestPasswordReset: Scalars['Boolean']['output'];
   requestPaymentVerification: Conversation;
   /**
    * Propose a time of your own.
@@ -4120,7 +4336,7 @@ export type Mutation = {
    * Without it, every call is a new withdrawal, as before.
    */
   requestWalletWithdrawal: WalletTxn;
-  resetPassword: Scalars["Boolean"]["output"];
+  resetPassword: Scalars['Boolean']['output'];
   /**
    * The logger accepts the remedy, or does not.
    *
@@ -4153,9 +4369,17 @@ export type Mutation = {
    * into "one shot, then withdraw". A new proposal replaces the previous one.
    */
   respondToInspectionIssue: InspectionIssue;
-  retireAssessmentQuestion: Scalars["Boolean"]["output"];
-  retireAssessmentTemplate: Scalars["Boolean"]["output"];
-  returnAssessment: Scalars["Boolean"]["output"];
+  retireAssessmentQuestion: Scalars['Boolean']['output'];
+  retireAssessmentTemplate: Scalars['Boolean']['output'];
+  returnAssessment: Scalars['Boolean']['output'];
+  /**
+   * Revalue a property: the valuation becomes its price (d19). On a tokenized
+   * property this is the only way the price changes — updateProperty refuses a
+   * direct edit — and the new valuation is recorded on the token in the
+   * background (pricing wallet). Supply never changes; the price per token does.
+   * Refused while a tokenization is in progress.
+   */
+  revalueProperty: Property;
   /** Financier: approve or reject submitted documents on an offer request */
   reviewOfferDocuments: Array<OfferRequestDocument>;
   /**
@@ -4171,10 +4395,10 @@ export type Mutation = {
    */
   reviseRepaymentInstallment: RepaymentInstallment;
   /** @deprecated Use revokeAssessmentShare. */
-  revokeAssessmentFinancierShare: Scalars["Boolean"]["output"];
-  revokeAssessmentShare: Scalars["Boolean"]["output"];
-  revokeOffer: Scalars["Boolean"]["output"];
-  revokeOfferRequest: Scalars["Boolean"]["output"];
+  revokeAssessmentFinancierShare: Scalars['Boolean']['output'];
+  revokeAssessmentShare: Scalars['Boolean']['output'];
+  revokeOffer: Scalars['Boolean']['output'];
+  revokeOfferRequest: Scalars['Boolean']['output'];
   /**
    * Store (or replace) the signer's reusable signature — the mark offered back to
    * them the next time they sign something. The URL must be one issued by the
@@ -4201,7 +4425,7 @@ export type Mutation = {
   sendMfaOtp: MfaOtpPayload;
   sendMfaOtpEmail: MfaOtpPayload;
   sendNotification: NotificationSuccessResponse;
-  sendOtp: Scalars["Boolean"]["output"];
+  sendOtp: Scalars['Boolean']['output'];
   sendPaymentReminderEmail: NotificationSuccessResponse;
   sendPaymentSubscriptionEmail: NotificationSuccessResponse;
   sendPaymentTermsAcceptanceEmail: NotificationSuccessResponse;
@@ -4294,6 +4518,11 @@ export type Mutation = {
    * questions and both stay on the record.
    */
   setRentSettlement: RentToBuyTxn;
+  /**
+   * Staff (support_request:manage). The server stamps resolvedAt and closedAt and
+   * tells the member. The same status again does nothing.
+   */
+  setSupportRequestStatus: SupportRequest;
   setSupportUserInitialPassword: SetSupportUserInitialPasswordPayload;
   setupMFA: MfaSetupPayload;
   /** Borrower signs the loan agreement (→ LOAN_AGREEMENT_BORROWER_SIGNED), attaching their signed copy. */
@@ -4334,7 +4563,7 @@ export type Mutation = {
   startRentSchedule: RentToBuyTxn;
   /** Responder supplies documents. Submissions accumulate rather than replace. */
   submitApproachDocuments: SellerApproach;
-  submitAssessment: Scalars["Boolean"]["output"];
+  submitAssessment: Scalars['Boolean']['output'];
   /** Borrower raises a declaration-review / formal request to the financier. */
   submitBorrowerLoanRequest: BorrowerLoanRequest;
   /**
@@ -4365,7 +4594,13 @@ export type Mutation = {
    * session already has its photo, SELFIE_CLOSED if it is closed or expired,
    * SELFIE_TOO_LARGE over the cap. Rate limited by IP.
    */
-  submitSelfie: Scalars["Boolean"]["output"];
+  submitSelfie: Scalars['Boolean']['output'];
+  /**
+   * PUBLIC. Start a request without an account. Turnstile verified first; 5 per
+   * hour per IP and 10 per day per reply email (RATE_LIMITED). Returns only the
+   * reference. A receipt goes to the reply email.
+   */
+  submitSupportRequest: SubmitSupportRequestPayload;
   subscribeToPushNotification: NotificationSuccessResponse;
   suspendCompanyMember: EntityMember;
   /**
@@ -4382,7 +4617,7 @@ export type Mutation = {
    * and the tenant's right to buy ends with the tenancy.
    */
   terminateRentTenancy: RentToBuyTxn;
-  toggleOfferFavorite: Scalars["Boolean"]["output"];
+  toggleOfferFavorite: Scalars['Boolean']['output'];
   togglePropertyFavorite: ToggleFavoriteResult;
   toggleSuspendUser: ToggleSuspendPayload;
   /**
@@ -4390,7 +4625,7 @@ export type Mutation = {
    * issuer's wallet is the owning entity's, found on the server (d17); supply is
    * the property's price (d18). Both are permanent.
    */
-  tokenizeProperty: Scalars["Boolean"]["output"];
+  tokenizeProperty: Scalars['Boolean']['output'];
   /**
    * Vendor — option_exercised → title_transferred. Records titleTransferredAt.
    *
@@ -4398,15 +4633,17 @@ export type Mutation = {
    */
   transferTitle: RentToBuyTxn;
   unassignTicket: Ticket;
-  updateAssessment: Scalars["Boolean"]["output"];
-  updateAssessmentAlertRule: Scalars["Boolean"]["output"];
-  updateAssessmentCategory: Scalars["Boolean"]["output"];
-  updateAssessmentDocument: Scalars["Boolean"]["output"];
-  updateAssessmentQuestion: Scalars["Boolean"]["output"];
-  updateAssessmentQuestionOption: Scalars["Boolean"]["output"];
-  updateAssessmentReadinessBand: Scalars["Boolean"]["output"];
-  updateAssessmentScoringBand: Scalars["Boolean"]["output"];
-  updateAssessmentTemplate: Scalars["Boolean"]["output"];
+  /** Resume transfers of a paused property token. False if it was not paused. */
+  unpausePropertyToken: Scalars['Boolean']['output'];
+  updateAssessment: Scalars['Boolean']['output'];
+  updateAssessmentAlertRule: Scalars['Boolean']['output'];
+  updateAssessmentCategory: Scalars['Boolean']['output'];
+  updateAssessmentDocument: Scalars['Boolean']['output'];
+  updateAssessmentQuestion: Scalars['Boolean']['output'];
+  updateAssessmentQuestionOption: Scalars['Boolean']['output'];
+  updateAssessmentReadinessBand: Scalars['Boolean']['output'];
+  updateAssessmentScoringBand: Scalars['Boolean']['output'];
+  updateAssessmentTemplate: Scalars['Boolean']['output'];
   updateCompanyRole: EntityRole;
   /** Admin: update a compliance section */
   updateComplianceSection: ComplianceAdminSectionResponse;
@@ -4418,33 +4655,33 @@ export type Mutation = {
   /** Admin: update a document template */
   updateComplianceTemplate: ComplianceAdminTemplateResponse;
   updateConversation: Conversation;
-  updateConversationPayment: Scalars["Boolean"]["output"];
-  updateDueDiligence: Scalars["Boolean"]["output"];
+  updateConversationPayment: Scalars['Boolean']['output'];
+  updateDueDiligence: Scalars['Boolean']['output'];
   updateMemberRole: EntityMember;
-  updateOffer: Scalars["Boolean"]["output"];
+  updateOffer: Scalars['Boolean']['output'];
   /** Financier: edit a pending document request (name / description / deadline) */
   updateOfferDocumentRequest: OfferRequestDocument;
-  updateOfferRequest: Scalars["Boolean"]["output"];
-  updatePaymentSchedule: Scalars["Boolean"]["output"];
-  updatePortfolio: Scalars["Boolean"]["output"];
-  updateProject: Scalars["Boolean"]["output"];
-  updateProperty: Scalars["Boolean"]["output"];
-  updateRepayment: Scalars["Boolean"]["output"];
-  updateRepaymentScheduleStatus: Scalars["Boolean"]["output"];
-  updateReview: Scalars["Boolean"]["output"];
-  updateSupportLastSeen: Scalars["Boolean"]["output"];
+  updateOfferRequest: Scalars['Boolean']['output'];
+  updatePaymentSchedule: Scalars['Boolean']['output'];
+  updatePortfolio: Scalars['Boolean']['output'];
+  updateProject: Scalars['Boolean']['output'];
+  updateProperty: Scalars['Boolean']['output'];
+  updateRepayment: Scalars['Boolean']['output'];
+  updateRepaymentScheduleStatus: Scalars['Boolean']['output'];
+  updateReview: Scalars['Boolean']['output'];
+  updateSupportLastSeen: Scalars['Boolean']['output'];
   updateSupportRole: SupportRole;
   updateTailoringRule: TailoringRuleResponse;
-  updateTempProject: Scalars["Boolean"]["output"];
+  updateTempProject: Scalars['Boolean']['output'];
   /**
    * `id` is the session id. The draft's owner may set pending, processing,
    * failed or cancelled; only platform staff may set paid — nothing on the server
    * confirms the listing fee yet, so a client cannot attest to its own payment.
    */
-  updateTempProjectPaymentStatus: Scalars["Boolean"]["output"];
+  updateTempProjectPaymentStatus: Scalars['Boolean']['output'];
   updateTermSheet: TermSheet;
   updateTicketStatus: Ticket;
-  updateTransaction: Scalars["Boolean"]["output"];
+  updateTransaction: Scalars['Boolean']['output'];
   /**
    * The seller hands over the sale agreement (D93).
    *
@@ -4531,18 +4768,18 @@ export type Mutation = {
    */
   uploadSellerTransactionDocument: SellerFinancingTxn;
   uploadTransferDocument: Message;
-  upsertAssessmentResponse: Scalars["ID"]["output"];
+  upsertAssessmentResponse: Scalars['ID']['output'];
   /** Public. False when the temporary password does not match; an error when the link is not usable. */
-  verifyAccessInvite: Scalars["Boolean"]["output"];
-  verifyAssessmentDocument: Scalars["Boolean"]["output"];
+  verifyAccessInvite: Scalars['Boolean']['output'];
+  verifyAssessmentDocument: Scalars['Boolean']['output'];
   /** Independent review flips a disbursement to VERIFIED or UNVERIFIABLE. */
   verifyDisbursement: OfferRequest;
-  verifyEmail: Scalars["Boolean"]["output"];
+  verifyEmail: Scalars['Boolean']['output'];
   /** Second leg of an MFA login: exchange the emailed OTP for a session. */
   verifyLoginOtp: AuthPayload;
   verifyMfaOtp: MfaVerifyPayload;
   verifyRequestedRole: RoleVerifiedPayload;
-  verifyUser: Scalars["Boolean"]["output"];
+  verifyUser: Scalars['Boolean']['output'];
   votePoll: Message;
   /**
    * Requester lets a category go. Only the requester may waive — waiving your own
@@ -4633,1817 +4870,2250 @@ export type Mutation = {
   withdrawSellerFinancing: SellerFinancingTxn;
 };
 
+
 export type MutationAcceptApproachItemArgs = {
-  approachId: Scalars["ID"]["input"];
-  itemId: Scalars["ID"]["input"];
+  approachId: Scalars['ID']['input'];
+  itemId: Scalars['ID']['input'];
 };
+
 
 export type MutationAcceptCashDiligenceItemArgs = {
-  itemId: Scalars["ID"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  itemId: Scalars['ID']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationAcceptCompanyInviteArgs = {
-  token: Scalars["String"]["input"];
+  token: Scalars['String']['input'];
 };
+
 
 export type MutationAcceptDiligenceItemArgs = {
-  itemId: Scalars["ID"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  itemId: Scalars['ID']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationAcceptOfferArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationAcceptOfferLetterArgs = {
-  offerRequestId: Scalars["ID"]["input"];
-  signatureImageUrl?: InputMaybe<Scalars["String"]["input"]>;
+  offerRequestId: Scalars['ID']['input'];
+  signatureImageUrl?: InputMaybe<Scalars['String']['input']>;
   signatureKind?: InputMaybe<SignatureKind>;
-  signedDocumentUrl?: InputMaybe<Scalars["String"]["input"]>;
+  signedDocumentUrl?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type MutationAcceptPaymentPlanArgs = {
-  acknowledgedTerms: Scalars["Boolean"]["input"];
-  transactionId: Scalars["ID"]["input"];
-  typedSignature: Scalars["String"]["input"];
+  acknowledgedTerms: Scalars['Boolean']['input'];
+  transactionId: Scalars['ID']['input'];
+  typedSignature: Scalars['String']['input'];
 };
+
 
 export type MutationAcceptRentDiligenceItemArgs = {
-  itemId: Scalars["ID"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  itemId: Scalars['ID']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationAcceptRentPlanArgs = {
-  acknowledgedTerms: Scalars["Boolean"]["input"];
-  transactionId: Scalars["ID"]["input"];
-  typedSignature: Scalars["String"]["input"];
+  acknowledgedTerms: Scalars['Boolean']['input'];
+  transactionId: Scalars['ID']['input'];
+  typedSignature: Scalars['String']['input'];
 };
+
 
 export type MutationAcceptTermsSheetArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type MutationAcknowledgeBorrowerLoanRequestArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationAcknowledgeTitleReceiptArgs = {
-  transactionId: Scalars["ID"]["input"];
-  typedName: Scalars["String"]["input"];
+  transactionId: Scalars['ID']['input'];
+  typedName: Scalars['String']['input'];
 };
+
 
 export type MutationActivateAccountArgs = {
-  newPassword: Scalars["String"]["input"];
-  temporaryPassword: Scalars["String"]["input"];
-  token: Scalars["String"]["input"];
+  newPassword: Scalars['String']['input'];
+  temporaryPassword: Scalars['String']['input'];
+  token: Scalars['String']['input'];
 };
+
 
 export type MutationActivateAssessmentArgs = {
-  id: Scalars["ID"]["input"];
-  officerId: Scalars["ID"]["input"];
-  officerNotes?: InputMaybe<Scalars["String"]["input"]>;
+  id: Scalars['ID']['input'];
+  officerId: Scalars['ID']['input'];
+  officerNotes?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type MutationAddAttachmentCommentArgs = {
-  attachmentId: Scalars["String"]["input"];
-  content: Scalars["String"]["input"];
-  messageId: Scalars["ID"]["input"];
+  attachmentId: Scalars['String']['input'];
+  content: Scalars['String']['input'];
+  messageId: Scalars['ID']['input'];
 };
 
+
 export type MutationAddMyTicketCommentArgs = {
-  body: Scalars["String"]["input"];
-  ticketId: Scalars["ID"]["input"];
+  body: Scalars['String']['input'];
+  ticketId: Scalars['ID']['input'];
 };
+
 
 export type MutationAddParticipantArgs = {
   input: AddParticipantInput;
 };
 
+
 export type MutationAddReactionArgs = {
-  emoji: Scalars["String"]["input"];
-  messageId: Scalars["ID"]["input"];
+  emoji: Scalars['String']['input'];
+  messageId: Scalars['ID']['input'];
 };
+
 
 export type MutationAddReplyArgs = {
-  content: Scalars["String"]["input"];
-  messageId: Scalars["ID"]["input"];
+  content: Scalars['String']['input'];
+  messageId: Scalars['ID']['input'];
 };
 
-export type MutationAddTicketCommentArgs = {
-  body: Scalars["String"]["input"];
-  ticketId: Scalars["ID"]["input"];
+
+export type MutationAddSupportMessageArgs = {
+  input: AddSupportMessageInput;
 };
+
+
+export type MutationAddTicketCommentArgs = {
+  body: Scalars['String']['input'];
+  ticketId: Scalars['ID']['input'];
+};
+
 
 export type MutationAddUserForPushArgs = {
   input: AddUserForPushInput;
 };
 
+
 export type MutationAgreeTermsArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationAmendRepaymentScheduleArgs = {
-  gracePeriodDays?: InputMaybe<Scalars["Int"]["input"]>;
-  offerRequestId: Scalars["ID"]["input"];
+  gracePeriodDays?: InputMaybe<Scalars['Int']['input']>;
+  offerRequestId: Scalars['ID']['input'];
   schedule: Array<ScheduledInstallmentInput>;
 };
+
 
 export type MutationApproveAccessRequestArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationApproveScheduledDeclarationArgs = {
-  declarationId: Scalars["ID"]["input"];
+  declarationId: Scalars['ID']['input'];
 };
+
 
 export type MutationApproveUserVerificationArgs = {
-  role: Scalars["String"]["input"];
-  userId: Scalars["ID"]["input"];
+  role: Scalars['String']['input'];
+  userId: Scalars['ID']['input'];
 };
+
 
 export type MutationArchiveAssessmentArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
+
+export type MutationAssignSupportRequestArgs = {
+  input: AssignSupportRequestInput;
+};
+
 
 export type MutationAssignSupportRoleArgs = {
-  supportRoleId: Scalars["ID"]["input"];
-  supportUserId: Scalars["Int"]["input"];
+  supportRoleId: Scalars['ID']['input'];
+  supportUserId: Scalars['Int']['input'];
 };
+
 
 export type MutationAssignTicketArgs = {
-  supportUserId: Scalars["Int"]["input"];
-  ticketId: Scalars["ID"]["input"];
+  supportUserId: Scalars['Int']['input'];
+  ticketId: Scalars['ID']['input'];
 };
+
 
 export type MutationAttachAssessmentDocumentFileArgs = {
-  fileUrl?: InputMaybe<Scalars["String"]["input"]>;
-  id: Scalars["ID"]["input"];
+  fileUrl?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
 };
 
+
 export type MutationBeginLoanDeclarationArgs = {
-  gracePeriodDays: Scalars["Int"]["input"];
-  offerRequestId: Scalars["ID"]["input"];
+  gracePeriodDays: Scalars['Int']['input'];
+  offerRequestId: Scalars['ID']['input'];
   schedule: Array<ScheduledInstallmentInput>;
 };
 
+
 export type MutationBeginOfficerReviewArgs = {
-  id: Scalars["ID"]["input"];
-  officerId: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
+  officerId: Scalars['ID']['input'];
 };
+
 
 export type MutationBeginRequestReviewArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
 
+
 export type MutationBookPropertyViewingArgs = {
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  propertyId: Scalars["ID"]["input"];
-  slotId: Scalars["String"]["input"];
+  note?: InputMaybe<Scalars['String']['input']>;
+  propertyId: Scalars['ID']['input'];
+  slotId: Scalars['String']['input'];
 };
+
 
 export type MutationBulkCreatePreTokenizedUnitsArgs = {
   pretokenizedUnits: Array<PreTokenizedUnitInput>;
 };
 
+
 export type MutationBulkUpdatePreTokenizedUnitsByTypeArgs = {
-  portfolioId: Scalars["ID"]["input"];
+  portfolioId: Scalars['ID']['input'];
   pretokenizedUnits: Array<PreTokenizedUnitUpdateInput>;
-  unitType: Scalars["String"]["input"];
+  unitType: Scalars['String']['input'];
 };
+
 
 export type MutationCancelDeclarationArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
 
+
 export type MutationCancelPropertyViewingArgs = {
-  reason?: InputMaybe<Scalars["String"]["input"]>;
-  viewingId: Scalars["ID"]["input"];
+  reason?: InputMaybe<Scalars['String']['input']>;
+  viewingId: Scalars['ID']['input'];
 };
+
 
 export type MutationCheckLandArgs = {
   input: CheckLandInput;
 };
 
+
 export type MutationCloseSelfieSessionArgs = {
-  key: Scalars["String"]["input"];
+  key: Scalars['String']['input'];
 };
+
 
 export type MutationCommenceRepaymentArgs = {
-  gracePeriodDays: Scalars["Int"]["input"];
+  gracePeriodDays: Scalars['Int']['input'];
   schedule: Array<ScheduledInstallmentInput>;
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationCommissionValuationArgs = {
-  notes?: InputMaybe<Scalars["String"]["input"]>;
-  offerRequestId: Scalars["ID"]["input"];
-  valuerName: Scalars["String"]["input"];
+  notes?: InputMaybe<Scalars['String']['input']>;
+  offerRequestId: Scalars['ID']['input'];
+  valuerName: Scalars['String']['input'];
 };
 
+
 export type MutationCompleteFinancingAssessmentArgs = {
-  allocatedAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  allocationNote?: InputMaybe<Scalars["String"]["input"]>;
-  notes?: InputMaybe<Scalars["String"]["input"]>;
-  offerRequestId: Scalars["ID"]["input"];
+  allocatedAmount?: InputMaybe<Scalars['Float']['input']>;
+  allocationNote?: InputMaybe<Scalars['String']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type MutationCompleteOnboardingArgs = {
   input?: InputMaybe<CompleteOnboardingInput>;
 };
 
+
 export type MutationCompleteRentDueDiligenceArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationCompleteSellerDueDiligenceArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationCompleteTitleTransferArgs = {
-  reference?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  reference?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationComputeAssessmentScoreArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationConfirmCashCompletionConditionsArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationConfirmCompletionConditionsArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationConfirmConditionsPrecedentArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type MutationConfirmHandoverArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationConfirmInspectionArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationConfirmRentCompletionConditionsArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationConfirmRentFullyPaidArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationConfirmRentInspectionArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationConfirmSellerInspectionArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
 
-export type MutationConfirmTitleSettledArgs = {
-  transactionId: Scalars["ID"]["input"];
+
+export type MutationConfirmSupportResolutionArgs = {
+  input: ConfirmSupportResolutionInput;
 };
+
+
+export type MutationConfirmTitleSettledArgs = {
+  transactionId: Scalars['ID']['input'];
+};
+
 
 export type MutationContactUsArgs = {
   input: ContactUsInput;
 };
 
+
 export type MutationConvertSellerApproachArgs = {
-  approachId: Scalars["ID"]["input"];
-  offerRequestIds: Array<Scalars["ID"]["input"]>;
+  approachId: Scalars['ID']['input'];
+  offerRequestIds: Array<Scalars['ID']['input']>;
 };
+
 
 export type MutationCountersignOfferLetterArgs = {
-  offerRequestId: Scalars["ID"]["input"];
-  signatureImageUrl?: InputMaybe<Scalars["String"]["input"]>;
+  offerRequestId: Scalars['ID']['input'];
+  signatureImageUrl?: InputMaybe<Scalars['String']['input']>;
   signatureKind?: InputMaybe<SignatureKind>;
-  signedDocumentUrl?: InputMaybe<Scalars["String"]["input"]>;
+  signedDocumentUrl?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type MutationCountersignRentAgreementArgs = {
-  signedCopyUrl?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  signedCopyUrl?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationCountersignSaleAgreementArgs = {
-  signatureImageUrl?: InputMaybe<Scalars["String"]["input"]>;
+  signatureImageUrl?: InputMaybe<Scalars['String']['input']>;
   signatureKind?: InputMaybe<SignatureKind>;
-  signedCopyUrl?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  signedCopyUrl?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
 
+
 export type MutationCountersignSellerFinancingSpaArgs = {
-  signatureImageUrl?: InputMaybe<Scalars["String"]["input"]>;
+  signatureImageUrl?: InputMaybe<Scalars['String']['input']>;
   signatureKind?: InputMaybe<SignatureKind>;
-  signedCopyUrl?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  signedCopyUrl?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationCreateAdminConversationArgs = {
   input: CreateAdminConversationInput;
 };
 
+
 export type MutationCreateAssessmentArgs = {
   input: CreateAssessmentInput;
 };
+
 
 export type MutationCreateAssessmentAlertRuleArgs = {
   input: CreateAssessmentAlertRuleInput;
 };
 
+
 export type MutationCreateAssessmentCategoryArgs = {
   input: CreateAssessmentCategoryInput;
 };
+
 
 export type MutationCreateAssessmentDocumentArgs = {
   input: CreateAssessmentDocumentInput;
 };
 
+
 export type MutationCreateAssessmentQuestionArgs = {
   input: CreateAssessmentQuestionInput;
 };
+
 
 export type MutationCreateAssessmentQuestionOptionArgs = {
   input: CreateAssessmentQuestionOptionInput;
 };
 
+
 export type MutationCreateAssessmentReadinessBandArgs = {
   input: CreateAssessmentReadinessBandInput;
 };
+
 
 export type MutationCreateAssessmentScoringBandArgs = {
   input: CreateAssessmentScoringBandInput;
 };
 
+
 export type MutationCreateAssessmentTemplateArgs = {
   input: CreateAssessmentTemplateInput;
 };
+
 
 export type MutationCreateAssetValueSnapshotArgs = {
   input: CreateAssetValueSnapshotInput;
 };
 
+
 export type MutationCreateBareLandProjectArgs = {
   input: CreateBareLandProjectInput;
 };
+
 
 export type MutationCreateBuyerProjectArgs = {
   input: CreateBuyerProjectInput;
 };
 
+
 export type MutationCreateCompanyRoleArgs = {
   input: CreateEntityRoleInput;
 };
+
 
 export type MutationCreateComplianceSectionArgs = {
   input: CreateComplianceSectionInput;
 };
 
+
 export type MutationCreateComplianceTemplateArgs = {
   input: CreateComplianceTemplateInput;
 };
+
 
 export type MutationCreateConversationArgs = {
   input: CreateConversationInput;
 };
 
+
 export type MutationCreateDueDiligenceArgs = {
   input: CreateDueDiligenceInput;
 };
+
 
 export type MutationCreateLandArgs = {
   input: CreateLandInput;
 };
 
+
 export type MutationCreateOfferArgs = {
   input: CreateOfferInput;
 };
+
 
 export type MutationCreateOfferRequestArgs = {
   input: CreateOfferRequestInput;
 };
 
+
 export type MutationCreatePaymentScheduleArgs = {
   input: CreatePaymentScheduleInput;
 };
+
 
 export type MutationCreatePortfolioArgs = {
   input: CreatePortfolioInput;
 };
 
+
 export type MutationCreatePortfolioProjectWithUnitsArgs = {
   input: CreatePortfolioProjectWithUnitsInput;
 };
+
 
 export type MutationCreatePreTokenizedUnitArgs = {
   input: PreTokenizedUnitInput;
 };
 
+
 export type MutationCreateProjectArgs = {
   input: ProjectInput;
 };
 
+
 export type MutationCreatePropertyArgs = {
   input: PropertyInput;
-  listingType: Scalars["String"]["input"];
-  projectType: Scalars["String"]["input"];
-  sessionId?: InputMaybe<Scalars["String"]["input"]>;
+  listingType: Scalars['String']['input'];
+  projectType: Scalars['String']['input'];
+  sessionId?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type MutationCreateRepaymentArgs = {
   input: CreateRepaymentInput;
 };
 
+
 export type MutationCreateReviewArgs = {
   input: CreateReviewInput;
 };
+
 
 export type MutationCreateSimpleConversationArgs = {
   input: CreateSimpleConversationInput;
 };
 
+
+export type MutationCreateSupportRequestArgs = {
+  input: CreateSupportRequestInput;
+};
+
+
 export type MutationCreateSupportRoleArgs = {
   input: CreateSupportRoleInput;
 };
+
 
 export type MutationCreateSupportUserArgs = {
   input: CreateSupportUserInput;
 };
 
+
 export type MutationCreateTailoringRuleArgs = {
   input: CreateTailoringRuleInput;
 };
+
 
 export type MutationCreateTempProjectArgs = {
   input: CreateTempProjectInput;
 };
 
+
 export type MutationCreateTermSheetArgs = {
   input: CreateTermSheetInput;
 };
+
 
 export type MutationCreateTransactionArgs = {
   input: CreateTransactionInput;
 };
 
+
 export type MutationDecidePropertyViewingArgs = {
-  accept: Scalars["Boolean"]["input"];
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  viewingId: Scalars["ID"]["input"];
+  accept: Scalars['Boolean']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  viewingId: Scalars['ID']['input'];
 };
+
 
 export type MutationDecideRentBuyoutArgs = {
-  approve: Scalars["Boolean"]["input"];
-  declineReason?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  approve: Scalars['Boolean']['input'];
+  declineReason?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationDeclareCommitmentDepositArgs = {
-  bankReference: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  bankReference: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationDeclineAccessRequestArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationDeclineOfferLetterArgs = {
-  offerRequestId: Scalars["ID"]["input"];
-  reason?: InputMaybe<Scalars["String"]["input"]>;
+  offerRequestId: Scalars['ID']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type MutationDeclineRentVariationArgs = {
-  reason: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
-  variationId: Scalars["ID"]["input"];
+  reason: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
+  variationId: Scalars['ID']['input'];
 };
+
 
 export type MutationDeclineSpaVariationArgs = {
-  reason: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
-  variationId: Scalars["ID"]["input"];
+  reason: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
+  variationId: Scalars['ID']['input'];
 };
+
 
 export type MutationDecryptMetadataArgs = {
-  metadata: Scalars["JSON"]["input"];
+  metadata: Scalars['JSON']['input'];
 };
+
 
 export type MutationDeleteCompanyRoleArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationDeleteComplianceSectionArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationDeleteComplianceTemplateArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationDeleteConversationArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationDeleteMessageArgs = {
-  forEveryone?: InputMaybe<Scalars["Boolean"]["input"]>;
-  messageId: Scalars["ID"]["input"];
+  forEveryone?: InputMaybe<Scalars['Boolean']['input']>;
+  messageId: Scalars['ID']['input'];
 };
+
 
 export type MutationDeleteNotificationArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationDeleteSupportRoleArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationDeleteTailoringRuleArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
 
+
 export type MutationDeleteTicketArgs = {
-  ticketId: Scalars["ID"]["input"];
+  ticketId: Scalars['ID']['input'];
 };
+
 
 export type MutationDisburseFacilityArgs = {
   input: DisburseFacilityInput;
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
 
+
 export type MutationDismissComplianceNotificationArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   roleType: ComplianceRoleType;
 };
 
+
 export type MutationEditMessageArgs = {
-  content: Scalars["JSONObject"]["input"];
-  messageId: Scalars["ID"]["input"];
+  content: Scalars['JSONObject']['input'];
+  messageId: Scalars['ID']['input'];
 };
+
 
 export type MutationEncryptMetadataArgs = {
-  metadata: Scalars["JSON"]["input"];
+  metadata: Scalars['JSON']['input'];
 };
+
 
 export type MutationExtendOfferLetterDeadlineArgs = {
-  newDeadline: Scalars["DateTime"]["input"];
-  offerRequestId: Scalars["ID"]["input"];
-  reason?: InputMaybe<Scalars["String"]["input"]>;
+  newDeadline: Scalars['DateTime']['input'];
+  offerRequestId: Scalars['ID']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type MutationExtendSellerSpaDeadlineArgs = {
-  newDeadline: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  newDeadline: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
 
+
 export type MutationExtendSigningDeadlineArgs = {
-  newDeadline: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  newDeadline: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationFileDeclarationArgs = {
   input: FileDeclarationInput;
 };
 
+
 export type MutationFundApproachDepositArgs = {
-  approachId: Scalars["ID"]["input"];
+  approachId: Scalars['ID']['input'];
 };
 
+
 export type MutationGenerateTokenArgs = {
-  email: Scalars["String"]["input"];
+  email: Scalars['String']['input'];
 };
+
 
 export type MutationGrantAssessmentFinancierShareArgs = {
   input: GrantAssessmentFinancierShareInput;
 };
 
+
 export type MutationGrantAssessmentShareArgs = {
   input: GrantAssessmentShareInput;
 };
 
+
 export type MutationGrantOfferRequestArgs = {
   input: GrantOfferRequestInput;
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type MutationImportAssessmentTemplateArgs = {
   input: ImportAssessmentTemplateInput;
 };
 
+
 export type MutationInitiateWalletDepositArgs = {
-  amount: Scalars["Float"]["input"];
-  idempotencyKey?: InputMaybe<Scalars["String"]["input"]>;
+  amount: Scalars['Float']['input'];
+  idempotencyKey?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type MutationInstructCommitmentDepositArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationInstructDownPaymentArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationInstructDownPaymentReleaseArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationInstructOptionFeeArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
 
+
 export type MutationInstructReservationFeeArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationInviteCompanyMemberArgs = {
   input: InviteCompanyMemberInput;
 };
 
+
 export type MutationIssueCashReceiptArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationIssueDischargeArgs = {
-  dischargeLetterUrl: Scalars["String"]["input"];
-  offerRequestId: Scalars["ID"]["input"];
-  titleTransferTxRef?: InputMaybe<Scalars["String"]["input"]>;
+  dischargeLetterUrl: Scalars['String']['input'];
+  offerRequestId: Scalars['ID']['input'];
+  titleTransferTxRef?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type MutationIssueLoanAgreementArgs = {
-  loanDocumentUrl: Scalars["String"]["input"];
-  offerRequestId: Scalars["ID"]["input"];
-  signingDeadline?: InputMaybe<Scalars["DateTime"]["input"]>;
+  loanDocumentUrl: Scalars['String']['input'];
+  offerRequestId: Scalars['ID']['input'];
+  signingDeadline?: InputMaybe<Scalars['DateTime']['input']>;
 };
+
 
 export type MutationIssueOfferLetterArgs = {
-  acceptanceDeadline?: InputMaybe<Scalars["DateTime"]["input"]>;
-  offerLetterUrl?: InputMaybe<Scalars["String"]["input"]>;
-  offerRequestId: Scalars["ID"]["input"];
+  acceptanceDeadline?: InputMaybe<Scalars['DateTime']['input']>;
+  offerLetterUrl?: InputMaybe<Scalars['String']['input']>;
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type MutationIssueRentDefaultNoticeArgs = {
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  note?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationIssueSaleAgreementArgs = {
-  documentUrl: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
-  typedSignature?: InputMaybe<Scalars["String"]["input"]>;
+  documentUrl: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
+  typedSignature?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type MutationIssueSellerReceiptArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationLogInspectionIssueArgs = {
-  detail?: InputMaybe<Scalars["String"]["input"]>;
-  summary: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  detail?: InputMaybe<Scalars['String']['input']>;
+  summary: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationLogRentInspectionIssueArgs = {
-  detail?: InputMaybe<Scalars["String"]["input"]>;
-  summary: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  detail?: InputMaybe<Scalars['String']['input']>;
+  summary: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationLogSellerInspectionIssueArgs = {
-  detail?: InputMaybe<Scalars["String"]["input"]>;
-  summary: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  detail?: InputMaybe<Scalars['String']['input']>;
+  summary: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationLoginArgs = {
-  email: Scalars["String"]["input"];
-  password: Scalars["String"]["input"];
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
+
 
 export type MutationLoginAframSearchArgs = {
-  email: Scalars["String"]["input"];
-  password: Scalars["String"]["input"];
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
+
 
 export type MutationLoginSupportUserArgs = {
-  email: Scalars["String"]["input"];
-  password: Scalars["String"]["input"];
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
+
 
 export type MutationLogoutArgs = {
-  refreshToken: Scalars["String"]["input"];
+  refreshToken: Scalars['String']['input'];
 };
+
 
 export type MutationMarkAsPaidArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type MutationMarkDiligenceCompleteArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationMarkNotificationAsReadArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationMarkSelfieSessionOpenedArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
+
+export type MutationMarkSupportRequestSeenArgs = {
+  input: MarkSupportRequestSeenInput;
+};
+
 
 export type MutationNudgeFinancierArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type MutationNudgeSellerArgs = {
-  approachId: Scalars["ID"]["input"];
+  approachId: Scalars['ID']['input'];
 };
+
 
 export type MutationOpenSelfieSessionArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
+
+export type MutationPausePropertyTokenArgs = {
+  propertyId: Scalars['ID']['input'];
+};
+
 
 export type MutationPayCashDepositFromWalletArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
 
+
 export type MutationPayCashEscrowBalanceFromWalletArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationPayLoanArgs = {
   input: PayLoanInput;
 };
 
+
 export type MutationPayRentSettlementArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationPlaceCashPurchaseArgs = {
-  propertyId: Scalars["ID"]["input"];
+  propertyId: Scalars['ID']['input'];
 };
+
 
 export type MutationPlaceRentToBuyRequestArgs = {
-  propertyId: Scalars["ID"]["input"];
+  propertyId: Scalars['ID']['input'];
 };
+
 
 export type MutationPlaceSellerApproachArgs = {
-  propertyId: Scalars["ID"]["input"];
+  propertyId: Scalars['ID']['input'];
 };
+
 
 export type MutationPlaceSellerFinancingRequestArgs = {
-  propertyId: Scalars["ID"]["input"];
+  propertyId: Scalars['ID']['input'];
 };
+
 
 export type MutationProceedPastWithdrawalWindowArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationProceedToRentTermsArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationProceedToSellerTermsArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationProceedWithRentRequestArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationProceedWithSellerRequestArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationProposePaymentPlanArgs = {
-  downPaymentMode: Scalars["String"]["input"];
-  downPaymentValue: Scalars["Float"]["input"];
-  interestRatePct: Scalars["Float"]["input"];
-  notes?: InputMaybe<Scalars["String"]["input"]>;
-  repaymentFrequency: Scalars["String"]["input"];
-  tenorMonths: Scalars["Int"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  downPaymentMode: Scalars['String']['input'];
+  downPaymentValue: Scalars['Float']['input'];
+  interestRatePct: Scalars['Float']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
+  repaymentFrequency: Scalars['String']['input'];
+  tenorMonths: Scalars['Int']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationProposeRentPlanArgs = {
-  buyPrice: Scalars["Float"]["input"];
-  insurance: Scalars["String"]["input"];
-  maintenance: Scalars["String"]["input"];
-  monthlyRent: Scalars["Float"]["input"];
-  optionFee: Scalars["Float"]["input"];
-  termMonths: Scalars["Int"]["input"];
-  transactionId: Scalars["ID"]["input"];
-  unitPrice: Scalars["Float"]["input"];
+  buyPrice: Scalars['Float']['input'];
+  insurance: Scalars['String']['input'];
+  maintenance: Scalars['String']['input'];
+  monthlyRent: Scalars['Float']['input'];
+  optionFee: Scalars['Float']['input'];
+  termMonths: Scalars['Int']['input'];
+  transactionId: Scalars['ID']['input'];
+  unitPrice: Scalars['Float']['input'];
 };
+
 
 export type MutationPublishAssessmentTemplateArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationPublishPortfolioUnitsArgs = {
-  portfolioId: Scalars["ID"]["input"];
-  unitIds: Array<Scalars["ID"]["input"]>;
+  portfolioId: Scalars['ID']['input'];
+  unitIds: Array<Scalars['ID']['input']>;
 };
+
 
 export type MutationQueryCashDiligenceItemArgs = {
-  itemId: Scalars["ID"]["input"];
-  note: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  itemId: Scalars['ID']['input'];
+  note: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationQueryDiligenceItemArgs = {
-  itemId: Scalars["ID"]["input"];
-  note: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  itemId: Scalars['ID']['input'];
+  note: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationQueryRentDiligenceItemArgs = {
-  itemId: Scalars["ID"]["input"];
-  note: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  itemId: Scalars['ID']['input'];
+  note: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationReGenerateAccessTokenArgs = {
-  refreshToken: Scalars["String"]["input"];
+  refreshToken: Scalars['String']['input'];
 };
+
 
 export type MutationReactivateAssessmentTemplateArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationReactivateCompanyMemberArgs = {
-  memberId: Scalars["ID"]["input"];
+  memberId: Scalars['ID']['input'];
 };
+
 
 export type MutationRecordPropertyViewingOutcomeArgs = {
-  attended: Scalars["Boolean"]["input"];
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  viewingId: Scalars["ID"]["input"];
+  attended: Scalars['Boolean']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  viewingId: Scalars['ID']['input'];
 };
+
 
 export type MutationRecordRentCreditDecisionArgs = {
-  basis: Array<Scalars["String"]["input"]>;
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  outcome: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  basis: Array<Scalars['String']['input']>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  outcome: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationRecordRentPaymentArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationRecordSellerCreditDecisionArgs = {
-  basis: Array<Scalars["String"]["input"]>;
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  outcome: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  basis: Array<Scalars['String']['input']>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  outcome: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationRecordValuationArgs = {
-  notes?: InputMaybe<Scalars["String"]["input"]>;
-  offerRequestId: Scalars["ID"]["input"];
-  valuationAmount: Scalars["Float"]["input"];
+  notes?: InputMaybe<Scalars['String']['input']>;
+  offerRequestId: Scalars['ID']['input'];
+  valuationAmount: Scalars['Float']['input'];
 };
+
 
 export type MutationReissueLoanAgreementArgs = {
-  offerRequestId: Scalars["ID"]["input"];
-  reason: Scalars["String"]["input"];
+  offerRequestId: Scalars['ID']['input'];
+  reason: Scalars['String']['input'];
 };
+
 
 export type MutationReissueSaleAgreementArgs = {
-  reason: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  reason: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationRejectAssessmentDocumentArgs = {
-  id: Scalars["ID"]["input"];
-  notes?: InputMaybe<Scalars["String"]["input"]>;
-  verifiedBy: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
+  verifiedBy: Scalars['ID']['input'];
 };
+
 
 export type MutationRejectOfferRequestArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type MutationReleaseCashPurchaseFundsArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationReleaseMilestoneArgs = {
-  amount?: InputMaybe<Scalars["Float"]["input"]>;
-  milestoneId: Scalars["ID"]["input"];
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  offerRequestId: Scalars["ID"]["input"];
+  amount?: InputMaybe<Scalars['Float']['input']>;
+  milestoneId: Scalars['ID']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  offerRequestId: Scalars['ID']['input'];
 };
 
+
 export type MutationReleaseOptionFeeArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationReleaseTokensToBuyerArgs = {
   input: ReleaseTokensToBuyerInput;
 };
 
+
 export type MutationRemoveAssessmentAlertRuleArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveAssessmentCategoryArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveAssessmentDocumentArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveAssessmentQuestionOptionArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveAssessmentReadinessBandArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveAssessmentScoringBandArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveCashDiligenceDocumentArgs = {
-  documentId: Scalars["ID"]["input"];
-  itemId: Scalars["ID"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  documentId: Scalars['ID']['input'];
+  itemId: Scalars['ID']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveCompanyMemberArgs = {
-  memberId: Scalars["ID"]["input"];
+  memberId: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveDiligenceDocumentArgs = {
-  documentId: Scalars["ID"]["input"];
-  itemId: Scalars["ID"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  documentId: Scalars['ID']['input'];
+  itemId: Scalars['ID']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveDueDiligenceArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveLandArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveLoanArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveOfferArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveOfferDocumentRequestArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveOfferRequestArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemovePaymentScheduleArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemovePortfolioArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveProjectArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveProjectMilestoneArgs = {
-  milestoneId: Scalars["ID"]["input"];
-  offerRequestId: Scalars["ID"]["input"];
+  milestoneId: Scalars['ID']['input'];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type MutationRemovePropertyArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveReactionArgs = {
-  messageId: Scalars["ID"]["input"];
+  messageId: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveRentDiligenceDocumentArgs = {
-  documentId: Scalars["ID"]["input"];
-  itemId: Scalars["ID"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  documentId: Scalars['ID']['input'];
+  itemId: Scalars['ID']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveRepaymentArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveReviewArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveTempProjectArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveTermSheetArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveTicketCommentArgs = {
-  commentId: Scalars["ID"]["input"];
+  commentId: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveTransactionArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
 
+
 export type MutationReplayWalletProvisioningArgs = {
-  currency?: InputMaybe<Scalars["String"]["input"]>;
-  dryRun?: InputMaybe<Scalars["Boolean"]["input"]>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  ownerIds?: InputMaybe<Array<Scalars["ID"]["input"]>>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  dryRun?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  ownerIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
+
+
+export type MutationReplySupportRequestArgs = {
+  input: ReplySupportRequestInput;
+};
+
 
 export type MutationRequestAccessArgs = {
   input: RequestAccessInput;
 };
 
+
 export type MutationRequestApproachCategoryArgs = {
-  approachId: Scalars["ID"]["input"];
-  categoryId: Scalars["String"]["input"];
+  approachId: Scalars['ID']['input'];
+  categoryId: Scalars['String']['input'];
 };
+
 
 export type MutationRequestCashDiligenceCategoryArgs = {
-  itemId: Scalars["ID"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  itemId: Scalars['ID']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationRequestCustomCashDiligenceItemArgs = {
-  label: Scalars["String"]["input"];
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  label: Scalars['String']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationRequestCustomDiligenceItemArgs = {
-  label: Scalars["String"]["input"];
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  label: Scalars['String']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationRequestCustomRentDiligenceItemArgs = {
-  label: Scalars["String"]["input"];
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  label: Scalars['String']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationRequestDeclarationUpdateArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type MutationRequestDiligenceCategoryArgs = {
-  itemId: Scalars["ID"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  itemId: Scalars['ID']['input'];
+  transactionId: Scalars['ID']['input'];
 };
 
+
 export type MutationRequestLoanAgreementChangesArgs = {
-  offerRequestId: Scalars["ID"]["input"];
-  reason: Scalars["String"]["input"];
+  offerRequestId: Scalars['ID']['input'];
+  reason: Scalars['String']['input'];
 };
+
 
 export type MutationRequestOfferDocumentsArgs = {
   documents: Array<DocumentRequestItem>;
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type MutationRequestPasswordResetArgs = {
-  email: Scalars["String"]["input"];
+  email: Scalars['String']['input'];
 };
+
 
 export type MutationRequestPaymentVerificationArgs = {
-  conversationId: Scalars["ID"]["input"];
+  conversationId: Scalars['ID']['input'];
 };
+
 
 export type MutationRequestPropertyViewingArgs = {
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  propertyId: Scalars["ID"]["input"];
-  proposedAt: Scalars["DateTime"]["input"];
+  note?: InputMaybe<Scalars['String']['input']>;
+  propertyId: Scalars['ID']['input'];
+  proposedAt: Scalars['DateTime']['input'];
 };
+
 
 export type MutationRequestRentBuyoutArgs = {
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  note?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationRequestRentDiligenceCategoryArgs = {
-  itemId: Scalars["ID"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  itemId: Scalars['ID']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationRequestRentVariationArgs = {
-  note: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  note: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationRequestSpaVariationArgs = {
-  note: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  note: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationRequestTermSheetChangesArgs = {
-  message: Scalars["String"]["input"];
-  offerRequestId: Scalars["ID"]["input"];
+  message: Scalars['String']['input'];
+  offerRequestId: Scalars['ID']['input'];
 };
 
+
 export type MutationRequestWalletWithdrawalArgs = {
-  amount: Scalars["Float"]["input"];
-  idempotencyKey?: InputMaybe<Scalars["String"]["input"]>;
+  amount: Scalars['Float']['input'];
+  idempotencyKey?: InputMaybe<Scalars['String']['input']>;
   ownerType?: InputMaybe<PayoutAccountOwner>;
 };
 
+
 export type MutationResetPasswordArgs = {
-  newPassword: Scalars["String"]["input"];
-  token: Scalars["String"]["input"];
+  newPassword: Scalars['String']['input'];
+  token: Scalars['String']['input'];
 };
+
 
 export type MutationResolveInspectionIssueArgs = {
-  accepted: Scalars["Boolean"]["input"];
-  issueId: Scalars["ID"]["input"];
-  note?: InputMaybe<Scalars["String"]["input"]>;
+  accepted: Scalars['Boolean']['input'];
+  issueId: Scalars['ID']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type MutationRespondToApproachArgs = {
-  approachId: Scalars["ID"]["input"];
-  outcome: Scalars["String"]["input"];
-  reason?: InputMaybe<Scalars["String"]["input"]>;
+  approachId: Scalars['ID']['input'];
+  outcome: Scalars['String']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type MutationRespondToInspectionIssueArgs = {
-  byDate?: InputMaybe<Scalars["Date"]["input"]>;
-  issueId: Scalars["ID"]["input"];
-  remedy: Scalars["String"]["input"];
+  byDate?: InputMaybe<Scalars['Date']['input']>;
+  issueId: Scalars['ID']['input'];
+  remedy: Scalars['String']['input'];
 };
+
 
 export type MutationRetireAssessmentQuestionArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRetireAssessmentTemplateArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
 
+
 export type MutationReturnAssessmentArgs = {
-  id: Scalars["ID"]["input"];
-  officerId: Scalars["ID"]["input"];
-  officerNotes?: InputMaybe<Scalars["String"]["input"]>;
+  id: Scalars['ID']['input'];
+  officerId: Scalars['ID']['input'];
+  officerNotes?: InputMaybe<Scalars['String']['input']>;
 };
+
+
+export type MutationRevaluePropertyArgs = {
+  input: RevaluePropertyInput;
+  propertyId: Scalars['ID']['input'];
+};
+
 
 export type MutationReviewOfferDocumentsArgs = {
   documents: Array<ReviewOfferDocumentItem>;
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
 
+
 export type MutationReviseRepaymentInstallmentArgs = {
-  installmentId: Scalars["ID"]["input"];
-  reason: Scalars["String"]["input"];
+  installmentId: Scalars['ID']['input'];
+  reason: Scalars['String']['input'];
   revision: InstallmentRevisionInput;
 };
 
+
 export type MutationRevokeAssessmentFinancierShareArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRevokeAssessmentShareArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationRevokeOfferArgs = {
-  financierId: Scalars["ID"]["input"];
-  offerId: Scalars["ID"]["input"];
+  financierId: Scalars['ID']['input'];
+  offerId: Scalars['ID']['input'];
 };
+
 
 export type MutationRevokeOfferRequestArgs = {
-  financierId: Scalars["ID"]["input"];
-  offerRequestId: Scalars["ID"]["input"];
+  financierId: Scalars['ID']['input'];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type MutationSaveMySignatureArgs = {
-  signatureImageUrl: Scalars["String"]["input"];
+  signatureImageUrl: Scalars['String']['input'];
 };
 
+
 export type MutationSaveOnboardingProgressArgs = {
-  currentStep?: InputMaybe<Scalars["String"]["input"]>;
+  currentStep?: InputMaybe<Scalars['String']['input']>;
   input?: InputMaybe<CompleteOnboardingInput>;
 };
+
 
 export type MutationSaveUserPolicyArgs = {
   input: SaveUserPolicyInput;
 };
 
+
 export type MutationSendDuePaymentSubscriptionEmailArgs = {
   input: EmailRecipientInput;
 };
+
 
 export type MutationSendMessageArgs = {
   input: SendMessageInput;
 };
 
+
 export type MutationSendMfaOtpArgs = {
-  userId: Scalars["ID"]["input"];
+  userId: Scalars['ID']['input'];
 };
 
+
 export type MutationSendMfaOtpEmailArgs = {
-  userId: Scalars["ID"]["input"];
+  userId: Scalars['ID']['input'];
 };
+
 
 export type MutationSendNotificationArgs = {
   input: SendNotificationInput;
 };
 
+
 export type MutationSendOtpArgs = {
-  email: Scalars["String"]["input"];
+  email: Scalars['String']['input'];
 };
+
 
 export type MutationSendPaymentReminderEmailArgs = {
   input: EmailRecipientInput;
 };
 
+
 export type MutationSendPaymentSubscriptionEmailArgs = {
   input: EmailRecipientInput;
 };
+
 
 export type MutationSendPaymentTermsAcceptanceEmailArgs = {
   input: PaymentTermsEmailInput;
 };
 
+
 export type MutationSendPaymentTermsConfirmationEmailArgs = {
   input: PaymentTermsEmailInput;
 };
+
 
 export type MutationSendPaymentVerificationEmailArgs = {
   input: EmailRecipientInput;
 };
 
+
 export type MutationSendRentAgreementArgs = {
-  signingDeadline?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  signingDeadline?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
 
+
 export type MutationSendRepaymentReminderArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type MutationSendRoleVerificationEmailArgs = {
   input: EmailRecipientInput;
 };
 
+
 export type MutationSendSaleAgreementToBuyerArgs = {
-  signingDeadline?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  signingDeadline?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
 
+
 export type MutationSendSellerFinancingSpaArgs = {
-  signingDeadline?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  signingDeadline?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationSendWelcomeEmailArgs = {
   input: EmailRecipientInput;
 };
 
+
 export type MutationSetConditionPrecedentStatusArgs = {
   input: ConditionPrecedentStatusInput;
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
   phase?: InputMaybe<ConditionPhase>;
 };
 
+
 export type MutationSetIdentityVerificationArgs = {
-  reason?: InputMaybe<Scalars["String"]["input"]>;
+  reason?: InputMaybe<Scalars['String']['input']>;
   status: IdentityVerificationStatus;
-  userId: Scalars["ID"]["input"];
+  userId: Scalars['ID']['input'];
 };
+
 
 export type MutationSetPayoutAccountArgs = {
   input: PayoutAccountInput;
   ownerType: PayoutAccountOwner;
 };
 
+
 export type MutationSetPlatformFeeArgs = {
-  currency?: InputMaybe<Scalars["String"]["input"]>;
-  feeType: Scalars["String"]["input"];
-  flatAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  maxAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  minAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  ratePct?: InputMaybe<Scalars["Float"]["input"]>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  feeType: Scalars['String']['input'];
+  flatAmount?: InputMaybe<Scalars['Float']['input']>;
+  maxAmount?: InputMaybe<Scalars['Float']['input']>;
+  minAmount?: InputMaybe<Scalars['Float']['input']>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  ratePct?: InputMaybe<Scalars['Float']['input']>;
 };
+
 
 export type MutationSetProjectMilestoneArgs = {
   input: ProjectMilestoneInput;
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
 
+
 export type MutationSetRentSettlementArgs = {
-  amount: Scalars["Float"]["input"];
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  amount: Scalars['Float']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
+
+
+export type MutationSetSupportRequestStatusArgs = {
+  input: SetSupportRequestStatusInput;
+};
+
 
 export type MutationSetSupportUserInitialPasswordArgs = {
   input: SetSupportUserInitialPasswordInput;
 };
 
+
 export type MutationSetupMfaArgs = {
-  enabled: Scalars["Boolean"]["input"];
+  enabled: Scalars['Boolean']['input'];
 };
+
 
 export type MutationSignAsBorrowerArgs = {
-  loanDocumentUrl?: InputMaybe<Scalars["String"]["input"]>;
-  offerRequestId: Scalars["ID"]["input"];
-  signatureImageUrl?: InputMaybe<Scalars["String"]["input"]>;
+  loanDocumentUrl?: InputMaybe<Scalars['String']['input']>;
+  offerRequestId: Scalars['ID']['input'];
+  signatureImageUrl?: InputMaybe<Scalars['String']['input']>;
   signatureKind?: InputMaybe<SignatureKind>;
 };
+
 
 export type MutationSignAsLenderArgs = {
-  loanDocumentUrl?: InputMaybe<Scalars["String"]["input"]>;
-  offerRequestId: Scalars["ID"]["input"];
-  signatureImageUrl?: InputMaybe<Scalars["String"]["input"]>;
+  loanDocumentUrl?: InputMaybe<Scalars['String']['input']>;
+  offerRequestId: Scalars['ID']['input'];
+  signatureImageUrl?: InputMaybe<Scalars['String']['input']>;
   signatureKind?: InputMaybe<SignatureKind>;
 };
+
 
 export type MutationSignRentAgreementArgs = {
-  acknowledgedTerms: Scalars["Boolean"]["input"];
-  signedCopyUrl?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
-  typedSignature: Scalars["String"]["input"];
+  acknowledgedTerms: Scalars['Boolean']['input'];
+  signedCopyUrl?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
+  typedSignature: Scalars['String']['input'];
 };
+
 
 export type MutationSignSaleAgreementArgs = {
-  acknowledgedTerms: Scalars["Boolean"]["input"];
-  signatureImageUrl?: InputMaybe<Scalars["String"]["input"]>;
+  acknowledgedTerms: Scalars['Boolean']['input'];
+  signatureImageUrl?: InputMaybe<Scalars['String']['input']>;
   signatureKind?: InputMaybe<SignatureKind>;
-  signedCopyUrl?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
-  typedSignature: Scalars["String"]["input"];
+  signedCopyUrl?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
+  typedSignature: Scalars['String']['input'];
 };
 
+
 export type MutationSignSellerFinancingSpaArgs = {
-  acknowledgedTerms: Scalars["Boolean"]["input"];
-  signatureImageUrl?: InputMaybe<Scalars["String"]["input"]>;
+  acknowledgedTerms: Scalars['Boolean']['input'];
+  signatureImageUrl?: InputMaybe<Scalars['String']['input']>;
   signatureKind?: InputMaybe<SignatureKind>;
-  signedCopyUrl?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
-  typedSignature: Scalars["String"]["input"];
+  signedCopyUrl?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
+  typedSignature: Scalars['String']['input'];
 };
+
 
 export type MutationSignupArgs = {
   input: SignupInput;
 };
 
+
 export type MutationStartRentScheduleArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationSubmitApproachDocumentsArgs = {
-  approachId: Scalars["ID"]["input"];
+  approachId: Scalars['ID']['input'];
   documents: Array<ApproachDocumentInput>;
-  itemId: Scalars["ID"]["input"];
+  itemId: Scalars['ID']['input'];
 };
 
+
 export type MutationSubmitAssessmentArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type MutationSubmitBorrowerLoanRequestArgs = {
   input: SubmitBorrowerLoanRequestInput;
 };
 
+
 export type MutationSubmitCashDiligenceDocumentsArgs = {
   documents: Array<DiligenceDocumentUpload>;
-  itemId: Scalars["ID"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  itemId: Scalars['ID']['input'];
+  transactionId: Scalars['ID']['input'];
 };
 
+
 export type MutationSubmitConditionPrecedentEvidenceArgs = {
-  conditionId: Scalars["ID"]["input"];
-  offerRequestId: Scalars["ID"]["input"];
+  conditionId: Scalars['ID']['input'];
+  offerRequestId: Scalars['ID']['input'];
   phase?: InputMaybe<ConditionPhase>;
-  supportingDocumentName?: InputMaybe<Scalars["String"]["input"]>;
-  supportingDocumentUrl: Scalars["String"]["input"];
+  supportingDocumentName?: InputMaybe<Scalars['String']['input']>;
+  supportingDocumentUrl: Scalars['String']['input'];
 };
+
 
 export type MutationSubmitDiligenceDocumentsArgs = {
   documents: Array<DiligenceDocumentInput>;
-  itemId: Scalars["ID"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  itemId: Scalars['ID']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationSubmitOfferDocumentsArgs = {
   documents: Array<SubmitOfferDocumentItem>;
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type MutationSubmitRentDiligenceDocumentsArgs = {
   documents: Array<DiligenceDocumentInput>;
-  itemId: Scalars["ID"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  itemId: Scalars['ID']['input'];
+  transactionId: Scalars['ID']['input'];
 };
 
+
 export type MutationSubmitSelfieArgs = {
-  id: Scalars["ID"]["input"];
-  image: Scalars["String"]["input"];
+  id: Scalars['ID']['input'];
+  image: Scalars['String']['input'];
 };
+
+
+export type MutationSubmitSupportRequestArgs = {
+  input: SubmitSupportRequestInput;
+};
+
 
 export type MutationSubscribeToPushNotificationArgs = {
   input: SubscribeToPushInput;
 };
 
+
 export type MutationSuspendCompanyMemberArgs = {
-  memberId: Scalars["ID"]["input"];
+  memberId: Scalars['ID']['input'];
 };
+
 
 export type MutationTailorEntityArgs = {
-  entityId: Scalars["ID"]["input"];
+  entityId: Scalars['ID']['input'];
 };
+
 
 export type MutationTerminateRentTenancyArgs = {
-  reason: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  reason: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationToggleOfferFavoriteArgs = {
-  entityId: Scalars["ID"]["input"];
+  entityId: Scalars['ID']['input'];
 };
+
 
 export type MutationTogglePropertyFavoriteArgs = {
-  propertyId: Scalars["ID"]["input"];
+  propertyId: Scalars['ID']['input'];
 };
+
 
 export type MutationToggleSuspendUserArgs = {
-  userId: Scalars["ID"]["input"];
+  userId: Scalars['ID']['input'];
 };
+
 
 export type MutationTokenizePropertyArgs = {
-  metadata?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  uri: Scalars["String"]["input"];
+  metadata?: InputMaybe<Scalars['JSONObject']['input']>;
+  uri: Scalars['String']['input'];
 };
+
 
 export type MutationTransferTitleArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationUnassignTicketArgs = {
-  ticketId: Scalars["ID"]["input"];
+  ticketId: Scalars['ID']['input'];
 };
 
+
+export type MutationUnpausePropertyTokenArgs = {
+  propertyId: Scalars['ID']['input'];
+};
+
+
 export type MutationUpdateAssessmentArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateAssessmentInput;
 };
 
+
 export type MutationUpdateAssessmentAlertRuleArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateAssessmentAlertRuleInput;
 };
 
+
 export type MutationUpdateAssessmentCategoryArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateAssessmentCategoryInput;
 };
 
+
 export type MutationUpdateAssessmentDocumentArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateAssessmentDocumentInput;
 };
 
+
 export type MutationUpdateAssessmentQuestionArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateAssessmentQuestionInput;
 };
 
+
 export type MutationUpdateAssessmentQuestionOptionArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateAssessmentQuestionOptionInput;
 };
 
+
 export type MutationUpdateAssessmentReadinessBandArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateAssessmentReadinessBandInput;
 };
 
+
 export type MutationUpdateAssessmentScoringBandArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateAssessmentScoringBandInput;
 };
 
+
 export type MutationUpdateAssessmentTemplateArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateAssessmentTemplateInput;
 };
 
+
 export type MutationUpdateCompanyRoleArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateEntityRoleInput;
 };
 
+
 export type MutationUpdateComplianceSectionArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateComplianceSectionInput;
 };
 
+
 export type MutationUpdateComplianceSubmissionArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateComplianceSubmissionInput;
 };
 
+
 export type MutationUpdateComplianceTemplateArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateComplianceTemplateInput;
 };
+
 
 export type MutationUpdateConversationArgs = {
   input: UpdateConversationInput;
 };
 
+
 export type MutationUpdateConversationPaymentArgs = {
-  conversationId: Scalars["ID"]["input"];
+  conversationId: Scalars['ID']['input'];
   paymentStatus: ConversationPaymentStatus;
 };
+
 
 export type MutationUpdateDueDiligenceArgs = {
   input: UpdateDueDiligenceInput;
 };
 
+
 export type MutationUpdateMemberRoleArgs = {
-  entityRoleId: Scalars["ID"]["input"];
-  memberId: Scalars["ID"]["input"];
+  entityRoleId: Scalars['ID']['input'];
+  memberId: Scalars['ID']['input'];
 };
+
 
 export type MutationUpdateOfferArgs = {
   input: UpdateOfferInput;
 };
 
+
 export type MutationUpdateOfferDocumentRequestArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateDocumentRequestInput;
 };
+
 
 export type MutationUpdateOfferRequestArgs = {
   input: UpdateOfferRequestInput;
 };
 
+
 export type MutationUpdatePaymentScheduleArgs = {
   input: UpdatePaymentScheduleInput;
 };
+
 
 export type MutationUpdatePortfolioArgs = {
   input: UpdatePortfolioInput;
 };
 
+
 export type MutationUpdateProjectArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: ProjectInput;
 };
 
+
 export type MutationUpdatePropertyArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: PropertyInput;
 };
+
 
 export type MutationUpdateRepaymentArgs = {
   input: UpdateRepaymentInput;
 };
 
+
 export type MutationUpdateRepaymentScheduleStatusArgs = {
-  id: Scalars["ID"]["input"];
-  refNo: Scalars["String"]["input"];
-  status: Scalars["String"]["input"];
+  id: Scalars['ID']['input'];
+  refNo: Scalars['String']['input'];
+  status: Scalars['String']['input'];
 };
+
 
 export type MutationUpdateReviewArgs = {
   input: UpdateReviewInput;
 };
 
+
 export type MutationUpdateSupportRoleArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateSupportRoleInput;
 };
 
+
 export type MutationUpdateTailoringRuleArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateTailoringRuleInput;
 };
+
 
 export type MutationUpdateTempProjectArgs = {
   input: UpdateTempProjectInput;
 };
 
+
 export type MutationUpdateTempProjectPaymentStatusArgs = {
-  id: Scalars["ID"]["input"];
-  paymentStatus: Scalars["String"]["input"];
+  id: Scalars['ID']['input'];
+  paymentStatus: Scalars['String']['input'];
 };
 
+
 export type MutationUpdateTermSheetArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   input: UpdateTermSheetInput;
 };
 
+
 export type MutationUpdateTicketStatusArgs = {
   status: TicketStatus;
-  ticketId: Scalars["ID"]["input"];
+  ticketId: Scalars['ID']['input'];
 };
+
 
 export type MutationUpdateTransactionArgs = {
   input: UpdateTransactionInput;
 };
 
+
 export type MutationUploadApproachDocumentArgs = {
-  approachId: Scalars["ID"]["input"];
-  documentUrl: Scalars["String"]["input"];
-  fileName: Scalars["String"]["input"];
-  kind: Scalars["String"]["input"];
+  approachId: Scalars['ID']['input'];
+  documentUrl: Scalars['String']['input'];
+  fileName: Scalars['String']['input'];
+  kind: Scalars['String']['input'];
 };
 
+
 export type MutationUploadCashTransactionDocumentArgs = {
-  documentUrl: Scalars["String"]["input"];
-  fileName?: InputMaybe<Scalars["String"]["input"]>;
-  kind: Scalars["String"]["input"];
-  label?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  documentUrl: Scalars['String']['input'];
+  fileName?: InputMaybe<Scalars['String']['input']>;
+  kind: Scalars['String']['input'];
+  label?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationUploadComplianceDocumentArgs = {
   input: UploadComplianceDocumentInput;
 };
 
+
 export type MutationUploadFinalDisclosureArgs = {
-  documentUrl: Scalars["String"]["input"];
-  fileName?: InputMaybe<Scalars["String"]["input"]>;
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  documentUrl: Scalars['String']['input'];
+  fileName?: InputMaybe<Scalars['String']['input']>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationUploadRentAgreementArgs = {
-  documentUrl: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  documentUrl: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationUploadRentTransactionDocumentArgs = {
-  documentUrl: Scalars["String"]["input"];
-  fileName: Scalars["String"]["input"];
-  kind: Scalars["String"]["input"];
-  label?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  documentUrl: Scalars['String']['input'];
+  fileName: Scalars['String']['input'];
+  kind: Scalars['String']['input'];
+  label?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationUploadSaleAgreementArgs = {
-  documentUrl: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  documentUrl: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationUploadSellerFinancingSpaArgs = {
-  documentUrl: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  documentUrl: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationUploadSellerTransactionDocumentArgs = {
-  documentUrl: Scalars["String"]["input"];
-  kind: Scalars["String"]["input"];
-  label?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId: Scalars["ID"]["input"];
+  documentUrl: Scalars['String']['input'];
+  kind: Scalars['String']['input'];
+  label?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['ID']['input'];
 };
 
+
 export type MutationUploadTransferDocumentArgs = {
-  conversationId: Scalars["ID"]["input"];
-  transferDoc: Scalars["String"]["input"];
+  conversationId: Scalars['ID']['input'];
+  transferDoc: Scalars['String']['input'];
 };
+
 
 export type MutationUpsertAssessmentResponseArgs = {
   input: UpsertAssessmentResponseInput;
 };
 
+
 export type MutationVerifyAccessInviteArgs = {
-  temporaryPassword: Scalars["String"]["input"];
-  token: Scalars["String"]["input"];
+  temporaryPassword: Scalars['String']['input'];
+  token: Scalars['String']['input'];
 };
+
 
 export type MutationVerifyAssessmentDocumentArgs = {
-  id: Scalars["ID"]["input"];
-  notes?: InputMaybe<Scalars["String"]["input"]>;
-  verifiedBy: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
+  verifiedBy: Scalars['ID']['input'];
 };
 
+
 export type MutationVerifyDisbursementArgs = {
-  disbursementId: Scalars["ID"]["input"];
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  offerRequestId: Scalars["ID"]["input"];
+  disbursementId: Scalars['ID']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  offerRequestId: Scalars['ID']['input'];
   status: DisbursementVerificationStatus;
 };
 
+
 export type MutationVerifyEmailArgs = {
-  email: Scalars["String"]["input"];
-  otp: Scalars["String"]["input"];
+  email: Scalars['String']['input'];
+  otp: Scalars['String']['input'];
 };
+
 
 export type MutationVerifyLoginOtpArgs = {
-  otp: Scalars["String"]["input"];
-  userId: Scalars["ID"]["input"];
+  otp: Scalars['String']['input'];
+  userId: Scalars['ID']['input'];
 };
+
 
 export type MutationVerifyMfaOtpArgs = {
-  otp: Scalars["String"]["input"];
-  userId: Scalars["ID"]["input"];
+  otp: Scalars['String']['input'];
+  userId: Scalars['ID']['input'];
 };
+
 
 export type MutationVerifyRequestedRoleArgs = {
-  role: Scalars["String"]["input"];
-  userId: Scalars["ID"]["input"];
+  role: Scalars['String']['input'];
+  userId: Scalars['ID']['input'];
 };
+
 
 export type MutationVerifyUserArgs = {
-  userId: Scalars["ID"]["input"];
+  userId: Scalars['ID']['input'];
 };
+
 
 export type MutationVotePollArgs = {
-  messageId: Scalars["ID"]["input"];
-  optionIndex: Scalars["Int"]["input"];
+  messageId: Scalars['ID']['input'];
+  optionIndex: Scalars['Int']['input'];
 };
+
 
 export type MutationWaiveApproachItemArgs = {
-  approachId: Scalars["ID"]["input"];
-  itemId: Scalars["ID"]["input"];
-  reason: Scalars["String"]["input"];
+  approachId: Scalars['ID']['input'];
+  itemId: Scalars['ID']['input'];
+  reason: Scalars['String']['input'];
 };
+
 
 export type MutationWaiveCashDiligenceItemArgs = {
-  itemId: Scalars["ID"]["input"];
-  reason: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  itemId: Scalars['ID']['input'];
+  reason: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationWaiveDiligenceItemArgs = {
-  itemId: Scalars["ID"]["input"];
-  reason: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  itemId: Scalars['ID']['input'];
+  reason: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationWaiveDocumentRequestArgs = {
-  offerRequestId: Scalars["ID"]["input"];
-  reason: Scalars["String"]["input"];
+  offerRequestId: Scalars['ID']['input'];
+  reason: Scalars['String']['input'];
 };
+
 
 export type MutationWaiveInspectionArgs = {
-  acknowledgement: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  acknowledgement: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationWaiveRentDiligenceItemArgs = {
-  itemId: Scalars["ID"]["input"];
-  reason: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  itemId: Scalars['ID']['input'];
+  reason: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationWaiveRentInspectionArgs = {
-  acknowledgement: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  acknowledgement: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationWaiveRepaymentInstallmentsArgs = {
-  installmentIds?: InputMaybe<Array<Scalars["ID"]["input"]>>;
-  offerRequestId: Scalars["ID"]["input"];
-  reason: Scalars["String"]["input"];
+  installmentIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+  offerRequestId: Scalars['ID']['input'];
+  reason: Scalars['String']['input'];
 };
+
 
 export type MutationWaiveSellerInspectionArgs = {
-  acknowledgement: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  acknowledgement: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationWithdrawApproachArgs = {
-  approachId: Scalars["ID"]["input"];
-  reason?: InputMaybe<Scalars["String"]["input"]>;
+  approachId: Scalars['ID']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type MutationWithdrawDealArgs = {
-  reason: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  reason: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type MutationWithdrawRentToBuyArgs = {
-  reason: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  reason: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
 
+
 export type MutationWithdrawSellerFinancingArgs = {
-  reason: Scalars["String"]["input"];
-  transactionId: Scalars["ID"]["input"];
+  reason: Scalars['String']['input'];
+  transactionId: Scalars['ID']['input'];
 };
 
 /** A member's thread is read one ticket at a time: `ticketId: { eq }` is required. */
@@ -6451,25 +7121,35 @@ export type MyTicketCommentFilter = {
   ticketId: IdOperator;
 };
 
+export type NftStatus =
+  /** The latest attempt failed. An admin can call tokenizeProperty again. */
+  | 'failed'
+  /** Deployed, with the whole supply minted to the issuer. */
+  | 'minted'
+  /** Never queued for tokenization. */
+  | 'none'
+  /** Queued; the token is being deployed and minted. */
+  | 'pending';
+
 export type Notification = {
-  __typename?: "Notification";
-  archivedAt?: Maybe<Scalars["String"]["output"]>;
-  createdAt: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
-  isArchived: Scalars["Boolean"]["output"];
-  isRead: Scalars["Boolean"]["output"];
-  message: Scalars["String"]["output"];
-  metadata?: Maybe<Scalars["JSON"]["output"]>;
-  readAt?: Maybe<Scalars["String"]["output"]>;
-  recipientId: Scalars["String"]["output"];
+  __typename?: 'Notification';
+  archivedAt?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  isArchived: Scalars['Boolean']['output'];
+  isRead: Scalars['Boolean']['output'];
+  message: Scalars['String']['output'];
+  metadata?: Maybe<Scalars['JSON']['output']>;
+  readAt?: Maybe<Scalars['String']['output']>;
+  recipientId: Scalars['String']['output'];
   references?: Maybe<NotificationReferences>;
-  senderId?: Maybe<Scalars["String"]["output"]>;
-  senderName?: Maybe<Scalars["String"]["output"]>;
+  senderId?: Maybe<Scalars['String']['output']>;
+  senderName?: Maybe<Scalars['String']['output']>;
   senderType?: Maybe<SenderType>;
-  templateType?: Maybe<Scalars["String"]["output"]>;
-  title: Scalars["String"]["output"];
+  templateType?: Maybe<Scalars['String']['output']>;
+  title: Scalars['String']['output'];
   type?: Maybe<NotificationType>;
-  updatedAt: Scalars["String"]["output"];
+  updatedAt: Scalars['String']['output'];
 };
 
 export type NotificationFilter = {
@@ -6483,39 +7163,39 @@ export type NotificationFilter = {
 };
 
 export type NotificationRecipientInput = {
-  email?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["String"]["input"]>;
-  name?: InputMaybe<Scalars["String"]["input"]>;
-  phone?: InputMaybe<Scalars["String"]["input"]>;
-  pushToken?: InputMaybe<Scalars["String"]["input"]>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
+  pushToken?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type NotificationReferences = {
-  __typename?: "NotificationReferences";
-  projectId?: Maybe<Scalars["String"]["output"]>;
-  propertyId?: Maybe<Scalars["String"]["output"]>;
-  roomId?: Maybe<Scalars["String"]["output"]>;
-  transactionId?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'NotificationReferences';
+  projectId?: Maybe<Scalars['String']['output']>;
+  propertyId?: Maybe<Scalars['String']['output']>;
+  roomId?: Maybe<Scalars['String']['output']>;
+  transactionId?: Maybe<Scalars['String']['output']>;
 };
 
 export type NotificationSuccessResponse = {
-  __typename?: "NotificationSuccessResponse";
-  message?: Maybe<Scalars["String"]["output"]>;
-  success: Scalars["Boolean"]["output"];
+  __typename?: 'NotificationSuccessResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export type NotificationType =
-  | "asset_division"
-  | "interest"
-  | "message"
-  | "nft"
-  | "offer"
-  | "payment_confirmation"
-  | "project_update"
-  | "repayment_terms_acceptance"
-  | "repayment_terms_update"
-  | "system"
-  | "transaction";
+  | 'asset_division'
+  | 'interest'
+  | 'message'
+  | 'nft'
+  | 'offer'
+  | 'payment_confirmation'
+  | 'project_update'
+  | 'repayment_terms_acceptance'
+  | 'repayment_terms_update'
+  | 'system'
+  | 'transaction';
 
 export type NotificationTypeOperator = {
   eq?: InputMaybe<NotificationType>;
@@ -6523,65 +7203,65 @@ export type NotificationTypeOperator = {
 };
 
 export type NumberOperator = {
-  between?: InputMaybe<Array<InputMaybe<Scalars["Float"]["input"]>>>;
-  eq?: InputMaybe<Scalars["Float"]["input"]>;
-  gt?: InputMaybe<Scalars["Float"]["input"]>;
-  gte?: InputMaybe<Scalars["Float"]["input"]>;
-  lt?: InputMaybe<Scalars["Float"]["input"]>;
-  lte?: InputMaybe<Scalars["Float"]["input"]>;
+  between?: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>>>;
+  eq?: InputMaybe<Scalars['Float']['input']>;
+  gt?: InputMaybe<Scalars['Float']['input']>;
+  gte?: InputMaybe<Scalars['Float']['input']>;
+  lt?: InputMaybe<Scalars['Float']['input']>;
+  lte?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type NumberRange = {
-  end: Scalars["Float"]["input"];
-  start: Scalars["Float"]["input"];
+  end: Scalars['Float']['input'];
+  start: Scalars['Float']['input'];
 };
 
 export type Offer = {
-  __typename?: "Offer";
-  acceptedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  availabilityPeriodDays?: Maybe<Scalars["Int"]["output"]>;
+  __typename?: 'Offer';
+  acceptedAt?: Maybe<Scalars['DateTime']['output']>;
+  availabilityPeriodDays?: Maybe<Scalars['Int']['output']>;
   bondSubType?: Maybe<BondSubType>;
-  commitmentFeeRate?: Maybe<Scalars["Float"]["output"]>;
-  conditions?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
-  covenants?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  currency?: Maybe<Scalars["String"]["output"]>;
-  depositPercentage?: Maybe<Scalars["Float"]["output"]>;
-  drawdownSchedule?: Maybe<Array<Maybe<Scalars["JSONObject"]["output"]>>>;
-  dsraMonths?: Maybe<Scalars["Int"]["output"]>;
+  commitmentFeeRate?: Maybe<Scalars['Float']['output']>;
+  conditions?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  covenants?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  currency?: Maybe<Scalars['String']['output']>;
+  depositPercentage?: Maybe<Scalars['Float']['output']>;
+  drawdownSchedule?: Maybe<Array<Maybe<Scalars['JSONObject']['output']>>>;
+  dsraMonths?: Maybe<Scalars['Int']['output']>;
   financier?: Maybe<Entity>;
-  financierId: Scalars["ID"]["output"];
-  id: Scalars["ID"]["output"];
-  interestRate?: Maybe<Scalars["JSONObject"]["output"]>;
-  issuedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  lenderName?: Maybe<Scalars["String"]["output"]>;
-  loanAgreementUrl?: Maybe<Scalars["String"]["output"]>;
+  financierId: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
+  interestRate?: Maybe<Scalars['JSONObject']['output']>;
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  lenderName?: Maybe<Scalars['String']['output']>;
+  loanAgreementUrl?: Maybe<Scalars['String']['output']>;
   loanSubType?: Maybe<LoanSubType>;
-  loanTenor?: Maybe<Scalars["JSONObject"]["output"]>;
+  loanTenor?: Maybe<Scalars['JSONObject']['output']>;
   loanType?: Maybe<LoanType>;
-  ltv?: Maybe<Scalars["Float"]["output"]>;
-  maxLoanAmount?: Maybe<Scalars["Float"]["output"]>;
-  moratorium?: Maybe<Array<Maybe<Scalars["JSONObject"]["output"]>>>;
-  offerExpiryDate?: Maybe<Scalars["DateTime"]["output"]>;
-  offerLetterUrl?: Maybe<Scalars["String"]["output"]>;
+  ltv?: Maybe<Scalars['Float']['output']>;
+  maxLoanAmount?: Maybe<Scalars['Float']['output']>;
+  moratorium?: Maybe<Array<Maybe<Scalars['JSONObject']['output']>>>;
+  offerExpiryDate?: Maybe<Scalars['DateTime']['output']>;
+  offerLetterUrl?: Maybe<Scalars['String']['output']>;
   offerRequest?: Maybe<OfferRequest>;
-  offerRequestId?: Maybe<Scalars["ID"]["output"]>;
+  offerRequestId?: Maybe<Scalars['ID']['output']>;
   offerStatus?: Maybe<OfferStatus>;
-  otherFees?: Maybe<Array<Maybe<Scalars["JSONObject"]["output"]>>>;
-  processingTimeline?: Maybe<Array<Maybe<Scalars["JSONObject"]["output"]>>>;
+  otherFees?: Maybe<Array<Maybe<Scalars['JSONObject']['output']>>>;
+  processingTimeline?: Maybe<Array<Maybe<Scalars['JSONObject']['output']>>>;
   property?: Maybe<Property>;
-  propertyId?: Maybe<Scalars["ID"]["output"]>;
-  propertyName?: Maybe<Scalars["String"]["output"]>;
+  propertyId?: Maybe<Scalars['ID']['output']>;
+  propertyName?: Maybe<Scalars['String']['output']>;
   rateType?: Maybe<RateType>;
   recipient?: Maybe<User>;
-  recipientId?: Maybe<Scalars["ID"]["output"]>;
+  recipientId?: Maybe<Scalars['ID']['output']>;
   repaymentFrequency?: Maybe<RepaymentFrequency>;
   repaymentType?: Maybe<RepaymentType>;
-  revokedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  schedule?: Maybe<Scalars["JSONObject"]["output"]>;
-  security?: Maybe<Scalars["JSONObject"]["output"]>;
-  sources?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  revokedAt?: Maybe<Scalars['DateTime']['output']>;
+  schedule?: Maybe<Scalars['JSONObject']['output']>;
+  security?: Maybe<Scalars['JSONObject']['output']>;
+  sources?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type OfferFilter = {
@@ -6601,21 +7281,21 @@ export type OfferFilter = {
  * English" summary — every figure here must already appear on the offer letter.
  */
 export type OfferLetter = {
-  __typename?: "OfferLetter";
+  __typename?: 'OfferLetter';
   /** Acceptance deadline the lender set when issuing (see extendOfferLetterDeadline). */
-  expiresAt?: Maybe<Scalars["DateTime"]["output"]>;
-  fileName?: Maybe<Scalars["String"]["output"]>;
-  fileUrl?: Maybe<Scalars["String"]["output"]>;
-  interestRatePct?: Maybe<Scalars["Float"]["output"]>;
+  expiresAt?: Maybe<Scalars['DateTime']['output']>;
+  fileName?: Maybe<Scalars['String']['output']>;
+  fileUrl?: Maybe<Scalars['String']['output']>;
+  interestRatePct?: Maybe<Scalars['Float']['output']>;
   /** When the lender issued the offer letter. */
-  issuedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  loanAmount?: Maybe<Scalars["Float"]["output"]>;
-  status?: Maybe<Scalars["String"]["output"]>;
-  tenorMonths?: Maybe<Scalars["Int"]["output"]>;
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  loanAmount?: Maybe<Scalars['Float']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+  tenorMonths?: Maybe<Scalars['Int']['output']>;
 };
 
 export type OfferRequest = {
-  __typename?: "OfferRequest";
+  __typename?: 'OfferRequest';
   /**
    * What underwriting decided the lender will actually advance (D76). Null or
    * equal to `requestedAmount` on a full approval; the allocated figure on a
@@ -6625,15 +7305,15 @@ export type OfferRequest = {
    * sheet principal, the offer letter, the loan agreement and disbursement all
    * read it in preference to `requestedAmount`.
    */
-  agreedAmount?: Maybe<Scalars["Float"]["output"]>;
+  agreedAmount?: Maybe<Scalars['Float']['output']>;
   /**
    * Why the lender advanced less than was asked for. Visible to the borrower, and
    * required whenever there is a shortfall — null on full approvals.
    */
-  allocationNote?: Maybe<Scalars["String"]["output"]>;
-  approvedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  allocationNote?: Maybe<Scalars['String']['output']>;
+  approvedAt?: Maybe<Scalars['DateTime']['output']>;
   buyer?: Maybe<User>;
-  buyerId?: Maybe<Scalars["ID"]["output"]>;
+  buyerId?: Maybe<Scalars['ID']['output']>;
   /** The pre-disbursement checklist. Every item must be CONFIRMED or WAIVED before the facility can be drawn. */
   conditionsPrecedent: Array<ConditionPrecedent>;
   /**
@@ -6644,18 +7324,18 @@ export type OfferRequest = {
    * whose status is CONFIRMED or WAIVED.
    */
   conditionsSubsequent: Array<ConditionPrecedent>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
   disbursements: Array<DisbursementRecord>;
   /** Document requests raised on this offer request, in request order. Lets the /offers list show per-request document progress in one query. */
   documents: Array<OfferRequestDocument>;
   financier?: Maybe<Entity>;
-  financierId?: Maybe<Scalars["ID"]["output"]>;
-  financingAssessmentNotes?: Maybe<Scalars["String"]["output"]>;
+  financierId?: Maybe<Scalars['ID']['output']>;
+  financingAssessmentNotes?: Maybe<Scalars['String']['output']>;
   grantedOffer?: Maybe<Offer>;
-  id: Scalars["ID"]["output"];
-  initialDeposit?: Maybe<Scalars["Float"]["output"]>;
+  id: Scalars['ID']['output'];
+  initialDeposit?: Maybe<Scalars['Float']['output']>;
   issuer?: Maybe<Entity>;
-  issuerId?: Maybe<Scalars["ID"]["output"]>;
+  issuerId?: Maybe<Scalars['ID']['output']>;
   /**
    * When this loan's lender was last asked to file an overdue declaration, or null
    * if never.
@@ -6665,7 +7345,7 @@ export type OfferRequest = {
    * so a lender cannot be chased twice in a week by two mechanisms that each
    * assumed they were the only one.
    */
-  lastDeclarationNudgeAt?: Maybe<Scalars["DateTime"]["output"]>;
+  lastDeclarationNudgeAt?: Maybe<Scalars['DateTime']['output']>;
   /**
    * When the lender last sent this borrower a repayment reminder, or null if never.
    *
@@ -6674,14 +7354,14 @@ export type OfferRequest = {
    * reminder, and firing a request that is going to be refused is a worse
    * experience than a button that explains itself.
    */
-  lastRepaymentReminderAt?: Maybe<Scalars["DateTime"]["output"]>;
+  lastRepaymentReminderAt?: Maybe<Scalars['DateTime']['output']>;
   /** The issued loan agreement and its signing clock. Null until issueLoanAgreement runs. */
   loanAgreement?: Maybe<LoanAgreement>;
   /** Both parties' signatures on the loan agreement (borrower signs, lender countersigns). */
   loanAgreementSignatures: DocumentSignatures;
-  metadata?: Maybe<Scalars["JSONObject"]["output"]>;
+  metadata?: Maybe<Scalars['JSONObject']['output']>;
   modeOfFinancing?: Maybe<ModeOfFinancing>;
-  offer?: Maybe<Scalars["JSONObject"]["output"]>;
+  offer?: Maybe<Scalars['JSONObject']['output']>;
   offerLetter?: Maybe<OfferLetter>;
   /** Both parties' signatures on the offer letter (borrower signs, lender countersigns). */
   offerLetterSignatures: DocumentSignatures;
@@ -6705,10 +7385,10 @@ export type OfferRequest = {
    */
   projectMilestones: Array<ProjectMilestone>;
   property?: Maybe<Property>;
-  propertyId?: Maybe<Scalars["ID"]["output"]>;
-  refNo?: Maybe<Scalars["String"]["output"]>;
+  propertyId?: Maybe<Scalars['ID']['output']>;
+  refNo?: Maybe<Scalars['String']['output']>;
   requestStatus?: Maybe<OfferRequestStatus>;
-  requestedAmount: Scalars["Float"]["output"];
+  requestedAmount: Scalars['Float']['output'];
   /**
    * The deal's stage history, oldest first — what happened, when, and by whom.
    *
@@ -6736,7 +7416,7 @@ export type OfferRequest = {
    * distinguish "not started" from "not implemented".
    */
   titleTransfer: TitleTransfer;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
   /**
    * The independent site valuation, or null when none has been commissioned.
    *
@@ -6748,28 +7428,28 @@ export type OfferRequest = {
 };
 
 export type OfferRequestDocument = {
-  __typename?: "OfferRequestDocument";
-  acceptedFileTypes: Array<Scalars["String"]["output"]>;
-  count?: Maybe<Scalars["Int"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
-  documentCode?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'OfferRequestDocument';
+  acceptedFileTypes: Array<Scalars['String']['output']>;
+  count?: Maybe<Scalars['Int']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  documentCode?: Maybe<Scalars['String']['output']>;
   /** @deprecated First file only — use files. */
-  documentUrl?: Maybe<Scalars["String"]["output"]>;
-  dueDate?: Maybe<Scalars["String"]["output"]>;
+  documentUrl?: Maybe<Scalars['String']['output']>;
+  dueDate?: Maybe<Scalars['String']['output']>;
   /** @deprecated First file only — use files. */
-  fileName?: Maybe<Scalars["String"]["output"]>;
+  fileName?: Maybe<Scalars['String']['output']>;
   /** Every file uploaded for this request. Always populated for reads (a legacy single-file row yields one element). */
   files: Array<OfferRequestDocumentFile>;
-  id: Scalars["ID"]["output"];
-  name: Scalars["String"]["output"];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
   offerRequest?: Maybe<OfferRequest>;
-  offerRequestId: Scalars["ID"]["output"];
+  offerRequestId: Scalars['ID']['output'];
   requestedBy?: Maybe<Entity>;
-  requestedByEntityId: Scalars["ID"]["output"];
-  required: Scalars["Boolean"]["output"];
-  reviewedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  reviewerNotes?: Maybe<Scalars["String"]["output"]>;
+  requestedByEntityId: Scalars['ID']['output'];
+  required: Scalars['Boolean']['output'];
+  reviewedAt?: Maybe<Scalars['DateTime']['output']>;
+  reviewerNotes?: Maybe<Scalars['String']['output']>;
   /**
    * Set when the platform answered this request from documents it already held —
    * `listing`, `portfolio`, `approach` or `compliance`. Null on every row the borrower filled
@@ -6780,22 +7460,22 @@ export type OfferRequestDocument = {
    * presenting them as the applicant's evidence is the exact defect AFR-149 had to
    * clean up.
    */
-  source?: Maybe<Scalars["String"]["output"]>;
+  source?: Maybe<Scalars['String']['output']>;
   /** One line saying where a pre-filled file came from. Null otherwise. */
-  sourceNote?: Maybe<Scalars["String"]["output"]>;
+  sourceNote?: Maybe<Scalars['String']['output']>;
   status: OfferRequestDocumentStatus;
-  submittedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  submitterNotes?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  submittedAt?: Maybe<Scalars['DateTime']['output']>;
+  submitterNotes?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 /** One uploaded file for a document request (a single front/back/month slot). */
 export type OfferRequestDocumentFile = {
-  __typename?: "OfferRequestDocumentFile";
-  documentUrl: Scalars["String"]["output"];
-  fileName?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'OfferRequestDocumentFile';
+  documentUrl: Scalars['String']['output'];
+  fileName?: Maybe<Scalars['String']['output']>;
   /** Human label for the slot this file fills — "Front", "Back", "Month 1"… */
-  slotLabel?: Maybe<Scalars["String"]["output"]>;
+  slotLabel?: Maybe<Scalars['String']['output']>;
 };
 
 export type OfferRequestDocumentFilter = {
@@ -6805,7 +7485,11 @@ export type OfferRequestDocumentFilter = {
   status?: InputMaybe<OfferRequestDocumentStatus>;
 };
 
-export type OfferRequestDocumentStatus = "APPROVED" | "PENDING" | "REJECTED" | "SUBMITTED";
+export type OfferRequestDocumentStatus =
+  | 'APPROVED'
+  | 'PENDING'
+  | 'REJECTED'
+  | 'SUBMITTED';
 
 export type OfferRequestFilter = {
   buyerId?: InputMaybe<IdOperator>;
@@ -6819,41 +7503,46 @@ export type OfferRequestFilter = {
   updatedAt?: InputMaybe<DateOperator>;
 };
 
-export type OfferRequestPaymentStatus = "PAID" | "PENDING";
+export type OfferRequestPaymentStatus =
+  | 'PAID'
+  | 'PENDING';
 
 export type OfferRequestStatus =
-  | "ACCEPTED"
-  | "APPROVED"
-  | "CLOSED"
-  | "CONDITIONS_PRECEDENT_CONFIRMED"
-  | "CREDIT_ASSESSMENT"
-  | "DISBURSED"
-  | "DISCHARGE_ISSUED"
-  | "DOCUMENTS_REQUESTED"
-  | "DOCUMENTS_SUBMITTED"
+  | 'ACCEPTED'
+  | 'APPROVED'
+  | 'CLOSED'
+  | 'CONDITIONS_PRECEDENT_CONFIRMED'
+  | 'CREDIT_ASSESSMENT'
+  | 'DISBURSED'
+  | 'DISCHARGE_ISSUED'
+  | 'DOCUMENTS_REQUESTED'
+  | 'DOCUMENTS_SUBMITTED'
   /**
    * Retired 2026-08-04 with the pre-staged short path. Kept so historical rows
    * still read back — nothing writes these any more. A deal that was mid-flight on
    * the short path was migrated onto the staged path by migration 20260804120000.
    */
-  | "GRANTED"
-  | "LOAN_AGREEMENT_BORROWER_SIGNED"
-  | "LOAN_AGREEMENT_ISSUED"
-  | "LOAN_AGREEMENT_SIGNED"
-  | "OFFER_LETTER_ACCEPTED"
-  | "OFFER_LETTER_BORROWER_SIGNED"
-  | "OFFER_LETTER_DECLINED"
-  | "OFFER_LETTER_ISSUED"
-  | "PENDING"
-  | "REJECTED"
-  | "REPAYING"
-  | "REVOKED"
-  | "TERMSHEET_ACCEPTED"
-  | "TERMSHEET_GENERATION"
-  | "TERMSHEET_ISSUED"
-  | "UNDER_REVIEW";
+  | 'GRANTED'
+  | 'LOAN_AGREEMENT_BORROWER_SIGNED'
+  | 'LOAN_AGREEMENT_ISSUED'
+  | 'LOAN_AGREEMENT_SIGNED'
+  | 'OFFER_LETTER_ACCEPTED'
+  | 'OFFER_LETTER_BORROWER_SIGNED'
+  | 'OFFER_LETTER_DECLINED'
+  | 'OFFER_LETTER_ISSUED'
+  | 'PENDING'
+  | 'REJECTED'
+  | 'REPAYING'
+  | 'REVOKED'
+  | 'TERMSHEET_ACCEPTED'
+  | 'TERMSHEET_GENERATION'
+  | 'TERMSHEET_ISSUED'
+  | 'UNDER_REVIEW';
 
-export type OfferStatus = "ACTIVE" | "COMPLETED" | "REVOKED";
+export type OfferStatus =
+  | 'ACTIVE'
+  | 'COMPLETED'
+  | 'REVOKED';
 
 /**
  * A half-finished onboarding, held server-side (AFR-167).
@@ -6865,43 +7554,43 @@ export type OfferStatus = "ACTIVE" | "COMPLETED" | "REVOKED";
  * dropped once onboarding actually completes.
  */
 export type OnboardingProgress = {
-  __typename?: "OnboardingProgress";
+  __typename?: 'OnboardingProgress';
   /**
    * Where the wizard was, in the client's own vocabulary. The server stores this
    * and does not interpret it: which steps exist, and what they are called, is the
    * form's business and changes with it.
    */
-  currentStep?: Maybe<Scalars["String"]["output"]>;
+  currentStep?: Maybe<Scalars['String']['output']>;
   /** Everything saved so far, merged across every step submitted. */
-  data: Scalars["JSON"]["output"];
+  data: Scalars['JSON']['output'];
   /** When the draft was last written. Null when nothing has been saved yet. */
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type Pagination = {
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type ParticipantInput = {
-  address?: InputMaybe<Scalars["String"]["input"]>;
-  name: Scalars["String"]["input"];
-  phoneNumber?: InputMaybe<Scalars["String"]["input"]>;
-  pic: Scalars["String"]["input"];
-  role: Scalars["String"]["input"];
-  walletAddress?: InputMaybe<Scalars["String"]["input"]>;
+  address?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  pic: Scalars['String']['input'];
+  role: Scalars['String']['input'];
+  walletAddress?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type PayLoanInput = {
   /** Major units (GHS), matching the modal's input. */
-  amount: Scalars["Float"]["input"];
+  amount: Scalars['Float']['input'];
   /** The loan anchor — the same id the loan queries use. */
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
   source: LoanPaymentSource;
 };
 
 export type PayLoanResult = {
-  __typename?: "PayLoanResult";
+  __typename?: 'PayLoanResult';
   /**
    * The Stream-2 payment row created on the loan. It counts against the filing
    * once the bank confirms the transfer to the lender — at once on a same-bank
@@ -6919,31 +7608,31 @@ export type PayLoanResult = {
 };
 
 export type Payment = {
-  __typename?: "Payment";
-  amount: Scalars["String"]["output"];
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  currency: Scalars["String"]["output"];
-  externalRefNo?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  ledgerTransactionId?: Maybe<Scalars["ID"]["output"]>;
-  metadata?: Maybe<Scalars["JSONObject"]["output"]>;
-  receivedAt: Scalars["DateTime"]["output"];
-  source: Scalars["String"]["output"];
+  __typename?: 'Payment';
+  amount: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  currency: Scalars['String']['output'];
+  externalRefNo?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  ledgerTransactionId?: Maybe<Scalars['ID']['output']>;
+  metadata?: Maybe<Scalars['JSONObject']['output']>;
+  receivedAt: Scalars['DateTime']['output'];
+  source: Scalars['String']['output'];
 };
 
 export type PaymentApplication = {
-  __typename?: "PaymentApplication";
-  amountFees: Scalars["String"]["output"];
-  amountInterest: Scalars["String"]["output"];
-  amountPrincipal: Scalars["String"]["output"];
-  appliedAt: Scalars["DateTime"]["output"];
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  direction: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
-  installmentId: Scalars["ID"]["output"];
-  paymentId: Scalars["ID"]["output"];
-  reversedByApplicationId?: Maybe<Scalars["ID"]["output"]>;
-  reversesApplicationId?: Maybe<Scalars["ID"]["output"]>;
+  __typename?: 'PaymentApplication';
+  amountFees: Scalars['String']['output'];
+  amountInterest: Scalars['String']['output'];
+  amountPrincipal: Scalars['String']['output'];
+  appliedAt: Scalars['DateTime']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  direction: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  installmentId: Scalars['ID']['output'];
+  paymentId: Scalars['ID']['output'];
+  reversedByApplicationId?: Maybe<Scalars['ID']['output']>;
+  reversesApplicationId?: Maybe<Scalars['ID']['output']>;
 };
 
 /**
@@ -6952,13 +7641,13 @@ export type PaymentApplication = {
  * moved; a payment is attributed to a loan through the filing it settled.
  */
 export type PaymentEvent = {
-  __typename?: "PaymentEvent";
-  amount: Scalars["Float"]["output"];
-  currency: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
-  loanId?: Maybe<Scalars["ID"]["output"]>;
-  offerRequestId: Scalars["ID"]["output"];
-  paymentDate: Scalars["DateTime"]["output"];
+  __typename?: 'PaymentEvent';
+  amount: Scalars['Float']['output'];
+  currency: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  loanId?: Maybe<Scalars['ID']['output']>;
+  offerRequestId: Scalars['ID']['output'];
+  paymentDate: Scalars['DateTime']['output'];
   /**
    * Confirmed once the payment has posted to the ledger; PendingSettlement while
    * it is recorded but unapplied; Reversed once every allocation it made has been
@@ -6966,54 +7655,61 @@ export type PaymentEvent = {
    */
   paymentStatus: PaymentEventStatus;
   /** The provider that moved the money. Null when it moved inside Afram. */
-  pspName?: Maybe<Scalars["String"]["output"]>;
+  pspName?: Maybe<Scalars['String']['output']>;
   /** External provider reference, when there is one. Null for a wallet payment. */
-  pspReference?: Maybe<Scalars["String"]["output"]>;
+  pspReference?: Maybe<Scalars['String']['output']>;
   railType: PaymentRail;
-  recordedAt: Scalars["DateTime"]["output"];
+  recordedAt: Scalars['DateTime']['output'];
   /**
    * Always null. A reversal is recorded against the payment's allocations, not as
    * a second payment — kept for client compatibility.
    */
-  reversalOf?: Maybe<Scalars["ID"]["output"]>;
+  reversalOf?: Maybe<Scalars['ID']['output']>;
   /** The Status Declaration this payment settled against. */
-  statusDeclarationId?: Maybe<Scalars["ID"]["output"]>;
+  statusDeclarationId?: Maybe<Scalars['ID']['output']>;
 };
 
-export type PaymentEventStatus = "Confirmed" | "Failed" | "PendingSettlement" | "Reversed";
+export type PaymentEventStatus =
+  | 'Confirmed'
+  | 'Failed'
+  | 'PendingSettlement'
+  | 'Reversed';
 
 export type PaymentRail =
   /** Paid from the borrower's Afram wallet — no external provider involved. */
-  "AframWallet" | "BankTransfer" | "Manual" | "MobileMoney";
+  | 'AframWallet'
+  | 'BankTransfer'
+  | 'Manual'
+  | 'MobileMoney';
 
 export type PaymentSchedule = {
-  __typename?: "PaymentSchedule";
+  __typename?: 'PaymentSchedule';
   /** The borrower this schedule was drawn up for. */
-  buyerId?: Maybe<Scalars["ID"]["output"]>;
+  buyerId?: Maybe<Scalars['ID']['output']>;
   /** Their full name, or their email where no name is set. */
-  buyerName?: Maybe<Scalars["String"]["output"]>;
-  conversationId?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  createdById?: Maybe<Scalars["ID"]["output"]>;
-  createdForId?: Maybe<Scalars["ID"]["output"]>;
-  id: Scalars["ID"]["output"];
-  interestRate?: Maybe<Scalars["Float"]["output"]>;
-  interestRateBps?: Maybe<Scalars["Int"]["output"]>;
-  interestRateKind?: Maybe<Scalars["String"]["output"]>;
-  loanId?: Maybe<Scalars["ID"]["output"]>;
-  metadata?: Maybe<Scalars["JSONObject"]["output"]>;
-  offerRequestId?: Maybe<Scalars["ID"]["output"]>;
-  principalMinor?: Maybe<Scalars["String"]["output"]>;
+  buyerName?: Maybe<Scalars['String']['output']>;
+  conversationId?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  createdById?: Maybe<Scalars['ID']['output']>;
+  createdForId?: Maybe<Scalars['ID']['output']>;
+  id: Scalars['ID']['output'];
+  interestRate?: Maybe<Scalars['Float']['output']>;
+  interestRateBps?: Maybe<Scalars['Int']['output']>;
+  interestRateKind?: Maybe<Scalars['String']['output']>;
+  loanId?: Maybe<Scalars['ID']['output']>;
+  metadata?: Maybe<Scalars['JSONObject']['output']>;
+  offerRequestId?: Maybe<Scalars['ID']['output']>;
+  principalMinor?: Maybe<Scalars['String']['output']>;
   /** The unit this schedule is against. Falls back to the offer request's. */
-  propertyId?: Maybe<Scalars["ID"]["output"]>;
+  propertyId?: Maybe<Scalars['ID']['output']>;
   /** Resolved from the property. Null where the schedule names no unit. */
-  propertyName?: Maybe<Scalars["String"]["output"]>;
-  repaymentFrequency?: Maybe<Scalars["String"]["output"]>;
-  repaymentTerms?: Maybe<Scalars["JSONObject"]["output"]>;
-  scheduleType?: Maybe<Scalars["String"]["output"]>;
-  totalInterestMinor?: Maybe<Scalars["String"]["output"]>;
-  totalRepaymentMinor?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  propertyName?: Maybe<Scalars['String']['output']>;
+  repaymentFrequency?: Maybe<Scalars['String']['output']>;
+  repaymentTerms?: Maybe<Scalars['JSONObject']['output']>;
+  scheduleType?: Maybe<Scalars['String']['output']>;
+  totalInterestMinor?: Maybe<Scalars['String']['output']>;
+  totalRepaymentMinor?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 /**
@@ -7025,12 +7721,12 @@ export type PaymentSchedule = {
  * the distinction back.
  */
 export type PaymentScheduleEntry = {
-  __typename?: "PaymentScheduleEntry";
+  __typename?: 'PaymentScheduleEntry';
   /** Major units — the servicing record stores minor. */
-  amount: Scalars["Float"]["output"];
-  currency: Scalars["String"]["output"];
-  dueDate: Scalars["DateTime"]["output"];
-  id: Scalars["ID"]["output"];
+  amount: Scalars['Float']['output'];
+  currency: Scalars['String']['output'];
+  dueDate: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
   /**
    * The underlying servicing state — scheduled | due | paid_partial | paid_full |
    * overdue | waived.
@@ -7039,9 +7735,9 @@ export type PaymentScheduleEntry = {
    * instalment and a paid one are indistinguishable there, and only one of them
    * involved money.
    */
-  installmentStatus: Scalars["String"]["output"];
+  installmentStatus: Scalars['String']['output'];
   /** Which instalment this is, e.g. 3 of 24. */
-  sequence?: Maybe<Scalars["Int"]["output"]>;
+  sequence?: Maybe<Scalars['Int']['output']>;
   /**
    * upcoming | paid | overdue
    *
@@ -7050,7 +7746,7 @@ export type PaymentScheduleEntry = {
    * `overdue` once its due date has passed — the status job only advances unpaid
    * rows, so it would otherwise sit at "upcoming" indefinitely.
    */
-  status: Scalars["String"]["output"];
+  status: Scalars['String']['output'];
 };
 
 export type PaymentScheduleFilter = {
@@ -7062,61 +7758,64 @@ export type PaymentScheduleFilter = {
   offerRequestId?: InputMaybe<IdOperator>;
 };
 
-export type PaymentStatus = "OVERDUE" | "PAID" | "PENDING";
+export type PaymentStatus =
+  | 'OVERDUE'
+  | 'PAID'
+  | 'PENDING';
 
 export type PaymentTermsAndSchedule = {
-  __typename?: "PaymentTermsAndSchedule";
-  baseRefNo: Scalars["String"]["output"];
-  conversationId: Scalars["ID"]["output"];
+  __typename?: 'PaymentTermsAndSchedule';
+  baseRefNo: Scalars['String']['output'];
+  conversationId: Scalars['ID']['output'];
   createdBy: UserReference;
   createdFor: UserReference;
   interestRate: InterestRate;
   loanScheduleType: LoanScheduleType;
   loanSubType: LoanSubType;
-  maxAmount: Scalars["Float"]["output"];
-  offerRequestId: Scalars["ID"]["output"];
-  propertyId: Scalars["ID"]["output"];
-  propertyName: Scalars["String"]["output"];
+  maxAmount: Scalars['Float']['output'];
+  offerRequestId: Scalars['ID']['output'];
+  propertyId: Scalars['ID']['output'];
+  propertyName: Scalars['String']['output'];
   repaymentFrequency: RepaymentFrequency;
   repaymentTerms: RepaymentTerms;
   scheduleType: ScheduleType;
   tenor: Tenor;
   termSchedule: Array<YearlyTermSchedule>;
-  totalInterest: Scalars["Float"]["output"];
-  totalRepayment: Scalars["Float"]["output"];
-  transactionId?: Maybe<Scalars["ID"]["output"]>;
-  userId: Scalars["ID"]["output"];
+  totalInterest: Scalars['Float']['output'];
+  totalRepayment: Scalars['Float']['output'];
+  transactionId?: Maybe<Scalars['ID']['output']>;
+  userId: Scalars['ID']['output'];
 };
 
 export type PaymentTermsAndScheduleInput = {
-  additionalInterest?: InputMaybe<Scalars["Float"]["input"]>;
-  baseRefNo?: InputMaybe<Scalars["String"]["input"]>;
+  additionalInterest?: InputMaybe<Scalars['Float']['input']>;
+  baseRefNo?: InputMaybe<Scalars['String']['input']>;
   createdBy?: InputMaybe<UserReferenceInput>;
   createdFor?: InputMaybe<UserReferenceInput>;
   interestRate?: InputMaybe<InterestRateInput>;
-  isSubscribedToReferenceRate?: InputMaybe<Scalars["Boolean"]["input"]>;
+  isSubscribedToReferenceRate?: InputMaybe<Scalars['Boolean']['input']>;
   loanScheduleType?: InputMaybe<LoanScheduleType>;
   loanSubType?: InputMaybe<LoanSubType>;
-  maxAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  maxLoanAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  offerRequestId?: InputMaybe<Scalars["ID"]["input"]>;
-  repaymentFrequency?: InputMaybe<Scalars["String"]["input"]>;
+  maxAmount?: InputMaybe<Scalars['Float']['input']>;
+  maxLoanAmount?: InputMaybe<Scalars['Float']['input']>;
+  offerRequestId?: InputMaybe<Scalars['ID']['input']>;
+  repaymentFrequency?: InputMaybe<Scalars['String']['input']>;
   repaymentTerms?: InputMaybe<RepaymentTermsInput>;
   tenor?: InputMaybe<TenorInput>;
   termSchedule?: InputMaybe<Array<YearlyTermScheduleInput>>;
-  totalInterest?: InputMaybe<Scalars["Float"]["input"]>;
-  totalRepayment?: InputMaybe<Scalars["Float"]["input"]>;
+  totalInterest?: InputMaybe<Scalars['Float']['input']>;
+  totalRepayment?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type PaymentTermsEmailInput = {
-  body?: InputMaybe<Scalars["String"]["input"]>;
-  email: Scalars["String"]["input"];
-  name?: InputMaybe<Scalars["String"]["input"]>;
-  payload?: InputMaybe<Scalars["JSON"]["input"]>;
-  repaymentId?: InputMaybe<Scalars["String"]["input"]>;
-  scheduleId?: InputMaybe<Scalars["String"]["input"]>;
-  title?: InputMaybe<Scalars["String"]["input"]>;
-  userId?: InputMaybe<Scalars["String"]["input"]>;
+  body?: InputMaybe<Scalars['String']['input']>;
+  email: Scalars['String']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  payload?: InputMaybe<Scalars['JSON']['input']>;
+  repaymentId?: InputMaybe<Scalars['String']['input']>;
+  scheduleId?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 /**
@@ -7125,16 +7824,16 @@ export type PaymentTermsEmailInput = {
  * readable number to every screen that renders it.
  */
 export type PayoutAccount = {
-  __typename?: "PayoutAccount";
+  __typename?: 'PayoutAccount';
   /** As it appears on the account. The bank will reject a payout that disagrees. */
-  accountName: Scalars["String"]["output"];
-  accountNumberMasked: Scalars["String"]["output"];
+  accountName: Scalars['String']['output'];
+  accountNumberMasked: Scalars['String']['output'];
   /** Reference only — shown back to the owner, never used to route a payout. */
-  bankBranch?: Maybe<Scalars["String"]["output"]>;
+  bankBranch?: Maybe<Scalars['String']['output']>;
   /** The partner bank's routing key, when the caller supplied one. */
-  bankCode?: Maybe<Scalars["String"]["output"]>;
-  bankName: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
+  bankCode?: Maybe<Scalars['String']['output']>;
+  bankName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   ownerType: PayoutAccountOwner;
   /**
    * `pending` from the moment it is saved or changed, until the bank partner
@@ -7143,87 +7842,93 @@ export type PayoutAccount = {
    * account; a check the bank could not answer stays `pending` and is retried.
    */
   status: PayoutAccountStatus;
-  updatedAt: Scalars["DateTime"]["output"];
+  updatedAt: Scalars['DateTime']['output'];
   /** Why the account is pending or rejected — written for the owner. Null once verified. */
-  verificationNote?: Maybe<Scalars["String"]["output"]>;
-  verifiedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  verificationNote?: Maybe<Scalars['String']['output']>;
+  verifiedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type PayoutAccountInput = {
-  accountName: Scalars["String"]["input"];
+  accountName: Scalars['String']['input'];
   /** Spaces and dashes are fine — they are stripped, not rejected. */
-  accountNumber: Scalars["String"]["input"];
+  accountNumber: Scalars['String']['input'];
   /**
    * Optional, and free text: the branch is recorded for the owner's own reference
    * and never used to route money — `bankCode` does that. Stored as typed, minus
    * surrounding whitespace.
    */
-  bankBranch?: InputMaybe<Scalars["String"]["input"]>;
-  bankCode?: InputMaybe<Scalars["String"]["input"]>;
-  bankName: Scalars["String"]["input"];
+  bankBranch?: InputMaybe<Scalars['String']['input']>;
+  bankCode?: InputMaybe<Scalars['String']['input']>;
+  bankName: Scalars['String']['input'];
 };
 
 export type PayoutAccountOwner =
   /** The caller's active entity — the destination an issuer or financier is paid at. */
-  | "entity"
+  | 'entity'
   /** The authenticated user, personally — the destination for their withdrawals. */
-  | "user";
+  | 'user';
 
-export type PayoutAccountStatus = "pending" | "rejected" | "verified";
+export type PayoutAccountStatus =
+  | 'pending'
+  | 'rejected'
+  | 'verified';
 
-export type PenaltyType = "FLAT" | "NONE" | "PERCENTAGE";
+export type PenaltyType =
+  | 'FLAT'
+  | 'NONE'
+  | 'PERCENTAGE';
 
 export type PendingVerificationsPayload = {
-  __typename?: "PendingVerificationsPayload";
-  limit: Scalars["Int"]["output"];
-  page: Scalars["Int"]["output"];
+  __typename?: 'PendingVerificationsPayload';
+  limit: Scalars['Int']['output'];
+  page: Scalars['Int']['output'];
   requests: Array<RoleRequest>;
-  total: Scalars["Int"]["output"];
-  totalPages: Scalars["Int"]["output"];
+  total: Scalars['Int']['output'];
+  totalPages: Scalars['Int']['output'];
 };
 
 /** One period end on the sales-pipeline chart. */
 export type PipelinePoint = {
-  __typename?: "PipelinePoint";
+  __typename?: 'PipelinePoint';
   /**
    * What `value` is denominated in.
    *
    * One currency per point. A portfolio spanning two reports the one most of it
    * is in rather than silently adding cedis to dollars.
    */
-  currency: Scalars["String"]["output"];
+  currency: Scalars['String']['output'];
   /** Period end, so the client labels it in the viewer's locale. */
-  periodEnd: Scalars["DateTime"]["output"];
+  periodEnd: Scalars['DateTime']['output'];
   /** Total list value of unsold units at that date. */
-  value: Scalars["Float"]["output"];
+  value: Scalars['Float']['output'];
 };
 
 export type PlatformFeeSetting = {
-  __typename?: "PlatformFeeSetting";
-  createdAt: Scalars["String"]["output"];
-  currency: Scalars["String"]["output"];
+  __typename?: 'PlatformFeeSetting';
+  createdAt: Scalars['String']['output'];
+  currency: Scalars['String']['output'];
   /** Machine key for what is being charged, e.g. seller_financing_down_payment_release. */
-  feeType: Scalars["String"]["output"];
+  feeType: Scalars['String']['output'];
   /** Added on top of the percentage. Use alone for a pure flat fee. */
-  flatAmount: Scalars["Float"]["output"];
-  id: Scalars["ID"]["output"];
+  flatAmount: Scalars['Float']['output'];
+  id: Scalars['ID']['output'];
   /** False on a superseded row — history, not the live rate. */
-  isActive: Scalars["Boolean"]["output"];
+  isActive: Scalars['Boolean']['output'];
   /** Ceiling, applied after rate + flat. Null for none. */
-  maxAmount?: Maybe<Scalars["Float"]["output"]>;
+  maxAmount?: Maybe<Scalars['Float']['output']>;
   /** Floor, applied after rate + flat. Null for none. */
-  minAmount?: Maybe<Scalars["Float"]["output"]>;
+  minAmount?: Maybe<Scalars['Float']['output']>;
   /** Why this fee exists, or why it last changed. */
-  note?: Maybe<Scalars["String"]["output"]>;
+  note?: Maybe<Scalars['String']['output']>;
   /** Percentage of the gross amount. */
-  ratePct: Scalars["Float"]["output"];
-  supersededAt?: Maybe<Scalars["String"]["output"]>;
-  updatedAt: Scalars["String"]["output"];
-  updatedById?: Maybe<Scalars["ID"]["output"]>;
+  ratePct: Scalars['Float']['output'];
+  supersededAt?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['String']['output'];
+  updatedById?: Maybe<Scalars['ID']['output']>;
 };
 
 export type Portfolio = {
-  __typename?: "Portfolio";
+  __typename?: 'Portfolio';
   /**
    * The portfolio's supporting files, as written by `createPortfolio` /
    * `updatePortfolio` (`[JSONObject]`): `{ description, fileUrl }`. Typed
@@ -7231,50 +7936,50 @@ export type Portfolio = {
    * file failed the whole query it appeared in. `JSON` rather than `JSONObject`
    * so an early row holding a bare URL still reads.
    */
-  additionalFiles?: Maybe<Array<Maybe<Scalars["JSON"]["output"]>>>;
+  additionalFiles?: Maybe<Array<Maybe<Scalars['JSON']['output']>>>;
   construction?: Maybe<Construction>;
-  constructionCommencementDate?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["String"]["output"]>;
-  epaPermitNumber?: Maybe<Scalars["String"]["output"]>;
-  gpsAddress?: Maybe<Scalars["String"]["output"]>;
-  grossDevelopmentValue?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["String"]["output"]>;
-  isCompleted?: Maybe<Scalars["Boolean"]["output"]>;
-  landValuationAmount?: Maybe<Scalars["Float"]["output"]>;
-  landValuer?: Maybe<Scalars["String"]["output"]>;
-  listingObjective?: Maybe<Scalars["String"]["output"]>;
-  metadata?: Maybe<Scalars["JSONObject"]["output"]>;
-  ownerId?: Maybe<Scalars["String"]["output"]>;
-  planningPermitNumber?: Maybe<Scalars["String"]["output"]>;
-  portfolioType?: Maybe<Scalars["String"]["output"]>;
-  practicalCompletionDate?: Maybe<Scalars["String"]["output"]>;
+  constructionCommencementDate?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['String']['output']>;
+  epaPermitNumber?: Maybe<Scalars['String']['output']>;
+  gpsAddress?: Maybe<Scalars['String']['output']>;
+  grossDevelopmentValue?: Maybe<Scalars['Float']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  isCompleted?: Maybe<Scalars['Boolean']['output']>;
+  landValuationAmount?: Maybe<Scalars['Float']['output']>;
+  landValuer?: Maybe<Scalars['String']['output']>;
+  listingObjective?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Scalars['JSONObject']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  planningPermitNumber?: Maybe<Scalars['String']['output']>;
+  portfolioType?: Maybe<Scalars['String']['output']>;
+  practicalCompletionDate?: Maybe<Scalars['String']['output']>;
   projectCost?: Maybe<ProjectCost>;
-  projectDescription?: Maybe<Scalars["String"]["output"]>;
-  projectImages?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
-  projectName?: Maybe<Scalars["String"]["output"]>;
-  projectStatus?: Maybe<Scalars["String"]["output"]>;
-  projectType?: Maybe<Scalars["String"]["output"]>;
-  properties?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
+  projectDescription?: Maybe<Scalars['String']['output']>;
+  projectImages?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  projectName?: Maybe<Scalars['String']['output']>;
+  projectStatus?: Maybe<Scalars['String']['output']>;
+  projectType?: Maybe<Scalars['String']['output']>;
+  properties?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   propertyTypes?: Maybe<Array<Maybe<PropertyTypes>>>;
-  readiness?: Maybe<Scalars["Int"]["output"]>;
-  sessionId?: Maybe<Scalars["String"]["output"]>;
-  sharedAmenities?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
-  squareFeet?: Maybe<Scalars["Int"]["output"]>;
-  streetAddress?: Maybe<Scalars["String"]["output"]>;
-  titleNumber?: Maybe<Scalars["String"]["output"]>;
-  totalDevelopmentCost?: Maybe<Scalars["Float"]["output"]>;
-  updatedAt?: Maybe<Scalars["String"]["output"]>;
-  views?: Maybe<Scalars["Int"]["output"]>;
-  yearBuilt?: Maybe<Scalars["String"]["output"]>;
+  readiness?: Maybe<Scalars['Int']['output']>;
+  sessionId?: Maybe<Scalars['String']['output']>;
+  sharedAmenities?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  squareFeet?: Maybe<Scalars['Int']['output']>;
+  streetAddress?: Maybe<Scalars['String']['output']>;
+  titleNumber?: Maybe<Scalars['String']['output']>;
+  totalDevelopmentCost?: Maybe<Scalars['Float']['output']>;
+  updatedAt?: Maybe<Scalars['String']['output']>;
+  views?: Maybe<Scalars['Int']['output']>;
+  yearBuilt?: Maybe<Scalars['String']['output']>;
 };
 
 export type PortfolioContext = {
-  __typename?: "PortfolioContext";
-  portfolioId: Scalars["ID"]["output"];
-  portfolioType: Scalars["String"]["output"];
-  projectName?: Maybe<Scalars["String"]["output"]>;
-  sharedAmenities?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
-  totalUnits: Scalars["Int"]["output"];
+  __typename?: 'PortfolioContext';
+  portfolioId: Scalars['ID']['output'];
+  portfolioType: Scalars['String']['output'];
+  projectName?: Maybe<Scalars['String']['output']>;
+  sharedAmenities?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  totalUnits: Scalars['Int']['output'];
 };
 
 export type PortfolioFilter = {
@@ -7283,51 +7988,51 @@ export type PortfolioFilter = {
 };
 
 export type PortfolioProjectUnitInput = {
-  backyard?: InputMaybe<Scalars["Int"]["input"]>;
-  bedroom?: InputMaybe<Scalars["Int"]["input"]>;
-  currency?: InputMaybe<Scalars["String"]["input"]>;
-  diningArea?: InputMaybe<Scalars["Int"]["input"]>;
-  fullBathroom?: InputMaybe<Scalars["Int"]["input"]>;
-  fullKitchen?: InputMaybe<Scalars["Int"]["input"]>;
-  halfBathroom?: InputMaybe<Scalars["Int"]["input"]>;
-  kitchenette?: InputMaybe<Scalars["Int"]["input"]>;
-  livingRoom?: InputMaybe<Scalars["Int"]["input"]>;
-  office?: InputMaybe<Scalars["Int"]["input"]>;
-  patio?: InputMaybe<Scalars["Int"]["input"]>;
-  price: Scalars["Float"]["input"];
-  projectImages?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  propertyAmenities?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  propertyCardDesc?: InputMaybe<Scalars["String"]["input"]>;
-  propertyDescription?: InputMaybe<Scalars["String"]["input"]>;
-  propertyNameOrNumber?: InputMaybe<Scalars["String"]["input"]>;
-  propertyType?: InputMaybe<Scalars["String"]["input"]>;
-  squareFeet?: InputMaybe<Scalars["Int"]["input"]>;
-  thumbnail?: InputMaybe<Scalars["String"]["input"]>;
+  backyard?: InputMaybe<Scalars['Int']['input']>;
+  bedroom?: InputMaybe<Scalars['Int']['input']>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  diningArea?: InputMaybe<Scalars['Int']['input']>;
+  fullBathroom?: InputMaybe<Scalars['Int']['input']>;
+  fullKitchen?: InputMaybe<Scalars['Int']['input']>;
+  halfBathroom?: InputMaybe<Scalars['Int']['input']>;
+  kitchenette?: InputMaybe<Scalars['Int']['input']>;
+  livingRoom?: InputMaybe<Scalars['Int']['input']>;
+  office?: InputMaybe<Scalars['Int']['input']>;
+  patio?: InputMaybe<Scalars['Int']['input']>;
+  price: Scalars['Float']['input'];
+  projectImages?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  propertyAmenities?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  propertyCardDesc?: InputMaybe<Scalars['String']['input']>;
+  propertyDescription?: InputMaybe<Scalars['String']['input']>;
+  propertyNameOrNumber?: InputMaybe<Scalars['String']['input']>;
+  propertyType?: InputMaybe<Scalars['String']['input']>;
+  squareFeet?: InputMaybe<Scalars['Int']['input']>;
+  thumbnail?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type PortfolioProjectWithUnitsResult = {
-  __typename?: "PortfolioProjectWithUnitsResult";
-  portfolioId?: Maybe<Scalars["ID"]["output"]>;
-  projectId?: Maybe<Scalars["ID"]["output"]>;
-  success: Scalars["Boolean"]["output"];
-  unitIds?: Maybe<Array<Maybe<Scalars["ID"]["output"]>>>;
+  __typename?: 'PortfolioProjectWithUnitsResult';
+  portfolioId?: Maybe<Scalars['ID']['output']>;
+  projectId?: Maybe<Scalars['ID']['output']>;
+  success: Scalars['Boolean']['output'];
+  unitIds?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
 };
 
 export type PreApprovalDocument = {
-  __typename?: "PreApprovalDocument";
-  documentUrl: Scalars["String"]["output"];
-  fileName: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
+  __typename?: 'PreApprovalDocument';
+  documentUrl: Scalars['String']['output'];
+  fileName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
 };
 
 export type PreApprovalExchangeRow = {
-  __typename?: "PreApprovalExchangeRow";
+  __typename?: 'PreApprovalExchangeRow';
   /** issuer_to_buyer = the seller asked the applicant; buyer_to_issuer = the reverse. */
-  direction: Scalars["String"]["output"];
+  direction: Scalars['String']['output'];
   documents: Array<PreApprovalDocument>;
-  label: Scalars["String"]["output"];
+  label: Scalars['String']['output'];
   /** The settled state, rendered verbatim in a pill: accepted / waived / requested / … */
-  status: Scalars["String"]["output"];
+  status: Scalars['String']['output'];
 };
 
 /**
@@ -7340,18 +8045,18 @@ export type PreApprovalExchangeRow = {
  * it must not move underneath the lender afterwards.
  */
 export type PreApprovalFile = {
-  __typename?: "PreApprovalFile";
+  __typename?: 'PreApprovalFile';
   /** When the seller accepted. Null only on a snapshot taken before they did. */
-  acceptedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  acceptedAt?: Maybe<Scalars['DateTime']['output']>;
   /** The approach's reference, shown to the lender (e.g. AP-2026-001094). */
-  approachId: Scalars["String"]["output"];
+  approachId: Scalars['String']['output'];
   /** When the deposit cleared and the seller was told — placement itself is silent. */
-  approachedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  approachedAt?: Maybe<Scalars['DateTime']['output']>;
   /** The buyer's commitment deposit, already confirmed in escrow. */
-  depositAmount: Scalars["Float"]["output"];
-  depositCurrency?: Maybe<Scalars["String"]["output"]>;
+  depositAmount: Scalars['Float']['output'];
+  depositCurrency?: Maybe<Scalars['String']['output']>;
   /** The escrow provider's reference for the confirmed leg (e.g. PSP-5161). */
-  depositReference?: Maybe<Scalars["String"]["output"]>;
+  depositReference?: Maybe<Scalars['String']['output']>;
   /**
    * The optional two-way exchange, where there was one. Empty on most deals.
    *
@@ -7368,32 +8073,32 @@ export type PreApprovalFile = {
    */
   propertyPack: Array<PreApprovalPackCategory>;
   /** The seller's company or display name, as it was at acceptance. */
-  sellerName: Scalars["String"]["output"];
+  sellerName: Scalars['String']['output'];
 };
 
 export type PreApprovalPackCategory = {
-  __typename?: "PreApprovalPackCategory";
-  categoryId: Scalars["String"]["output"];
+  __typename?: 'PreApprovalPackCategory';
+  categoryId: Scalars['String']['output'];
   /** Empty where the category produced nothing — render the gap, do not drop the row. */
   documents: Array<PreApprovalDocument>;
   /** Human label, e.g. "Planning permission and building permit". */
-  label: Scalars["String"]["output"];
+  label: Scalars['String']['output'];
 };
 
 export type PreTokenizedUnit = {
-  __typename?: "PreTokenizedUnit";
-  createdAt: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
+  __typename?: 'PreTokenizedUnit';
+  createdAt: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   metaData?: Maybe<PreTokenizedUnitMetadata>;
-  numberOfUnits: Scalars["Int"]["output"];
-  ownerId: Scalars["ID"]["output"];
-  paymentStatus: Scalars["String"]["output"];
-  portfolioId: Scalars["ID"]["output"];
-  status: Scalars["String"]["output"];
-  unitCoverImage?: Maybe<Scalars["String"]["output"]>;
-  unitId: Scalars["String"]["output"];
-  unitType: Scalars["String"]["output"];
-  updatedAt: Scalars["String"]["output"];
+  numberOfUnits: Scalars['Int']['output'];
+  ownerId: Scalars['ID']['output'];
+  paymentStatus: Scalars['String']['output'];
+  portfolioId: Scalars['ID']['output'];
+  status: Scalars['String']['output'];
+  unitCoverImage?: Maybe<Scalars['String']['output']>;
+  unitId: Scalars['String']['output'];
+  unitType: Scalars['String']['output'];
+  updatedAt: Scalars['String']['output'];
 };
 
 export type PreTokenizedUnitFilter = {
@@ -7406,166 +8111,169 @@ export type PreTokenizedUnitFilter = {
 
 export type PreTokenizedUnitInput = {
   metaData?: InputMaybe<PreTokenizedUnitMetadataInput>;
-  numberOfUnits?: InputMaybe<Scalars["Int"]["input"]>;
-  paymentStatus?: InputMaybe<Scalars["String"]["input"]>;
-  portfolioId: Scalars["ID"]["input"];
-  status?: InputMaybe<Scalars["String"]["input"]>;
-  unitCoverImage?: InputMaybe<Scalars["String"]["input"]>;
-  unitId: Scalars["String"]["input"];
-  unitType: Scalars["String"]["input"];
+  numberOfUnits?: InputMaybe<Scalars['Int']['input']>;
+  paymentStatus?: InputMaybe<Scalars['String']['input']>;
+  portfolioId: Scalars['ID']['input'];
+  status?: InputMaybe<Scalars['String']['input']>;
+  unitCoverImage?: InputMaybe<Scalars['String']['input']>;
+  unitId: Scalars['String']['input'];
+  unitType: Scalars['String']['input'];
 };
 
 export type PreTokenizedUnitMetadata = {
-  __typename?: "PreTokenizedUnitMetadata";
-  area?: Maybe<Scalars["String"]["output"]>;
-  availableFrom?: Maybe<Scalars["String"]["output"]>;
-  bedroom?: Maybe<Scalars["Int"]["output"]>;
-  city?: Maybe<Scalars["String"]["output"]>;
-  district?: Maybe<Scalars["String"]["output"]>;
-  floor?: Maybe<Scalars["String"]["output"]>;
-  floorPlanUrl?: Maybe<Scalars["String"]["output"]>;
-  fullBathroom?: Maybe<Scalars["Int"]["output"]>;
-  hasUnitDeed?: Maybe<Scalars["Boolean"]["output"]>;
-  headline?: Maybe<Scalars["String"]["output"]>;
-  houseNumber?: Maybe<Scalars["String"]["output"]>;
-  latA?: Maybe<Scalars["String"]["output"]>;
-  latB?: Maybe<Scalars["String"]["output"]>;
-  legalDescOfProperty?: Maybe<Scalars["String"]["output"]>;
-  listingType?: Maybe<Scalars["String"]["output"]>;
-  lngA?: Maybe<Scalars["String"]["output"]>;
-  lngB?: Maybe<Scalars["String"]["output"]>;
-  municipality?: Maybe<Scalars["String"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-  projectAmenities?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
-  projectImages?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
-  projectNameOrNumber?: Maybe<Scalars["String"]["output"]>;
-  projectStatus?: Maybe<Scalars["String"]["output"]>;
-  projectType?: Maybe<Scalars["String"]["output"]>;
-  propertyDescription?: Maybe<Scalars["String"]["output"]>;
-  propertyUse?: Maybe<Scalars["String"]["output"]>;
-  region?: Maybe<Scalars["String"]["output"]>;
-  squareFeet?: Maybe<Scalars["Float"]["output"]>;
-  unitDeedUrl?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'PreTokenizedUnitMetadata';
+  area?: Maybe<Scalars['String']['output']>;
+  availableFrom?: Maybe<Scalars['String']['output']>;
+  bedroom?: Maybe<Scalars['Int']['output']>;
+  city?: Maybe<Scalars['String']['output']>;
+  district?: Maybe<Scalars['String']['output']>;
+  floor?: Maybe<Scalars['String']['output']>;
+  floorPlanUrl?: Maybe<Scalars['String']['output']>;
+  fullBathroom?: Maybe<Scalars['Int']['output']>;
+  hasUnitDeed?: Maybe<Scalars['Boolean']['output']>;
+  headline?: Maybe<Scalars['String']['output']>;
+  houseNumber?: Maybe<Scalars['String']['output']>;
+  latA?: Maybe<Scalars['String']['output']>;
+  latB?: Maybe<Scalars['String']['output']>;
+  legalDescOfProperty?: Maybe<Scalars['String']['output']>;
+  listingType?: Maybe<Scalars['String']['output']>;
+  lngA?: Maybe<Scalars['String']['output']>;
+  lngB?: Maybe<Scalars['String']['output']>;
+  municipality?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  projectAmenities?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  projectImages?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  projectNameOrNumber?: Maybe<Scalars['String']['output']>;
+  projectStatus?: Maybe<Scalars['String']['output']>;
+  projectType?: Maybe<Scalars['String']['output']>;
+  propertyDescription?: Maybe<Scalars['String']['output']>;
+  propertyUse?: Maybe<Scalars['String']['output']>;
+  region?: Maybe<Scalars['String']['output']>;
+  squareFeet?: Maybe<Scalars['Float']['output']>;
+  unitDeedUrl?: Maybe<Scalars['String']['output']>;
 };
 
 export type PreTokenizedUnitMetadataInput = {
-  area?: InputMaybe<Scalars["String"]["input"]>;
-  availableFrom?: InputMaybe<Scalars["String"]["input"]>;
-  bedroom?: InputMaybe<Scalars["Int"]["input"]>;
-  city?: InputMaybe<Scalars["String"]["input"]>;
-  currency?: InputMaybe<Scalars["String"]["input"]>;
-  description?: InputMaybe<Scalars["String"]["input"]>;
-  district?: InputMaybe<Scalars["String"]["input"]>;
-  floor?: InputMaybe<Scalars["String"]["input"]>;
-  floorPlanUrl?: InputMaybe<Scalars["String"]["input"]>;
-  fullBathroom?: InputMaybe<Scalars["Int"]["input"]>;
-  hasUnitDeed?: InputMaybe<Scalars["Boolean"]["input"]>;
-  headline?: InputMaybe<Scalars["String"]["input"]>;
-  houseNumber?: InputMaybe<Scalars["String"]["input"]>;
-  latA?: InputMaybe<Scalars["String"]["input"]>;
-  latB?: InputMaybe<Scalars["String"]["input"]>;
-  legalDescOfProperty?: InputMaybe<Scalars["String"]["input"]>;
-  listingType?: InputMaybe<Scalars["String"]["input"]>;
-  lngA?: InputMaybe<Scalars["String"]["input"]>;
-  lngB?: InputMaybe<Scalars["String"]["input"]>;
-  municipality?: InputMaybe<Scalars["String"]["input"]>;
-  price?: InputMaybe<Scalars["Float"]["input"]>;
-  projectAmenities?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  projectImages?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  projectNameOrNumber?: InputMaybe<Scalars["String"]["input"]>;
-  projectStatus?: InputMaybe<Scalars["String"]["input"]>;
-  projectType?: InputMaybe<Scalars["String"]["input"]>;
-  propertyDescription?: InputMaybe<Scalars["String"]["input"]>;
-  propertyUse?: InputMaybe<Scalars["String"]["input"]>;
-  region?: InputMaybe<Scalars["String"]["input"]>;
-  squareFeet?: InputMaybe<Scalars["Float"]["input"]>;
-  unitDeedUrl?: InputMaybe<Scalars["String"]["input"]>;
+  area?: InputMaybe<Scalars['String']['input']>;
+  availableFrom?: InputMaybe<Scalars['String']['input']>;
+  bedroom?: InputMaybe<Scalars['Int']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  district?: InputMaybe<Scalars['String']['input']>;
+  floor?: InputMaybe<Scalars['String']['input']>;
+  floorPlanUrl?: InputMaybe<Scalars['String']['input']>;
+  fullBathroom?: InputMaybe<Scalars['Int']['input']>;
+  hasUnitDeed?: InputMaybe<Scalars['Boolean']['input']>;
+  headline?: InputMaybe<Scalars['String']['input']>;
+  houseNumber?: InputMaybe<Scalars['String']['input']>;
+  latA?: InputMaybe<Scalars['String']['input']>;
+  latB?: InputMaybe<Scalars['String']['input']>;
+  legalDescOfProperty?: InputMaybe<Scalars['String']['input']>;
+  listingType?: InputMaybe<Scalars['String']['input']>;
+  lngA?: InputMaybe<Scalars['String']['input']>;
+  lngB?: InputMaybe<Scalars['String']['input']>;
+  municipality?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<Scalars['Float']['input']>;
+  projectAmenities?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  projectImages?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  projectNameOrNumber?: InputMaybe<Scalars['String']['input']>;
+  projectStatus?: InputMaybe<Scalars['String']['input']>;
+  projectType?: InputMaybe<Scalars['String']['input']>;
+  propertyDescription?: InputMaybe<Scalars['String']['input']>;
+  propertyUse?: InputMaybe<Scalars['String']['input']>;
+  region?: InputMaybe<Scalars['String']['input']>;
+  squareFeet?: InputMaybe<Scalars['Float']['input']>;
+  unitDeedUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type PreTokenizedUnitUpdateInput = {
   metaData?: InputMaybe<PreTokenizedUnitMetadataInput>;
-  numberOfUnits?: InputMaybe<Scalars["Int"]["input"]>;
-  paymentStatus?: InputMaybe<Scalars["String"]["input"]>;
-  status?: InputMaybe<Scalars["String"]["input"]>;
-  unitCoverImage?: InputMaybe<Scalars["String"]["input"]>;
-  unitId?: InputMaybe<Scalars["String"]["input"]>;
-  unitType?: InputMaybe<Scalars["String"]["input"]>;
+  numberOfUnits?: InputMaybe<Scalars['Int']['input']>;
+  paymentStatus?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  unitCoverImage?: InputMaybe<Scalars['String']['input']>;
+  unitId?: InputMaybe<Scalars['String']['input']>;
+  unitType?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type PrepaymentFeeType = "FLAT" | "NONE" | "PERCENTAGE";
+export type PrepaymentFeeType =
+  | 'FLAT'
+  | 'NONE'
+  | 'PERCENTAGE';
 
 export type PrepaymentTerms = {
-  __typename?: "PrepaymentTerms";
-  allowed: Scalars["Boolean"]["output"];
-  days: Scalars["Int"]["output"];
-  feeAmount: Scalars["Float"]["output"];
-  feePercentage: Scalars["Float"]["output"];
+  __typename?: 'PrepaymentTerms';
+  allowed: Scalars['Boolean']['output'];
+  days: Scalars['Int']['output'];
+  feeAmount: Scalars['Float']['output'];
+  feePercentage: Scalars['Float']['output'];
   feeType: PrepaymentFeeType;
 };
 
 export type PrepaymentTermsInput = {
-  allowed?: InputMaybe<Scalars["Boolean"]["input"]>;
-  days?: InputMaybe<Scalars["Int"]["input"]>;
-  feeAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  feePercentage?: InputMaybe<Scalars["Float"]["input"]>;
+  allowed?: InputMaybe<Scalars['Boolean']['input']>;
+  days?: InputMaybe<Scalars['Int']['input']>;
+  feeAmount?: InputMaybe<Scalars['Float']['input']>;
+  feePercentage?: InputMaybe<Scalars['Float']['input']>;
   feeType?: InputMaybe<PrepaymentFeeType>;
 };
 
 export type Project = {
-  __typename?: "Project";
-  createdAt?: Maybe<Scalars["String"]["output"]>;
-  divisionDate?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["String"]["output"]>;
-  isDivided?: Maybe<Scalars["Boolean"]["output"]>;
-  isTokenized?: Maybe<Scalars["Boolean"]["output"]>;
-  listingType?: Maybe<Scalars["String"]["output"]>;
-  nftAddress?: Maybe<Scalars["String"]["output"]>;
-  nftTokenId?: Maybe<Scalars["String"]["output"]>;
-  nftTokenUri?: Maybe<Scalars["String"]["output"]>;
-  ownerId?: Maybe<Scalars["String"]["output"]>;
-  ownerWalletAddress?: Maybe<Scalars["String"]["output"]>;
-  owners?: Maybe<Array<Maybe<Scalars["JSONObject"]["output"]>>>;
+  __typename?: 'Project';
+  createdAt?: Maybe<Scalars['String']['output']>;
+  divisionDate?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  isDivided?: Maybe<Scalars['Boolean']['output']>;
+  isTokenized?: Maybe<Scalars['Boolean']['output']>;
+  listingType?: Maybe<Scalars['String']['output']>;
+  nftAddress?: Maybe<Scalars['String']['output']>;
+  nftTokenId?: Maybe<Scalars['String']['output']>;
+  nftTokenUri?: Maybe<Scalars['String']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  ownerWalletAddress?: Maybe<Scalars['String']['output']>;
+  owners?: Maybe<Array<Maybe<Scalars['JSONObject']['output']>>>;
   portfolio?: Maybe<Portfolio>;
-  projectId?: Maybe<Scalars["String"]["output"]>;
-  projectType?: Maybe<Scalars["String"]["output"]>;
+  projectId?: Maybe<Scalars['String']['output']>;
+  projectType?: Maybe<Scalars['String']['output']>;
   property?: Maybe<Property>;
-  shareToken?: Maybe<Scalars["Int"]["output"]>;
-  status?: Maybe<Scalars["String"]["output"]>;
-  tokenizationTimestamp?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["String"]["output"]>;
+  shareToken?: Maybe<Scalars['Int']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+  tokenizationTimestamp?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['String']['output']>;
 };
 
 export type ProjectCost = {
-  __typename?: "ProjectCost";
-  adminAndOther?: Maybe<Scalars["Float"]["output"]>;
-  construction?: Maybe<Scalars["Float"]["output"]>;
-  contingency?: Maybe<Scalars["Float"]["output"]>;
-  depositRequired?: Maybe<Scalars["Float"]["output"]>;
-  designAndEng?: Maybe<Scalars["Float"]["output"]>;
-  financingAvailable?: Maybe<Scalars["Boolean"]["output"]>;
-  land?: Maybe<Scalars["Float"]["output"]>;
-  marketingOrSales?: Maybe<Scalars["Float"]["output"]>;
-  maxAmountAvailable?: Maybe<Scalars["Float"]["output"]>;
-  paymentTerms?: Maybe<Scalars["String"]["output"]>;
-  paymentType?: Maybe<Scalars["String"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-  serviceFee?: Maybe<Scalars["Float"]["output"]>;
+  __typename?: 'ProjectCost';
+  adminAndOther?: Maybe<Scalars['Float']['output']>;
+  construction?: Maybe<Scalars['Float']['output']>;
+  contingency?: Maybe<Scalars['Float']['output']>;
+  depositRequired?: Maybe<Scalars['Float']['output']>;
+  designAndEng?: Maybe<Scalars['Float']['output']>;
+  financingAvailable?: Maybe<Scalars['Boolean']['output']>;
+  land?: Maybe<Scalars['Float']['output']>;
+  marketingOrSales?: Maybe<Scalars['Float']['output']>;
+  maxAmountAvailable?: Maybe<Scalars['Float']['output']>;
+  paymentTerms?: Maybe<Scalars['String']['output']>;
+  paymentType?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  serviceFee?: Maybe<Scalars['Float']['output']>;
 };
 
 export type ProjectCostInput = {
-  adminAndOther?: InputMaybe<Scalars["Float"]["input"]>;
-  construction?: InputMaybe<Scalars["Float"]["input"]>;
-  contingency?: InputMaybe<Scalars["Float"]["input"]>;
-  depositRequired?: InputMaybe<Scalars["Float"]["input"]>;
-  designAndEng?: InputMaybe<Scalars["Float"]["input"]>;
-  financingAvailable?: InputMaybe<Scalars["Boolean"]["input"]>;
-  land?: InputMaybe<Scalars["Float"]["input"]>;
-  marketingOrSales?: InputMaybe<Scalars["Float"]["input"]>;
-  maxAmountAvailable?: InputMaybe<Scalars["Float"]["input"]>;
-  paymentTerms?: InputMaybe<Scalars["String"]["input"]>;
-  paymentType?: InputMaybe<Scalars["String"]["input"]>;
-  price?: InputMaybe<Scalars["Float"]["input"]>;
-  serviceFee?: InputMaybe<Scalars["Float"]["input"]>;
+  adminAndOther?: InputMaybe<Scalars['Float']['input']>;
+  construction?: InputMaybe<Scalars['Float']['input']>;
+  contingency?: InputMaybe<Scalars['Float']['input']>;
+  depositRequired?: InputMaybe<Scalars['Float']['input']>;
+  designAndEng?: InputMaybe<Scalars['Float']['input']>;
+  financingAvailable?: InputMaybe<Scalars['Boolean']['input']>;
+  land?: InputMaybe<Scalars['Float']['input']>;
+  marketingOrSales?: InputMaybe<Scalars['Float']['input']>;
+  maxAmountAvailable?: InputMaybe<Scalars['Float']['input']>;
+  paymentTerms?: InputMaybe<Scalars['String']['input']>;
+  paymentType?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<Scalars['Float']['input']>;
+  serviceFee?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type ProjectFilter = {
@@ -7580,18 +8288,18 @@ export type ProjectFilter = {
 };
 
 export type ProjectInput = {
-  isDivided?: InputMaybe<Scalars["Boolean"]["input"]>;
-  isTokenized?: InputMaybe<Scalars["Boolean"]["input"]>;
-  listingType?: InputMaybe<Scalars["String"]["input"]>;
-  nftAddress?: InputMaybe<Scalars["String"]["input"]>;
-  nftTokenId?: InputMaybe<Scalars["String"]["input"]>;
-  nftTokenUri?: InputMaybe<Scalars["String"]["input"]>;
-  ownerWalletAddress?: InputMaybe<Scalars["String"]["input"]>;
-  owners?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  projectId?: InputMaybe<Scalars["ID"]["input"]>;
-  projectType?: InputMaybe<Scalars["String"]["input"]>;
-  shareToken?: InputMaybe<Scalars["Int"]["input"]>;
-  tokenizationTimestamp?: InputMaybe<Scalars["String"]["input"]>;
+  isDivided?: InputMaybe<Scalars['Boolean']['input']>;
+  isTokenized?: InputMaybe<Scalars['Boolean']['input']>;
+  listingType?: InputMaybe<Scalars['String']['input']>;
+  nftAddress?: InputMaybe<Scalars['String']['input']>;
+  nftTokenId?: InputMaybe<Scalars['String']['input']>;
+  nftTokenUri?: InputMaybe<Scalars['String']['input']>;
+  ownerWalletAddress?: InputMaybe<Scalars['String']['input']>;
+  owners?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  projectId?: InputMaybe<Scalars['ID']['input']>;
+  projectType?: InputMaybe<Scalars['String']['input']>;
+  shareToken?: InputMaybe<Scalars['Int']['input']>;
+  tokenizationTimestamp?: InputMaybe<Scalars['String']['input']>;
 };
 
 /**
@@ -7608,134 +8316,146 @@ export type ProjectInput = {
  * projection of it. There is no second copy to drift.
  */
 export type ProjectMilestone = {
-  __typename?: "ProjectMilestone";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'ProjectMilestone';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
   /** The disbursement that released it, so the two can be shown side by side. */
-  disbursementId?: Maybe<Scalars["ID"]["output"]>;
+  disbursementId?: Maybe<Scalars['ID']['output']>;
   /** The tranche INTENDED for this milestone. Compare with `releasedAmount`. */
-  expectedAmount: Scalars["Float"]["output"];
-  expectedDate?: Maybe<Scalars["DateTime"]["output"]>;
-  id: Scalars["ID"]["output"];
+  expectedAmount: Scalars['Float']['output'];
+  expectedDate?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
   /** e.g. "Foundation complete". */
-  name: Scalars["String"]["output"];
+  name: Scalars['String']['output'];
   /**
    * What was ACTUALLY released. May differ from `expectedAmount` — a short release
    * stays visible rather than being smoothed away by overwriting the plan.
    */
-  releasedAmount?: Maybe<Scalars["Float"]["output"]>;
+  releasedAmount?: Maybe<Scalars['Float']['output']>;
   /** When the tranche was released. Null while pending. */
-  releasedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  releasedAt?: Maybe<Scalars['DateTime']['output']>;
   /** pending | released — derived from whether a tranche carries this milestone's id. */
-  status: Scalars["String"]["output"];
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  status: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type ProjectMilestoneInput = {
-  description?: InputMaybe<Scalars["String"]["input"]>;
-  expectedAmount: Scalars["Float"]["input"];
-  expectedDate?: InputMaybe<Scalars["DateTime"]["input"]>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  expectedAmount: Scalars['Float']['input'];
+  expectedDate?: InputMaybe<Scalars['DateTime']['input']>;
   /** Omit to create; supply to edit an existing milestone. */
-  id?: InputMaybe<Scalars["ID"]["input"]>;
-  name: Scalars["String"]["input"];
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name: Scalars['String']['input'];
 };
 
 export type Property = {
-  __typename?: "Property";
-  adminAndOther?: Maybe<Scalars["Float"]["output"]>;
-  area?: Maybe<Scalars["String"]["output"]>;
-  backyard?: Maybe<Scalars["Int"]["output"]>;
-  barcodeTitlePlan?: Maybe<Scalars["String"]["output"]>;
-  barcodedSitePlan?: Maybe<Scalars["String"]["output"]>;
-  bedroom?: Maybe<Scalars["Int"]["output"]>;
-  city?: Maybe<Scalars["String"]["output"]>;
-  consentData?: Maybe<Scalars["String"]["output"]>;
-  construction?: Maybe<Scalars["Float"]["output"]>;
-  contingency?: Maybe<Scalars["Float"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  currency?: Maybe<Scalars["String"]["output"]>;
-  dateOfIssue?: Maybe<Scalars["String"]["output"]>;
-  dateOfStamping?: Maybe<Scalars["String"]["output"]>;
-  dateOfTransfer?: Maybe<Scalars["String"]["output"]>;
-  depositRequired?: Maybe<Scalars["Float"]["output"]>;
-  designAndEng?: Maybe<Scalars["Float"]["output"]>;
-  diningArea?: Maybe<Scalars["Int"]["output"]>;
-  dividedUnits?: Maybe<Array<Maybe<Scalars["ID"]["output"]>>>;
-  divisionDate?: Maybe<Scalars["DateTime"]["output"]>;
-  dueDiligenceId?: Maybe<Scalars["ID"]["output"]>;
-  estimatedPrice?: Maybe<Scalars["Float"]["output"]>;
-  financingAvailable?: Maybe<Scalars["Boolean"]["output"]>;
-  floorAreaSqm?: Maybe<Scalars["Float"]["output"]>;
-  fullBathroom?: Maybe<Scalars["Int"]["output"]>;
-  fullKitchen?: Maybe<Scalars["Int"]["output"]>;
-  gpsAddress?: Maybe<Scalars["String"]["output"]>;
-  halfBathroom?: Maybe<Scalars["Int"]["output"]>;
-  houseNumber?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  independentValuer?: Maybe<Scalars["String"]["output"]>;
-  interestHeld?: Maybe<Scalars["String"]["output"]>;
-  isDivided?: Maybe<Scalars["Boolean"]["output"]>;
-  isFavorited?: Maybe<Scalars["Boolean"]["output"]>;
-  isTokenized?: Maybe<Scalars["Boolean"]["output"]>;
-  kitchenette?: Maybe<Scalars["Int"]["output"]>;
-  land?: Maybe<Scalars["Float"]["output"]>;
-  landCertificateNumber?: Maybe<Scalars["String"]["output"]>;
-  landTitleUrl?: Maybe<Scalars["String"]["output"]>;
-  legalDescOfProperty?: Maybe<Scalars["String"]["output"]>;
-  legalDocs?: Maybe<Array<Maybe<Scalars["JSONObject"]["output"]>>>;
+  __typename?: 'Property';
+  adminAndOther?: Maybe<Scalars['Float']['output']>;
+  area?: Maybe<Scalars['String']['output']>;
+  backyard?: Maybe<Scalars['Int']['output']>;
+  barcodeTitlePlan?: Maybe<Scalars['String']['output']>;
+  barcodedSitePlan?: Maybe<Scalars['String']['output']>;
+  bedroom?: Maybe<Scalars['Int']['output']>;
+  city?: Maybe<Scalars['String']['output']>;
+  consentData?: Maybe<Scalars['String']['output']>;
+  construction?: Maybe<Scalars['Float']['output']>;
+  contingency?: Maybe<Scalars['Float']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  currency?: Maybe<Scalars['String']['output']>;
+  dateOfIssue?: Maybe<Scalars['String']['output']>;
+  dateOfStamping?: Maybe<Scalars['String']['output']>;
+  dateOfTransfer?: Maybe<Scalars['String']['output']>;
+  depositRequired?: Maybe<Scalars['Float']['output']>;
+  designAndEng?: Maybe<Scalars['Float']['output']>;
+  diningArea?: Maybe<Scalars['Int']['output']>;
+  dividedUnits?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  divisionDate?: Maybe<Scalars['DateTime']['output']>;
+  dueDiligenceId?: Maybe<Scalars['ID']['output']>;
+  estimatedPrice?: Maybe<Scalars['Float']['output']>;
+  financingAvailable?: Maybe<Scalars['Boolean']['output']>;
+  floorAreaSqm?: Maybe<Scalars['Float']['output']>;
+  fullBathroom?: Maybe<Scalars['Int']['output']>;
+  fullKitchen?: Maybe<Scalars['Int']['output']>;
+  gpsAddress?: Maybe<Scalars['String']['output']>;
+  halfBathroom?: Maybe<Scalars['Int']['output']>;
+  houseNumber?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  independentValuer?: Maybe<Scalars['String']['output']>;
+  interestHeld?: Maybe<Scalars['String']['output']>;
+  isDivided?: Maybe<Scalars['Boolean']['output']>;
+  isFavorited?: Maybe<Scalars['Boolean']['output']>;
+  isTokenized?: Maybe<Scalars['Boolean']['output']>;
+  kitchenette?: Maybe<Scalars['Int']['output']>;
+  land?: Maybe<Scalars['Float']['output']>;
+  landCertificateNumber?: Maybe<Scalars['String']['output']>;
+  landTitleUrl?: Maybe<Scalars['String']['output']>;
+  legalDescOfProperty?: Maybe<Scalars['String']['output']>;
+  legalDocs?: Maybe<Array<Maybe<Scalars['JSONObject']['output']>>>;
   /**
    * When Afram approved this listing onto the marketplace. Null while it awaits
    * review: a listing reaches the market only when staff approve it.
    */
-  listingApprovedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  listingObjective?: Maybe<Scalars["String"]["output"]>;
-  livingRoom?: Maybe<Scalars["Int"]["output"]>;
-  marketingOrSales?: Maybe<Scalars["Float"]["output"]>;
-  maxAmountAvailable?: Maybe<Scalars["Float"]["output"]>;
-  metadata?: Maybe<Scalars["JSONObject"]["output"]>;
-  numberOfUnits?: Maybe<Scalars["Int"]["output"]>;
-  office?: Maybe<Scalars["Int"]["output"]>;
+  listingApprovedAt?: Maybe<Scalars['DateTime']['output']>;
+  listingObjective?: Maybe<Scalars['String']['output']>;
+  livingRoom?: Maybe<Scalars['Int']['output']>;
+  marketingOrSales?: Maybe<Scalars['Float']['output']>;
+  maxAmountAvailable?: Maybe<Scalars['Float']['output']>;
+  metadata?: Maybe<Scalars['JSONObject']['output']>;
+  /**
+   * The latest tokenization attempt's on-chain details. Null when the property
+   * has never been through tokenizeProperty, including units created by
+   * combining already-tokenized units.
+   */
+  nft?: Maybe<PropertyNft>;
+  /**
+   * Where the property's token stands, from its latest tokenization attempt.
+   * Unlike isTokenized, which only turns true once minting finishes, this shows
+   * an attempt in flight (pending) and one that failed.
+   */
+  nftStatus: NftStatus;
+  numberOfUnits?: Maybe<Scalars['Int']['output']>;
+  office?: Maybe<Scalars['Int']['output']>;
   owner?: Maybe<Entity>;
-  ownerId: Scalars["ID"]["output"];
-  ownersGrantor?: Maybe<Scalars["String"]["output"]>;
-  parcelId?: Maybe<Scalars["String"]["output"]>;
-  parentNftAddress?: Maybe<Scalars["String"]["output"]>;
-  parentNftTokenId?: Maybe<Scalars["String"]["output"]>;
-  parentPropertyId?: Maybe<Scalars["ID"]["output"]>;
-  patio?: Maybe<Scalars["Int"]["output"]>;
-  paymentTerms?: Maybe<Scalars["String"]["output"]>;
-  paymentType?: Maybe<Scalars["String"]["output"]>;
+  ownerId: Scalars['ID']['output'];
+  ownersGrantor?: Maybe<Scalars['String']['output']>;
+  parcelId?: Maybe<Scalars['String']['output']>;
+  parentNftAddress?: Maybe<Scalars['String']['output']>;
+  parentNftTokenId?: Maybe<Scalars['String']['output']>;
+  parentPropertyId?: Maybe<Scalars['ID']['output']>;
+  patio?: Maybe<Scalars['Int']['output']>;
+  paymentTerms?: Maybe<Scalars['String']['output']>;
+  paymentType?: Maybe<Scalars['String']['output']>;
   portfolio?: Maybe<PortfolioContext>;
-  portfolioId?: Maybe<Scalars["ID"]["output"]>;
-  price: Scalars["Float"]["output"];
-  projectImages?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
-  projectStatus?: Maybe<Scalars["String"]["output"]>;
-  propertyAmenities?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
-  propertyCardDesc?: Maybe<Scalars["String"]["output"]>;
-  propertyDescription?: Maybe<Scalars["String"]["output"]>;
-  propertyNameOrNumber?: Maybe<Scalars["String"]["output"]>;
-  propertyType?: Maybe<Scalars["String"]["output"]>;
-  propertyUse?: Maybe<Scalars["String"]["output"]>;
-  readiness?: Maybe<Scalars["Int"]["output"]>;
-  region?: Maybe<Scalars["String"]["output"]>;
-  rentToBuyEnabled?: Maybe<Scalars["Boolean"]["output"]>;
-  serviceFee?: Maybe<Scalars["Float"]["output"]>;
-  siteCoordinates?: Maybe<Scalars["JSONObject"]["output"]>;
-  squareFeet?: Maybe<Scalars["Int"]["output"]>;
+  portfolioId?: Maybe<Scalars['ID']['output']>;
+  price: Scalars['Float']['output'];
+  projectImages?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  projectStatus?: Maybe<Scalars['String']['output']>;
+  propertyAmenities?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  propertyCardDesc?: Maybe<Scalars['String']['output']>;
+  propertyDescription?: Maybe<Scalars['String']['output']>;
+  propertyNameOrNumber?: Maybe<Scalars['String']['output']>;
+  propertyType?: Maybe<Scalars['String']['output']>;
+  propertyUse?: Maybe<Scalars['String']['output']>;
+  readiness?: Maybe<Scalars['Int']['output']>;
+  region?: Maybe<Scalars['String']['output']>;
+  rentToBuyEnabled?: Maybe<Scalars['Boolean']['output']>;
+  serviceFee?: Maybe<Scalars['Float']['output']>;
+  siteCoordinates?: Maybe<Scalars['JSONObject']['output']>;
+  squareFeet?: Maybe<Scalars['Int']['output']>;
   status?: Maybe<PropertyStatus>;
-  streetAddress?: Maybe<Scalars["String"]["output"]>;
-  streetName?: Maybe<Scalars["String"]["output"]>;
-  termHeld?: Maybe<Scalars["String"]["output"]>;
-  thumbnail?: Maybe<Scalars["String"]["output"]>;
-  titleHolder?: Maybe<Scalars["String"]["output"]>;
-  titleType?: Maybe<Scalars["String"]["output"]>;
-  transactionId?: Maybe<Scalars["ID"]["output"]>;
-  transferDeedNumber?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  valuationAmount?: Maybe<Scalars["Float"]["output"]>;
-  valuationDate?: Maybe<Scalars["String"]["output"]>;
-  views?: Maybe<Scalars["Int"]["output"]>;
-  yearBuilt?: Maybe<Scalars["Int"]["output"]>;
+  streetAddress?: Maybe<Scalars['String']['output']>;
+  streetName?: Maybe<Scalars['String']['output']>;
+  termHeld?: Maybe<Scalars['String']['output']>;
+  thumbnail?: Maybe<Scalars['String']['output']>;
+  titleHolder?: Maybe<Scalars['String']['output']>;
+  titleType?: Maybe<Scalars['String']['output']>;
+  transactionId?: Maybe<Scalars['ID']['output']>;
+  transferDeedNumber?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  valuationAmount?: Maybe<Scalars['Float']['output']>;
+  valuationDate?: Maybe<Scalars['String']['output']>;
+  views?: Maybe<Scalars['Int']['output']>;
+  yearBuilt?: Maybe<Scalars['Int']['output']>;
 };
 
 export type PropertyFilter = {
@@ -7749,7 +8469,7 @@ export type PropertyFilter = {
    *
    * Combines with an `id` filter rather than replacing it — both must hold.
    */
-  excludeFinancedBy?: InputMaybe<Scalars["ID"]["input"]>;
+  excludeFinancedBy?: InputMaybe<Scalars['ID']['input']>;
   excludeOwnerId?: InputMaybe<IdOperator>;
   id?: InputMaybe<IdOperator>;
   isTokenized?: InputMaybe<BooleanOperator>;
@@ -7769,97 +8489,112 @@ export type PropertyFilter = {
 };
 
 export type PropertyInput = {
-  adminAndOther?: InputMaybe<Scalars["Float"]["input"]>;
-  area?: InputMaybe<Scalars["String"]["input"]>;
-  backyard?: InputMaybe<Scalars["Int"]["input"]>;
-  barcodeTitlePlan?: InputMaybe<Scalars["String"]["input"]>;
-  barcodedSitePlan?: InputMaybe<Scalars["String"]["input"]>;
-  bedroom?: InputMaybe<Scalars["Int"]["input"]>;
-  city?: InputMaybe<Scalars["String"]["input"]>;
-  consentData?: InputMaybe<Scalars["String"]["input"]>;
-  construction?: InputMaybe<Scalars["Float"]["input"]>;
-  contingency?: InputMaybe<Scalars["Float"]["input"]>;
-  currency?: InputMaybe<Scalars["String"]["input"]>;
-  dateOfIssue?: InputMaybe<Scalars["String"]["input"]>;
-  dateOfStamping?: InputMaybe<Scalars["String"]["input"]>;
-  dateOfTransfer?: InputMaybe<Scalars["String"]["input"]>;
-  depositRequired?: InputMaybe<Scalars["Float"]["input"]>;
-  designAndEng?: InputMaybe<Scalars["Float"]["input"]>;
-  diningArea?: InputMaybe<Scalars["Int"]["input"]>;
-  dividedUnits?: InputMaybe<Array<InputMaybe<Scalars["ID"]["input"]>>>;
-  divisionDate?: InputMaybe<Scalars["DateTime"]["input"]>;
-  dueDiligenceId?: InputMaybe<Scalars["ID"]["input"]>;
-  estimatedPrice?: InputMaybe<Scalars["Float"]["input"]>;
-  financingAvailable?: InputMaybe<Scalars["Boolean"]["input"]>;
-  floorAreaSqm?: InputMaybe<Scalars["Float"]["input"]>;
-  fullBathroom?: InputMaybe<Scalars["Int"]["input"]>;
-  fullKitchen?: InputMaybe<Scalars["Int"]["input"]>;
-  gpsAddress?: InputMaybe<Scalars["String"]["input"]>;
-  halfBathroom?: InputMaybe<Scalars["Int"]["input"]>;
-  houseNumber?: InputMaybe<Scalars["String"]["input"]>;
-  independentValuer?: InputMaybe<Scalars["String"]["input"]>;
-  interestHeld?: InputMaybe<Scalars["String"]["input"]>;
-  isDivided?: InputMaybe<Scalars["Boolean"]["input"]>;
-  kitchenette?: InputMaybe<Scalars["Int"]["input"]>;
-  land?: InputMaybe<Scalars["Float"]["input"]>;
-  landCertificateNumber?: InputMaybe<Scalars["String"]["input"]>;
-  landTitleUrl?: InputMaybe<Scalars["String"]["input"]>;
-  legalDescOfProperty?: InputMaybe<Scalars["String"]["input"]>;
+  adminAndOther?: InputMaybe<Scalars['Float']['input']>;
+  area?: InputMaybe<Scalars['String']['input']>;
+  backyard?: InputMaybe<Scalars['Int']['input']>;
+  barcodeTitlePlan?: InputMaybe<Scalars['String']['input']>;
+  barcodedSitePlan?: InputMaybe<Scalars['String']['input']>;
+  bedroom?: InputMaybe<Scalars['Int']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  consentData?: InputMaybe<Scalars['String']['input']>;
+  construction?: InputMaybe<Scalars['Float']['input']>;
+  contingency?: InputMaybe<Scalars['Float']['input']>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  dateOfIssue?: InputMaybe<Scalars['String']['input']>;
+  dateOfStamping?: InputMaybe<Scalars['String']['input']>;
+  dateOfTransfer?: InputMaybe<Scalars['String']['input']>;
+  depositRequired?: InputMaybe<Scalars['Float']['input']>;
+  designAndEng?: InputMaybe<Scalars['Float']['input']>;
+  diningArea?: InputMaybe<Scalars['Int']['input']>;
+  dividedUnits?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  divisionDate?: InputMaybe<Scalars['DateTime']['input']>;
+  dueDiligenceId?: InputMaybe<Scalars['ID']['input']>;
+  estimatedPrice?: InputMaybe<Scalars['Float']['input']>;
+  financingAvailable?: InputMaybe<Scalars['Boolean']['input']>;
+  floorAreaSqm?: InputMaybe<Scalars['Float']['input']>;
+  fullBathroom?: InputMaybe<Scalars['Int']['input']>;
+  fullKitchen?: InputMaybe<Scalars['Int']['input']>;
+  gpsAddress?: InputMaybe<Scalars['String']['input']>;
+  halfBathroom?: InputMaybe<Scalars['Int']['input']>;
+  houseNumber?: InputMaybe<Scalars['String']['input']>;
+  independentValuer?: InputMaybe<Scalars['String']['input']>;
+  interestHeld?: InputMaybe<Scalars['String']['input']>;
+  isDivided?: InputMaybe<Scalars['Boolean']['input']>;
+  kitchenette?: InputMaybe<Scalars['Int']['input']>;
+  land?: InputMaybe<Scalars['Float']['input']>;
+  landCertificateNumber?: InputMaybe<Scalars['String']['input']>;
+  landTitleUrl?: InputMaybe<Scalars['String']['input']>;
+  legalDescOfProperty?: InputMaybe<Scalars['String']['input']>;
   legalDocs?: InputMaybe<Array<InputMaybe<LegalDocsInput>>>;
-  listingObjective?: InputMaybe<Scalars["String"]["input"]>;
-  livingRoom?: InputMaybe<Scalars["Int"]["input"]>;
-  marketingOrSales?: InputMaybe<Scalars["Float"]["input"]>;
-  maxAmountAvailable?: InputMaybe<Scalars["Float"]["input"]>;
-  metadata?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  numberOfUnits?: InputMaybe<Scalars["Int"]["input"]>;
-  office?: InputMaybe<Scalars["Int"]["input"]>;
-  ownersGrantor?: InputMaybe<Scalars["String"]["input"]>;
-  parcelId?: InputMaybe<Scalars["String"]["input"]>;
-  parentNftAddress?: InputMaybe<Scalars["String"]["input"]>;
-  parentNftTokenId?: InputMaybe<Scalars["String"]["input"]>;
-  parentPropertyId?: InputMaybe<Scalars["ID"]["input"]>;
-  patio?: InputMaybe<Scalars["Int"]["input"]>;
-  paymentTerms?: InputMaybe<Scalars["String"]["input"]>;
-  paymentType?: InputMaybe<Scalars["String"]["input"]>;
-  portfolioId?: InputMaybe<Scalars["ID"]["input"]>;
-  price?: InputMaybe<Scalars["Float"]["input"]>;
-  projectImages?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  projectStatus?: InputMaybe<Scalars["String"]["input"]>;
-  propertyAmenities?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  propertyCardDesc?: InputMaybe<Scalars["String"]["input"]>;
-  propertyDescription?: InputMaybe<Scalars["String"]["input"]>;
-  propertyNameOrNumber?: InputMaybe<Scalars["String"]["input"]>;
-  propertyType?: InputMaybe<Scalars["String"]["input"]>;
-  propertyUse?: InputMaybe<Scalars["String"]["input"]>;
-  readiness?: InputMaybe<Scalars["Int"]["input"]>;
-  region?: InputMaybe<Scalars["String"]["input"]>;
-  rentToBuyEnabled?: InputMaybe<Scalars["Boolean"]["input"]>;
-  serviceFee?: InputMaybe<Scalars["Float"]["input"]>;
-  siteCoordinates?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  squareFeet?: InputMaybe<Scalars["Int"]["input"]>;
+  listingObjective?: InputMaybe<Scalars['String']['input']>;
+  livingRoom?: InputMaybe<Scalars['Int']['input']>;
+  marketingOrSales?: InputMaybe<Scalars['Float']['input']>;
+  maxAmountAvailable?: InputMaybe<Scalars['Float']['input']>;
+  metadata?: InputMaybe<Scalars['JSONObject']['input']>;
+  numberOfUnits?: InputMaybe<Scalars['Int']['input']>;
+  office?: InputMaybe<Scalars['Int']['input']>;
+  ownersGrantor?: InputMaybe<Scalars['String']['input']>;
+  parcelId?: InputMaybe<Scalars['String']['input']>;
+  parentNftAddress?: InputMaybe<Scalars['String']['input']>;
+  parentNftTokenId?: InputMaybe<Scalars['String']['input']>;
+  parentPropertyId?: InputMaybe<Scalars['ID']['input']>;
+  patio?: InputMaybe<Scalars['Int']['input']>;
+  paymentTerms?: InputMaybe<Scalars['String']['input']>;
+  paymentType?: InputMaybe<Scalars['String']['input']>;
+  portfolioId?: InputMaybe<Scalars['ID']['input']>;
+  price?: InputMaybe<Scalars['Float']['input']>;
+  projectImages?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  projectStatus?: InputMaybe<Scalars['String']['input']>;
+  propertyAmenities?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  propertyCardDesc?: InputMaybe<Scalars['String']['input']>;
+  propertyDescription?: InputMaybe<Scalars['String']['input']>;
+  propertyNameOrNumber?: InputMaybe<Scalars['String']['input']>;
+  propertyType?: InputMaybe<Scalars['String']['input']>;
+  propertyUse?: InputMaybe<Scalars['String']['input']>;
+  readiness?: InputMaybe<Scalars['Int']['input']>;
+  region?: InputMaybe<Scalars['String']['input']>;
+  rentToBuyEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+  serviceFee?: InputMaybe<Scalars['Float']['input']>;
+  siteCoordinates?: InputMaybe<Scalars['JSONObject']['input']>;
+  squareFeet?: InputMaybe<Scalars['Int']['input']>;
   status?: InputMaybe<PropertyStatus>;
-  streetAddress?: InputMaybe<Scalars["String"]["input"]>;
-  streetName?: InputMaybe<Scalars["String"]["input"]>;
-  termHeld?: InputMaybe<Scalars["String"]["input"]>;
-  thumbnail?: InputMaybe<Scalars["String"]["input"]>;
-  titleHolder?: InputMaybe<Scalars["String"]["input"]>;
-  titleType?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId?: InputMaybe<Scalars["ID"]["input"]>;
-  transferDeedNumber?: InputMaybe<Scalars["String"]["input"]>;
-  valuationAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  valuationDate?: InputMaybe<Scalars["String"]["input"]>;
-  yearBuilt?: InputMaybe<Scalars["Int"]["input"]>;
+  streetAddress?: InputMaybe<Scalars['String']['input']>;
+  streetName?: InputMaybe<Scalars['String']['input']>;
+  termHeld?: InputMaybe<Scalars['String']['input']>;
+  thumbnail?: InputMaybe<Scalars['String']['input']>;
+  titleHolder?: InputMaybe<Scalars['String']['input']>;
+  titleType?: InputMaybe<Scalars['String']['input']>;
+  transactionId?: InputMaybe<Scalars['ID']['input']>;
+  transferDeedNumber?: InputMaybe<Scalars['String']['input']>;
+  valuationAmount?: InputMaybe<Scalars['Float']['input']>;
+  valuationDate?: InputMaybe<Scalars['String']['input']>;
+  yearBuilt?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type PropertyNft = {
+  __typename?: 'PropertyNft';
+  metadataUri: Scalars['String']['output'];
+  mintedAt?: Maybe<Scalars['DateTime']['output']>;
+  status: NftStatus;
+  /** The property's ERC-20 contract. Null until minted. */
+  tokenAddress?: Maybe<Scalars['String']['output']>;
+  transactionHash?: Maybe<Scalars['String']['output']>;
 };
 
 export type PropertyPipelineBucket = {
-  __typename?: "PropertyPipelineBucket";
-  count: Scalars["Int"]["output"];
-  label: Scalars["String"]["output"];
+  __typename?: 'PropertyPipelineBucket';
+  count: Scalars['Int']['output'];
+  label: Scalars['String']['output'];
   stage: PropertyPipelineStage;
-  total: Scalars["Int"]["output"];
+  total: Scalars['Int']['output'];
 };
 
-export type PropertyPipelineStage = "ACTIVE" | "CLOSED" | "DRAFT" | "IN_REVIEW" | "TOKENIZED";
+export type PropertyPipelineStage =
+  | 'ACTIVE'
+  | 'CLOSED'
+  | 'DRAFT'
+  | 'IN_REVIEW'
+  | 'TOKENIZED';
 
 /**
  * One price a property was set to, and when (#450). A newly listed property has
@@ -7868,13 +8603,13 @@ export type PropertyPipelineStage = "ACTIVE" | "CLOSED" | "DRAFT" | "IN_REVIEW" 
  * `Property.price` alone, not invented earlier points.
  */
 export type PropertyPrice = {
-  __typename?: "PropertyPrice";
+  __typename?: 'PropertyPrice';
   /** When the property took this price. */
-  createdAt: Scalars["DateTime"]["output"];
-  currency?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  price: Scalars["Float"]["output"];
-  propertyId: Scalars["ID"]["output"];
+  createdAt: Scalars['DateTime']['output'];
+  currency?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  price: Scalars['Float']['output'];
+  propertyId: Scalars['ID']['output'];
 };
 
 export type PropertyPriceFilter = {
@@ -7885,18 +8620,18 @@ export type PropertyPriceFilter = {
 };
 
 export type PropertyStatus =
-  | "delisted"
-  | "divided"
-  | "listed"
-  | "pending"
+  | 'delisted'
+  | 'divided'
+  | 'listed'
+  | 'pending'
   /**
    * Sold. Set when the issuer is paid out, whatever the sale path: cash at close,
    * seller-financed at the down-payment release, lender-financed at disbursement.
    * Excluded from the browse lists by default — ask for it explicitly to build a
    * "Sold" view.
    */
-  | "sold"
-  | "subdivision"
+  | 'sold'
+  | 'subdivision'
   /**
    * One buyer has committed money to this unit and it is theirs to complete.
    * Set the moment a deposit is confirmed, whatever the path: a cash deposit
@@ -7909,8 +8644,8 @@ export type PropertyStatus =
    * their feed would have no way back to it. What it cannot be is transacted on
    * by anyone else — every placement path refuses it.
    */
-  | "under_offer"
-  | "unlisted";
+  | 'under_offer'
+  | 'unlisted';
 
 export type PropertyStatusOperator = {
   eq?: InputMaybe<PropertyStatus>;
@@ -7919,28 +8654,28 @@ export type PropertyStatusOperator = {
 };
 
 export type PropertyTypes = {
-  __typename?: "PropertyTypes";
-  currency?: Maybe<Scalars["String"]["output"]>;
-  estimatedPrice?: Maybe<Scalars["Float"]["output"]>;
+  __typename?: 'PropertyTypes';
+  currency?: Maybe<Scalars['String']['output']>;
+  estimatedPrice?: Maybe<Scalars['Float']['output']>;
   floorArea?: Maybe<FloorArea>;
-  maxPrice?: Maybe<Scalars["Float"]["output"]>;
-  minPrice?: Maybe<Scalars["Float"]["output"]>;
-  numOfUnits?: Maybe<Scalars["Int"]["output"]>;
-  propertyDescription?: Maybe<Scalars["String"]["output"]>;
-  propertyImages?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
-  propertyType?: Maybe<Scalars["String"]["output"]>;
+  maxPrice?: Maybe<Scalars['Float']['output']>;
+  minPrice?: Maybe<Scalars['Float']['output']>;
+  numOfUnits?: Maybe<Scalars['Int']['output']>;
+  propertyDescription?: Maybe<Scalars['String']['output']>;
+  propertyImages?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  propertyType?: Maybe<Scalars['String']['output']>;
 };
 
 export type PropertyTypesInput = {
-  currency?: InputMaybe<Scalars["String"]["input"]>;
-  estimatedPrice?: InputMaybe<Scalars["Float"]["input"]>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  estimatedPrice?: InputMaybe<Scalars['Float']['input']>;
   floorArea?: InputMaybe<FloorAreaInput>;
-  maxPrice?: InputMaybe<Scalars["Float"]["input"]>;
-  minPrice?: InputMaybe<Scalars["Float"]["input"]>;
-  numOfUnits?: InputMaybe<Scalars["Int"]["input"]>;
-  propertyDescription?: InputMaybe<Scalars["String"]["input"]>;
-  propertyImages?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  propertyType?: InputMaybe<Scalars["String"]["input"]>;
+  maxPrice?: InputMaybe<Scalars['Float']['input']>;
+  minPrice?: InputMaybe<Scalars['Float']['input']>;
+  numOfUnits?: InputMaybe<Scalars['Int']['input']>;
+  propertyDescription?: InputMaybe<Scalars['String']['input']>;
+  propertyImages?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  propertyType?: InputMaybe<Scalars['String']['input']>;
 };
 
 /**
@@ -7952,35 +8687,35 @@ export type PropertyTypesInput = {
  * theirs and letting the vendor discover the clash.
  */
 export type PropertyViewing = {
-  __typename?: "PropertyViewing";
-  cancellationReason?: Maybe<Scalars["String"]["output"]>;
-  cancelledAt?: Maybe<Scalars["DateTime"]["output"]>;
+  __typename?: 'PropertyViewing';
+  cancellationReason?: Maybe<Scalars['String']['output']>;
+  cancelledAt?: Maybe<Scalars['DateTime']['output']>;
   cancelledBy?: Maybe<TransactionPartyRoleOrMember>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  decidedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  decidedAt?: Maybe<Scalars['DateTime']['output']>;
   /** The vendor's word on accepting or declining. */
-  decisionNote?: Maybe<Scalars["String"]["output"]>;
+  decisionNote?: Maybe<Scalars['String']['output']>;
   /** Derived from the window's `slotMinutes`. Null on a proposed time. */
-  endsAt?: Maybe<Scalars["DateTime"]["output"]>;
-  id: Scalars["ID"]["output"];
+  endsAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
   /** The vendor entity, as it was when the appointment was made. */
-  issuerId?: Maybe<Scalars["ID"]["output"]>;
+  issuerId?: Maybe<Scalars['ID']['output']>;
   /** The interested member. A user, not an entity — they may not have one. */
-  memberId: Scalars["ID"]["output"];
+  memberId: Scalars['ID']['output'];
   /** The member's message when asking. */
-  note?: Maybe<Scalars["String"]["output"]>;
+  note?: Maybe<Scalars['String']['output']>;
   origin: PropertyViewingOrigin;
-  outcomeNote?: Maybe<Scalars["String"]["output"]>;
-  outcomeRecordedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  propertyId: Scalars["ID"]["output"];
-  scheduledAt: Scalars["DateTime"]["output"];
+  outcomeNote?: Maybe<Scalars['String']['output']>;
+  outcomeRecordedAt?: Maybe<Scalars['DateTime']['output']>;
+  propertyId: Scalars['ID']['output'];
+  scheduledAt: Scalars['DateTime']['output'];
   /**
    * `YYYY-MM-DDTHH:MM`, the id the client derived from a declared window.
    * Null only on a proposed time, which contends for nothing.
    */
-  slotId?: Maybe<Scalars["String"]["output"]>;
+  slotId?: Maybe<Scalars['String']['output']>;
   status: PropertyViewingStatus;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type PropertyViewingOrigin =
@@ -7988,26 +8723,26 @@ export type PropertyViewingOrigin =
    * A time proposed outside every window. Only possible where the vendor set
    * `allowRequestsOutside`, and never contended — there is no slot to contend for.
    */
-  | "proposed"
+  | 'proposed'
   /** Picked out of a declared window. Contended. */
-  | "slot";
+  | 'slot';
 
 export type PropertyViewingStatus =
   /** It happened. */
-  | "attended"
+  | 'attended'
   /** Called off by either party. Releases the slot. */
-  | "cancelled"
+  | 'cancelled'
   /** The vendor said yes. */
-  | "confirmed"
+  | 'confirmed'
   /** The vendor said no. Releases the slot. */
-  | "declined"
+  | 'declined'
   /** It did not. The slot is still consumed — the time was spent. */
-  | "no_show"
+  | 'no_show'
   /** Asked for. The slot is already held. */
-  | "requested";
+  | 'requested';
 
 export type Query = {
-  __typename?: "Query";
+  __typename?: 'Query';
   /**
    * Whether the buyer on this deal has passed Afram's NIA identity check, for
    * the issuer or financier on the same deal. Scoped to a request both parties
@@ -8026,44 +8761,44 @@ export type Query = {
   getAccessRequest?: Maybe<AccessRequest>;
   /** Staff only (access_request:view). Pending count: `getAccessRequestsLength(filter: { status: { eq: pending } })`. */
   getAccessRequests: Array<AccessRequest>;
-  getAccessRequestsLength: Scalars["Int"]["output"];
+  getAccessRequestsLength: Scalars['Int']['output'];
   getAdminDashboardSummary: AdminDashboardSummary;
   getAssessment?: Maybe<Assessment>;
   getAssessmentAlertRule?: Maybe<AssessmentAlertRule>;
   getAssessmentAlertRules: Array<AssessmentAlertRule>;
-  getAssessmentAlertRulesLength: Scalars["Int"]["output"];
+  getAssessmentAlertRulesLength: Scalars['Int']['output'];
   getAssessmentCategories: Array<AssessmentCategory>;
-  getAssessmentCategoriesLength: Scalars["Int"]["output"];
+  getAssessmentCategoriesLength: Scalars['Int']['output'];
   getAssessmentCategory?: Maybe<AssessmentCategory>;
   getAssessmentDocument?: Maybe<AssessmentDocument>;
   getAssessmentDocuments: Array<AssessmentDocument>;
-  getAssessmentDocumentsLength: Scalars["Int"]["output"];
+  getAssessmentDocumentsLength: Scalars['Int']['output'];
   getAssessmentFinancierShareGrant?: Maybe<AssessmentFinancierShareGrant>;
   getAssessmentFinancierShareGrants: Array<AssessmentFinancierShareGrant>;
-  getAssessmentFinancierShareGrantsLength: Scalars["Int"]["output"];
+  getAssessmentFinancierShareGrantsLength: Scalars['Int']['output'];
   getAssessmentQuestion?: Maybe<AssessmentQuestion>;
   getAssessmentQuestionOption?: Maybe<AssessmentQuestionOption>;
   getAssessmentQuestionOptions: Array<AssessmentQuestionOption>;
-  getAssessmentQuestionOptionsLength: Scalars["Int"]["output"];
+  getAssessmentQuestionOptionsLength: Scalars['Int']['output'];
   getAssessmentQuestions: Array<AssessmentQuestion>;
-  getAssessmentQuestionsLength: Scalars["Int"]["output"];
+  getAssessmentQuestionsLength: Scalars['Int']['output'];
   getAssessmentReadinessBand?: Maybe<AssessmentReadinessBand>;
   getAssessmentReadinessBands: Array<AssessmentReadinessBand>;
-  getAssessmentReadinessBandsLength: Scalars["Int"]["output"];
+  getAssessmentReadinessBandsLength: Scalars['Int']['output'];
   getAssessmentResponse?: Maybe<AssessmentResponse>;
   getAssessmentResponses: Array<AssessmentResponse>;
-  getAssessmentResponsesLength: Scalars["Int"]["output"];
+  getAssessmentResponsesLength: Scalars['Int']['output'];
   getAssessmentScoringBand?: Maybe<AssessmentScoringBand>;
   getAssessmentScoringBands: Array<AssessmentScoringBand>;
-  getAssessmentScoringBandsLength: Scalars["Int"]["output"];
+  getAssessmentScoringBandsLength: Scalars['Int']['output'];
   getAssessmentShareGrant?: Maybe<AssessmentShareGrant>;
   getAssessmentShareGrants: Array<AssessmentShareGrant>;
-  getAssessmentShareGrantsLength: Scalars["Int"]["output"];
+  getAssessmentShareGrantsLength: Scalars['Int']['output'];
   getAssessmentTemplate?: Maybe<AssessmentTemplate>;
   getAssessmentTemplates: Array<AssessmentTemplate>;
-  getAssessmentTemplatesLength: Scalars["Int"]["output"];
+  getAssessmentTemplatesLength: Scalars['Int']['output'];
   getAssessments: Array<Assessment>;
-  getAssessmentsLength: Scalars["Int"]["output"];
+  getAssessmentsLength: Scalars['Int']['output'];
   /**
    * Every assessment currently shared with the caller's active entity.
    *
@@ -8075,17 +8810,17 @@ export type Query = {
   getAssessmentsSharedWithMe: Array<AssessmentOutput>;
   getAssetValueSnapshot?: Maybe<AssetValueSnapshot>;
   getAssetValueSnapshots: Array<AssetValueSnapshot>;
-  getAssetValueSnapshotsLength: Scalars["Int"]["output"];
+  getAssetValueSnapshotsLength: Scalars['Int']['output'];
   getAuditLog?: Maybe<AuditLog>;
   getAuditLogs: Array<AuditLog>;
-  getAuditLogsLength: Scalars["Int"]["output"];
-  getAvailableAdminPermissions: Array<Scalars["String"]["output"]>;
-  getAvailablePermissions: Array<Scalars["String"]["output"]>;
+  getAuditLogsLength: Scalars['Int']['output'];
+  getAvailableAdminPermissions: Array<Scalars['String']['output']>;
+  getAvailablePermissions: Array<Scalars['String']['output']>;
   /** Borrower-raised requests for a loan (party-scoped: borrower or financier), newest first. */
   getBorrowerLoanRequests: Array<BorrowerLoanRequest>;
   getBuyerProject?: Maybe<BuyerProject>;
   getBuyerProjects: Array<BuyerProject>;
-  getBuyerProjectsLength: Scalars["Int"]["output"];
+  getBuyerProjectsLength: Scalars['Int']['output'];
   /** The authenticated buyer's own properties, grouped into in-progress vs owned. */
   getBuyerPropertyHoldings: BuyerPropertyHoldings;
   getCashPurchase?: Maybe<CashPurchaseTxn>;
@@ -8093,28 +8828,35 @@ export type Query = {
   getCashPurchasesForMyUnits: Array<CashPurchaseTxn>;
   getCompanyMember?: Maybe<EntityMember>;
   getCompanyMembers: Array<EntityMember>;
-  getCompanyMembersLength: Scalars["Int"]["output"];
+  getCompanyMembersLength: Scalars['Int']['output'];
   getCompanyRole?: Maybe<EntityRole>;
   getCompanyRoles: Array<EntityRole>;
-  getCompanyRolesLength: Scalars["Int"]["output"];
+  getCompanyRolesLength: Scalars['Int']['output'];
   getComplianceAuditEvent?: Maybe<ComplianceAuditEvent>;
   /**
    * Admin: query the dedicated compliance audit trail across all entities.
    * Filter by submissionId, entity, action, actor, role, status or date.
    */
   getComplianceAuditEvents: Array<ComplianceAuditEvent>;
-  getComplianceAuditEventsLength: Scalars["Int"]["output"];
-  /** Fetch all compliance sections, templates, and the user's submission statuses for a given role */
+  getComplianceAuditEventsLength: Scalars['Int']['output'];
+  /**
+   * Fetch the compliance sections, templates, and the user's submission statuses
+   * for a given role. For an entity-scoped role (issuer) only the set for the
+   * caller's own entity type, which the server works out — stats count that set.
+   */
   getComplianceDocuments: ComplianceDocumentsResponse;
   getComplianceNotifications: Array<ComplianceNotification>;
-  getComplianceNotificationsLength: Scalars["Int"]["output"];
-  /** Admin: list all sections for a role type */
+  getComplianceNotificationsLength: Scalars['Int']['output'];
+  /**
+   * Admin: list the sections for a role type. With entityType, only that entity
+   * type's sections; without it, all of the role's sections.
+   */
   getComplianceSections: Array<ComplianceSection>;
   /** Admin: fetch a single compliance submission (with template, user, files) */
   getComplianceSubmission?: Maybe<ComplianceSubmission>;
   /** Admin: list compliance submissions across users for review */
   getComplianceSubmissions: Array<ComplianceSubmission>;
-  getComplianceSubmissionsLength: Scalars["Int"]["output"];
+  getComplianceSubmissionsLength: Scalars['Int']['output'];
   /** The condition-precedent checklist for a request (Act 9). Any party may view it. */
   getConditionsPrecedent: Array<ConditionPrecedent>;
   /** The condition-subsequent checklist for a request. Any party may view it. */
@@ -8123,7 +8865,7 @@ export type Query = {
   getConversationByReferenceNumber?: Maybe<Conversation>;
   getConversationByUsers?: Maybe<Conversation>;
   getConversations: Array<Conversation>;
-  getConversationsLength: Scalars["Int"]["output"];
+  getConversationsLength: Scalars['Int']['output'];
   getDashboardSummary: DashboardSummary;
   /** Full declaration history for a loan (via its offer request), newest first. */
   getDeclarationsByOfferRequest: Array<StatusDeclaration>;
@@ -8137,16 +8879,16 @@ export type Query = {
   getDisbursements: Array<DisbursementRecord>;
   getDueDiligence?: Maybe<DueDiligence>;
   getDueDiligences: Array<DueDiligence>;
-  getDueDiligencesLength: Scalars["Int"]["output"];
+  getDueDiligencesLength: Scalars['Int']['output'];
   /** The entity's tailored document requirements plus a per-action gate summary. */
   getEntityDocumentRequirements: EntityRequirementsResponse;
   /** The money rail for one deal. Buyer or owning issuer only. */
   getEscrowEvents: Array<EscrowEvent>;
   getFavoriteOffer?: Maybe<FavoriteOffer>;
   getFavoriteOffers: Array<FavoriteOffer>;
-  getFavoriteOffersLength: Scalars["Int"]["output"];
+  getFavoriteOffersLength: Scalars['Int']['output'];
   getFavoriteProperties: Array<Property>;
-  getFavoritePropertiesLength: Scalars["Int"]["output"];
+  getFavoritePropertiesLength: Scalars['Int']['output'];
   /** AFRAM platform / lender fee records for a loan. */
   getFeeRecords: Array<FeeRecord>;
   getFinancier?: Maybe<Entity>;
@@ -8182,10 +8924,10 @@ export type Query = {
   /** The authenticated financier's financed properties, grouped into in-progress vs settled. */
   getFinancierPropertyHoldings: FinancierPropertyHoldings;
   getFinanciers?: Maybe<Array<Maybe<Entity>>>;
-  getFinanciersLength: Scalars["Int"]["output"];
+  getFinanciersLength: Scalars['Int']['output'];
   getInstallment?: Maybe<RepaymentInstallment>;
   getInstallments: Array<RepaymentInstallment>;
-  getInstallmentsLength: Scalars["Int"]["output"];
+  getInstallmentsLength: Scalars['Int']['output'];
   getIssuer?: Maybe<Entity>;
   /**
    * The issuer's sales pipeline valued at each period end, oldest first.
@@ -8216,10 +8958,10 @@ export type Query = {
    */
   getIssuerPortfolioCounts: IssuerPortfolioCounts;
   getIssuers?: Maybe<Array<Maybe<Entity>>>;
-  getIssuersLength: Scalars["Int"]["output"];
+  getIssuersLength: Scalars['Int']['output'];
   getLand?: Maybe<Land>;
   getLands: Array<Land>;
-  getLandsLength: Scalars["Int"]["output"];
+  getLandsLength: Scalars['Int']['output'];
   /** The latest active (non-cancelled) declaration for a loan — drives Outstanding/Status. */
   getLatestActiveDeclaration?: Maybe<StatusDeclaration>;
   /**
@@ -8243,15 +8985,15 @@ export type Query = {
   /** The viewer's loans — funded offer requests they lend on or borrow on, projected as loan rows. */
   getLedgerLoans: Array<LedgerLoan>;
   /** Count of loans the viewer can see (for the same filter). */
-  getLedgerLoansLength: Scalars["Int"]["output"];
+  getLedgerLoansLength: Scalars['Int']['output'];
   getLoan?: Maybe<Loan>;
   /** All documents attached to a loan (borrower-uploaded + financier-shared), newest first. */
   getLoanDocuments: Array<LoanDocument>;
   getLoans: Array<Loan>;
-  getLoansLength: Scalars["Int"]["output"];
+  getLoansLength: Scalars['Int']['output'];
   getMessage?: Maybe<Message>;
   getMessages: Array<Message>;
-  getMessagesLength: Scalars["Int"]["output"];
+  getMessagesLength: Scalars['Int']['output'];
   getMyActiveAssessment?: Maybe<Assessment>;
   getMyAssessmentEntryState: AssessmentEntryState;
   /** The buyer's list — the 'Purchases' section at the top of /buyer/offers. */
@@ -8288,25 +9030,32 @@ export type Query = {
   getMySellerApproaches: Array<SellerApproach>;
   /** The caller's deals, newest first. */
   getMySellerFinancingTxns: Array<SellerFinancingTxn>;
+  /** Null when the reference doesn't exist or the caller can't see it. Never says which. */
+  getMySupportRequest?: Maybe<SupportRequest>;
+  /** Signed in: the person's requests, and their company's for vendors and financiers. Newest activity first. Limit 20 by default, 50 at most. */
+  getMySupportRequests: Array<SupportRequest>;
+  getMySupportRequestsLength: Scalars['Int']['output'];
+  /** How many of the person's requests have news. Lights the dot on Help. */
+  getMySupportUpdatesCount: Scalars['Int']['output'];
   /** Member: the thread on a ticket they raised, or one in a conversation they take part in. Oldest first. */
   getMyTicketComments: Array<TicketComment>;
-  getMyTicketCommentsLength: Scalars["Int"]["output"];
+  getMyTicketCommentsLength: Scalars['Int']['output'];
   getNotification?: Maybe<Notification>;
   getNotifications: Array<Notification>;
-  getNotificationsLength: Scalars["Int"]["output"];
+  getNotificationsLength: Scalars['Int']['output'];
   getOffer?: Maybe<Offer>;
   getOfferRequest?: Maybe<OfferRequest>;
   getOfferRequestDocuments: Array<OfferRequestDocument>;
-  getOfferRequestDocumentsLength: Scalars["Int"]["output"];
+  getOfferRequestDocumentsLength: Scalars['Int']['output'];
   getOfferRequests: Array<OfferRequest>;
-  getOfferRequestsLength: Scalars["Int"]["output"];
+  getOfferRequestsLength: Scalars['Int']['output'];
   getOffers: Array<Offer>;
-  getOffersLength: Scalars["Int"]["output"];
+  getOffersLength: Scalars['Int']['output'];
   /** Payments a loan actually received (Stream 2 — never merged with declarations). */
   getPaymentEvents: Array<PaymentEvent>;
   getPaymentSchedule?: Maybe<PaymentSchedule>;
   getPaymentSchedules: Array<PaymentSchedule>;
-  getPaymentSchedulesLength: Scalars["Int"]["output"];
+  getPaymentSchedulesLength: Scalars['Int']['output'];
   /**
    * The payout account on file for the given owner, or null if there is none.
    *
@@ -8318,7 +9067,7 @@ export type Query = {
   getPayoutAccount?: Maybe<PayoutAccount>;
   getPendingTermChange?: Maybe<RepaymentTermChange>;
   getPendingTermChanges: Array<RepaymentTermChange>;
-  getPendingTermChangesLength: Scalars["Int"]["output"];
+  getPendingTermChangesLength: Scalars['Int']['output'];
   getPendingVerifications: PendingVerificationsPayload;
   /** Admin — superseded rates for one fee type, newest first. */
   getPlatformFeeHistory: Array<PlatformFeeSetting>;
@@ -8326,15 +9075,15 @@ export type Query = {
   getPlatformFees: Array<PlatformFeeSetting>;
   getPortfolio?: Maybe<Portfolio>;
   getPortfolios: Array<Portfolio>;
-  getPortfoliosLength: Scalars["Int"]["output"];
+  getPortfoliosLength: Scalars['Int']['output'];
   getPreTokenizedUnits: Array<PreTokenizedUnit>;
-  getPreTokenizedUnitsLength: Scalars["Int"]["output"];
+  getPreTokenizedUnitsLength: Scalars['Int']['output'];
   getProject?: Maybe<Project>;
   getProjects: Array<Project>;
-  getProjectsLength: Scalars["Int"]["output"];
+  getProjectsLength: Scalars['Int']['output'];
   getProperties: Array<Property>;
   getPropertiesInPortfolio: Array<Property>;
-  getPropertiesLength: Scalars["Int"]["output"];
+  getPropertiesLength: Scalars['Int']['output'];
   getProperty?: Maybe<Property>;
   /**
    * Everything Afram already holds for one property, optionally narrowed to a
@@ -8354,16 +9103,16 @@ export type Query = {
   getPropertyPrice?: Maybe<PropertyPrice>;
   /** Oldest first. */
   getPropertyPrices: Array<PropertyPrice>;
-  getPropertyPricesLength: Scalars["Int"]["output"];
+  getPropertyPricesLength: Scalars['Int']['output'];
   /** One viewing. Either party to it may read it; nobody else. */
   getPropertyViewing?: Maybe<PropertyViewing>;
   /** Every viewing across the units the caller's entity owns. */
   getPropertyViewingsForMyUnits: Array<PropertyViewing>;
   getPublicPortfolioUnits: Array<Property>;
   getPublicProjects: Array<Project>;
-  getPublicProjectsLength: Scalars["Int"]["output"];
+  getPublicProjectsLength: Scalars['Int']['output'];
   getRecentActivities: Array<RecentActivity>;
-  getRecentActivitiesLength: Scalars["Int"]["output"];
+  getRecentActivitiesLength: Scalars['Int']['output'];
   /**
    * Buyer or vendor on the deal, by transaction id or by the deal's offer request.
    *
@@ -8378,12 +9127,12 @@ export type Query = {
   getRepayment?: Maybe<Repayment>;
   getRepaymentTerm?: Maybe<Repayment>;
   getRepaymentTerms: Array<Repayment>;
-  getRepaymentTermsLength: Scalars["Int"]["output"];
+  getRepaymentTermsLength: Scalars['Int']['output'];
   getRepayments: Array<Repayment>;
-  getRepaymentsLength: Scalars["Int"]["output"];
+  getRepaymentsLength: Scalars['Int']['output'];
   getReview?: Maybe<Review>;
   getReviews: Array<Review>;
-  getReviewsLength: Scalars["Int"]["output"];
+  getReviewsLength: Scalars['Int']['output'];
   getRoleRequests: Array<RoleRequest>;
   /** Computer. Auth + key. The fallback when the socket cannot connect. Null when no such session is the caller's. */
   getSelfieSession?: Maybe<SelfieSession>;
@@ -8406,16 +9155,26 @@ export type Query = {
    * full record, so refusing them the summary would be theatre.
    */
   getSharedAssessmentOutput?: Maybe<AssessmentOutput>;
+  getSupportRequest?: Maybe<SupportRequest>;
+  /**
+   * PUBLIC. Where a signed-out request stands, by its reference and the email it
+   * was sent from. Null when either is wrong, without saying which. Status only,
+   * never messages. 10 per hour per IP.
+   */
+  getSupportRequestStatus?: Maybe<SupportRequestStatusResult>;
+  /** Staff (support_request:view): every request, newest activity first. */
+  getSupportRequests: Array<SupportRequest>;
+  getSupportRequestsLength: Scalars['Int']['output'];
   getSupportRole?: Maybe<SupportRole>;
   getSupportRoles: Array<SupportRole>;
-  getSupportRolesLength: Scalars["Int"]["output"];
+  getSupportRolesLength: Scalars['Int']['output'];
   getSupportUser?: Maybe<SupportUser>;
   getSupportUserStats: UserStats;
   getSupportUsers: Array<SupportUser>;
-  getSupportUsersLength: Scalars["Int"]["output"];
+  getSupportUsersLength: Scalars['Int']['output'];
   getTailoringRule?: Maybe<TailoringRule>;
   getTailoringRules: Array<TailoringRule>;
-  getTailoringRulesLength: Scalars["Int"]["output"];
+  getTailoringRulesLength: Scalars['Int']['output'];
   /**
    * The slot ids currently spoken for on a listing, so the client can grey them
    * out.
@@ -8425,17 +9184,17 @@ export type Query = {
    * derive. Open to anyone: a taken slot is not private, and withholding it would
    * only mean members discovering clashes by being refused.
    */
-  getTakenViewingSlots: Array<Scalars["String"]["output"]>;
+  getTakenViewingSlots: Array<Scalars['String']['output']>;
   getTempProject?: Maybe<TempProject>;
   getTempProjects: Array<TempProject>;
-  getTempProjectsLength: Scalars["Int"]["output"];
+  getTempProjectsLength: Scalars['Int']['output'];
   getTermSheet?: Maybe<TermSheet>;
   getTermSheets: Array<TermSheet>;
-  getTermSheetsLength: Scalars["Int"]["output"];
+  getTermSheetsLength: Scalars['Int']['output'];
   getTicket?: Maybe<Ticket>;
   getTicketComments: Array<TicketComment>;
   getTickets: Array<Ticket>;
-  getTicketsLength: Scalars["Int"]["output"];
+  getTicketsLength: Scalars['Int']['output'];
   /** Token escrow lifecycle events for a loan. */
   getTokenEvents: Array<TokenEvent>;
   /**
@@ -8447,14 +9206,14 @@ export type Query = {
   getTransaction?: Maybe<Transaction>;
   getTransactionVolumeSeries: Array<TransactionVolumePoint>;
   getTransactions: Array<Transaction>;
-  getTransactionsLength: Scalars["Int"]["output"];
+  getTransactionsLength: Scalars['Int']['output'];
   getTransfer?: Maybe<Transfer>;
   getTransfers: Array<Transfer>;
-  getTransfersLength: Scalars["Int"]["output"];
+  getTransfersLength: Scalars['Int']['output'];
   getUser?: Maybe<User>;
   getUserPolicy?: Maybe<UserPolicy>;
   getUsers?: Maybe<Array<Maybe<User>>>;
-  getUsersLength: Scalars["Int"]["output"];
+  getUsersLength: Scalars['Int']['output'];
   /**
    * The caller's wallet, if one has been opened — null otherwise. Never opens one.
    * `ownerType: entity` reads the caller's active entity's wallet and needs the
@@ -8471,278 +9230,342 @@ export type Query = {
   vapidPublicKey: VapidPublicKeyResponse;
 };
 
+
 export type QueryCounterpartyIdentityArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type QueryEvaluateEntityGateArgs = {
   action: GatedAction;
-  entityId: Scalars["ID"]["input"];
+  entityId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetAccessInviteArgs = {
   filter: AccessInviteFilter;
 };
 
+
 export type QueryGetAccessRequestArgs = {
   filter: AccessRequestFilter;
 };
+
 
 export type QueryGetAccessRequestsArgs = {
   filter?: InputMaybe<AccessRequestFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetAccessRequestsLengthArgs = {
   filter?: InputMaybe<AccessRequestFilter>;
 };
+
 
 export type QueryGetAssessmentArgs = {
   filter?: InputMaybe<AssessmentFilter>;
 };
 
+
 export type QueryGetAssessmentAlertRuleArgs = {
   filter?: InputMaybe<AssessmentAlertRuleFilter>;
 };
+
 
 export type QueryGetAssessmentAlertRulesArgs = {
   filter?: InputMaybe<AssessmentAlertRuleFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetAssessmentAlertRulesLengthArgs = {
   filter?: InputMaybe<AssessmentAlertRuleFilter>;
 };
+
 
 export type QueryGetAssessmentCategoriesArgs = {
   filter?: InputMaybe<AssessmentCategoryFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetAssessmentCategoriesLengthArgs = {
   filter?: InputMaybe<AssessmentCategoryFilter>;
 };
+
 
 export type QueryGetAssessmentCategoryArgs = {
   filter?: InputMaybe<AssessmentCategoryFilter>;
 };
 
+
 export type QueryGetAssessmentDocumentArgs = {
   filter?: InputMaybe<AssessmentDocumentFilter>;
 };
+
 
 export type QueryGetAssessmentDocumentsArgs = {
   filter?: InputMaybe<AssessmentDocumentFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetAssessmentDocumentsLengthArgs = {
   filter?: InputMaybe<AssessmentDocumentFilter>;
 };
 
+
 export type QueryGetAssessmentFinancierShareGrantArgs = {
   filter?: InputMaybe<AssessmentFinancierShareGrantFilter>;
 };
+
 
 export type QueryGetAssessmentFinancierShareGrantsArgs = {
   filter?: InputMaybe<AssessmentFinancierShareGrantFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetAssessmentFinancierShareGrantsLengthArgs = {
   filter?: InputMaybe<AssessmentFinancierShareGrantFilter>;
 };
+
 
 export type QueryGetAssessmentQuestionArgs = {
   filter?: InputMaybe<AssessmentQuestionFilter>;
 };
 
+
 export type QueryGetAssessmentQuestionOptionArgs = {
   filter?: InputMaybe<AssessmentQuestionOptionFilter>;
 };
+
 
 export type QueryGetAssessmentQuestionOptionsArgs = {
   filter?: InputMaybe<AssessmentQuestionOptionFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetAssessmentQuestionOptionsLengthArgs = {
   filter?: InputMaybe<AssessmentQuestionOptionFilter>;
 };
+
 
 export type QueryGetAssessmentQuestionsArgs = {
   filter?: InputMaybe<AssessmentQuestionFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetAssessmentQuestionsLengthArgs = {
   filter?: InputMaybe<AssessmentQuestionFilter>;
 };
 
+
 export type QueryGetAssessmentReadinessBandArgs = {
   filter?: InputMaybe<AssessmentReadinessBandFilter>;
 };
+
 
 export type QueryGetAssessmentReadinessBandsArgs = {
   filter?: InputMaybe<AssessmentReadinessBandFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetAssessmentReadinessBandsLengthArgs = {
   filter?: InputMaybe<AssessmentReadinessBandFilter>;
 };
 
+
 export type QueryGetAssessmentResponseArgs = {
   filter?: InputMaybe<AssessmentResponseFilter>;
 };
+
 
 export type QueryGetAssessmentResponsesArgs = {
   filter?: InputMaybe<AssessmentResponseFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetAssessmentResponsesLengthArgs = {
   filter?: InputMaybe<AssessmentResponseFilter>;
 };
 
+
 export type QueryGetAssessmentScoringBandArgs = {
   filter?: InputMaybe<AssessmentScoringBandFilter>;
 };
+
 
 export type QueryGetAssessmentScoringBandsArgs = {
   filter?: InputMaybe<AssessmentScoringBandFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetAssessmentScoringBandsLengthArgs = {
   filter?: InputMaybe<AssessmentScoringBandFilter>;
 };
 
+
 export type QueryGetAssessmentShareGrantArgs = {
   filter?: InputMaybe<AssessmentShareGrantFilter>;
 };
+
 
 export type QueryGetAssessmentShareGrantsArgs = {
   filter?: InputMaybe<AssessmentShareGrantFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetAssessmentShareGrantsLengthArgs = {
   filter?: InputMaybe<AssessmentShareGrantFilter>;
 };
 
+
 export type QueryGetAssessmentTemplateArgs = {
   filter?: InputMaybe<AssessmentTemplateFilter>;
 };
+
 
 export type QueryGetAssessmentTemplatesArgs = {
   filter?: InputMaybe<AssessmentTemplateFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetAssessmentTemplatesLengthArgs = {
   filter?: InputMaybe<AssessmentTemplateFilter>;
 };
+
 
 export type QueryGetAssessmentsArgs = {
   filter?: InputMaybe<AssessmentFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetAssessmentsLengthArgs = {
   filter?: InputMaybe<AssessmentFilter>;
 };
+
 
 export type QueryGetAssessmentsSharedWithMeArgs = {
   counterpartyKind?: InputMaybe<AssessmentCounterpartyKind>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetAssetValueSnapshotArgs = {
   filter?: InputMaybe<AssetValueSnapshotFilter>;
 };
+
 
 export type QueryGetAssetValueSnapshotsArgs = {
   filter?: InputMaybe<AssetValueSnapshotFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetAssetValueSnapshotsLengthArgs = {
   filter?: InputMaybe<AssetValueSnapshotFilter>;
 };
 
+
 export type QueryGetAuditLogArgs = {
   filter?: InputMaybe<AuditLogFilter>;
 };
+
 
 export type QueryGetAuditLogsArgs = {
   filter?: InputMaybe<AuditLogFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetAuditLogsLengthArgs = {
   filter?: InputMaybe<AuditLogFilter>;
 };
 
+
 export type QueryGetBorrowerLoanRequestsArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetBuyerProjectArgs = {
   filter?: InputMaybe<BuyerProjectFilter>;
 };
+
 
 export type QueryGetBuyerProjectsArgs = {
   filter?: InputMaybe<BuyerProjectFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetBuyerProjectsLengthArgs = {
   filter?: InputMaybe<BuyerProjectFilter>;
 };
 
+
 export type QueryGetCashPurchaseArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type QueryGetCompanyMemberArgs = {
   filter?: InputMaybe<EntityMemberFilter>;
 };
+
 
 export type QueryGetCompanyMembersArgs = {
   filter?: InputMaybe<EntityMemberFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetCompanyMembersLengthArgs = {
   filter?: InputMaybe<EntityMemberFilter>;
 };
 
+
 export type QueryGetCompanyRoleArgs = {
   filter?: InputMaybe<EntityRoleFilter>;
 };
+
 
 export type QueryGetCompanyRolesArgs = {
   filter?: InputMaybe<EntityRoleFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetCompanyRolesLengthArgs = {
   filter?: InputMaybe<EntityRoleFilter>;
 };
 
+
 export type QueryGetComplianceAuditEventArgs = {
   filter?: InputMaybe<ComplianceAuditEventFilter>;
 };
+
 
 export type QueryGetComplianceAuditEventsArgs = {
   filter?: InputMaybe<ComplianceAuditEventFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetComplianceAuditEventsLengthArgs = {
   filter?: InputMaybe<ComplianceAuditEventFilter>;
 };
+
 
 export type QueryGetComplianceDocumentsArgs = {
   filter?: InputMaybe<ComplianceDocumentFilter>;
@@ -8750,679 +9573,873 @@ export type QueryGetComplianceDocumentsArgs = {
   roleType: ComplianceRoleType;
 };
 
+
 export type QueryGetComplianceNotificationsArgs = {
   filter?: InputMaybe<ComplianceNotificationFilter>;
   pagination?: InputMaybe<Pagination>;
   roleType: ComplianceRoleType;
 };
 
+
 export type QueryGetComplianceNotificationsLengthArgs = {
   filter?: InputMaybe<ComplianceNotificationFilter>;
   roleType: ComplianceRoleType;
 };
 
+
 export type QueryGetComplianceSectionsArgs = {
+  entityType?: InputMaybe<EntityType>;
   roleType: ComplianceRoleType;
 };
+
 
 export type QueryGetComplianceSubmissionArgs = {
   filter?: InputMaybe<ComplianceSubmissionFilter>;
 };
+
 
 export type QueryGetComplianceSubmissionsArgs = {
   filter?: InputMaybe<ComplianceSubmissionFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetComplianceSubmissionsLengthArgs = {
   filter?: InputMaybe<ComplianceSubmissionFilter>;
 };
 
+
 export type QueryGetConditionsPrecedentArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
 
+
 export type QueryGetConditionsSubsequentArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetConversationArgs = {
   filter?: InputMaybe<ConversationFilter>;
 };
 
+
 export type QueryGetConversationByReferenceNumberArgs = {
-  referenceNumber: Scalars["String"]["input"];
+  referenceNumber: Scalars['String']['input'];
 };
 
+
 export type QueryGetConversationByUsersArgs = {
-  propertyId?: InputMaybe<Scalars["ID"]["input"]>;
-  userId1: Scalars["ID"]["input"];
-  userId2: Scalars["ID"]["input"];
-  withParent?: InputMaybe<Scalars["Boolean"]["input"]>;
+  propertyId?: InputMaybe<Scalars['ID']['input']>;
+  userId1: Scalars['ID']['input'];
+  userId2: Scalars['ID']['input'];
+  withParent?: InputMaybe<Scalars['Boolean']['input']>;
 };
+
 
 export type QueryGetConversationsArgs = {
   filter?: InputMaybe<ConversationFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetConversationsLengthArgs = {
   filter?: InputMaybe<ConversationFilter>;
 };
+
 
 export type QueryGetDashboardSummaryArgs = {
   range: DashboardRange;
 };
 
+
 export type QueryGetDeclarationsByOfferRequestArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetDiligenceItemsArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
 
+
 export type QueryGetDisbursementsArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetDueDiligenceArgs = {
   filter?: InputMaybe<DueDiligenceFilter>;
 };
+
 
 export type QueryGetDueDiligencesArgs = {
   filter?: InputMaybe<DueDiligenceFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetDueDiligencesLengthArgs = {
   filter?: InputMaybe<DueDiligenceFilter>;
 };
 
+
 export type QueryGetEntityDocumentRequirementsArgs = {
-  entityId: Scalars["ID"]["input"];
+  entityId: Scalars['ID']['input'];
 };
 
+
 export type QueryGetEscrowEventsArgs = {
-  transactionId: Scalars["ID"]["input"];
+  transactionId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetFavoriteOfferArgs = {
   filter?: InputMaybe<FavoriteOfferFilter>;
 };
+
 
 export type QueryGetFavoriteOffersArgs = {
   filter?: InputMaybe<FavoriteOfferFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetFavoriteOffersLengthArgs = {
   filter?: InputMaybe<FavoriteOfferFilter>;
 };
+
 
 export type QueryGetFavoritePropertiesArgs = {
   filter?: InputMaybe<PropertyFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetFavoritePropertiesLengthArgs = {
   filter?: InputMaybe<PropertyFilter>;
 };
 
+
 export type QueryGetFeeRecordsArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetFinancierArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
 
+
 export type QueryGetFinancierAumSeriesArgs = {
-  months?: InputMaybe<Scalars["Int"]["input"]>;
+  months?: InputMaybe<Scalars['Int']['input']>;
 };
+
 
 export type QueryGetFinanciersArgs = {
   filter?: InputMaybe<FinancierFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetFinanciersLengthArgs = {
   filter?: InputMaybe<FinancierFilter>;
 };
 
+
 export type QueryGetInstallmentArgs = {
   filter?: InputMaybe<InstallmentFilter>;
 };
+
 
 export type QueryGetInstallmentsArgs = {
   filter?: InputMaybe<InstallmentFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetInstallmentsLengthArgs = {
   filter?: InputMaybe<InstallmentFilter>;
 };
 
+
 export type QueryGetIssuerArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
 
+
 export type QueryGetIssuerPipelineSeriesArgs = {
-  months?: InputMaybe<Scalars["Int"]["input"]>;
+  months?: InputMaybe<Scalars['Int']['input']>;
 };
+
 
 export type QueryGetIssuersArgs = {
   filter?: InputMaybe<IssuerFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetIssuersLengthArgs = {
   filter?: InputMaybe<IssuerFilter>;
 };
 
+
 export type QueryGetLandArgs = {
   filter?: InputMaybe<LandFilter>;
 };
+
 
 export type QueryGetLandsArgs = {
   filter?: InputMaybe<LandFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetLandsLengthArgs = {
   filter?: InputMaybe<LandFilter>;
 };
 
+
 export type QueryGetLatestActiveDeclarationArgs = {
-  loanId?: InputMaybe<Scalars["ID"]["input"]>;
-  offerRequestId?: InputMaybe<Scalars["ID"]["input"]>;
+  loanId?: InputMaybe<Scalars['ID']['input']>;
+  offerRequestId?: InputMaybe<Scalars['ID']['input']>;
 };
+
 
 export type QueryGetLatestActiveDeclarationsByBorrowerArgs = {
-  borrowerId: Scalars["ID"]["input"];
+  borrowerId: Scalars['ID']['input'];
 };
 
+
 export type QueryGetLatestActiveDeclarationsByLenderArgs = {
-  financierId: Scalars["ID"]["input"];
+  financierId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetLedgerLoanArgs = {
   filter?: InputMaybe<LedgerLoanFilter>;
 };
+
 
 export type QueryGetLedgerLoansArgs = {
   filter?: InputMaybe<LedgerLoanFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetLedgerLoansLengthArgs = {
   filter?: InputMaybe<LedgerLoanFilter>;
 };
+
 
 export type QueryGetLoanArgs = {
   filter?: InputMaybe<LoanFilter>;
 };
 
+
 export type QueryGetLoanDocumentsArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetLoansArgs = {
   filter?: InputMaybe<LoanFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetLoansLengthArgs = {
   filter?: InputMaybe<LoanFilter>;
 };
 
+
 export type QueryGetMessageArgs = {
   filter?: InputMaybe<MessageFilter>;
 };
+
 
 export type QueryGetMessagesArgs = {
   filter?: InputMaybe<MessageFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetMessagesLengthArgs = {
   filter?: InputMaybe<MessageFilter>;
 };
 
+
 export type QueryGetMyAssessmentEntryStateArgs = {
-  applicantUserId?: InputMaybe<Scalars["ID"]["input"]>;
+  applicantUserId?: InputMaybe<Scalars['ID']['input']>;
   platformRole?: InputMaybe<AssessmentPlatformRole>;
-  subjectEntityId?: InputMaybe<Scalars["ID"]["input"]>;
+  subjectEntityId?: InputMaybe<Scalars['ID']['input']>;
 };
 
+
 export type QueryGetMyHeldDocumentsArgs = {
-  categoryId?: InputMaybe<Scalars["String"]["input"]>;
+  categoryId?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type QueryGetMyPropertyViewingsArgs = {
   statuses?: InputMaybe<Array<PropertyViewingStatus>>;
 };
+
+
+export type QueryGetMySupportRequestArgs = {
+  reference: Scalars['String']['input'];
+};
+
+
+export type QueryGetMySupportRequestsArgs = {
+  filter?: InputMaybe<SupportRequestFilter>;
+  pagination?: InputMaybe<Pagination>;
+};
+
+
+export type QueryGetMySupportRequestsLengthArgs = {
+  filter?: InputMaybe<SupportRequestFilter>;
+};
+
 
 export type QueryGetMyTicketCommentsArgs = {
   filter: MyTicketCommentFilter;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetMyTicketCommentsLengthArgs = {
   filter: MyTicketCommentFilter;
 };
 
+
 export type QueryGetNotificationArgs = {
   filter: NotificationFilter;
 };
+
 
 export type QueryGetNotificationsArgs = {
   filter?: InputMaybe<NotificationFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetNotificationsLengthArgs = {
   filter?: InputMaybe<NotificationFilter>;
 };
+
 
 export type QueryGetOfferArgs = {
   filter?: InputMaybe<OfferFilter>;
 };
 
+
 export type QueryGetOfferRequestArgs = {
   filter?: InputMaybe<OfferRequestFilter>;
 };
+
 
 export type QueryGetOfferRequestDocumentsArgs = {
   filter?: InputMaybe<OfferRequestDocumentFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetOfferRequestDocumentsLengthArgs = {
   filter?: InputMaybe<OfferRequestDocumentFilter>;
 };
+
 
 export type QueryGetOfferRequestsArgs = {
   filter?: InputMaybe<OfferRequestFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetOfferRequestsLengthArgs = {
   filter?: InputMaybe<OfferRequestFilter>;
 };
+
 
 export type QueryGetOffersArgs = {
   filter?: InputMaybe<OfferFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetOffersLengthArgs = {
   filter?: InputMaybe<OfferFilter>;
 };
 
+
 export type QueryGetPaymentEventsArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetPaymentScheduleArgs = {
   filter?: InputMaybe<PaymentScheduleFilter>;
 };
+
 
 export type QueryGetPaymentSchedulesArgs = {
   filter?: InputMaybe<PaymentScheduleFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetPaymentSchedulesLengthArgs = {
   filter?: InputMaybe<PaymentScheduleFilter>;
 };
+
 
 export type QueryGetPayoutAccountArgs = {
   ownerType: PayoutAccountOwner;
 };
 
+
 export type QueryGetPendingTermChangeArgs = {
   filter?: InputMaybe<TermChangeFilter>;
 };
+
 
 export type QueryGetPendingTermChangesArgs = {
   filter?: InputMaybe<TermChangeFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetPendingTermChangesLengthArgs = {
   filter?: InputMaybe<TermChangeFilter>;
 };
 
+
 export type QueryGetPendingVerificationsArgs = {
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  page?: InputMaybe<Scalars["Int"]["input"]>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
 };
 
+
 export type QueryGetPlatformFeeHistoryArgs = {
-  feeType: Scalars["String"]["input"];
+  feeType: Scalars['String']['input'];
 };
+
 
 export type QueryGetPortfolioArgs = {
   filter?: InputMaybe<PortfolioFilter>;
 };
+
 
 export type QueryGetPortfoliosArgs = {
   filter?: InputMaybe<PortfolioFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetPortfoliosLengthArgs = {
   filter?: InputMaybe<PortfolioFilter>;
 };
 
+
 export type QueryGetPreTokenizedUnitsArgs = {
   filter?: InputMaybe<PreTokenizedUnitFilter>;
-  ownerId: Scalars["ID"]["input"];
+  ownerId: Scalars['ID']['input'];
   pagination?: InputMaybe<Pagination>;
-  portfolioId: Scalars["ID"]["input"];
+  portfolioId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetPreTokenizedUnitsLengthArgs = {
   filter?: InputMaybe<PreTokenizedUnitFilter>;
-  ownerId: Scalars["ID"]["input"];
-  portfolioId: Scalars["ID"]["input"];
+  ownerId: Scalars['ID']['input'];
+  portfolioId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetProjectArgs = {
   filter?: InputMaybe<ProjectFilter>;
 };
+
 
 export type QueryGetProjectsArgs = {
   filter?: InputMaybe<ProjectFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetProjectsLengthArgs = {
   filter?: InputMaybe<ProjectFilter>;
 };
+
 
 export type QueryGetPropertiesArgs = {
   filter?: InputMaybe<PropertyFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetPropertiesInPortfolioArgs = {
-  portfolioId: Scalars["ID"]["input"];
+  portfolioId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetPropertiesLengthArgs = {
   filter?: InputMaybe<PropertyFilter>;
 };
 
+
 export type QueryGetPropertyArgs = {
   filter: PropertyFilter;
 };
 
+
 export type QueryGetPropertyHeldDocumentsArgs = {
-  categoryId?: InputMaybe<Scalars["String"]["input"]>;
-  propertyId: Scalars["ID"]["input"];
+  categoryId?: InputMaybe<Scalars['String']['input']>;
+  propertyId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetPropertyPipelineArgs = {
   range?: InputMaybe<DashboardRange>;
 };
 
+
 export type QueryGetPropertyPriceArgs = {
   filter: PropertyPriceFilter;
 };
+
 
 export type QueryGetPropertyPricesArgs = {
   filter?: InputMaybe<PropertyPriceFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetPropertyPricesLengthArgs = {
   filter?: InputMaybe<PropertyPriceFilter>;
 };
 
+
 export type QueryGetPropertyViewingArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
 
+
 export type QueryGetPropertyViewingsForMyUnitsArgs = {
-  propertyId?: InputMaybe<Scalars["ID"]["input"]>;
+  propertyId?: InputMaybe<Scalars['ID']['input']>;
   statuses?: InputMaybe<Array<PropertyViewingStatus>>;
 };
 
+
 export type QueryGetPublicPortfolioUnitsArgs = {
-  portfolioId: Scalars["ID"]["input"];
+  portfolioId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetPublicProjectsArgs = {
   filter?: InputMaybe<ProjectFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetPublicProjectsLengthArgs = {
   filter?: InputMaybe<ProjectFilter>;
 };
+
 
 export type QueryGetRecentActivitiesArgs = {
   filter?: InputMaybe<RecentActivityFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetRecentActivitiesLengthArgs = {
   filter?: InputMaybe<RecentActivityFilter>;
 };
 
+
 export type QueryGetRentToBuyTxnArgs = {
-  id?: InputMaybe<Scalars["ID"]["input"]>;
-  offerRequestId?: InputMaybe<Scalars["ID"]["input"]>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  offerRequestId?: InputMaybe<Scalars['ID']['input']>;
 };
+
 
 export type QueryGetRepaymentArgs = {
   filter?: InputMaybe<RepaymentFilter>;
 };
 
+
 export type QueryGetRepaymentTermArgs = {
   filter?: InputMaybe<RepaymentFilter>;
 };
+
 
 export type QueryGetRepaymentTermsArgs = {
   filter?: InputMaybe<RepaymentFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetRepaymentTermsLengthArgs = {
   filter?: InputMaybe<RepaymentFilter>;
 };
+
 
 export type QueryGetRepaymentsArgs = {
   filter?: InputMaybe<RepaymentFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetRepaymentsLengthArgs = {
   filter?: InputMaybe<RepaymentFilter>;
 };
 
+
 export type QueryGetReviewArgs = {
   filter?: InputMaybe<ReviewFilter>;
 };
+
 
 export type QueryGetReviewsArgs = {
   filter?: InputMaybe<ReviewFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetReviewsLengthArgs = {
   filter?: InputMaybe<ReviewFilter>;
 };
+
 
 export type QueryGetRoleRequestsArgs = {
   type: RoleFetchType;
 };
 
+
 export type QueryGetSelfieSessionArgs = {
   filter: SelfieSessionFilter;
 };
 
+
 export type QueryGetSellerApproachArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type QueryGetSellerFinancingTxnArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
 
+
 export type QueryGetSharedAssessmentOutputArgs = {
-  assessmentId: Scalars["ID"]["input"];
+  assessmentId: Scalars['ID']['input'];
 };
+
+
+export type QueryGetSupportRequestArgs = {
+  filter?: InputMaybe<SupportRequestAdminFilter>;
+};
+
+
+export type QueryGetSupportRequestStatusArgs = {
+  reference: Scalars['String']['input'];
+  replyEmail: Scalars['String']['input'];
+};
+
+
+export type QueryGetSupportRequestsArgs = {
+  filter?: InputMaybe<SupportRequestAdminFilter>;
+  pagination?: InputMaybe<Pagination>;
+};
+
+
+export type QueryGetSupportRequestsLengthArgs = {
+  filter?: InputMaybe<SupportRequestAdminFilter>;
+};
+
 
 export type QueryGetSupportRoleArgs = {
   filter?: InputMaybe<SupportRoleFilter>;
 };
+
 
 export type QueryGetSupportRolesArgs = {
   filter?: InputMaybe<SupportRoleFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetSupportRolesLengthArgs = {
   filter?: InputMaybe<SupportRoleFilter>;
 };
 
+
 export type QueryGetSupportUserArgs = {
   filter?: InputMaybe<SupportUserFilter>;
 };
+
 
 export type QueryGetSupportUsersArgs = {
   filter?: InputMaybe<SupportUserFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetSupportUsersLengthArgs = {
   filter?: InputMaybe<SupportUserFilter>;
 };
 
+
 export type QueryGetTailoringRuleArgs = {
   filter?: InputMaybe<TailoringRuleFilter>;
 };
+
 
 export type QueryGetTailoringRulesArgs = {
   filter?: InputMaybe<TailoringRuleFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetTailoringRulesLengthArgs = {
   filter?: InputMaybe<TailoringRuleFilter>;
 };
 
+
 export type QueryGetTakenViewingSlotsArgs = {
-  from?: InputMaybe<Scalars["DateTime"]["input"]>;
-  propertyId: Scalars["ID"]["input"];
-  to?: InputMaybe<Scalars["DateTime"]["input"]>;
+  from?: InputMaybe<Scalars['DateTime']['input']>;
+  propertyId: Scalars['ID']['input'];
+  to?: InputMaybe<Scalars['DateTime']['input']>;
 };
+
 
 export type QueryGetTempProjectArgs = {
   filter?: InputMaybe<TempProjectFilter>;
 };
+
 
 export type QueryGetTempProjectsArgs = {
   filter?: InputMaybe<TempProjectFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetTempProjectsLengthArgs = {
   filter?: InputMaybe<TempProjectFilter>;
 };
 
+
 export type QueryGetTermSheetArgs = {
   filter?: InputMaybe<TermSheetFilter>;
 };
+
 
 export type QueryGetTermSheetsArgs = {
   filter?: InputMaybe<TermSheetFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetTermSheetsLengthArgs = {
   filter?: InputMaybe<TermSheetFilter>;
 };
+
 
 export type QueryGetTicketArgs = {
   filter?: InputMaybe<TicketFilter>;
 };
 
+
 export type QueryGetTicketCommentsArgs = {
   pagination?: InputMaybe<Pagination>;
-  ticketId: Scalars["ID"]["input"];
+  ticketId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetTicketsArgs = {
   filter?: InputMaybe<TicketFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetTicketsLengthArgs = {
   filter?: InputMaybe<TicketFilter>;
 };
 
+
 export type QueryGetTokenEventsArgs = {
-  offerRequestId: Scalars["ID"]["input"];
+  offerRequestId: Scalars['ID']['input'];
 };
 
+
 export type QueryGetTokenEventsByBorrowerArgs = {
-  borrowerId: Scalars["ID"]["input"];
+  borrowerId: Scalars['ID']['input'];
 };
+
 
 export type QueryGetTransactionArgs = {
   filter?: InputMaybe<TransactionFilter>;
 };
 
+
 export type QueryGetTransactionVolumeSeriesArgs = {
   range: DashboardRange;
 };
+
 
 export type QueryGetTransactionsArgs = {
   filter?: InputMaybe<TransactionFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetTransactionsLengthArgs = {
   filter?: InputMaybe<TransactionFilter>;
 };
 
+
 export type QueryGetTransferArgs = {
   filter: TransferFilter;
 };
+
 
 export type QueryGetTransfersArgs = {
   filter?: InputMaybe<TransferFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetTransfersLengthArgs = {
   filter?: InputMaybe<TransferFilter>;
 };
 
+
 export type QueryGetUserArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type QueryGetUserPolicyArgs = {
   role: UserPolicyRole;
 };
+
 
 export type QueryGetUsersArgs = {
   filter?: InputMaybe<UserFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetUsersLengthArgs = {
   filter?: InputMaybe<UserFilter>;
 };
 
+
 export type QueryGetWalletAccountArgs = {
   ownerType?: InputMaybe<PayoutAccountOwner>;
 };
+
 
 export type QueryGetWalletTransactionsArgs = {
   kind?: InputMaybe<WalletTxnKind>;
@@ -9430,19 +10447,22 @@ export type QueryGetWalletTransactionsArgs = {
   pagination?: InputMaybe<Pagination>;
 };
 
-export type RateType = "FIXED" | "FLOATING" | "VARIABLE";
+export type RateType =
+  | 'FIXED'
+  | 'FLOATING'
+  | 'VARIABLE';
 
 export type RecentActivity = {
-  __typename?: "RecentActivity";
-  actorId?: Maybe<Scalars["ID"]["output"]>;
-  actorName?: Maybe<Scalars["String"]["output"]>;
-  createdAt: Scalars["DateTime"]["output"];
-  entityId?: Maybe<Scalars["ID"]["output"]>;
-  entityType?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  metadata?: Maybe<Scalars["JSONObject"]["output"]>;
-  subtitle: Scalars["String"]["output"];
-  title: Scalars["String"]["output"];
+  __typename?: 'RecentActivity';
+  actorId?: Maybe<Scalars['ID']['output']>;
+  actorName?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  entityId?: Maybe<Scalars['ID']['output']>;
+  entityType?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  metadata?: Maybe<Scalars['JSONObject']['output']>;
+  subtitle: Scalars['String']['output'];
+  title: Scalars['String']['output'];
   type: RecentActivityType;
 };
 
@@ -9453,15 +10473,20 @@ export type RecentActivityFilter = {
   types?: InputMaybe<Array<RecentActivityType>>;
 };
 
-export type RecentActivityType = "LEGAL" | "PROPERTY" | "TICKET" | "TRANSACTION" | "VERIFICATION";
+export type RecentActivityType =
+  | 'LEGAL'
+  | 'PROPERTY'
+  | 'TICKET'
+  | 'TRANSACTION'
+  | 'VERIFICATION';
 
 export type ReleaseTokensToBuyerInput = {
   /** Amount to release; defaults to the loan's remaining escrowed token balance. */
-  amount?: InputMaybe<Scalars["Float"]["input"]>;
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  offerRequestId: Scalars["ID"]["input"];
+  amount?: InputMaybe<Scalars['Float']['input']>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  offerRequestId: Scalars['ID']['input'];
   /** On-chain reference for the release, when the lender has one. Omit rather than invent. */
-  txRef?: InputMaybe<Scalars["String"]["input"]>;
+  txRef?: InputMaybe<Scalars['String']['input']>;
 };
 
 /**
@@ -9471,11 +10496,11 @@ export type ReleaseTokensToBuyerInput = {
  */
 export type RentAgreementStatus =
   /** Uploaded, vendor-only. The buyer cannot see it or its URL. */
-  | "draft"
+  | 'draft'
   /** Countersigned by the vendor as Landlord — the agreement is executed. */
-  | "executed"
+  | 'executed'
   /** Sent to the buyer. Either or both signatures may already be recorded. */
-  | "sent";
+  | 'sent';
 
 /**
  * The buyer asking to complete early (§7B).
@@ -9484,14 +10509,14 @@ export type RentAgreementStatus =
  * raised again without the deal moving.
  */
 export type RentBuyoutRequest = {
-  __typename?: "RentBuyoutRequest";
-  decidedAt?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'RentBuyoutRequest';
+  decidedAt?: Maybe<Scalars['String']['output']>;
   /** Shown to the buyer verbatim. */
-  declineReason?: Maybe<Scalars["String"]["output"]>;
-  note?: Maybe<Scalars["String"]["output"]>;
-  requestedAt: Scalars["String"]["output"];
+  declineReason?: Maybe<Scalars['String']['output']>;
+  note?: Maybe<Scalars['String']['output']>;
+  requestedAt: Scalars['String']['output'];
   /** pending | approved | declined */
-  status: Scalars["String"]["output"];
+  status: Scalars['String']['output'];
 };
 
 /**
@@ -9503,13 +10528,13 @@ export type RentBuyoutRequest = {
  * vendor's available ACTION, never this list.
  */
 export type RentDefaultNotice = {
-  __typename?: "RentDefaultNotice";
-  id: Scalars["ID"]["output"];
-  issuedAt: Scalars["String"]["output"];
+  __typename?: 'RentDefaultNotice';
+  id: Scalars['ID']['output'];
+  issuedAt: Scalars['String']['output'];
   /** Payments outstanding when it was issued — snapshotted, not recomputed. */
-  missed: Scalars["Int"]["output"];
+  missed: Scalars['Int']['output'];
   /** The vendor's own words, shown to the tenant verbatim. */
-  note?: Maybe<Scalars["String"]["output"]>;
+  note?: Maybe<Scalars['String']['output']>;
   step: RentDefaultStep;
 };
 
@@ -9519,26 +10544,26 @@ export type RentDefaultNotice = {
  * signed with. `current` is not a rung — it is the absence of one.
  */
 export type RentDefaultStep =
-  | "current"
+  | 'current'
   /** 2 missed — the vendor may serve the final warning. */
-  | "final_warning"
+  | 'final_warning'
   /** 3+ missed — the vendor may terminate and recover possession. */
-  | "termination"
+  | 'termination'
   /** 1 payment missed — the vendor may serve a warning to pay. */
-  | "warning";
+  | 'warning';
 
 /** A vendor-filed record hanging off the deal. */
 export type RentDocument = {
-  __typename?: "RentDocument";
-  documentUrl: Scalars["String"]["output"];
-  fileName: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
+  __typename?: 'RentDocument';
+  documentUrl: Scalars['String']['output'];
+  fileName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   /** receipt | invoice | annex */
-  kind: Scalars["String"]["output"];
+  kind: Scalars['String']['output'];
   /** Required on an annex — it is how the buyer tells them apart. */
-  label?: Maybe<Scalars["String"]["output"]>;
-  uploadedAt: Scalars["String"]["output"];
-  uploadedBy: Scalars["String"]["output"];
+  label?: Maybe<Scalars['String']['output']>;
+  uploadedAt: Scalars['String']['output'];
+  uploadedBy: Scalars['String']['output'];
 };
 
 /**
@@ -9555,15 +10580,15 @@ export type RentDocument = {
  * confirms the transfer, then `confirmed`. A refused transfer puts the stage back.
  */
 export type RentEscrowLeg = {
-  __typename?: "RentEscrowLeg";
-  amount: Scalars["Float"]["output"];
-  confirmedAt?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  instructedAt: Scalars["String"]["output"];
+  __typename?: 'RentEscrowLeg';
+  amount: Scalars['Float']['output'];
+  confirmedAt?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  instructedAt: Scalars['String']['output'];
   /** reservation_fee | option_fee */
-  purpose: Scalars["String"]["output"];
+  purpose: Scalars['String']['output'];
   /** pending | confirmed */
-  status: Scalars["String"]["output"];
+  status: Scalars['String']['output'];
 };
 
 /**
@@ -9574,20 +10599,20 @@ export type RentEscrowLeg = {
  * count of `paid` rows is what earns the right to buy (§2.2).
  */
 export type RentPayment = {
-  __typename?: "RentPayment";
+  __typename?: 'RentPayment';
   /**
    * The agreed rent for this month — plan.monthlyRent when nothing has been
    * confirmed, and the figure actually taken once the month is paid. No split, no
    * credit component.
    */
-  amount: Scalars["Float"]["output"];
+  amount: Scalars['Float']['output'];
   /**
    * The vendor's confirmed figure for this month, when one governs it. Null when
    * the vendor confirmed nothing for the period — which is the ordinary case, and
    * means the agreed rent stands.
    */
-  confirmedAmount?: Maybe<Scalars["Float"]["output"]>;
-  dueDate: Scalars["String"]["output"];
+  confirmedAmount?: Maybe<Scalars['Float']['output']>;
+  dueDate: Scalars['String']['output'];
   /**
    * What the tenant owes for this month: confirmedAmount ?? the agreed rent.
    *
@@ -9596,18 +10621,18 @@ export type RentPayment = {
    * could disagree about what is owed while the wallet settled the argument.
    * Show this, not `amount`.
    */
-  effectiveAmount: Scalars["Float"]["output"];
-  id: Scalars["ID"]["output"];
+  effectiveAmount: Scalars['Float']['output'];
+  id: Scalars['ID']['output'];
   /** 1-based, in schedule order. */
-  index: Scalars["Int"]["output"];
-  paidAt?: Maybe<Scalars["String"]["output"]>;
+  index: Scalars['Int']['output'];
+  paidAt?: Maybe<Scalars['String']['output']>;
   /**
    * due | paid | late | processing. `processing`: the month's rent has been sent
    * to the vendor's payout account as a bank transfer and the bank has not
    * confirmed it yet — show it as being paid; it counts as neither paid nor
    * missed, and becomes `paid`, or goes back to what it was if the bank refuses.
    */
-  status: Scalars["String"]["output"];
+  status: Scalars['String']['output'];
 };
 
 /**
@@ -9618,8 +10643,8 @@ export type RentPayment = {
  * not price their property. There is no band validation on any of them.
  */
 export type RentPlan = {
-  __typename?: "RentPlan";
-  acceptedAt?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'RentPlan';
+  acceptedAt?: Maybe<Scalars['String']['output']>;
   /**
    * What they pay to take title after a full term. Fixed at signing and never
    * rewritten — an early completion is quoted separately in `settlement.amount`,
@@ -9628,16 +10653,16 @@ export type RentPlan = {
    * Nothing is netted off it. The option fee is not credited against it (§2.3)
    * and the rent certainly is not (§2.1), so this figure is what it says.
    */
-  buyPrice: Scalars["Float"]["output"];
+  buyPrice: Scalars['Float']['output'];
   /** vendor | buyer */
-  insurance: Scalars["String"]["output"];
+  insurance: Scalars['String']['output'];
   /** vendor | buyer */
-  maintenance: Scalars["String"]["output"];
+  maintenance: Scalars['String']['output'];
   /**
    * Rent IN FULL. NOTHING is credited to the price — there is no equity portion,
    * and there must never be a companion field carrying one (§2.1).
    */
-  monthlyRent: Scalars["Float"]["output"];
+  monthlyRent: Scalars['Float']['output'];
   /**
    * Default 6 × monthlyRent, vendor-editable. CONSIDERATION, not a deposit: it
    * buys the right to purchase at a fixed price and is NOT credited toward
@@ -9648,10 +10673,10 @@ export type RentPlan = {
    * setting a lower buyPrice — not by the server netting it off, which would put
    * AFRAM's arithmetic between two figures the parties agreed themselves.
    */
-  optionFee: Scalars["Float"]["output"];
-  proposedAt: Scalars["String"]["output"];
+  optionFee: Scalars['Float']['output'];
+  proposedAt: Scalars['String']['output'];
   /** Default 60, vendor-editable. What confirmRentFullyPaid counts against. */
-  termMonths: Scalars["Int"]["output"];
+  termMonths: Scalars['Int']['output'];
 };
 
 /**
@@ -9664,12 +10689,12 @@ export type RentPlan = {
  * numbers stay on the record (§2.5).
  */
 export type RentSettlement = {
-  __typename?: "RentSettlement";
-  amount: Scalars["Float"]["output"];
+  __typename?: 'RentSettlement';
+  amount: Scalars['Float']['output'];
   /** The breakdown — fees, rates, legal. */
-  note?: Maybe<Scalars["String"]["output"]>;
-  paidAt?: Maybe<Scalars["String"]["output"]>;
-  setAt: Scalars["String"]["output"];
+  note?: Maybe<Scalars['String']['output']>;
+  paidAt?: Maybe<Scalars['String']['output']>;
+  setAt: Scalars['String']['output'];
 };
 
 /**
@@ -9677,42 +10702,42 @@ export type RentSettlement = {
  * flows' SellerSpaSignature — the buyer signs as Tenant, the vendor as Landlord.
  */
 export type RentSignature = {
-  __typename?: "RentSignature";
+  __typename?: 'RentSignature';
   /** The address the signature was made from, captured server-side. */
-  ip?: Maybe<Scalars["String"]["output"]>;
-  name: Scalars["String"]["output"];
+  ip?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
   /**
    * The signer's mark, when they drew one or uploaded a scan rather than only
    * typing their name. Null for a typed signature.
    */
-  signatureImageUrl?: Maybe<Scalars["String"]["output"]>;
+  signatureImageUrl?: Maybe<Scalars['String']['output']>;
   signatureKind?: Maybe<SignatureKind>;
-  signedAt: Scalars["String"]["output"];
-  signedCopyUrl?: Maybe<Scalars["String"]["output"]>;
+  signedAt: Scalars['String']['output'];
+  signedCopyUrl?: Maybe<Scalars['String']['output']>;
 };
 
 /** The 17-stage rent-to-buy lifecycle. Values match the frontend's RentToBuyStage. */
 export type RentToBuyStage =
-  | "closed"
-  | "commitment_deposit_paid"
-  | "completion_conditions_confirmed"
-  | "diligence_complete"
+  | 'closed'
+  | 'commitment_deposit_paid'
+  | 'completion_conditions_confirmed'
+  | 'diligence_complete'
   /** Both parties confirmed the inspection, or the buyer waived it (AFR-229). */
-  | "inspection_complete"
-  | "occupancy_commenced"
-  | "option_exercised"
-  | "option_fee_funded"
-  | "option_fee_released"
-  | "rent_agreement_issued"
-  | "rent_agreement_signed"
-  | "rent_plan_accepted"
-  | "rent_plan_proposed"
+  | 'inspection_complete'
+  | 'occupancy_commenced'
+  | 'option_exercised'
+  | 'option_fee_funded'
+  | 'option_fee_released'
+  | 'rent_agreement_issued'
+  | 'rent_agreement_signed'
+  | 'rent_plan_accepted'
+  | 'rent_plan_proposed'
   /** Where the deal sits for the whole term. The option is exercised out of it. */
-  | "renting"
-  | "request_submitted"
-  | "title_transferred"
-  | "under_review"
-  | "withdrawal_window_closed";
+  | 'renting'
+  | 'request_submitted'
+  | 'title_transferred'
+  | 'under_review'
+  | 'withdrawal_window_closed';
 
 /**
  * Four ways to end and only one of them is completion. Both non-completions leave
@@ -9720,12 +10745,12 @@ export type RentToBuyStage =
  * should show where — while `status` records that it stopped.
  */
 export type RentToBuyStatus =
-  | "active"
-  | "closed"
+  | 'active'
+  | 'closed'
   /** A live tenancy ended on the default ladder. Nothing is returned. */
-  | "terminated"
+  | 'terminated'
   /** Before anyone is committed — the withdrawal window at `diligence_complete`. */
-  | "withdrawn";
+  | 'withdrawn';
 
 /**
  * The listing's published indicative rent-to-buy terms, snapshotted at placement
@@ -9737,35 +10762,35 @@ export type RentToBuyStatus =
  * them. Nothing downstream of placement validates a proposed plan against this.
  */
 export type RentToBuyTerms = {
-  __typename?: "RentToBuyTerms";
+  __typename?: 'RentToBuyTerms';
   /** Platform default 60. */
-  defaultTermMonths: Scalars["Int"]["output"];
+  defaultTermMonths: Scalars['Int']['output'];
   /** Defaults to the asking price. */
-  indicativeBuyPrice: Scalars["Float"]["output"];
+  indicativeBuyPrice: Scalars['Float']['output'];
   /** The vendor's published guide, or null when they never set one. */
-  indicativeMonthlyRent?: Maybe<Scalars["Float"]["output"]>;
+  indicativeMonthlyRent?: Maybe<Scalars['Float']['output']>;
   /** Platform default 6 — the option fee is this many months' rent. */
-  optionFeeMonths: Scalars["Int"]["output"];
+  optionFeeMonths: Scalars['Int']['output'];
 };
 
 export type RentToBuyTxn = {
-  __typename?: "RentToBuyTxn";
+  __typename?: 'RentToBuyTxn';
   /**
    * missedPayments × plan.monthlyRent.
    *
    * ⚠ This is what is OVERDUE NOW, and it falls to zero when the arrears clear. It
    * is not a balance, and nothing on this deal accrues one.
    */
-  arrears: Scalars["Float"]["output"];
+  arrears: Scalars['Float']['output'];
   /** The tenant, who becomes the buyer only if they exercise the option. */
   buyer?: Maybe<User>;
   /** Signs as Tenant. Recorded first, and does NOT execute the agreement. */
   buyerSignature?: Maybe<RentSignature>;
   buyoutRequest?: Maybe<RentBuyoutRequest>;
-  createdAt: Scalars["String"]["output"];
+  createdAt: Scalars['String']['output'];
   /** REUSED from the vendor flow — same type, same 'AFRAM never scores' rule. */
   creditDecision?: Maybe<SellerCreditDecision>;
-  currency: Scalars["String"]["output"];
+  currency: Scalars['String']['output'];
   defaultNotices: Array<RentDefaultNotice>;
   /** The rung those arrears reach. Follows missedPayments back down when they clear. */
   defaultStep: RentDefaultStep;
@@ -9776,8 +10801,8 @@ export type RentToBuyTxn = {
   /** REUSED shape — the stepper's history and the audit trail read from it. */
   events?: Maybe<Array<SellerStageEvent>>;
   /** The vendor's confirmation that the full term was served — unlocks Buy Now. */
-  fullyPaidConfirmedAt?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
+  fullyPaidConfirmedAt?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
   /** §2.1-2.3. Null on deals placed before the inspection contract shipped. */
   inspection?: Maybe<TransactionInspection>;
   /** The vendor — landlord for the term, seller at the end. */
@@ -9785,12 +10810,12 @@ export type RentToBuyTxn = {
   /** Countersigns as Landlord — the executing signature. */
   issuerSignature?: Maybe<RentSignature>;
   /** Payments `late`, or unpaid with a due date in the past. Outstanding NOW. */
-  missedPayments: Scalars["Int"]["output"];
+  missedPayments: Scalars['Int']['output'];
   /** Keys changed hands. Title did not move. */
-  occupancyStartedAt?: Maybe<Scalars["String"]["output"]>;
+  occupancyStartedAt?: Maybe<Scalars['String']['output']>;
   /** The RENT_TO_BUY offer request created at placement. The chat anchor. */
-  offerRequestId?: Maybe<Scalars["ID"]["output"]>;
-  optionExercisedAt?: Maybe<Scalars["String"]["output"]>;
+  offerRequestId?: Maybe<Scalars['ID']['output']>;
+  optionExercisedAt?: Maybe<Scalars['String']['output']>;
   /**
    * The whole schedule, every row, ordered by `index`.
    *
@@ -9810,45 +10835,45 @@ export type RentToBuyTxn = {
    * `confirmRentFullyPaid` compares against `plan.termMonths`, so the two sides
    * read one figure instead of two that have to agree.
    */
-  paymentsMade: Scalars["Int"]["output"];
+  paymentsMade: Scalars['Int']['output'];
   plan?: Maybe<RentPlan>;
   /** The name the buyer typed to accept the plan. */
-  planAcceptedBy?: Maybe<Scalars["String"]["output"]>;
+  planAcceptedBy?: Maybe<Scalars['String']['output']>;
   /** The unit being rented, then bought. Read live, never a snapshot. */
   property?: Maybe<Property>;
   /** Human reference, e.g. RTB-2026-000123 — display this, route on `id`. */
-  reference: Scalars["String"]["output"];
-  rentAgreementSentAt?: Maybe<Scalars["String"]["output"]>;
+  reference: Scalars['String']['output'];
+  rentAgreementSentAt?: Maybe<Scalars['String']['output']>;
   rentAgreementStatus?: Maybe<RentAgreementStatus>;
   /** Null for the buyer while the status is `draft` — a draft is vendor-only. */
-  rentAgreementUrl?: Maybe<Scalars["String"]["output"]>;
+  rentAgreementUrl?: Maybe<Scalars['String']['output']>;
   /** Starts at 1; a revision answering a variation round bumps it. */
-  rentAgreementVersion?: Maybe<Scalars["Int"]["output"]>;
+  rentAgreementVersion?: Maybe<Scalars['Int']['output']>;
   /** Payable before the vendor reviews the request. */
-  reservationFee: Scalars["Float"]["output"];
+  reservationFee: Scalars['Float']['output'];
   settlement?: Maybe<RentSettlement>;
-  signingDeadline?: Maybe<Scalars["String"]["output"]>;
+  signingDeadline?: Maybe<Scalars['String']['output']>;
   stage: RentToBuyStage;
   status: RentToBuyStatus;
   /**
    * Set on status `terminated`, and it is the WHOLE settlement. Rent was rent:
    * there is no refund calculation, no termination fee and no equity to release.
    */
-  terminationReason?: Maybe<Scalars["String"]["output"]>;
+  terminationReason?: Maybe<Scalars['String']['output']>;
   /** The listing's published terms as they stood at placement. */
   terms: RentToBuyTerms;
   /** The BUYER's confirmation that they have them. This is what closes the deal. */
-  titleAcknowledgedAt?: Maybe<Scalars["String"]["output"]>;
-  titleAcknowledgedBy?: Maybe<Scalars["String"]["output"]>;
+  titleAcknowledgedAt?: Maybe<Scalars['String']['output']>;
+  titleAcknowledgedBy?: Maybe<Scalars['String']['output']>;
   /** The vendor's assertion that they posted the documents. */
-  titleTransferredAt?: Maybe<Scalars["String"]["output"]>;
+  titleTransferredAt?: Maybe<Scalars['String']['output']>;
   /** The property price, vendor-set. */
-  unitPrice: Scalars["Float"]["output"];
-  updatedAt: Scalars["String"]["output"];
+  unitPrice: Scalars['Float']['output'];
+  updatedAt: Scalars['String']['output'];
   /** Append-only rounds; at most ONE open at a time. */
   variations?: Maybe<Array<RentVariation>>;
   /** Set on status `withdrawn`. */
-  withdrawReason?: Maybe<Scalars["String"]["output"]>;
+  withdrawReason?: Maybe<Scalars['String']['output']>;
 };
 
 /**
@@ -9865,216 +10890,259 @@ export type RentToBuyTxn = {
  * and hold card take it structurally.
  */
 export type RentVariation = {
-  __typename?: "RentVariation";
+  __typename?: 'RentVariation';
   /** On `revised`: the agreement version that answered this round. */
-  documentVersion?: Maybe<Scalars["Int"]["output"]>;
-  id: Scalars["ID"]["output"];
-  note: Scalars["String"]["output"];
-  requestedAt: Scalars["String"]["output"];
-  requestedByName: Scalars["String"]["output"];
+  documentVersion?: Maybe<Scalars['Int']['output']>;
+  id: Scalars['ID']['output'];
+  note: Scalars['String']['output'];
+  requestedAt: Scalars['String']['output'];
+  requestedByName: Scalars['String']['output'];
   /** Buyer | Issuer */
-  requestedByRole: Scalars["String"]["output"];
+  requestedByRole: Scalars['String']['output'];
   /** Required (>=10 chars) when the round is declined. */
-  resolutionNote?: Maybe<Scalars["String"]["output"]>;
-  resolvedAt?: Maybe<Scalars["String"]["output"]>;
+  resolutionNote?: Maybe<Scalars['String']['output']>;
+  resolvedAt?: Maybe<Scalars['String']['output']>;
   /** 1-based, in request order. */
-  round: Scalars["Int"]["output"];
+  round: Scalars['Int']['output'];
   status: RentVariationStatus;
 };
 
 /** A variation round is open until the vendor either revises or declines it. */
 export type RentVariationStatus =
   /** Answered with a reason; the document stands as sent. */
-  | "declined"
-  | "open"
+  | 'declined'
+  | 'open'
   /** Answered by a new version of the agreement. */
-  | "revised";
+  | 'revised';
 
 export type Repayment = {
-  __typename?: "Repayment";
-  conversationId?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  createdById?: Maybe<Scalars["ID"]["output"]>;
-  createdForId?: Maybe<Scalars["ID"]["output"]>;
-  id: Scalars["ID"]["output"];
-  interestRate?: Maybe<Scalars["Float"]["output"]>;
-  interestRateBps?: Maybe<Scalars["Int"]["output"]>;
-  interestRateKind?: Maybe<Scalars["String"]["output"]>;
-  isSubscribedToReferenceRate?: Maybe<Scalars["Boolean"]["output"]>;
-  loanId?: Maybe<Scalars["ID"]["output"]>;
-  metadata?: Maybe<Scalars["JSONObject"]["output"]>;
-  offerRequestId?: Maybe<Scalars["ID"]["output"]>;
-  principalMinor?: Maybe<Scalars["String"]["output"]>;
-  propertyId?: Maybe<Scalars["ID"]["output"]>;
-  repaymentFrequency?: Maybe<Scalars["String"]["output"]>;
-  repaymentTerms?: Maybe<Scalars["JSONObject"]["output"]>;
-  scheduleType?: Maybe<Scalars["String"]["output"]>;
-  totalInterestMinor?: Maybe<Scalars["String"]["output"]>;
-  totalRepaymentMinor?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  __typename?: 'Repayment';
+  conversationId?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  createdById?: Maybe<Scalars['ID']['output']>;
+  createdForId?: Maybe<Scalars['ID']['output']>;
+  id: Scalars['ID']['output'];
+  interestRate?: Maybe<Scalars['Float']['output']>;
+  interestRateBps?: Maybe<Scalars['Int']['output']>;
+  interestRateKind?: Maybe<Scalars['String']['output']>;
+  isSubscribedToReferenceRate?: Maybe<Scalars['Boolean']['output']>;
+  loanId?: Maybe<Scalars['ID']['output']>;
+  metadata?: Maybe<Scalars['JSONObject']['output']>;
+  offerRequestId?: Maybe<Scalars['ID']['output']>;
+  principalMinor?: Maybe<Scalars['String']['output']>;
+  propertyId?: Maybe<Scalars['ID']['output']>;
+  repaymentFrequency?: Maybe<Scalars['String']['output']>;
+  repaymentTerms?: Maybe<Scalars['JSONObject']['output']>;
+  scheduleType?: Maybe<Scalars['String']['output']>;
+  totalInterestMinor?: Maybe<Scalars['String']['output']>;
+  totalRepaymentMinor?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type RepaymentFilter = {
-  conversationId?: InputMaybe<Scalars["ID"]["input"]>;
-  createdById?: InputMaybe<Scalars["ID"]["input"]>;
-  id?: InputMaybe<Scalars["ID"]["input"]>;
-  scheduleType?: InputMaybe<Scalars["String"]["input"]>;
+  conversationId?: InputMaybe<Scalars['ID']['input']>;
+  createdById?: InputMaybe<Scalars['ID']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  scheduleType?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type RepaymentFrequency =
-  "ANNUALLY" | "BI_WEEKLY" | "MONTHLY" | "QUARTERLY" | "SEMI_ANNUALLY" | "WEEKLY";
+  | 'ANNUALLY'
+  | 'BI_WEEKLY'
+  | 'MONTHLY'
+  | 'QUARTERLY'
+  | 'SEMI_ANNUALLY'
+  | 'WEEKLY';
 
 export type RepaymentInstallment = {
-  __typename?: "RepaymentInstallment";
-  amountFees: Scalars["String"]["output"];
-  amountInterest: Scalars["String"]["output"];
-  amountPaidToDate: Scalars["String"]["output"];
-  amountPrincipal: Scalars["String"]["output"];
-  amountTotal: Scalars["String"]["output"];
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  currency: Scalars["String"]["output"];
-  dueDate: Scalars["String"]["output"];
+  __typename?: 'RepaymentInstallment';
+  amountFees: Scalars['String']['output'];
+  amountInterest: Scalars['String']['output'];
+  amountPaidToDate: Scalars['String']['output'];
+  amountPrincipal: Scalars['String']['output'];
+  amountTotal: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  currency: Scalars['String']['output'];
+  dueDate: Scalars['String']['output'];
   /** Annual effective interest rate, in percent (24.5 = 24.5% a year). Null on installments scheduled before it was captured. */
-  effectiveInterestRate?: Maybe<Scalars["Float"]["output"]>;
-  id: Scalars["ID"]["output"];
-  paidAt?: Maybe<Scalars["DateTime"]["output"]>;
-  refNo: Scalars["String"]["output"];
-  repaymentId: Scalars["ID"]["output"];
-  sequenceNo: Scalars["Int"]["output"];
-  status: Scalars["String"]["output"];
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  effectiveInterestRate?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  paidAt?: Maybe<Scalars['DateTime']['output']>;
+  refNo: Scalars['String']['output'];
+  repaymentId: Scalars['ID']['output'];
+  sequenceNo: Scalars['Int']['output'];
+  status: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
   /** Set when the lender waived what was left on the installment (status `waived`). What was waived is amountTotal less amountPaidToDate. */
-  waivedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  waivedAt?: Maybe<Scalars['DateTime']['output']>;
   /** The lender's reason for the waiver. */
-  waivedReason?: Maybe<Scalars["String"]["output"]>;
+  waivedReason?: Maybe<Scalars['String']['output']>;
 };
 
 export type RepaymentTermChange = {
-  __typename?: "RepaymentTermChange";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  decidedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  decidedBy?: Maybe<Scalars["JSONObject"]["output"]>;
-  decisionComment?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  proposedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  proposedBy?: Maybe<Scalars["JSONObject"]["output"]>;
-  repaymentId: Scalars["ID"]["output"];
-  status: Scalars["String"]["output"];
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  updates: Scalars["JSONObject"]["output"];
+  __typename?: 'RepaymentTermChange';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  decidedAt?: Maybe<Scalars['DateTime']['output']>;
+  decidedBy?: Maybe<Scalars['JSONObject']['output']>;
+  decisionComment?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  proposedAt?: Maybe<Scalars['DateTime']['output']>;
+  proposedBy?: Maybe<Scalars['JSONObject']['output']>;
+  repaymentId: Scalars['ID']['output'];
+  status: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  updates: Scalars['JSONObject']['output'];
 };
 
 export type RepaymentTerms = {
-  __typename?: "RepaymentTerms";
+  __typename?: 'RepaymentTerms';
   defaultFee: DefaultFee;
-  defaultFeeDays: Scalars["Int"]["output"];
-  defaultPenalty: Scalars["Float"]["output"];
-  defaultRemedyFeeAmount: Scalars["Float"]["output"];
-  hasDefaultingPenalties: Scalars["Boolean"]["output"];
-  penaltyAmount: Scalars["Float"]["output"];
-  penaltyPercentage: Scalars["Float"]["output"];
+  defaultFeeDays: Scalars['Int']['output'];
+  defaultPenalty: Scalars['Float']['output'];
+  defaultRemedyFeeAmount: Scalars['Float']['output'];
+  hasDefaultingPenalties: Scalars['Boolean']['output'];
+  penaltyAmount: Scalars['Float']['output'];
+  penaltyPercentage: Scalars['Float']['output'];
   penaltyType: PenaltyType;
-  prepaymentAllowed: Scalars["Boolean"]["output"];
-  prepaymentDays: Scalars["Int"]["output"];
-  prepaymentFeeAmount: Scalars["Float"]["output"];
-  prepaymentFeePercentage: Scalars["Float"]["output"];
+  prepaymentAllowed: Scalars['Boolean']['output'];
+  prepaymentDays: Scalars['Int']['output'];
+  prepaymentFeeAmount: Scalars['Float']['output'];
+  prepaymentFeePercentage: Scalars['Float']['output'];
   prepaymentFeeType: PrepaymentFeeType;
   prepaymentTerms: PrepaymentTerms;
-  remedyDefaultingDays: Scalars["Int"]["output"];
+  remedyDefaultingDays: Scalars['Int']['output'];
 };
 
 export type RepaymentTermsInput = {
   defaultFee?: InputMaybe<DefaultFeeInput>;
-  defaultFeeDays?: InputMaybe<Scalars["Int"]["input"]>;
-  defaultPenalty?: InputMaybe<Scalars["Float"]["input"]>;
-  defaultRemedyFeeAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  hasDefaultingPenalties?: InputMaybe<Scalars["Boolean"]["input"]>;
-  penaltyAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  penaltyPercentage?: InputMaybe<Scalars["Float"]["input"]>;
+  defaultFeeDays?: InputMaybe<Scalars['Int']['input']>;
+  defaultPenalty?: InputMaybe<Scalars['Float']['input']>;
+  defaultRemedyFeeAmount?: InputMaybe<Scalars['Float']['input']>;
+  hasDefaultingPenalties?: InputMaybe<Scalars['Boolean']['input']>;
+  penaltyAmount?: InputMaybe<Scalars['Float']['input']>;
+  penaltyPercentage?: InputMaybe<Scalars['Float']['input']>;
   penaltyType?: InputMaybe<PenaltyType>;
-  prepaymentAllowed?: InputMaybe<Scalars["Boolean"]["input"]>;
-  prepaymentDays?: InputMaybe<Scalars["Int"]["input"]>;
-  prepaymentFeeAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  prepaymentFeePercentage?: InputMaybe<Scalars["Float"]["input"]>;
+  prepaymentAllowed?: InputMaybe<Scalars['Boolean']['input']>;
+  prepaymentDays?: InputMaybe<Scalars['Int']['input']>;
+  prepaymentFeeAmount?: InputMaybe<Scalars['Float']['input']>;
+  prepaymentFeePercentage?: InputMaybe<Scalars['Float']['input']>;
   prepaymentFeeType?: InputMaybe<PrepaymentFeeType>;
   prepaymentTerms?: InputMaybe<PrepaymentTermsInput>;
-  remedyDefaultingDays?: InputMaybe<Scalars["Int"]["input"]>;
+  remedyDefaultingDays?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type RepaymentType = "BOND" | "FIXED_DEPOSIT" | "TRADITIONAL_LOAN";
+export type RepaymentType =
+  | 'BOND'
+  | 'FIXED_DEPOSIT'
+  | 'TRADITIONAL_LOAN';
+
+export type ReplySupportRequestInput = {
+  attachments?: InputMaybe<Array<SupportAttachmentInput>>;
+  /** Up to 4,000 characters. May be empty when files are attached. */
+  body?: InputMaybe<Scalars['String']['input']>;
+  idempotencyKey: Scalars['String']['input'];
+  reference: Scalars['String']['input'];
+  /** `public` goes to the member and is their answer; `internal` stays with staff. */
+  visibility: SupportMessageVisibility;
+};
 
 export type RequestAccessInput = {
-  email: Scalars["String"]["input"];
+  email: Scalars['String']['input'];
   /** 2–120 characters. */
-  fullName: Scalars["String"]["input"];
+  fullName: Scalars['String']['input'];
   /** 7–20 digits; `+ ( ) -` and spaces allowed. */
-  phone: Scalars["String"]["input"];
+  phone: Scalars['String']['input'];
   role: AccessRole;
 };
 
 export type RequestAccessResponse = {
-  __typename?: "RequestAccessResponse";
+  __typename?: 'RequestAccessResponse';
   /** Shown to the person as written. */
-  message: Scalars["String"]["output"];
-  success: Scalars["Boolean"]["output"];
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
 };
 
-export type RequestedRole = "admin" | "agent" | "buyer" | "financier" | "issuer" | "seller";
+export type RequestedRole =
+  | 'admin'
+  | 'agent'
+  | 'buyer'
+  | 'financier'
+  | 'issuer'
+  | 'seller';
 
-export type RequirementLevel = "advisory" | "if_applicable" | "mandatory";
+export type RequirementLevel =
+  | 'advisory'
+  | 'if_applicable'
+  | 'mandatory';
 
 /** The party responsible for satisfying a condition precedent. */
-export type ResponsibleParty = "BORROWER" | "FINANCIER";
+export type ResponsibleParty =
+  | 'BORROWER'
+  | 'FINANCIER';
+
+export type RevaluePropertyInput = {
+  /** The valuer who performed the valuation. */
+  independentValuer: Scalars['String']['input'];
+  /** The new valuation, in the property's currency. Becomes its price. */
+  valuationAmount: Scalars['Float']['input'];
+  /** When the valuation was performed (YYYY-MM-DD). Not in the future. */
+  valuationDate: Scalars['String']['input'];
+};
 
 export type Review = {
-  __typename?: "Review";
-  comment: Scalars["String"]["output"];
-  conversationId?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  id: Scalars["ID"]["output"];
-  propertyId: Scalars["ID"]["output"];
-  rating: Scalars["Int"]["output"];
-  replies?: Maybe<Array<Maybe<Scalars["JSONObject"]["output"]>>>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  user: Scalars["ID"]["output"];
-  userAvatar?: Maybe<Scalars["String"]["output"]>;
-  userName?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'Review';
+  comment: Scalars['String']['output'];
+  conversationId?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  propertyId: Scalars['ID']['output'];
+  rating: Scalars['Int']['output'];
+  replies?: Maybe<Array<Maybe<Scalars['JSONObject']['output']>>>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  user: Scalars['ID']['output'];
+  userAvatar?: Maybe<Scalars['String']['output']>;
+  userName?: Maybe<Scalars['String']['output']>;
 };
 
 export type ReviewFilter = {
-  id?: InputMaybe<Scalars["ID"]["input"]>;
-  propertyId?: InputMaybe<Scalars["ID"]["input"]>;
-  user?: InputMaybe<Scalars["ID"]["input"]>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  propertyId?: InputMaybe<Scalars['ID']['input']>;
+  user?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type ReviewOfferDocumentItem = {
-  id: Scalars["ID"]["input"];
-  notes?: InputMaybe<Scalars["String"]["input"]>;
+  id: Scalars['ID']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
   status: OfferRequestDocumentStatus;
 };
 
-export type RoleFetchType = "dev_buyer" | "financier";
+export type RoleFetchType =
+  | 'dev_buyer'
+  | 'financier';
 
 export type RoleRequest = {
-  __typename?: "RoleRequest";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  documents?: Maybe<Scalars["JSON"]["output"]>;
-  id: Scalars["ID"]["output"];
-  requestedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  __typename?: 'RoleRequest';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  documents?: Maybe<Scalars['JSON']['output']>;
+  id: Scalars['ID']['output'];
+  requestedAt?: Maybe<Scalars['DateTime']['output']>;
   role: RequestedRole;
   status?: Maybe<RoleRequestStatus>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
   user?: Maybe<User>;
-  userId: Scalars["ID"]["output"];
-  verifiedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  userId: Scalars['ID']['output'];
+  verifiedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
-export type RoleRequestStatus = "approved" | "pending" | "rejected";
+export type RoleRequestStatus =
+  | 'approved'
+  | 'pending'
+  | 'rejected';
 
 export type RoleVerifiedPayload = {
-  __typename?: "RoleVerifiedPayload";
-  userType: Scalars["String"]["output"];
-  verified: Scalars["Boolean"]["output"];
+  __typename?: 'RoleVerifiedPayload';
+  userType: Scalars['String']['output'];
+  verified: Scalars['Boolean']['output'];
 };
 
 /**
@@ -10089,25 +11157,27 @@ export type RoleVerifiedPayload = {
  */
 export type SaleAgreementStatus =
   /** Sent to the buyer. Either or both signatures may already be recorded. */
-  | "awaiting_signatures"
+  | 'awaiting_signatures'
   /** Uploaded, issuer-only. The buyer cannot see it or its URL. */
-  | "draft"
+  | 'draft'
   /** Countersigned by the issuer — the agreement is executed. */
-  | "executed"
+  | 'executed'
   /**
    * Withdrawn with no replacement pending. Reserved: `reissueSaleAgreement` voids
    * the round and goes straight back to `draft`, since the issuer is on their way
    * to uploading a corrected copy. Read it, do not expect to see it.
    */
-  | "voided";
+  | 'voided';
 
 export type SaveUserPolicyInput = {
-  data: Scalars["JSON"]["input"];
+  data: Scalars['JSON']['input'];
   role: UserPolicyRole;
-  schemaVersion: Scalars["Int"]["input"];
+  schemaVersion: Scalars['Int']['input'];
 };
 
-export type ScheduleType = "FINANCIER" | "ISSUER";
+export type ScheduleType =
+  | 'FINANCIER'
+  | 'ISSUER';
 
 /**
  * One installment of a repayment schedule, as the financier (or seller-financing
@@ -10115,28 +11185,28 @@ export type ScheduleType = "FINANCIER" | "ISSUER";
  * the whole amount is principal — but when given it must add up to `amount`.
  */
 export type ScheduledInstallmentInput = {
-  amount: Scalars["Float"]["input"];
+  amount: Scalars['Float']['input'];
   /** YYYY-MM-DD. Not in the past; no two installments on the same day. */
-  dueDate: Scalars["String"]["input"];
+  dueDate: Scalars['String']['input'];
   /** Annual effective interest rate, in percent (24.5 = 24.5% a year). Recorded as given; zero or more. */
-  effectiveInterestRate: Scalars["Float"]["input"];
-  fees?: InputMaybe<Scalars["Float"]["input"]>;
-  interest?: InputMaybe<Scalars["Float"]["input"]>;
-  principal?: InputMaybe<Scalars["Float"]["input"]>;
+  effectiveInterestRate: Scalars['Float']['input'];
+  fees?: InputMaybe<Scalars['Float']['input']>;
+  interest?: InputMaybe<Scalars['Float']['input']>;
+  principal?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type SelfieSession = {
-  __typename?: "SelfieSession";
-  expiresAt: Scalars["DateTime"]["output"];
-  id: Scalars["ID"]["output"];
+  __typename?: 'SelfieSession';
+  expiresAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
   /**
    * data:image/jpeg;base64,… (or image/png, image/webp). Present ONLY on
    * SUBMITTED, ONLY to the holder of the key, and ONLY on the first read that
    * finds it: the server deletes the photo as it hands it over.
    */
-  image?: Maybe<Scalars["String"]["output"]>;
+  image?: Maybe<Scalars['String']['output']>;
   status: SelfieSessionStatus;
-  submittedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  submittedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 /**
@@ -10152,7 +11222,12 @@ export type SelfieSessionFilter = {
  * Live selfie hand-off (NIA onboarding §2). The computer opens a session by id =
  * base64url(SHA-256(key)) and reads it back by key; the phone writes by id.
  */
-export type SelfieSessionStatus = "CLOSED" | "EXPIRED" | "OPENED" | "SUBMITTED" | "WAITING";
+export type SelfieSessionStatus =
+  | 'CLOSED'
+  | 'EXPIRED'
+  | 'OPENED'
+  | 'SUBMITTED'
+  | 'WAITING';
 
 /**
  * A buyer's approach to a seller, placed BEFORE any financier is involved
@@ -10173,18 +11248,18 @@ export type SelfieSessionStatus = "CLOSED" | "EXPIRED" | "OPENED" | "SUBMITTED" 
  *     there the deposit became the buyer's equity instead of coming back.
  */
 export type SellerApproach = {
-  __typename?: "SellerApproach";
-  buyerName: Scalars["String"]["output"];
+  __typename?: 'SellerApproach';
+  buyerName: Scalars['String']['output'];
   clock: SlaClock;
   /** Why this approach ended, in the words shown to the party who did not end it. */
-  closedReason?: Maybe<Scalars["String"]["output"]>;
-  createdAt: Scalars["String"]["output"];
-  currency: Scalars["String"]["output"];
+  closedReason?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['String']['output'];
+  currency: Scalars['String']['output'];
   /** Only where the seller chose to give one — declining without a reason is allowed. */
-  declineReason?: Maybe<Scalars["String"]["output"]>;
-  depositAmount: Scalars["Float"]["output"];
+  declineReason?: Maybe<Scalars['String']['output']>;
+  depositAmount: Scalars['Float']['output'];
   /** Resolved from the listing's commitmentDepositPct, or the platform default. */
-  depositPct: Scalars["Float"]["output"];
+  depositPct: Scalars['Float']['output'];
   diligenceItems?: Maybe<Array<ApproachDiligenceItem>>;
   /**
    * Handed over by the seller once they have accepted — the SPA, for now. Empty
@@ -10192,8 +11267,8 @@ export type SellerApproach = {
    */
   documents?: Maybe<Array<ApproachDocument>>;
   escrowEvents?: Maybe<Array<EscrowEvent>>;
-  id: Scalars["ID"]["output"];
-  issuerName?: Maybe<Scalars["String"]["output"]>;
+  id: Scalars['ID']['output'];
+  issuerName?: Maybe<Scalars['String']['output']>;
   /**
    * When the buyer last reminded the seller. Unset until the first reminder.
    *
@@ -10201,33 +11276,33 @@ export type SellerApproach = {
    * opening for the first reminder, then one per 24 hours. The server enforces it
    * either way.
    */
-  lastNudgeAt?: Maybe<Scalars["String"]["output"]>;
+  lastNudgeAt?: Maybe<Scalars['String']['output']>;
   /** The requests placed once converted. Empty until then. */
-  offerRequestIds?: Maybe<Array<Scalars["ID"]["output"]>>;
+  offerRequestIds?: Maybe<Array<Scalars['ID']['output']>>;
   /** Deposit cleared and the seller was notified. The phase begins here. */
-  openedAt?: Maybe<Scalars["String"]["output"]>;
-  projectName?: Maybe<Scalars["String"]["output"]>;
-  propertyId: Scalars["ID"]["output"];
-  propertyImage?: Maybe<Scalars["String"]["output"]>;
-  propertyName: Scalars["String"]["output"];
+  openedAt?: Maybe<Scalars['String']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
+  propertyId: Scalars['ID']['output'];
+  propertyImage?: Maybe<Scalars['String']['output']>;
+  propertyName: Scalars['String']['output'];
   /**
    * True when the phase is complete enough to convert: the deposit is confirmed
    * AND all three property-pack categories carry at least one file. The buyer's
    * convert button reads this rather than re-deriving it.
    */
-  readyToConvert: Scalars["Boolean"]["output"];
+  readyToConvert: Scalars['Boolean']['output'];
   /** Human-facing code — display this, route on `id`. */
-  reference?: Maybe<Scalars["String"]["output"]>;
+  reference?: Maybe<Scalars['String']['output']>;
   /** Total returned on a closed approach. Null while nothing has been returned. */
-  refundedAmount?: Maybe<Scalars["Float"]["output"]>;
-  respondedAt?: Maybe<Scalars["String"]["output"]>;
+  refundedAmount?: Maybe<Scalars['Float']['output']>;
+  respondedAt?: Maybe<Scalars['String']['output']>;
   /**
    * awaiting_payment | awaiting_seller | accepted | declined | lapsed |
    * superseded | withdrawn | converted
    */
-  status: Scalars["String"]["output"];
-  unitPrice: Scalars["Float"]["output"];
-  updatedAt: Scalars["String"]["output"];
+  status: Scalars['String']['output'];
+  unitPrice: Scalars['Float']['output'];
+  updatedAt: Scalars['String']['output'];
 };
 
 /**
@@ -10236,19 +11311,19 @@ export type SellerApproach = {
  * the issuer says they relied on.
  */
 export type SellerCreditDecision = {
-  __typename?: "SellerCreditDecision";
+  __typename?: 'SellerCreditDecision';
   /**
    * diligence_documents | assessment_documents | income_evidence | own_checks |
    * existing_relationship
    */
-  basis: Array<Scalars["String"]["output"]>;
-  decidedAt: Scalars["String"]["output"];
+  basis: Array<Scalars['String']['output']>;
+  decidedAt: Scalars['String']['output'];
   /** Snapshotted display name — a later rename never rewrites a recorded decision. */
-  decidedByName: Scalars["String"]["output"];
+  decidedByName: Scalars['String']['output'];
   /** Required (>=10 chars) unless the outcome is `approved`. */
-  note?: Maybe<Scalars["String"]["output"]>;
+  note?: Maybe<Scalars['String']['output']>;
   /** approved | approved_with_conditions | declined */
-  outcome: Scalars["String"]["output"];
+  outcome: Scalars['String']['output'];
 };
 
 /**
@@ -10258,10 +11333,10 @@ export type SellerCreditDecision = {
  * `requested`, optional ones at `not_requested` for the requester to open.
  */
 export type SellerDiligenceDocument = {
-  __typename?: "SellerDiligenceDocument";
-  documentUrl: Scalars["String"]["output"];
-  fileName: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
+  __typename?: 'SellerDiligenceDocument';
+  documentUrl: Scalars['String']['output'];
+  fileName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   /**
    * `upload` when someone supplied it against this request; `listing`,
    * `portfolio`, `approach` or `compliance` when the platform attached a document it already held rather
@@ -10269,34 +11344,34 @@ export type SellerDiligenceDocument = {
    * submitted a file of theirs Afram already held — verified in their readiness
    * assessment, or accepted on an earlier deal.
    */
-  source: Scalars["String"]["output"];
+  source: Scalars['String']['output'];
   /** One line saying where a carried-over file came from. Null on an upload. */
-  sourceNote?: Maybe<Scalars["String"]["output"]>;
-  uploadedAt: Scalars["String"]["output"];
+  sourceNote?: Maybe<Scalars['String']['output']>;
+  uploadedAt: Scalars['String']['output'];
   /** Buyer | Issuer */
-  uploadedBy: Scalars["String"]["output"];
+  uploadedBy: Scalars['String']['output'];
 };
 
 export type SellerDiligenceItem = {
-  __typename?: "SellerDiligenceItem";
+  __typename?: 'SellerDiligenceItem';
   /**
    * Catalogue id, shared verbatim with the frontend's category constant, or
    * `other:<direction>` on an ad-hoc request.
    */
-  categoryId: Scalars["String"]["output"];
+  categoryId: Scalars['String']['output'];
   /** Ad-hoc requests only. */
-  customLabel?: Maybe<Scalars["String"]["output"]>;
+  customLabel?: Maybe<Scalars['String']['output']>;
   /** Ad-hoc requests only. */
-  customNote?: Maybe<Scalars["String"]["output"]>;
+  customNote?: Maybe<Scalars['String']['output']>;
   /**
    * issuer_to_buyer | buyer_to_issuer — the direction of the REQUEST, not of the
    * documents. `issuer_to_buyer` is the issuer asking the buyer: the issuer
    * requests and receives, the buyer responds and supplies.
    */
-  direction: Scalars["String"]["output"];
+  direction: Scalars['String']['output'];
   documents?: Maybe<Array<SellerDiligenceDocument>>;
-  documentsCount?: Maybe<Scalars["Int"]["output"]>;
-  id: Scalars["ID"]["output"];
+  documentsCount?: Maybe<Scalars['Int']['output']>;
+  id: Scalars['ID']['output'];
   /**
    * The buyer's own documents already on file that answer this ask — verified in
    * their readiness assessment, or accepted by a seller on an earlier deal. Offer
@@ -10309,12 +11384,12 @@ export type SellerDiligenceItem = {
    */
   onFile: Array<HeldDocument>;
   /** What the requester said needs addressing. Set while status is `queried`. */
-  query?: Maybe<Scalars["String"]["output"]>;
+  query?: Maybe<Scalars['String']['output']>;
   /** not_requested | requested | submitted | queried | accepted | waived */
-  status: Scalars["String"]["output"];
-  updatedAt?: Maybe<Scalars["String"]["output"]>;
+  status: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['String']['output']>;
   /** Why the requester let this go. Set when status is `waived`. */
-  waiverReason?: Maybe<Scalars["String"]["output"]>;
+  waiverReason?: Maybe<Scalars['String']['output']>;
 };
 
 /**
@@ -10332,15 +11407,15 @@ export type SellerDiligenceItem = {
  * empty list that nothing was paid.
  */
 export type SellerEscrowEvent = {
-  __typename?: "SellerEscrowEvent";
-  amount: Scalars["Float"]["output"];
-  confirmedAt?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'SellerEscrowEvent';
+  amount: Scalars['Float']['output'];
+  confirmedAt?: Maybe<Scalars['String']['output']>;
   /** in (buyer → escrow) | out (escrow → issuer) */
-  direction: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
-  instructedAt: Scalars["String"]["output"];
-  providerName?: Maybe<Scalars["String"]["output"]>;
-  providerReference?: Maybe<Scalars["String"]["output"]>;
+  direction: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  instructedAt: Scalars['String']['output'];
+  providerName?: Maybe<Scalars['String']['output']>;
+  providerReference?: Maybe<Scalars['String']['output']>;
   /**
    * commitment_deposit | down_payment | release_to_issuer.
    *
@@ -10348,45 +11423,49 @@ export type SellerEscrowEvent = {
    * the only thing an in-leg could have been then. Without it a deposit leg
    * renders as "Down payment", which is wrong on the buyer's proof of payment.
    */
-  purpose?: Maybe<Scalars["String"]["output"]>;
+  purpose?: Maybe<Scalars['String']['output']>;
   /**
    * Why this leg ended where it did. Always set on failed / returned / reversed —
    * a refund the payer cannot get a sentence about is a refund they have to ring
    * someone to understand. Null on the ordinary path.
    */
-  reason?: Maybe<Scalars["String"]["output"]>;
+  reason?: Maybe<Scalars['String']['output']>;
   /** pending | received | settled | failed | returned | reversed */
-  status: Scalars["String"]["output"];
+  status: Scalars['String']['output'];
 };
 
 /** The 16-stage seller-financing lifecycle. Values match the frontend's SellerFinancingStage. */
 export type SellerFinancingStage =
-  | "closed"
-  | "commitment_deposit_paid"
-  | "completion_conditions_confirmed"
-  | "diligence_complete"
-  | "discharge_issued"
-  | "down_payment_funded"
-  | "down_payment_released"
+  | 'closed'
+  | 'commitment_deposit_paid'
+  | 'completion_conditions_confirmed'
+  | 'diligence_complete'
+  | 'discharge_issued'
+  | 'down_payment_funded'
+  | 'down_payment_released'
   /** Both parties confirmed the inspection, or the buyer waived it (AFR-229). */
-  | "inspection_complete"
-  | "payment_plan_accepted"
-  | "payment_plan_proposed"
+  | 'inspection_complete'
+  | 'payment_plan_accepted'
+  | 'payment_plan_proposed'
   /** Stages 14–16 are driven by loan servicing, not by this surface. */
-  | "repaying"
-  | "request_submitted"
-  | "spa_issued"
-  | "spa_signed"
-  | "title_settled"
-  | "under_review"
-  | "withdrawal_window_closed";
+  | 'repaying'
+  | 'request_submitted'
+  | 'spa_issued'
+  | 'spa_signed'
+  | 'title_settled'
+  | 'under_review'
+  | 'withdrawal_window_closed';
 
 /**
  * active | declined | withdrawn | closed. A declined credit decision or a
  * withdrawal ends the deal: `status` changes, `stage` stays where it was, and the
  * listing returns to market.
  */
-export type SellerFinancingStatus = "active" | "closed" | "declined" | "withdrawn";
+export type SellerFinancingStatus =
+  | 'active'
+  | 'closed'
+  | 'declined'
+  | 'withdrawn';
 
 /**
  * The listing's published seller-financing band, snapshotted at placement and
@@ -10394,42 +11473,42 @@ export type SellerFinancingStatus = "active" | "closed" | "declined" | "withdraw
  * judged by, whatever the listing later says.
  */
 export type SellerFinancingTerms = {
-  __typename?: "SellerFinancingTerms";
-  additionalCriteria?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'SellerFinancingTerms';
+  additionalCriteria?: Maybe<Scalars['String']['output']>;
   /** Published band: 0–30. Indicative only — the plan carries the real rate. */
-  indicativeInterestRatePct: Scalars["Float"]["output"];
-  maxTenorMonths: Scalars["Int"]["output"];
+  indicativeInterestRatePct: Scalars['Float']['output'];
+  maxTenorMonths: Scalars['Int']['output'];
   /** Published band: 5–50. */
-  minDownPaymentPct: Scalars["Float"]["output"];
+  minDownPaymentPct: Scalars['Float']['output'];
   /** Published band: 6–180. */
-  minTenorMonths: Scalars["Int"]["output"];
+  minTenorMonths: Scalars['Int']['output'];
   /** monthly | quarterly | biannually | annually */
-  repaymentFrequency: Scalars["String"]["output"];
+  repaymentFrequency: Scalars['String']['output'];
   /** retained_until_settlement | transferred_with_security */
-  titleStructure: Scalars["String"]["output"];
+  titleStructure: Scalars['String']['output'];
 };
 
 export type SellerFinancingTxn = {
-  __typename?: "SellerFinancingTxn";
+  __typename?: 'SellerFinancingTxn';
   buyer?: Maybe<User>;
   /** Recorded first. Does NOT execute the agreement. */
   buyerSignature?: Maybe<SellerSpaSignature>;
-  createdAt: Scalars["String"]["output"];
+  createdAt: Scalars['String']['output'];
   creditDecision?: Maybe<SellerCreditDecision>;
-  currency: Scalars["String"]["output"];
+  currency: Scalars['String']['output'];
   /** From a declined credit decision. */
-  declineReason?: Maybe<Scalars["String"]["output"]>;
+  declineReason?: Maybe<Scalars['String']['output']>;
   /** depositPct × unitPrice, rounded. */
-  depositAmount: Scalars["Float"]["output"];
-  depositDeclaredAt?: Maybe<Scalars["String"]["output"]>;
+  depositAmount: Scalars['Float']['output'];
+  depositDeclaredAt?: Maybe<Scalars['String']['output']>;
   /** The listing's commitment deposit % (default 10). */
-  depositPct: Scalars["Float"]["output"];
+  depositPct: Scalars['Float']['output'];
   /**
    * The reference the ISSUER reports having received the deposit against. Null
    * until they declare it — this is their evidence, not the buyer's, which is why
    * it is a separate field from `paymentReference` and appears later.
    */
-  depositReference?: Maybe<Scalars["String"]["output"]>;
+  depositReference?: Maybe<Scalars['String']['output']>;
   /** The §5 exchange, both directions — feeds the documents rail. */
   diligenceItems?: Maybe<Array<SellerDiligenceItem>>;
   /** Issuer-uploaded annexes and the invoice. */
@@ -10452,10 +11531,10 @@ export type SellerFinancingTxn = {
    * the price against a 20% minimum down payment, so a deal can arrive at stage 10
    * already funded. instructDownPayment handles that case by advancing the stage.
    */
-  downPaymentDue: Scalars["Float"]["output"];
+  downPaymentDue: Scalars['Float']['output'];
   escrowEvents?: Maybe<Array<SellerEscrowEvent>>;
   events?: Maybe<Array<SellerStageEvent>>;
-  id: Scalars["ID"]["output"];
+  id: Scalars['ID']['output'];
   /** §2.1-2.3. Null on deals placed before the inspection contract shipped. */
   inspection?: Maybe<TransactionInspection>;
   /** The issuer selling the unit — on this path also the lender. */
@@ -10463,7 +11542,7 @@ export type SellerFinancingTxn = {
   /** The issuer's countersignature, as Lender — the executing signature. */
   issuerSignature?: Maybe<SellerSpaSignature>;
   /** The SELLER_FINANCING offer request created at placement. */
-  offerRequestId?: Maybe<Scalars["ID"]["output"]>;
+  offerRequestId?: Maybe<Scalars['ID']['output']>;
   paymentPlan?: Maybe<SellerPaymentPlan>;
   /**
    * RETIRED for deals placed since D71, where it is always null: the deposit is
@@ -10471,25 +11550,25 @@ export type SellerFinancingTxn = {
    * buyer to annotate and no issuer account to send it to. It keeps its value on
    * legacy deals, where it is the reference the buyer quoted on their transfer.
    */
-  paymentReference?: Maybe<Scalars["String"]["output"]>;
+  paymentReference?: Maybe<Scalars['String']['output']>;
   /**
    * The parent portfolio's display name. Kept on the transaction because
    * Property.portfolio is only populated by the listing brokers.
    */
-  projectName?: Maybe<Scalars["String"]["output"]>;
+  projectName?: Maybe<Scalars['String']['output']>;
   /** The unit being bought. Read live off the properties table, never a snapshot. */
   property?: Maybe<Property>;
   /** Issued receipts, oldest first. Immutable once issued. */
   receipts?: Maybe<Array<SellerReceipt>>;
   /** Human reference, e.g. SF-2026-000123 — display this, route on `id`. */
-  reference: Scalars["String"]["output"];
-  saleAgreementSentAt?: Maybe<Scalars["String"]["output"]>;
+  reference: Scalars['String']['output'];
+  saleAgreementSentAt?: Maybe<Scalars['String']['output']>;
   saleAgreementStatus?: Maybe<SellerSpaStatus>;
   /** Null for the buyer while the status is `draft` — a draft is issuer-only. */
-  saleAgreementUrl?: Maybe<Scalars["String"]["output"]>;
+  saleAgreementUrl?: Maybe<Scalars['String']['output']>;
   /** Starts at 1; a revision answering a variation round bumps it. */
-  saleAgreementVersion?: Maybe<Scalars["Int"]["output"]>;
-  signingDeadline?: Maybe<Scalars["String"]["output"]>;
+  saleAgreementVersion?: Maybe<Scalars['Int']['output']>;
+  signingDeadline?: Maybe<Scalars['String']['output']>;
   stage: SellerFinancingStage;
   /**
    * The same history as `events`, in the flow-agnostic `StageEvent` shape (§6).
@@ -10500,18 +11579,18 @@ export type SellerFinancingTxn = {
   stageEvents: Array<StageEvent>;
   status: SellerFinancingStatus;
   terms: SellerFinancingTerms;
-  titleSettledAt?: Maybe<Scalars["String"]["output"]>;
+  titleSettledAt?: Maybe<Scalars['String']['output']>;
   /**
    * Inert on this surface: under retained_until_settlement title does not pass
    * until final payment, which is stage 15/16 in loan servicing.
    */
-  tokensTransferred?: Maybe<Scalars["Boolean"]["output"]>;
-  unitPrice: Scalars["Float"]["output"];
-  updatedAt: Scalars["String"]["output"];
+  tokensTransferred?: Maybe<Scalars['Boolean']['output']>;
+  unitPrice: Scalars['Float']['output'];
+  updatedAt: Scalars['String']['output'];
   variations?: Maybe<Array<SellerSpaVariation>>;
-  withdrawalReason?: Maybe<Scalars["String"]["output"]>;
+  withdrawalReason?: Maybe<Scalars['String']['output']>;
   /** Buyer | Issuer */
-  withdrawnBy?: Maybe<Scalars["String"]["output"]>;
+  withdrawnBy?: Maybe<Scalars['String']['output']>;
 };
 
 /**
@@ -10519,22 +11598,22 @@ export type SellerFinancingTxn = {
  * stores the inputs verbatim and derives only the two amounts.
  */
 export type SellerPaymentPlan = {
-  __typename?: "SellerPaymentPlan";
-  acceptedAt?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'SellerPaymentPlan';
+  acceptedAt?: Maybe<Scalars['String']['output']>;
   /** The buyer's typed name. */
-  acceptedSignature?: Maybe<Scalars["String"]["output"]>;
+  acceptedSignature?: Maybe<Scalars['String']['output']>;
   /** Resolved cash figure, rounded to the cedi — server-derived. */
-  downPaymentAmount: Scalars["Float"]["output"];
+  downPaymentAmount: Scalars['Float']['output'];
   /** percentage | amount — how the issuer entered it. */
-  downPaymentMode: Scalars["String"]["output"];
-  downPaymentValue: Scalars["Float"]["output"];
+  downPaymentMode: Scalars['String']['output'];
+  downPaymentValue: Scalars['Float']['output'];
   /** unitPrice − downPaymentAmount — server-derived. */
-  financedAmount: Scalars["Float"]["output"];
-  interestRatePct: Scalars["Float"]["output"];
-  notes?: Maybe<Scalars["String"]["output"]>;
-  proposedAt: Scalars["String"]["output"];
-  repaymentFrequency: Scalars["String"]["output"];
-  tenorMonths: Scalars["Int"]["output"];
+  financedAmount: Scalars['Float']['output'];
+  interestRatePct: Scalars['Float']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
+  proposedAt: Scalars['String']['output'];
+  repaymentFrequency: Scalars['String']['output'];
+  tenorMonths: Scalars['Int']['output'];
 };
 
 /**
@@ -10547,33 +11626,33 @@ export type SellerPaymentPlan = {
  * part-payments, which is why `balance` is large on an early receipt.
  */
 export type SellerReceipt = {
-  __typename?: "SellerReceipt";
+  __typename?: 'SellerReceipt';
   /** max(0, grossPayable − totalReceived). */
-  balance: Scalars["Float"]["output"];
+  balance: Scalars['Float']['output'];
   /** tax_exclusive (default) | tax_inclusive */
-  basis: Scalars["String"]["output"];
+  basis: Scalars['String']['output'];
   /** escrow_confirmed | issuer_declared | mixed */
-  evidence: Scalars["String"]["output"];
-  getfundAmount: Scalars["Float"]["output"];
-  grossPayable: Scalars["Float"]["output"];
+  evidence: Scalars['String']['output'];
+  getfundAmount: Scalars['Float']['output'];
+  grossPayable: Scalars['Float']['output'];
   /** The unit price this receipt was raised against. */
-  headlinePrice: Scalars["Float"]["output"];
-  id: Scalars["ID"]["output"];
-  issuedAt: Scalars["String"]["output"];
-  netAmount: Scalars["Float"]["output"];
-  nhilAmount: Scalars["Float"]["output"];
+  headlinePrice: Scalars['Float']['output'];
+  id: Scalars['ID']['output'];
+  issuedAt: Scalars['String']['output'];
+  netAmount: Scalars['Float']['output'];
+  nhilAmount: Scalars['Float']['output'];
   /** AFR-RCT-<last 8 of txn id>-<seq>. Stable once issued. */
-  number: Scalars["String"]["output"];
-  paidBy: Scalars["String"]["output"];
+  number: Scalars['String']['output'];
+  paidBy: Scalars['String']['output'];
   payments: Array<SellerReceiptPayment>;
   /** The statutory rate table in force at issue, e.g. GH-2026.01. */
-  rateTableVersion: Scalars["String"]["output"];
+  rateTableVersion: Scalars['String']['output'];
   /** The ISSUER's display name — never AFRAM, which does not receive this money. */
-  receivedBy: Scalars["String"]["output"];
-  settled: Scalars["Boolean"]["output"];
-  totalReceived: Scalars["Float"]["output"];
+  receivedBy: Scalars['String']['output'];
+  settled: Scalars['Boolean']['output'];
+  totalReceived: Scalars['Float']['output'];
   /** The three heads stay three lines — three different Acts, never one blend. */
-  vatAmount: Scalars["Float"]["output"];
+  vatAmount: Scalars['Float']['output'];
 };
 
 /**
@@ -10585,39 +11664,39 @@ export type SellerReceipt = {
  * of its transfer into the Afram pool, with its reference. A receipt must never present the two as equally witnessed.
  */
 export type SellerReceiptPayment = {
-  __typename?: "SellerReceiptPayment";
-  amount: Scalars["Float"]["output"];
+  __typename?: 'SellerReceiptPayment';
+  amount: Scalars['Float']['output'];
   /** Provider name, or the issuer's display name. */
-  attestedBy: Scalars["String"]["output"];
+  attestedBy: Scalars['String']['output'];
   /** escrow_confirmed | issuer_declared */
-  evidence: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
+  evidence: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   /** Commitment deposit | Down payment */
-  label: Scalars["String"]["output"];
-  receivedAt: Scalars["String"]["output"];
+  label: Scalars['String']['output'];
+  receivedAt: Scalars['String']['output'];
   /** Provider reference, or the issuer's declared bank reference. */
-  reference: Scalars["String"]["output"];
+  reference: Scalars['String']['output'];
 };
 
 /** One party's signature on the SPA. Identical to the cash flow's SpaSignature. */
 export type SellerSpaSignature = {
-  __typename?: "SellerSpaSignature";
+  __typename?: 'SellerSpaSignature';
   /**
    * The address the signature was made from, captured server-side. Null for
    * anything signed before this was captured.
    */
-  ip?: Maybe<Scalars["String"]["output"]>;
-  name: Scalars["String"]["output"];
+  ip?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
   /**
    * The signer's mark, when they drew one or uploaded a scan of one rather than
    * only typing their name. Null for a typed signature and for anything signed
    * before marks could be sent.
    */
-  signatureImageUrl?: Maybe<Scalars["String"]["output"]>;
+  signatureImageUrl?: Maybe<Scalars['String']['output']>;
   /** How the mark was made. Null for a signature recorded before this was captured. */
   signatureKind?: Maybe<SignatureKind>;
-  signedAt: Scalars["String"]["output"];
-  signedCopyUrl?: Maybe<Scalars["String"]["output"]>;
+  signedAt: Scalars['String']['output'];
+  signedCopyUrl?: Maybe<Scalars['String']['output']>;
 };
 
 /**
@@ -10627,11 +11706,11 @@ export type SellerSpaSignature = {
  */
 export type SellerSpaStatus =
   /** Sent to the buyer. Either or both signatures may already be recorded. */
-  | "awaiting_signatures"
+  | 'awaiting_signatures'
   /** Uploaded, issuer-only. The buyer cannot see it or its URL. */
-  | "draft"
+  | 'draft'
   /** Countersigned by the issuer — the agreement is executed. */
-  | "executed";
+  | 'executed';
 
 /**
  * A request to change the issued SPA, and its resolution. Append-only: a second
@@ -10639,34 +11718,34 @@ export type SellerSpaStatus =
  * requester and outcome permanently.
  */
 export type SellerSpaVariation = {
-  __typename?: "SellerSpaVariation";
+  __typename?: 'SellerSpaVariation';
   /** On `revised`: the SPA version that answered this round. */
-  documentVersion?: Maybe<Scalars["Int"]["output"]>;
-  id: Scalars["ID"]["output"];
-  note: Scalars["String"]["output"];
-  requestedAt: Scalars["String"]["output"];
-  requestedByName: Scalars["String"]["output"];
+  documentVersion?: Maybe<Scalars['Int']['output']>;
+  id: Scalars['ID']['output'];
+  note: Scalars['String']['output'];
+  requestedAt: Scalars['String']['output'];
+  requestedByName: Scalars['String']['output'];
   /** Buyer | Issuer */
-  requestedByRole: Scalars["String"]["output"];
+  requestedByRole: Scalars['String']['output'];
   /** Required when the round is declined. */
-  resolutionNote?: Maybe<Scalars["String"]["output"]>;
-  resolvedAt?: Maybe<Scalars["String"]["output"]>;
+  resolutionNote?: Maybe<Scalars['String']['output']>;
+  resolvedAt?: Maybe<Scalars['String']['output']>;
   /** 1-based, append-only. */
-  round: Scalars["Int"]["output"];
+  round: Scalars['Int']['output'];
   status: SellerVariationStatus;
 };
 
 /** Identical shape to the cash flow's CashStageEvent. */
 export type SellerStageEvent = {
-  __typename?: "SellerStageEvent";
+  __typename?: 'SellerStageEvent';
   /** Buyer | Issuer | Platform */
-  actor: Scalars["String"]["output"];
+  actor: Scalars['String']['output'];
   /** Null on the initial event. */
-  fromStage?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  note?: Maybe<Scalars["String"]["output"]>;
-  timestamp: Scalars["String"]["output"];
-  toStage: Scalars["String"]["output"];
+  fromStage?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  note?: Maybe<Scalars['String']['output']>;
+  timestamp: Scalars['String']['output'];
+  toStage: Scalars['String']['output'];
 };
 
 /**
@@ -10679,60 +11758,68 @@ export type SellerStageEvent = {
  * what is printed on it.
  */
 export type SellerTransactionDocument = {
-  __typename?: "SellerTransactionDocument";
-  documentUrl: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
+  __typename?: 'SellerTransactionDocument';
+  documentUrl: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   /** spa_annex | invoice | receipt */
-  kind: Scalars["String"]["output"];
+  kind: Scalars['String']['output'];
   /** Required on an annex, optional on a receipt, null on the invoice. */
-  label?: Maybe<Scalars["String"]["output"]>;
-  uploadedAt: Scalars["String"]["output"];
+  label?: Maybe<Scalars['String']['output']>;
+  uploadedAt: Scalars['String']['output'];
   /** Issuer */
-  uploadedBy: Scalars["String"]["output"];
+  uploadedBy: Scalars['String']['output'];
 };
 
 /** A variation round is open until the issuer either revises or declines it. */
 export type SellerVariationStatus =
   /** Answered with a reason; the document stands as sent. */
-  | "declined"
-  | "open"
+  | 'declined'
+  | 'open'
   /** Answered by a new SPA version. */
-  | "revised";
+  | 'revised';
 
 export type SendMessageInput = {
-  attachmentComment?: InputMaybe<Scalars["String"]["input"]>;
-  content: Scalars["JSONObject"]["input"];
-  conversationId: Scalars["ID"]["input"];
-  fileUrl?: InputMaybe<Scalars["String"]["input"]>;
-  messageType: Scalars["String"]["input"];
-  pollData?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  replyTo?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  senderPicture?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId?: InputMaybe<Scalars["String"]["input"]>;
+  attachmentComment?: InputMaybe<Scalars['String']['input']>;
+  content: Scalars['JSONObject']['input'];
+  conversationId: Scalars['ID']['input'];
+  fileUrl?: InputMaybe<Scalars['String']['input']>;
+  messageType: Scalars['String']['input'];
+  pollData?: InputMaybe<Scalars['JSONObject']['input']>;
+  replyTo?: InputMaybe<Scalars['JSONObject']['input']>;
+  senderPicture?: InputMaybe<Scalars['String']['input']>;
+  transactionId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type SendNotificationInput = {
-  body: Scalars["String"]["input"];
-  brand?: InputMaybe<Scalars["String"]["input"]>;
-  kind?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  payload?: InputMaybe<Scalars["JSON"]["input"]>;
+  body: Scalars['String']['input'];
+  brand?: InputMaybe<Scalars['String']['input']>;
+  kind?: InputMaybe<Array<Scalars['String']['input']>>;
+  payload?: InputMaybe<Scalars['JSON']['input']>;
   recipient?: InputMaybe<NotificationRecipientInput>;
   recipients?: InputMaybe<Array<NotificationRecipientInput>>;
-  title: Scalars["String"]["input"];
-  type?: InputMaybe<Scalars["String"]["input"]>;
+  title: Scalars['String']['input'];
+  type?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type SenderType = "automated" | "system" | "user";
+export type SenderType =
+  | 'automated'
+  | 'system'
+  | 'user';
+
+export type SetSupportRequestStatusInput = {
+  reference: Scalars['String']['input'];
+  status: SupportStatus;
+};
 
 export type SetSupportUserInitialPasswordInput = {
-  password: Scalars["String"]["input"];
-  token: Scalars["String"]["input"];
+  password: Scalars['String']['input'];
+  token: Scalars['String']['input'];
 };
 
 export type SetSupportUserInitialPasswordPayload = {
-  __typename?: "SetSupportUserInitialPasswordPayload";
-  email: Scalars["String"]["output"];
-  success: Scalars["Boolean"]["output"];
+  __typename?: 'SetSupportUserInitialPasswordPayload';
+  email: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
 };
 
 /**
@@ -10746,46 +11833,49 @@ export type SetSupportUserInitialPasswordPayload = {
  * `TYPED` is the only kind that carries no image — the other two are always
  * accompanied by a `signatureImageUrl`.
  */
-export type SignatureKind = "DRAWN" | "TYPED" | "UPLOADED";
+export type SignatureKind =
+  | 'DRAWN'
+  | 'TYPED'
+  | 'UPLOADED';
 
 /**
  * A single party's signature on a document, with the audit context captured at the
  * moment of signing. Party is BORROWER or FINANCIER.
  */
 export type SignatureRecord = {
-  __typename?: "SignatureRecord";
-  actorId?: Maybe<Scalars["ID"]["output"]>;
+  __typename?: 'SignatureRecord';
+  actorId?: Maybe<Scalars['ID']['output']>;
   /** The signed copy of the document this party uploaded when signing, if any. */
-  documentUrl?: Maybe<Scalars["String"]["output"]>;
-  ip?: Maybe<Scalars["String"]["output"]>;
-  party: Scalars["String"]["output"];
+  documentUrl?: Maybe<Scalars['String']['output']>;
+  ip?: Maybe<Scalars['String']['output']>;
+  party: Scalars['String']['output'];
   /**
    * The signer's mark, when they drew one or uploaded a scan of one rather than
    * only typing their name. Null for a typed signature and for anything signed
    * before marks could be sent.
    */
-  signatureImageUrl?: Maybe<Scalars["String"]["output"]>;
+  signatureImageUrl?: Maybe<Scalars['String']['output']>;
   /** How the mark was made. Null for a signature recorded before this was captured. */
   signatureKind?: Maybe<SignatureKind>;
-  signedAt: Scalars["DateTime"]["output"];
-  userAgent?: Maybe<Scalars["String"]["output"]>;
+  signedAt: Scalars['DateTime']['output'];
+  userAgent?: Maybe<Scalars['String']['output']>;
 };
 
 export type SignupInput = {
-  confirmPassword: Scalars["String"]["input"];
-  countryCode: Scalars["String"]["input"];
-  defaultRole: Scalars["String"]["input"];
-  email: Scalars["String"]["input"];
-  firstName?: InputMaybe<Scalars["String"]["input"]>;
-  lastName?: InputMaybe<Scalars["String"]["input"]>;
-  password: Scalars["String"]["input"];
-  phoneNumber: Scalars["String"]["input"];
-  profileImage?: InputMaybe<Scalars["String"]["input"]>;
-  walletId?: InputMaybe<Scalars["String"]["input"]>;
+  confirmPassword: Scalars['String']['input'];
+  countryCode: Scalars['String']['input'];
+  defaultRole: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  password: Scalars['String']['input'];
+  phoneNumber: Scalars['String']['input'];
+  profileImage?: InputMaybe<Scalars['String']['input']>;
+  walletId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type SiteCoordinates = {
-  __typename?: "SiteCoordinates";
+  __typename?: 'SiteCoordinates';
   coordinates?: Maybe<Array<Maybe<Coordinates>>>;
 };
 
@@ -10802,41 +11892,43 @@ export type SiteCoordinates = {
  * longer tell whether the seller was given seven days or nine.
  */
 export type SlaClock = {
-  __typename?: "SlaClock";
+  __typename?: 'SlaClock';
   /** Milliseconds already excluded from the window. */
-  pausedMs: Scalars["Float"]["output"];
+  pausedMs: Scalars['Float']['output'];
   /** Set while an exchange request is outstanding; null while the clock runs. */
-  pausedSince?: Maybe<Scalars["String"]["output"]>;
+  pausedSince?: Maybe<Scalars['String']['output']>;
   /** When the deposit cleared and the window opened. Null before that. */
-  startedAt?: Maybe<Scalars["String"]["output"]>;
+  startedAt?: Maybe<Scalars['String']['output']>;
 };
 
-export type SortOrder = "ascending" | "descending";
+export type SortOrder =
+  | 'ascending'
+  | 'descending';
 
 /** One party's signature on the SPA, with the counterpart copy they uploaded. */
 export type SpaSignature = {
-  __typename?: "SpaSignature";
+  __typename?: 'SpaSignature';
   /**
    * The address the signature was made from, captured server-side. Null for
    * anything signed before this was captured.
    */
-  ip?: Maybe<Scalars["String"]["output"]>;
+  ip?: Maybe<Scalars['String']['output']>;
   /** Signer display name — the buyer's typed signature, the issuer's profile name. */
-  name: Scalars["String"]["output"];
+  name: Scalars['String']['output'];
   /**
    * The signer's mark, when they drew one or uploaded a scan of one rather than
    * only typing their name. Null for a typed signature and for anything signed
    * before marks could be sent.
    */
-  signatureImageUrl?: Maybe<Scalars["String"]["output"]>;
+  signatureImageUrl?: Maybe<Scalars['String']['output']>;
   /** How the mark was made. Null for a signature recorded before this was captured. */
   signatureKind?: Maybe<SignatureKind>;
-  signedAt: Scalars["String"]["output"];
+  signedAt: Scalars['String']['output'];
   /**
    * The signed / counter-signed document. Null only for a signature recorded
    * before the client uploaded a copy.
    */
-  signedCopyUrl?: Maybe<Scalars["String"]["output"]>;
+  signedCopyUrl?: Maybe<Scalars['String']['output']>;
 };
 
 /**
@@ -10851,7 +11943,7 @@ export type SpaSignature = {
  * that can be rewritten answers a different and much less useful question.
  */
 export type StageEvent = {
-  __typename?: "StageEvent";
+  __typename?: 'StageEvent';
   /**
    * The party who caused it — `Borrower` | `Financier` | `Platform`.
    *
@@ -10864,10 +11956,10 @@ export type StageEvent = {
    * The same three-role vocabulary as the other two flows (`Buyer`/`Issuer` there,
    * `Borrower`/`Financier` here), so one stepper renders all three.
    */
-  actor: Scalars["String"]["output"];
+  actor: Scalars['String']['output'];
   /** Null on the first event — a deal was not anywhere before it existed. */
-  fromStage?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
+  fromStage?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
   /**
    * Why, on the transitions that carry a reason — a waiver, a decline, a request
    * for changes.
@@ -10876,71 +11968,74 @@ export type StageEvent = {
    * a second copy of the same sentence is a second thing to keep in step, and once
    * they differ neither one is authoritative.
    */
-  note?: Maybe<Scalars["String"]["output"]>;
-  timestamp: Scalars["DateTime"]["output"];
+  note?: Maybe<Scalars['String']['output']>;
+  timestamp: Scalars['DateTime']['output'];
   /** The stage entered. */
-  toStage: Scalars["String"]["output"];
+  toStage: Scalars['String']['output'];
 };
 
-export type Status = "failed" | "pending" | "success";
+export type Status =
+  | 'failed'
+  | 'pending'
+  | 'success';
 
 export type StatusDeclaration = {
-  __typename?: "StatusDeclaration";
-  amendmentDetails?: Maybe<Scalars["String"]["output"]>;
-  amendmentDoc?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'StatusDeclaration';
+  amendmentDetails?: Maybe<Scalars['String']['output']>;
+  amendmentDoc?: Maybe<Scalars['String']['output']>;
   amendmentType: DeclarationAmendmentType;
-  amountCollectedThisMonth?: Maybe<Scalars["Float"]["output"]>;
-  amountDisbursedThisPeriod?: Maybe<Scalars["Float"]["output"]>;
+  amountCollectedThisMonth?: Maybe<Scalars['Float']['output']>;
+  amountDisbursedThisPeriod?: Maybe<Scalars['Float']['output']>;
   /** Generated declarations: approve by this instant, or it is approved automatically. */
-  approvalDueAt?: Maybe<Scalars["DateTime"]["output"]>;
+  approvalDueAt?: Maybe<Scalars['DateTime']['output']>;
   approvalStatus: DeclarationApprovalStatus;
   /** When it was approved — by the financier, or automatically at approvalDueAt. */
-  approvedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  approvedAt?: Maybe<Scalars['DateTime']['output']>;
   /** Filings may be cancelled up to this instant (7 days after submission). */
-  cancellableUntil?: Maybe<Scalars["DateTime"]["output"]>;
-  cancelled: Scalars["Boolean"]["output"];
+  cancellableUntil?: Maybe<Scalars['DateTime']['output']>;
+  cancelled: Scalars['Boolean']['output'];
   /**
    * Collected through Afram against THIS filing since it was submitted — wallet
    * loan payments attributed to it. The filing itself is never rewritten, so this
    * is the figure to reconcile the next declaration against: the lender's new
    * `outstandingPrincipal` / `outstandingInterest` should already account for it.
    */
-  collectedThroughAfram: Scalars["Float"]["output"];
-  coversReportingGap: Scalars["Boolean"]["output"];
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  currency?: Maybe<Scalars["String"]["output"]>;
-  currentPeriodInterestRate?: Maybe<Scalars["Float"]["output"]>;
-  dischargeDoc?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
+  collectedThroughAfram: Scalars['Float']['output'];
+  coversReportingGap: Scalars['Boolean']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  currency?: Maybe<Scalars['String']['output']>;
+  currentPeriodInterestRate?: Maybe<Scalars['Float']['output']>;
+  dischargeDoc?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
   /** The schedule installment a generated declaration was produced from. */
-  installmentId?: Maybe<Scalars["ID"]["output"]>;
+  installmentId?: Maybe<Scalars['ID']['output']>;
   /** False once superseded by a later filing for the same period, or when cancelled. */
-  isActive: Scalars["Boolean"]["output"];
-  loanBook?: Maybe<Scalars["String"]["output"]>;
-  loanId?: Maybe<Scalars["ID"]["output"]>;
+  isActive: Scalars['Boolean']['output'];
+  loanBook?: Maybe<Scalars['String']['output']>;
+  loanId?: Maybe<Scalars['ID']['output']>;
   loanStatus: DeclarationLoanStatus;
-  nextPaymentAmount?: Maybe<Scalars["Float"]["output"]>;
-  nextPaymentDate?: Maybe<Scalars["DateTime"]["output"]>;
-  notes?: Maybe<Scalars["String"]["output"]>;
-  offerRequestId: Scalars["ID"]["output"];
+  nextPaymentAmount?: Maybe<Scalars['Float']['output']>;
+  nextPaymentDate?: Maybe<Scalars['DateTime']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
+  offerRequestId: Scalars['ID']['output'];
   /**
    * `totalOutstanding` less `collectedThroughAfram`, floored at zero — what a
    * borrower may still pay against this filing. This is the ceiling `payLoan`
    * enforces.
    */
-  outstandingAfterAframPayments: Scalars["Float"]["output"];
-  outstandingInterest: Scalars["Float"]["output"];
-  outstandingPenalties?: Maybe<Scalars["Float"]["output"]>;
-  outstandingPrincipal: Scalars["Float"]["output"];
+  outstandingAfterAframPayments: Scalars['Float']['output'];
+  outstandingInterest: Scalars['Float']['output'];
+  outstandingPenalties?: Maybe<Scalars['Float']['output']>;
+  outstandingPrincipal: Scalars['Float']['output'];
   paymentStatus: DeclarationPaymentStatus;
-  prepaymentFlag: Scalars["Boolean"]["output"];
-  prepaymentPenaltyAmount?: Maybe<Scalars["Float"]["output"]>;
-  reportingDate: Scalars["DateTime"]["output"];
+  prepaymentFlag: Scalars['Boolean']['output'];
+  prepaymentPenaltyAmount?: Maybe<Scalars['Float']['output']>;
+  reportingDate: Scalars['DateTime']['output'];
   /**
    * When the filing was first cleared in full. Null until it is, and never moved
    * by a later payment — this is the answer to "did they pay on time?".
    */
-  settledAt?: Maybe<Scalars["DateTime"]["output"]>;
+  settledAt?: Maybe<Scalars['DateTime']['output']>;
   /**
    * Whether the borrower has paid this filing: Settled once collections reach
    * `totalOutstanding`, PartiallyPaid while some money has arrived, Unpaid until
@@ -10950,56 +12045,77 @@ export type StatusDeclaration = {
   settlementStatus: DeclarationSettlementStatus;
   /** Hand-filed by the financier, or generated from the repayment schedule. */
   source: DeclarationSource;
-  submittedAt: Scalars["DateTime"]["output"];
-  submittedByRole: Scalars["String"]["output"];
+  submittedAt: Scalars['DateTime']['output'];
+  submittedByRole: Scalars['String']['output'];
   /** Id of the declaration that superseded this one, if any. */
-  supersededBy?: Maybe<Scalars["ID"]["output"]>;
+  supersededBy?: Maybe<Scalars['ID']['output']>;
   /** Computed server-side: principal + interest + penalties. */
-  totalOutstanding: Scalars["Float"]["output"];
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  totalOutstanding: Scalars['Float']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type StringOperator = {
-  eq?: InputMaybe<Scalars["String"]["input"]>;
-  in?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  like?: InputMaybe<Scalars["String"]["input"]>;
-  notContains?: InputMaybe<Scalars["String"]["input"]>;
-  notEq?: InputMaybe<Scalars["String"]["input"]>;
-  notIn?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  regex?: InputMaybe<Scalars["String"]["input"]>;
+  eq?: InputMaybe<Scalars['String']['input']>;
+  in?: InputMaybe<Array<Scalars['String']['input']>>;
+  like?: InputMaybe<Scalars['String']['input']>;
+  notContains?: InputMaybe<Scalars['String']['input']>;
+  notEq?: InputMaybe<Scalars['String']['input']>;
+  notIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  regex?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type SubmitBorrowerLoanRequestInput = {
-  declarationId?: InputMaybe<Scalars["ID"]["input"]>;
+  declarationId?: InputMaybe<Scalars['ID']['input']>;
   /** Supporting-file URL (upload to the vault first). */
-  doc?: InputMaybe<Scalars["String"]["input"]>;
+  doc?: InputMaybe<Scalars['String']['input']>;
   kind: LoanRequestKind;
-  offerRequestId: Scalars["ID"]["input"];
-  reason?: InputMaybe<Scalars["String"]["input"]>;
+  offerRequestId: Scalars['ID']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type SubmitOfferDocumentFile = {
-  documentUrl: Scalars["String"]["input"];
-  fileName?: InputMaybe<Scalars["String"]["input"]>;
+  documentUrl: Scalars['String']['input'];
+  fileName?: InputMaybe<Scalars['String']['input']>;
   /** Human label for the slot this file fills — "Front", "Back", "Month 1"… */
-  slotLabel?: InputMaybe<Scalars["String"]["input"]>;
+  slotLabel?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type SubmitOfferDocumentItem = {
   /** Every file the borrower uploaded for this request (front/back, multiple payslips). */
   files?: InputMaybe<Array<SubmitOfferDocumentFile>>;
-  id: Scalars["ID"]["input"];
-  notes?: InputMaybe<Scalars["String"]["input"]>;
+  id: Scalars['ID']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type SubmitSupportRequestInput = {
+  area: SupportArea;
+  attachments?: InputMaybe<Array<SupportAttachmentInput>>;
+  body: Scalars['String']['input'];
+  /** A Cloudflare Turnstile token. CAPTCHA_FAILED when it does not verify. */
+  captchaToken: Scalars['String']['input'];
+  contactName?: InputMaybe<Scalars['String']['input']>;
+  /** The website sends screen "Website Help"; the sign-in screens send the screen's name. */
+  context: SupportContextInput;
+  idempotencyKey: Scalars['String']['input'];
+  kind: SupportKind;
+  /** Where the reply goes. Optional, but without it there is no way to answer. */
+  replyEmail?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
+};
+
+export type SubmitSupportRequestPayload = {
+  __typename?: 'SubmitSupportRequestPayload';
+  reference: Scalars['String']['output'];
 };
 
 export type SubscribeToPushInput = {
-  pushToken?: InputMaybe<Scalars["String"]["input"]>;
-  subscription?: InputMaybe<Scalars["JSON"]["input"]>;
-  userId?: InputMaybe<Scalars["String"]["input"]>;
+  pushToken?: InputMaybe<Scalars['String']['input']>;
+  subscription?: InputMaybe<Scalars['JSON']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Subscription = {
-  __typename?: "Subscription";
+  __typename?: 'Subscription';
   /**
    * Live single purchase. Requires authentication, and refused at subscribe
    * unless the caller is the buyer or the owning issuer — a non-party gets an
@@ -11028,6 +12144,12 @@ export type Subscription = {
   /** Live list of the caller's deals, newest first. */
   getMySellerFinancingTxns: Array<SellerFinancingTxn>;
   /**
+   * Live single request. Current state on subscribe, then the whole request
+   * again on every change: a status move, a support answer, an assignment.
+   * Refused at subscribe unless the caller can see it.
+   */
+  getMySupportRequest?: Maybe<SupportRequest>;
+  /**
    * Live single offer request — the detail-screen counterpart to
    * `getOfferRequests`. Same argument and shape as the query, current value on
    * subscribe, then on change.
@@ -11055,7 +12177,7 @@ export type Subscription = {
    * Live count for the same filter, on the same terms as `getOfferRequests`
    * above: current value on subscribe, then on change.
    */
-  getOfferRequestsLength: Scalars["Int"]["output"];
+  getOfferRequestsLength: Scalars['Int']['output'];
   /**
    * Live single deal, by transaction id or by the deal's offer request. Refused
    * unless the caller is the buyer or the vendor.
@@ -11099,56 +12221,261 @@ export type Subscription = {
   getSellerFinancingTxnsForMyUnits: Array<SellerFinancingTxn>;
 };
 
+
 export type SubscriptionGetCashPurchaseArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
+
+export type SubscriptionGetMySupportRequestArgs = {
+  reference: Scalars['String']['input'];
+};
+
 
 export type SubscriptionGetOfferRequestArgs = {
   filter?: InputMaybe<OfferRequestFilter>;
 };
+
 
 export type SubscriptionGetOfferRequestsArgs = {
   filter?: InputMaybe<OfferRequestFilter>;
   pagination?: InputMaybe<Pagination>;
 };
 
+
 export type SubscriptionGetOfferRequestsLengthArgs = {
   filter?: InputMaybe<OfferRequestFilter>;
 };
 
+
 export type SubscriptionGetRentToBuyTxnArgs = {
-  id?: InputMaybe<Scalars["ID"]["input"]>;
-  offerRequestId?: InputMaybe<Scalars["ID"]["input"]>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  offerRequestId?: InputMaybe<Scalars['ID']['input']>;
 };
+
 
 export type SubscriptionGetSelfieSessionArgs = {
   filter: SelfieSessionFilter;
 };
 
+
 export type SubscriptionGetSellerApproachArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
+
 
 export type SubscriptionGetSellerFinancingTxnArgs = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
 };
 
+export type SupportAgent = {
+  __typename?: 'SupportAgent';
+  avatarUrl?: Maybe<Scalars['String']['output']>;
+  firstName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+};
+
+export type SupportArea =
+  | 'access'
+  | 'buying'
+  | 'financing'
+  | 'listings'
+  | 'messaging'
+  | 'notifications'
+  | 'other'
+  | 'settings'
+  | 'transactions'
+  | 'verification';
+
+export type SupportAttachment = {
+  __typename?: 'SupportAttachment';
+  /** The type the server read from the bytes. */
+  contentType: Scalars['String']['output'];
+  fileName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  kind: SupportAttachmentKind;
+  sizeBytes: Scalars['Int']['output'];
+  url: Scalars['String']['output'];
+};
+
+/**
+ * A file the client has already put in the platform's storage. The server fetches
+ * it, checks the bytes are PNG, JPEG, WEBP, PDF, DOC or DOCX and at most 10 MB,
+ * and records what it found. At most 3 per message.
+ */
+export type SupportAttachmentInput = {
+  contentType: Scalars['String']['input'];
+  fileName: Scalars['String']['input'];
+  sizeBytes: Scalars['Int']['input'];
+  url: Scalars['String']['input'];
+};
+
+export type SupportAttachmentKind =
+  | 'file'
+  | 'image';
+
 export type SupportAuthPayload = {
-  __typename?: "SupportAuthPayload";
-  accessToken: Scalars["String"]["output"];
+  __typename?: 'SupportAuthPayload';
+  accessToken: Scalars['String']['output'];
   user: SupportUser;
 };
 
+/** `system` is an automatic note, such as the member saying it's still a problem. */
+export type SupportAuthorKind =
+  | 'member'
+  | 'support'
+  | 'system';
+
+/** Collected by the client when Help was opened. No personal data in `path`. */
+export type SupportContextInput = {
+  appVersion?: InputMaybe<Scalars['String']['input']>;
+  language: Scalars['String']['input'];
+  path: Scalars['String']['input'];
+  /** The browser's clock. The server's createdAt is the real time. */
+  reportedAt: Scalars['DateTime']['input'];
+  /** The page or screen Help was opened from, e.g. "Offers", "Sign up". */
+  screen: Scalars['String']['input'];
+  userAgent: Scalars['String']['input'];
+  viewport: Scalars['String']['input'];
+};
+
+export type SupportKind =
+  | 'bug'
+  | 'help';
+
+/** The member's platform role when they wrote in. Null when signed out. */
+export type SupportMemberRole =
+  | 'buyer'
+  | 'financier'
+  | 'issuer';
+
+export type SupportMessage = {
+  __typename?: 'SupportMessage';
+  attachments: Array<SupportAttachment>;
+  /** Support messages only. */
+  author?: Maybe<SupportAgent>;
+  authorKind: SupportAuthorKind;
+  /** Up to 4,000 characters. Null when the message is only files. */
+  body?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  visibility: SupportMessageVisibility;
+};
+
+export type SupportMessagePayload = {
+  __typename?: 'SupportMessagePayload';
+  message: SupportMessage;
+  request: SupportRequest;
+};
+
+/** Members only ever see `public`. Internal notes stay with staff. */
+export type SupportMessageVisibility =
+  | 'internal'
+  | 'public';
+
+export type SupportRequest = {
+  __typename?: 'SupportRequest';
+  area: SupportArea;
+  /** First name only. Null until someone owns it. */
+  assignee?: Maybe<SupportAgent>;
+  /** Staff only; null for members. */
+  assigneeId?: Maybe<Scalars['Int']['output']>;
+  closedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** Staff only; null for members. */
+  contactName?: Maybe<Scalars['String']['output']>;
+  /**
+   * Staff only. Where and how it was sent: screen, path, user agent, viewport,
+   * language, app version and the browser's clock.
+   */
+  context?: Maybe<Scalars['JSON']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  /** Staff only; null for members. */
+  entityId?: Maybe<Scalars['ID']['output']>;
+  firstResponseAt?: Maybe<Scalars['DateTime']['output']>;
+  /** True when the status changed or support wrote since this person last looked. */
+  hasUpdate: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
+  kind: SupportKind;
+  lastMessageAt: Scalars['DateTime']['output'];
+  /**
+   * Staff only. The account a signed-out request's reply email matched. The
+   * email is not proven, so the request never shows in that account's Help.
+   */
+  matchedUserId?: Maybe<Scalars['ID']['output']>;
+  memberConfirmedResolved?: Maybe<Scalars['Boolean']['output']>;
+  /**
+   * The thread, oldest first, public messages only. Default limit 30. Use
+   * `messagesLength` to page to the tail; the live subscription re-emits the
+   * whole request when anything changes. Staff may pass `includeInternal` to
+   * see the team's notes as well; members never can.
+   */
+  messages: Array<SupportMessage>;
+  messagesLength: Scalars['Int']['output'];
+  /** What the member quotes: AF- and 6 characters from ABCDEFGHJKMNPQRSTUVWXYZ23456789. */
+  reference: Scalars['String']['output'];
+  /** Staff only; null for members. Where a signed-out requester hears back. */
+  replyEmail?: Maybe<Scalars['String']['output']>;
+  resolvedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** Staff only; null for members. */
+  role?: Maybe<SupportMemberRole>;
+  satisfaction?: Maybe<Scalars['Int']['output']>;
+  source: SupportSource;
+  status: SupportStatus;
+  /** Null when Help wasn't opened from a transaction, offer, property or document. */
+  subject?: Maybe<SupportSubject>;
+  title: Scalars['String']['output'];
+  /** Support messages this person hasn't read. */
+  unreadCount: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  /** Staff only; null for members. */
+  userId?: Maybe<Scalars['ID']['output']>;
+};
+
+
+export type SupportRequestMessagesArgs = {
+  includeInternal?: InputMaybe<Scalars['Boolean']['input']>;
+  pagination?: InputMaybe<Pagination>;
+};
+
+export type SupportRequestAdminFilter = {
+  area?: InputMaybe<StringOperator>;
+  assigneeId?: InputMaybe<NumberOperator>;
+  createdAt?: InputMaybe<DateOperator>;
+  entityId?: InputMaybe<StringOperator>;
+  id?: InputMaybe<IdOperator>;
+  kind?: InputMaybe<StringOperator>;
+  lastMessageAt?: InputMaybe<DateOperator>;
+  reference?: InputMaybe<StringOperator>;
+  replyEmail?: InputMaybe<StringOperator>;
+  source?: InputMaybe<StringOperator>;
+  status?: InputMaybe<StringOperator>;
+  userId?: InputMaybe<StringOperator>;
+};
+
+export type SupportRequestFilter = {
+  area?: InputMaybe<StringOperator>;
+  createdAt?: InputMaybe<DateOperator>;
+  kind?: InputMaybe<StringOperator>;
+  status?: InputMaybe<StringOperator>;
+};
+
+export type SupportRequestStatusResult = {
+  __typename?: 'SupportRequestStatusResult';
+  reference: Scalars['String']['output'];
+  status: SupportStatus;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export type SupportRole = {
-  __typename?: "SupportRole";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  isSystem: Scalars["Boolean"]["output"];
+  __typename?: 'SupportRole';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  isSystem: Scalars['Boolean']['output'];
   members?: Maybe<Array<SupportRoleMember>>;
-  name: Scalars["String"]["output"];
-  permissions: Array<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  name: Scalars['String']['output'];
+  permissions: Array<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type SupportRoleFilter = {
@@ -11159,24 +12486,61 @@ export type SupportRoleFilter = {
 };
 
 export type SupportRoleMember = {
-  __typename?: "SupportRoleMember";
-  email: Scalars["String"]["output"];
-  firstName: Scalars["String"]["output"];
-  id: Scalars["Int"]["output"];
-  lastName: Scalars["String"]["output"];
-  supportRoleId: Scalars["ID"]["output"];
+  __typename?: 'SupportRoleMember';
+  email: Scalars['String']['output'];
+  firstName: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  lastName: Scalars['String']['output'];
+  supportRoleId: Scalars['ID']['output'];
 };
 
+/** Whether the person was signed in when they sent it. Which screen or site is in the context. */
+export type SupportSource =
+  | 'signed_in'
+  | 'signed_out';
+
+/**
+ * open: sent, nobody has picked it up ("Waiting on team").
+ * in_progress: someone is working on it ("Team on it").
+ * waiting_on_member: support asked the member something ("Team on it", "Reply needed").
+ * resolved: support thinks it's fixed ("Sorted", "Is everything working?").
+ * closed: done; a reply opens a new request ("Sorted").
+ */
+export type SupportStatus =
+  | 'closed'
+  | 'in_progress'
+  | 'open'
+  | 'resolved'
+  | 'waiting_on_member';
+
+export type SupportSubject = {
+  __typename?: 'SupportSubject';
+  id: Scalars['ID']['output'];
+  type: SupportSubjectType;
+};
+
+export type SupportSubjectInput = {
+  id: Scalars['ID']['input'];
+  type: SupportSubjectType;
+};
+
+/** What a request is about inside Afram, so staff can jump to it. */
+export type SupportSubjectType =
+  | 'document'
+  | 'offer'
+  | 'property'
+  | 'transaction';
+
 export type SupportUser = {
-  __typename?: "SupportUser";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  email: Scalars["String"]["output"];
-  firstName: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
-  lastName: Scalars["String"]["output"];
+  __typename?: 'SupportUser';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  email: Scalars['String']['output'];
+  firstName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  lastName: Scalars['String']['output'];
   supportRole?: Maybe<SupportRole>;
-  supportRoleId: Scalars["ID"]["output"];
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  supportRoleId: Scalars['ID']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type SupportUserFilter = {
@@ -11189,17 +12553,17 @@ export type SupportUserFilter = {
 };
 
 export type TailoringRule = {
-  __typename?: "TailoringRule";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
-  documentCodes: Array<Scalars["String"]["output"]>;
-  entityType?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  isActive: Scalars["Boolean"]["output"];
-  name: Scalars["String"]["output"];
-  platformRole?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'TailoringRule';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  documentCodes: Array<Scalars['String']['output']>;
+  entityType?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  isActive: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  platformRole?: Maybe<Scalars['String']['output']>;
   requirement?: Maybe<RequirementLevel>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type TailoringRuleFilter = {
@@ -11210,24 +12574,24 @@ export type TailoringRuleFilter = {
 };
 
 export type TailoringRuleResponse = {
-  __typename?: "TailoringRuleResponse";
+  __typename?: 'TailoringRuleResponse';
   rule?: Maybe<TailoringRule>;
-  success: Scalars["Boolean"]["output"];
+  success: Scalars['Boolean']['output'];
 };
 
 export type TempProject = {
-  __typename?: "TempProject";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  id: Scalars["ID"]["output"];
-  ownerId?: Maybe<Scalars["ID"]["output"]>;
+  __typename?: 'TempProject';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  ownerId?: Maybe<Scalars['ID']['output']>;
   /**
    * Carries `extractionStatus` (pending | succeeded | failed) and, when failed,
    * `extractionError`. A pending extraction older than 15 minutes reads as failed.
    */
-  payload?: Maybe<Scalars["JSONObject"]["output"]>;
-  paymentStatus?: Maybe<Scalars["String"]["output"]>;
-  sessionId: Scalars["String"]["output"];
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  payload?: Maybe<Scalars['JSONObject']['output']>;
+  paymentStatus?: Maybe<Scalars['String']['output']>;
+  sessionId: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type TempProjectFilter = {
@@ -11237,58 +12601,58 @@ export type TempProjectFilter = {
 };
 
 export type Tenor = {
-  __typename?: "Tenor";
-  count: Scalars["Int"]["output"];
-  period: Scalars["String"]["output"];
+  __typename?: 'Tenor';
+  count: Scalars['Int']['output'];
+  period: Scalars['String']['output'];
 };
 
 export type TenorInput = {
-  count?: InputMaybe<Scalars["Int"]["input"]>;
-  period?: InputMaybe<Scalars["String"]["input"]>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  period?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type TermChangeFilter = {
-  id?: InputMaybe<Scalars["ID"]["input"]>;
-  repaymentId?: InputMaybe<Scalars["ID"]["input"]>;
-  status?: InputMaybe<Scalars["String"]["input"]>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  repaymentId?: InputMaybe<Scalars['ID']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type TermSheet = {
-  __typename?: "TermSheet";
+  __typename?: 'TermSheet';
   /** Deadline by which the borrower must accept (defaults to the term-sheet expiry). */
-  acceptByDate?: Maybe<Scalars["DateTime"]["output"]>;
-  availableTokens?: Maybe<Scalars["Int"]["output"]>;
-  blockNumber?: Maybe<Scalars["Int"]["output"]>;
+  acceptByDate?: Maybe<Scalars['DateTime']['output']>;
+  availableTokens?: Maybe<Scalars['Int']['output']>;
+  blockNumber?: Maybe<Scalars['Int']['output']>;
   buyer?: Maybe<User>;
-  buyerId?: Maybe<Scalars["ID"]["output"]>;
-  completionDate?: Maybe<Scalars["DateTime"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  currency?: Maybe<Scalars["String"]["output"]>;
-  documentUrl?: Maybe<Scalars["String"]["output"]>;
-  downPayment?: Maybe<Scalars["Float"]["output"]>;
-  dsraAmount?: Maybe<Scalars["Float"]["output"]>;
+  buyerId?: Maybe<Scalars['ID']['output']>;
+  completionDate?: Maybe<Scalars['DateTime']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  currency?: Maybe<Scalars['String']['output']>;
+  documentUrl?: Maybe<Scalars['String']['output']>;
+  downPayment?: Maybe<Scalars['Float']['output']>;
+  dsraAmount?: Maybe<Scalars['Float']['output']>;
   /** First scheduled instalment amount (major units), from the repayment schedule. */
-  estimatedMonthlyInstalment?: Maybe<Scalars["Float"]["output"]>;
-  executionDate?: Maybe<Scalars["DateTime"]["output"]>;
-  financedAmount?: Maybe<Scalars["Float"]["output"]>;
+  estimatedMonthlyInstalment?: Maybe<Scalars['Float']['output']>;
+  executionDate?: Maybe<Scalars['DateTime']['output']>;
+  financedAmount?: Maybe<Scalars['Float']['output']>;
   financier?: Maybe<Entity>;
-  financierId?: Maybe<Scalars["ID"]["output"]>;
-  financierLoanId?: Maybe<Scalars["ID"]["output"]>;
-  guarantorId?: Maybe<Scalars["ID"]["output"]>;
-  id: Scalars["ID"]["output"];
-  initialDeposit?: Maybe<Scalars["Float"]["output"]>;
-  interestRate?: Maybe<Scalars["JSONObject"]["output"]>;
-  isFractionalised?: Maybe<Scalars["Boolean"]["output"]>;
+  financierId?: Maybe<Scalars['ID']['output']>;
+  financierLoanId?: Maybe<Scalars['ID']['output']>;
+  guarantorId?: Maybe<Scalars['ID']['output']>;
+  id: Scalars['ID']['output'];
+  initialDeposit?: Maybe<Scalars['Float']['output']>;
+  interestRate?: Maybe<Scalars['JSONObject']['output']>;
+  isFractionalised?: Maybe<Scalars['Boolean']['output']>;
   issuer?: Maybe<Entity>;
-  issuerId?: Maybe<Scalars["ID"]["output"]>;
-  loanTenor?: Maybe<Scalars["JSONObject"]["output"]>;
-  longstopDate?: Maybe<Scalars["DateTime"]["output"]>;
-  ltv?: Maybe<Scalars["Float"]["output"]>;
-  metadata?: Maybe<Scalars["JSONObject"]["output"]>;
-  modeOfFinancing?: Maybe<Scalars["String"]["output"]>;
-  offerRequestId?: Maybe<Scalars["ID"]["output"]>;
-  ownerShares?: Maybe<Array<Maybe<Scalars["JSONObject"]["output"]>>>;
-  parentTermSheetId?: Maybe<Scalars["ID"]["output"]>;
+  issuerId?: Maybe<Scalars['ID']['output']>;
+  loanTenor?: Maybe<Scalars['JSONObject']['output']>;
+  longstopDate?: Maybe<Scalars['DateTime']['output']>;
+  ltv?: Maybe<Scalars['Float']['output']>;
+  metadata?: Maybe<Scalars['JSONObject']['output']>;
+  modeOfFinancing?: Maybe<Scalars['String']['output']>;
+  offerRequestId?: Maybe<Scalars['ID']['output']>;
+  ownerShares?: Maybe<Array<Maybe<Scalars['JSONObject']['output']>>>;
+  parentTermSheetId?: Maybe<Scalars['ID']['output']>;
   /**
    * The instalments this sheet is repaid by, earliest first.
    *
@@ -11299,25 +12663,25 @@ export type TermSheet = {
    */
   paymentSchedule: Array<PaymentScheduleEntry>;
   /** Upfront processing fee (major units), from the granted Offer's fee schedule. */
-  processingFee?: Maybe<Scalars["Float"]["output"]>;
-  projectId: Scalars["ID"]["output"];
+  processingFee?: Maybe<Scalars['Float']['output']>;
+  projectId: Scalars['ID']['output'];
   property?: Maybe<Property>;
-  purchasePrice?: Maybe<Scalars["Float"]["output"]>;
-  repaymentFrequency?: Maybe<Scalars["String"]["output"]>;
-  shareToken?: Maybe<Scalars["String"]["output"]>;
+  purchasePrice?: Maybe<Scalars['Float']['output']>;
+  repaymentFrequency?: Maybe<Scalars['String']['output']>;
+  shareToken?: Maybe<Scalars['String']['output']>;
   signatures?: Maybe<Array<Maybe<TermSheetSignature>>>;
   status?: Maybe<TermSheetStatus>;
-  termScheduleId?: Maybe<Scalars["ID"]["output"]>;
-  termSheetExpiryDate?: Maybe<Scalars["DateTime"]["output"]>;
-  totalAmount?: Maybe<Scalars["JSONObject"]["output"]>;
+  termScheduleId?: Maybe<Scalars['ID']['output']>;
+  termSheetExpiryDate?: Maybe<Scalars['DateTime']['output']>;
+  totalAmount?: Maybe<Scalars['JSONObject']['output']>;
   /** Total repayable over the life of the loan (major units). */
-  totalRepayable?: Maybe<Scalars["Float"]["output"]>;
-  transactionHash?: Maybe<Scalars["String"]["output"]>;
-  transactionRefNo?: Maybe<Scalars["String"]["output"]>;
+  totalRepayable?: Maybe<Scalars['Float']['output']>;
+  transactionHash?: Maybe<Scalars['String']['output']>;
+  transactionRefNo?: Maybe<Scalars['String']['output']>;
   type?: Maybe<TermSheetType>;
-  unitToken?: Maybe<Scalars["Int"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  version?: Maybe<Scalars["Int"]["output"]>;
+  unitToken?: Maybe<Scalars['Int']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  version?: Maybe<Scalars['Int']['output']>;
 };
 
 /**
@@ -11325,10 +12689,10 @@ export type TermSheet = {
  * when they decline to accept it as drafted.
  */
 export type TermSheetChangeRequest = {
-  __typename?: "TermSheetChangeRequest";
+  __typename?: 'TermSheetChangeRequest';
   /** The borrower's description of the changes they want. */
-  message: Scalars["String"]["output"];
-  requestedAt: Scalars["DateTime"]["output"];
+  message: Scalars['String']['output'];
+  requestedAt: Scalars['DateTime']['output'];
 };
 
 export type TermSheetFilter = {
@@ -11352,66 +12716,75 @@ export type TermSheetFilter = {
  * server can say when or from where it was applied.
  */
 export type TermSheetSignature = {
-  __typename?: "TermSheetSignature";
-  digitalSignature?: Maybe<Scalars["String"]["output"]>;
-  entityId?: Maybe<Scalars["ID"]["output"]>;
+  __typename?: 'TermSheetSignature';
+  digitalSignature?: Maybe<Scalars['String']['output']>;
+  entityId?: Maybe<Scalars['ID']['output']>;
   /** The address they signed from. Null where no signature record exists for them. */
-  ip?: Maybe<Scalars["String"]["output"]>;
-  memberRole?: Maybe<Scalars["String"]["output"]>;
+  ip?: Maybe<Scalars['String']['output']>;
+  memberRole?: Maybe<Scalars['String']['output']>;
   /** When this party signed. Null where no signature record exists for them. */
-  signedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  userId?: Maybe<Scalars["ID"]["output"]>;
+  signedAt?: Maybe<Scalars['DateTime']['output']>;
+  userId?: Maybe<Scalars['ID']['output']>;
 };
 
-export type TermSheetStatus = "COMPLETED" | "DRAFT" | "EXECUTED" | "LAPSED" | "TERMINATED";
+export type TermSheetStatus =
+  | 'COMPLETED'
+  | 'DRAFT'
+  | 'EXECUTED'
+  | 'LAPSED'
+  | 'TERMINATED';
 
-export type TermSheetType = "BUYER_FINANCIER" | "ISSUER_FINANCIER";
+export type TermSheetType =
+  | 'BUYER_FINANCIER'
+  | 'ISSUER_FINANCIER';
 
 export type Ticket = {
-  __typename?: "Ticket";
-  amountPaid?: Maybe<Scalars["String"]["output"]>;
-  assignedTo?: Maybe<Scalars["Int"]["output"]>;
+  __typename?: 'Ticket';
+  amountPaid?: Maybe<Scalars['String']['output']>;
+  assignedTo?: Maybe<Scalars['Int']['output']>;
   assignee?: Maybe<TicketAssignee>;
   comments?: Maybe<Array<TicketComment>>;
-  conversationId?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
-  image?: Maybe<Scalars["String"]["output"]>;
-  referenceNo?: Maybe<Scalars["String"]["output"]>;
-  status: Scalars["String"]["output"];
-  title: Scalars["String"]["output"];
-  type: Scalars["String"]["output"];
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  userId: Scalars["String"]["output"];
+  conversationId?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  image?: Maybe<Scalars['String']['output']>;
+  referenceNo?: Maybe<Scalars['String']['output']>;
+  status: Scalars['String']['output'];
+  title: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  userId: Scalars['String']['output'];
 };
 
 export type TicketAssignee = {
-  __typename?: "TicketAssignee";
-  email: Scalars["String"]["output"];
-  firstName: Scalars["String"]["output"];
-  id: Scalars["Int"]["output"];
-  lastName: Scalars["String"]["output"];
+  __typename?: 'TicketAssignee';
+  email: Scalars['String']['output'];
+  firstName: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  lastName: Scalars['String']['output'];
 };
 
 export type TicketComment = {
-  __typename?: "TicketComment";
+  __typename?: 'TicketComment';
   /** Set for support staff only. */
   author?: Maybe<TicketAssignee>;
   /** The support user who wrote it; null when a member did. */
-  authorId?: Maybe<Scalars["Int"]["output"]>;
+  authorId?: Maybe<Scalars['Int']['output']>;
   authorKind: TicketCommentAuthorKind;
   /** The member who wrote it; null when support staff did. */
-  authorUserId?: Maybe<Scalars["ID"]["output"]>;
-  body: Scalars["String"]["output"];
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  id: Scalars["ID"]["output"];
-  ticketId: Scalars["ID"]["output"];
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  authorUserId?: Maybe<Scalars['ID']['output']>;
+  body: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  ticketId: Scalars['ID']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 /** Who wrote a ticket comment: Afram support staff, or the member. */
-export type TicketCommentAuthorKind = "member" | "support";
+export type TicketCommentAuthorKind =
+  | 'member'
+  | 'support';
 
 export type TicketFilter = {
   assignedTo?: InputMaybe<NumberOperator>;
@@ -11424,7 +12797,11 @@ export type TicketFilter = {
   userId?: InputMaybe<StringOperator>;
 };
 
-export type TicketStatus = "closed" | "in_progress" | "open" | "resolved";
+export type TicketStatus =
+  | 'closed'
+  | 'in_progress'
+  | 'open'
+  | 'resolved';
 
 /**
  * The on-chain title-transfer pack, summarised for the borrower's overview.
@@ -11440,9 +12817,9 @@ export type TicketStatus = "closed" | "in_progress" | "open" | "resolved";
  *   * `completed`   — a `title_transferred` event exists.
  */
 export type TitleTransfer = {
-  __typename?: "TitleTransfer";
+  __typename?: 'TitleTransfer';
   /** When title was conveyed — the timestamp of the `title_transferred` event. */
-  completedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  completedAt?: Maybe<Scalars['DateTime']['output']>;
   /**
    * The pack: the discharge letter, the transfer deed, the updated title. Drawn
    * from the loan's documents by tag, so a file uploaded once appears here and in
@@ -11450,34 +12827,34 @@ export type TitleTransfer = {
    */
   documents: Array<LoanDocument>;
   /** pending | in_progress | completed */
-  status: Scalars["String"]["output"];
+  status: Scalars['String']['output'];
   /** Chain reference for the title transfer. Null when there is none to show. */
-  titleTransferTxRef?: Maybe<Scalars["String"]["output"]>;
+  titleTransferTxRef?: Maybe<Scalars['String']['output']>;
   /** Chain reference for the escrow release. Null when there is none to show. */
-  tokenReleaseTxRef?: Maybe<Scalars["String"]["output"]>;
+  tokenReleaseTxRef?: Maybe<Scalars['String']['output']>;
 };
 
 export type ToggleFavoriteResult = {
-  __typename?: "ToggleFavoriteResult";
-  added: Scalars["Boolean"]["output"];
+  __typename?: 'ToggleFavoriteResult';
+  added: Scalars['Boolean']['output'];
 };
 
 export type ToggleSuspendPayload = {
-  __typename?: "ToggleSuspendPayload";
-  isSuspended: Scalars["Boolean"]["output"];
-  message: Scalars["String"]["output"];
-  userId: Scalars["ID"]["output"];
+  __typename?: 'ToggleSuspendPayload';
+  isSuspended: Scalars['Boolean']['output'];
+  message: Scalars['String']['output'];
+  userId: Scalars['ID']['output'];
 };
 
 /** A token escrow lifecycle event for a loan. */
 export type TokenEvent = {
-  __typename?: "TokenEvent";
-  amount?: Maybe<Scalars["Float"]["output"]>;
-  id: Scalars["ID"]["output"];
-  loanId?: Maybe<Scalars["ID"]["output"]>;
-  note: Scalars["String"]["output"];
-  offerRequestId: Scalars["ID"]["output"];
-  timestamp: Scalars["DateTime"]["output"];
+  __typename?: 'TokenEvent';
+  amount?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  loanId?: Maybe<Scalars['ID']['output']>;
+  note: Scalars['String']['output'];
+  offerRequestId: Scalars['ID']['output'];
+  timestamp: Scalars['DateTime']['output'];
   /**
    * On-chain transaction reference, when this event had one.
    *
@@ -11485,35 +12862,38 @@ export type TokenEvent = {
    * call. Null means "no reference" — never "reference unknown", and nothing
    * substitutes a plausible-looking hash for one.
    */
-  txRef?: Maybe<Scalars["String"]["output"]>;
+  txRef?: Maybe<Scalars['String']['output']>;
   type: TokenEventType;
 };
 
 export type TokenEventType =
-  "locked_in_escrow" | "minted" | "released_from_escrow" | "title_transferred";
+  | 'locked_in_escrow'
+  | 'minted'
+  | 'released_from_escrow'
+  | 'title_transferred';
 
 export type Transaction = {
-  __typename?: "Transaction";
-  amount?: Maybe<Scalars["JSONObject"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description: Scalars["String"]["output"];
-  from?: Maybe<Scalars["JSONObject"]["output"]>;
-  id: Scalars["ID"]["output"];
-  propertyId: Scalars["ID"]["output"];
-  quantity: Scalars["Int"]["output"];
-  referenceNo: Scalars["String"]["output"];
-  state: Scalars["String"]["output"];
-  status: Scalars["String"]["output"];
-  to?: Maybe<Scalars["JSONObject"]["output"]>;
-  tokens: Scalars["Int"]["output"];
-  transactionId: Scalars["String"]["output"];
-  type: Scalars["String"]["output"];
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  __typename?: 'Transaction';
+  amount?: Maybe<Scalars['JSONObject']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  description: Scalars['String']['output'];
+  from?: Maybe<Scalars['JSONObject']['output']>;
+  id: Scalars['ID']['output'];
+  propertyId: Scalars['ID']['output'];
+  quantity: Scalars['Int']['output'];
+  referenceNo: Scalars['String']['output'];
+  state: Scalars['String']['output'];
+  status: Scalars['String']['output'];
+  to?: Maybe<Scalars['JSONObject']['output']>;
+  tokens: Scalars['Int']['output'];
+  transactionId: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type TransactionFilter = {
-  id?: InputMaybe<Scalars["ID"]["input"]>;
-  userId?: InputMaybe<Scalars["ID"]["input"]>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  userId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 /**
@@ -11521,23 +12901,23 @@ export type TransactionFilter = {
  * waiting for. That visibility is the whole of feedback item 5.
  */
 export type TransactionInspection = {
-  __typename?: "TransactionInspection";
+  __typename?: 'TransactionInspection';
   /** Set when the buyer confirmed the inspection happened and they are satisfied. */
-  buyerConfirmedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  buyerConfirmedAt?: Maybe<Scalars['DateTime']['output']>;
   /**
    * When the stage advanced — both parties confirmed, or the buyer waived.
    * Null while the inspection is still outstanding.
    */
-  completedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  completedAt?: Maybe<Scalars['DateTime']['output']>;
   /** The vendor's half of the same statement. Null until they confirm. */
-  issuerConfirmedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  issuerConfirmedAt?: Maybe<Scalars['DateTime']['output']>;
   /** Every issue logged on this deal, oldest first. Resolved ones included. */
   issues: Array<InspectionIssue>;
   /**
    * The exact wording the buyer was shown in the confirmation modal, stored
    * verbatim, so a later dispute is about a record rather than a recollection.
    */
-  waivedAcknowledgement?: Maybe<Scalars["String"]["output"]>;
+  waivedAcknowledgement?: Maybe<Scalars['String']['output']>;
   /**
    * Set when the buyer waived the inspection instead of having one.
    *
@@ -11546,55 +12926,59 @@ export type TransactionInspection = {
    * having inspected, which is precisely the thing that matters if the property
    * later turns out to be defective.
    */
-  waivedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  waivedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 /** Both sides of a deal, by the same two names every flow uses. */
-export type TransactionPartyRole = "Buyer" | "Issuer";
+export type TransactionPartyRole =
+  | 'Buyer'
+  | 'Issuer';
 
 /** Which side of a viewing acted. Members are users; vendors act as an entity. */
-export type TransactionPartyRoleOrMember = "Issuer" | "Member";
+export type TransactionPartyRoleOrMember =
+  | 'Issuer'
+  | 'Member';
 
 export type TransactionVolumePoint = {
-  __typename?: "TransactionVolumePoint";
-  bucket: Scalars["DateTime"]["output"];
-  count: Scalars["Int"]["output"];
-  currency: Scalars["String"]["output"];
-  label: Scalars["String"]["output"];
-  value: Scalars["Float"]["output"];
+  __typename?: 'TransactionVolumePoint';
+  bucket: Scalars['DateTime']['output'];
+  count: Scalars['Int']['output'];
+  currency: Scalars['String']['output'];
+  label: Scalars['String']['output'];
+  value: Scalars['Float']['output'];
 };
 
 export type Transfer = {
-  __typename?: "Transfer";
+  __typename?: 'Transfer';
   /** Major units. */
-  amount: Scalars["Float"]["output"];
-  completedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  createdAt: Scalars["DateTime"]["output"];
-  currency: Scalars["String"]["output"];
+  amount: Scalars['Float']['output'];
+  completedAt?: Maybe<Scalars['DateTime']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  currency: Scalars['String']['output'];
   destination: TransferDestination;
   /** The bank's reference for the disbursement. */
-  externalRef?: Maybe<Scalars["String"]["output"]>;
-  failureReason?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["ID"]["output"];
-  lastPolledAt?: Maybe<Scalars["DateTime"]["output"]>;
-  payerWalletId: Scalars["ID"]["output"];
+  externalRef?: Maybe<Scalars['String']['output']>;
+  failureReason?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  lastPolledAt?: Maybe<Scalars['DateTime']['output']>;
+  payerWalletId: Scalars['ID']['output'];
   /** Why the money moved: `withdrawal`, or the deal leg it pays. */
-  purpose: Scalars["String"]["output"];
-  recipientOwnerId: Scalars["ID"]["output"];
+  purpose: Scalars['String']['output'];
+  recipientOwnerId: Scalars['ID']['output'];
   recipientOwnerType: PayoutAccountOwner;
-  reference?: Maybe<Scalars["JSONObject"]["output"]>;
+  reference?: Maybe<Scalars['JSONObject']['output']>;
   route: TransferRoute;
   source: TransferSource;
   status: TransferStatus;
-  submittedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  updatedAt: Scalars["DateTime"]["output"];
+  submittedAt?: Maybe<Scalars['DateTime']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type TransferDestination = {
-  __typename?: "TransferDestination";
-  accountName?: Maybe<Scalars["String"]["output"]>;
-  accountNumber: Scalars["String"]["output"];
-  bankCode?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'TransferDestination';
+  accountName?: Maybe<Scalars['String']['output']>;
+  accountNumber: Scalars['String']['output'];
+  bankCode?: Maybe<Scalars['String']['output']>;
 };
 
 export type TransferFilter = {
@@ -11610,22 +12994,24 @@ export type TransferFilter = {
 
 export type TransferRoute =
   /** Paid straight from the payer's account (same bank). */
-  | "direct"
+  | 'direct'
   /** Swept into the pool first, then sent interbank. */
-  | "pool";
+  | 'pool';
 
-export type TransferSource = "cash" | "payout";
+export type TransferSource =
+  | 'cash'
+  | 'payout';
 
 export type TransferStatus =
-  | "completed"
+  | 'completed'
   /** Refused before any money moved; the payer's balance was restored. */
-  | "failed"
+  | 'failed'
   /** Accepted; the amount is held. */
-  | "pending"
+  | 'pending'
   /** Sent to the bank; awaiting its confirmation. */
-  | "submitted"
+  | 'submitted'
   /** Interbank only: out of the payer's account and in the pool, not yet with the recipient. Never reversed automatically. */
-  | "swept";
+  | 'swept';
 
 export type TransferStatusOperator = {
   eq?: InputMaybe<TransferStatus>;
@@ -11633,36 +13019,39 @@ export type TransferStatusOperator = {
   notIn?: InputMaybe<Array<TransferStatus>>;
 };
 
-export type Trend = "DOWN" | "FLAT" | "UP";
+export type Trend =
+  | 'DOWN'
+  | 'FLAT'
+  | 'UP';
 
 export type UpdateAssessmentAlertRuleInput = {
-  code?: InputMaybe<Scalars["String"]["input"]>;
-  message?: InputMaybe<Scalars["String"]["input"]>;
+  code?: InputMaybe<Scalars['String']['input']>;
+  message?: InputMaybe<Scalars['String']['input']>;
   operator?: InputMaybe<AssessmentAlertOperator>;
   severity?: InputMaybe<AssessmentAlertSeverity>;
-  threshold?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  triggerQuestionCode?: InputMaybe<Scalars["String"]["input"]>;
+  threshold?: InputMaybe<Scalars['JSONObject']['input']>;
+  triggerQuestionCode?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateAssessmentCategoryInput = {
-  code?: InputMaybe<Scalars["String"]["input"]>;
-  description?: InputMaybe<Scalars["String"]["input"]>;
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  label?: InputMaybe<Scalars["String"]["input"]>;
-  templateId?: InputMaybe<Scalars["ID"]["input"]>;
-  weight?: InputMaybe<Scalars["Float"]["input"]>;
+  code?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  label?: InputMaybe<Scalars['String']['input']>;
+  templateId?: InputMaybe<Scalars['ID']['input']>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type UpdateAssessmentDocumentInput = {
-  fileUrl?: InputMaybe<Scalars["String"]["input"]>;
+  fileUrl?: InputMaybe<Scalars['String']['input']>;
   /**
    * true marks the slot `not_applicable`, false puts it back to `pending`.
    * The applicant may do this only on an `advisory` or `if_applicable` slot
    * with no file on it, while the assessment is draft or returned; staff on
    * any slot with no file. Never on a verified document. Omit to leave it.
    */
-  notApplicable?: InputMaybe<Scalars["Boolean"]["input"]>;
-  notes?: InputMaybe<Scalars["String"]["input"]>;
+  notApplicable?: InputMaybe<Scalars['Boolean']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
   /**
    * Staff only once the slot exists — an applicant could otherwise turn a
    * mandatory slot into an optional one and then mark it not applicable.
@@ -11672,368 +13061,372 @@ export type UpdateAssessmentDocumentInput = {
 };
 
 export type UpdateAssessmentInput = {
-  consentGivenAt?: InputMaybe<Scalars["DateTime"]["input"]>;
-  declarationGivenAt?: InputMaybe<Scalars["DateTime"]["input"]>;
-  officerNotes?: InputMaybe<Scalars["String"]["input"]>;
+  consentGivenAt?: InputMaybe<Scalars['DateTime']['input']>;
+  declarationGivenAt?: InputMaybe<Scalars['DateTime']['input']>;
+  officerNotes?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateAssessmentQuestionInput = {
   answerType?: InputMaybe<AssessmentAnswerType>;
-  categoryId?: InputMaybe<Scalars["ID"]["input"]>;
-  code?: InputMaybe<Scalars["String"]["input"]>;
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  guidance?: InputMaybe<Scalars["String"]["input"]>;
-  isKycAutofill?: InputMaybe<Scalars["Boolean"]["input"]>;
-  isRequired?: InputMaybe<Scalars["Boolean"]["input"]>;
-  isScored?: InputMaybe<Scalars["Boolean"]["input"]>;
-  kycSourceField?: InputMaybe<Scalars["String"]["input"]>;
-  prompt?: InputMaybe<Scalars["String"]["input"]>;
-  scoringLogicText?: InputMaybe<Scalars["String"]["input"]>;
-  templateId?: InputMaybe<Scalars["ID"]["input"]>;
-  unit?: InputMaybe<Scalars["String"]["input"]>;
-  verification?: InputMaybe<Scalars["String"]["input"]>;
-  weight?: InputMaybe<Scalars["Float"]["input"]>;
+  categoryId?: InputMaybe<Scalars['ID']['input']>;
+  code?: InputMaybe<Scalars['String']['input']>;
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  guidance?: InputMaybe<Scalars['String']['input']>;
+  isKycAutofill?: InputMaybe<Scalars['Boolean']['input']>;
+  isRequired?: InputMaybe<Scalars['Boolean']['input']>;
+  isScored?: InputMaybe<Scalars['Boolean']['input']>;
+  kycSourceField?: InputMaybe<Scalars['String']['input']>;
+  prompt?: InputMaybe<Scalars['String']['input']>;
+  scoringLogicText?: InputMaybe<Scalars['String']['input']>;
+  templateId?: InputMaybe<Scalars['ID']['input']>;
+  unit?: InputMaybe<Scalars['String']['input']>;
+  verification?: InputMaybe<Scalars['String']['input']>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type UpdateAssessmentQuestionOptionInput = {
-  code?: InputMaybe<Scalars["String"]["input"]>;
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  label?: InputMaybe<Scalars["String"]["input"]>;
-  score?: InputMaybe<Scalars["Int"]["input"]>;
+  code?: InputMaybe<Scalars['String']['input']>;
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  label?: InputMaybe<Scalars['String']['input']>;
+  score?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdateAssessmentReadinessBandInput = {
-  action?: InputMaybe<Scalars["String"]["input"]>;
-  code?: InputMaybe<Scalars["String"]["input"]>;
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  guidance?: InputMaybe<Scalars["String"]["input"]>;
-  label?: InputMaybe<Scalars["String"]["input"]>;
-  maxScore?: InputMaybe<Scalars["Int"]["input"]>;
-  minScore?: InputMaybe<Scalars["Int"]["input"]>;
+  action?: InputMaybe<Scalars['String']['input']>;
+  code?: InputMaybe<Scalars['String']['input']>;
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  guidance?: InputMaybe<Scalars['String']['input']>;
+  label?: InputMaybe<Scalars['String']['input']>;
+  maxScore?: InputMaybe<Scalars['Int']['input']>;
+  minScore?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdateAssessmentScoringBandInput = {
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  maxValue?: InputMaybe<Scalars["Float"]["input"]>;
-  minValue?: InputMaybe<Scalars["Float"]["input"]>;
-  score?: InputMaybe<Scalars["Int"]["input"]>;
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  maxValue?: InputMaybe<Scalars['Float']['input']>;
+  minValue?: InputMaybe<Scalars['Float']['input']>;
+  score?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdateAssessmentTemplateInput = {
-  code?: InputMaybe<Scalars["String"]["input"]>;
-  consentText?: InputMaybe<Scalars["String"]["input"]>;
-  declarationText?: InputMaybe<Scalars["String"]["input"]>;
-  legalNotice?: InputMaybe<Scalars["String"]["input"]>;
-  maxScorePerParameter?: InputMaybe<Scalars["Int"]["input"]>;
-  name?: InputMaybe<Scalars["String"]["input"]>;
+  code?: InputMaybe<Scalars['String']['input']>;
+  consentText?: InputMaybe<Scalars['String']['input']>;
+  declarationText?: InputMaybe<Scalars['String']['input']>;
+  legalNotice?: InputMaybe<Scalars['String']['input']>;
+  maxScorePerParameter?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
   platformRole?: InputMaybe<AssessmentPlatformRole>;
   status?: InputMaybe<AssessmentTemplateStatus>;
   subjectType?: InputMaybe<AssessmentSubjectType>;
-  version?: InputMaybe<Scalars["String"]["input"]>;
+  version?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateComplianceSectionInput = {
-  bg?: InputMaybe<Scalars["String"]["input"]>;
-  color?: InputMaybe<Scalars["String"]["input"]>;
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  title?: InputMaybe<Scalars["String"]["input"]>;
+  bg?: InputMaybe<Scalars['String']['input']>;
+  color?: InputMaybe<Scalars['String']['input']>;
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateComplianceSubmissionInput = {
-  note?: InputMaybe<Scalars["String"]["input"]>;
-  reviewer?: InputMaybe<Scalars["String"]["input"]>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  reviewer?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<DocStatus>;
 };
 
 export type UpdateComplianceTemplateInput = {
-  description?: InputMaybe<Scalars["String"]["input"]>;
-  displayOrder?: InputMaybe<Scalars["Int"]["input"]>;
-  documentCode?: InputMaybe<Scalars["String"]["input"]>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  documentCode?: InputMaybe<Scalars['String']['input']>;
   gatedActions?: InputMaybe<Array<GatedAction>>;
-  name?: InputMaybe<Scalars["String"]["input"]>;
-  required?: InputMaybe<Scalars["Boolean"]["input"]>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  required?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UpdateConversationInput = {
-  id: Scalars["ID"]["input"];
+  id: Scalars['ID']['input'];
   kind?: InputMaybe<ConversationKind>;
-  lastMessageId?: InputMaybe<Scalars["ID"]["input"]>;
+  lastMessageId?: InputMaybe<Scalars['ID']['input']>;
   paymentStatus?: InputMaybe<ConversationPaymentStatus>;
-  referenceNumber?: InputMaybe<Scalars["String"]["input"]>;
-  transactionId?: InputMaybe<Scalars["String"]["input"]>;
-  transferDocument?: InputMaybe<Scalars["String"]["input"]>;
+  referenceNumber?: InputMaybe<Scalars['String']['input']>;
+  transactionId?: InputMaybe<Scalars['String']['input']>;
+  transferDocument?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateDocumentRequestInput = {
-  acceptedFileTypes?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  count?: InputMaybe<Scalars["Int"]["input"]>;
-  description?: InputMaybe<Scalars["String"]["input"]>;
-  documentCode?: InputMaybe<Scalars["String"]["input"]>;
-  dueDate?: InputMaybe<Scalars["String"]["input"]>;
-  name?: InputMaybe<Scalars["String"]["input"]>;
-  required?: InputMaybe<Scalars["Boolean"]["input"]>;
+  acceptedFileTypes?: InputMaybe<Array<Scalars['String']['input']>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  documentCode?: InputMaybe<Scalars['String']['input']>;
+  dueDate?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  required?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UpdateDueDiligenceInput = {
-  dueDiligenceInitiatedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
-  dueDiligenceReportDate?: InputMaybe<Scalars["DateTime"]["input"]>;
-  dueDiligenceReportImages?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  dueDiligenceReportMessage?: InputMaybe<Scalars["String"]["input"]>;
+  dueDiligenceInitiatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  dueDiligenceReportDate?: InputMaybe<Scalars['DateTime']['input']>;
+  dueDiligenceReportImages?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  dueDiligenceReportMessage?: InputMaybe<Scalars['String']['input']>;
   dueDiligenceStatus?: InputMaybe<DueDiligenceStatus>;
-  id: Scalars["ID"]["input"];
-  legalDocuments?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  ownerId?: InputMaybe<Scalars["ID"]["input"]>;
-  propertyId?: InputMaybe<Scalars["ID"]["input"]>;
-  updatedBy?: InputMaybe<Scalars["JSONObject"]["input"]>;
+  id: Scalars['ID']['input'];
+  legalDocuments?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  ownerId?: InputMaybe<Scalars['ID']['input']>;
+  propertyId?: InputMaybe<Scalars['ID']['input']>;
+  updatedBy?: InputMaybe<Scalars['JSONObject']['input']>;
 };
 
 export type UpdateEntityRoleInput = {
-  badgeColor?: InputMaybe<Scalars["String"]["input"]>;
-  description?: InputMaybe<Scalars["String"]["input"]>;
-  name?: InputMaybe<Scalars["String"]["input"]>;
-  permissions?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  badgeColor?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  permissions?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type UpdateOfferInput = {
-  acceptedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
-  availabilityPeriodDays?: InputMaybe<Scalars["Int"]["input"]>;
+  acceptedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  availabilityPeriodDays?: InputMaybe<Scalars['Int']['input']>;
   bondSubType?: InputMaybe<BondSubType>;
-  commitmentFeeRate?: InputMaybe<Scalars["Float"]["input"]>;
-  conditions?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  covenants?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  currency?: InputMaybe<Scalars["String"]["input"]>;
-  depositPercentage?: InputMaybe<Scalars["Float"]["input"]>;
-  drawdownSchedule?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  dsraMonths?: InputMaybe<Scalars["Int"]["input"]>;
-  financierId?: InputMaybe<Scalars["ID"]["input"]>;
-  id: Scalars["ID"]["input"];
-  interestRate?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  issuedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
-  lenderName?: InputMaybe<Scalars["String"]["input"]>;
+  commitmentFeeRate?: InputMaybe<Scalars['Float']['input']>;
+  conditions?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  covenants?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  depositPercentage?: InputMaybe<Scalars['Float']['input']>;
+  drawdownSchedule?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  dsraMonths?: InputMaybe<Scalars['Int']['input']>;
+  financierId?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
+  interestRate?: InputMaybe<Scalars['JSONObject']['input']>;
+  issuedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  lenderName?: InputMaybe<Scalars['String']['input']>;
   loanSubType?: InputMaybe<LoanSubType>;
-  loanTenor?: InputMaybe<Scalars["JSONObject"]["input"]>;
+  loanTenor?: InputMaybe<Scalars['JSONObject']['input']>;
   loanType?: InputMaybe<LoanType>;
-  ltv?: InputMaybe<Scalars["Float"]["input"]>;
-  maxLoanAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  moratorium?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  offerExpiryDate?: InputMaybe<Scalars["DateTime"]["input"]>;
-  offerRequestId?: InputMaybe<Scalars["ID"]["input"]>;
+  ltv?: InputMaybe<Scalars['Float']['input']>;
+  maxLoanAmount?: InputMaybe<Scalars['Float']['input']>;
+  moratorium?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  offerExpiryDate?: InputMaybe<Scalars['DateTime']['input']>;
+  offerRequestId?: InputMaybe<Scalars['ID']['input']>;
   offerStatus?: InputMaybe<OfferStatus>;
-  otherFees?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  processingTimeline?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  propertyId?: InputMaybe<Scalars["ID"]["input"]>;
-  propertyName?: InputMaybe<Scalars["String"]["input"]>;
+  otherFees?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  processingTimeline?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  propertyId?: InputMaybe<Scalars['ID']['input']>;
+  propertyName?: InputMaybe<Scalars['String']['input']>;
   rateType?: InputMaybe<RateType>;
-  recipientId?: InputMaybe<Scalars["ID"]["input"]>;
+  recipientId?: InputMaybe<Scalars['ID']['input']>;
   repaymentFrequency?: InputMaybe<RepaymentFrequency>;
   repaymentType?: InputMaybe<RepaymentType>;
-  revokedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
-  schedule?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  security?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  sources?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  revokedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  schedule?: InputMaybe<Scalars['JSONObject']['input']>;
+  security?: InputMaybe<Scalars['JSONObject']['input']>;
+  sources?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type UpdateOfferRequestInput = {
-  agreedAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  approvedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
-  buyerId?: InputMaybe<Scalars["ID"]["input"]>;
-  financierId?: InputMaybe<Scalars["ID"]["input"]>;
-  id: Scalars["ID"]["input"];
-  initialDeposit?: InputMaybe<Scalars["Float"]["input"]>;
-  issuerId?: InputMaybe<Scalars["ID"]["input"]>;
+  agreedAmount?: InputMaybe<Scalars['Float']['input']>;
+  approvedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  buyerId?: InputMaybe<Scalars['ID']['input']>;
+  financierId?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
+  initialDeposit?: InputMaybe<Scalars['Float']['input']>;
+  issuerId?: InputMaybe<Scalars['ID']['input']>;
   modeOfFinancing?: InputMaybe<ModeOfFinancing>;
-  offer?: InputMaybe<Scalars["JSONObject"]["input"]>;
+  offer?: InputMaybe<Scalars['JSONObject']['input']>;
   paymentStatus?: InputMaybe<OfferRequestPaymentStatus>;
-  propertyId?: InputMaybe<Scalars["ID"]["input"]>;
-  refNo?: InputMaybe<Scalars["String"]["input"]>;
+  propertyId?: InputMaybe<Scalars['ID']['input']>;
+  refNo?: InputMaybe<Scalars['String']['input']>;
   requestStatus?: InputMaybe<OfferRequestStatus>;
-  requestedAmount?: InputMaybe<Scalars["Float"]["input"]>;
+  requestedAmount?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type UpdatePaymentScheduleInput = {
-  createdForId?: InputMaybe<Scalars["ID"]["input"]>;
-  id: Scalars["ID"]["input"];
-  interestRate?: InputMaybe<Scalars["Float"]["input"]>;
-  loanId?: InputMaybe<Scalars["ID"]["input"]>;
-  maxLoanAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  metadata?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  offerRequestId?: InputMaybe<Scalars["ID"]["input"]>;
-  repaymentFrequency?: InputMaybe<Scalars["String"]["input"]>;
-  repaymentTerms?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  totalInterest?: InputMaybe<Scalars["String"]["input"]>;
-  totalRepayment?: InputMaybe<Scalars["String"]["input"]>;
+  createdForId?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
+  interestRate?: InputMaybe<Scalars['Float']['input']>;
+  loanId?: InputMaybe<Scalars['ID']['input']>;
+  maxLoanAmount?: InputMaybe<Scalars['Float']['input']>;
+  metadata?: InputMaybe<Scalars['JSONObject']['input']>;
+  offerRequestId?: InputMaybe<Scalars['ID']['input']>;
+  repaymentFrequency?: InputMaybe<Scalars['String']['input']>;
+  repaymentTerms?: InputMaybe<Scalars['JSONObject']['input']>;
+  totalInterest?: InputMaybe<Scalars['String']['input']>;
+  totalRepayment?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdatePortfolioInput = {
-  additionalFiles?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
+  additionalFiles?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
   construction?: InputMaybe<ConstructionInput>;
-  constructionCommencementDate?: InputMaybe<Scalars["String"]["input"]>;
-  epaPermitNumber?: InputMaybe<Scalars["String"]["input"]>;
-  gpsAddress?: InputMaybe<Scalars["String"]["input"]>;
-  grossDevelopmentValue?: InputMaybe<Scalars["Float"]["input"]>;
-  id: Scalars["ID"]["input"];
-  landValuationAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  landValuer?: InputMaybe<Scalars["String"]["input"]>;
-  listingObjective?: InputMaybe<Scalars["String"]["input"]>;
-  metadata?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  planningPermitNumber?: InputMaybe<Scalars["String"]["input"]>;
-  portfolioType?: InputMaybe<Scalars["String"]["input"]>;
-  practicalCompletionDate?: InputMaybe<Scalars["String"]["input"]>;
+  constructionCommencementDate?: InputMaybe<Scalars['String']['input']>;
+  epaPermitNumber?: InputMaybe<Scalars['String']['input']>;
+  gpsAddress?: InputMaybe<Scalars['String']['input']>;
+  grossDevelopmentValue?: InputMaybe<Scalars['Float']['input']>;
+  id: Scalars['ID']['input'];
+  landValuationAmount?: InputMaybe<Scalars['Float']['input']>;
+  landValuer?: InputMaybe<Scalars['String']['input']>;
+  listingObjective?: InputMaybe<Scalars['String']['input']>;
+  metadata?: InputMaybe<Scalars['JSONObject']['input']>;
+  planningPermitNumber?: InputMaybe<Scalars['String']['input']>;
+  portfolioType?: InputMaybe<Scalars['String']['input']>;
+  practicalCompletionDate?: InputMaybe<Scalars['String']['input']>;
   projectCost?: InputMaybe<ProjectCostInput>;
-  projectDescription?: InputMaybe<Scalars["String"]["input"]>;
-  projectImages?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  projectName?: InputMaybe<Scalars["String"]["input"]>;
-  projectStatus?: InputMaybe<Scalars["String"]["input"]>;
-  projectType?: InputMaybe<Scalars["String"]["input"]>;
-  properties?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  projectDescription?: InputMaybe<Scalars['String']['input']>;
+  projectImages?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  projectName?: InputMaybe<Scalars['String']['input']>;
+  projectStatus?: InputMaybe<Scalars['String']['input']>;
+  projectType?: InputMaybe<Scalars['String']['input']>;
+  properties?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   propertyTypes?: InputMaybe<Array<InputMaybe<PropertyTypesInput>>>;
-  readiness?: InputMaybe<Scalars["Int"]["input"]>;
-  sessionId?: InputMaybe<Scalars["String"]["input"]>;
-  sharedAmenities?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-  squareFeet?: InputMaybe<Scalars["Int"]["input"]>;
-  streetAddress?: InputMaybe<Scalars["String"]["input"]>;
-  titleNumber?: InputMaybe<Scalars["String"]["input"]>;
-  totalDevelopmentCost?: InputMaybe<Scalars["Float"]["input"]>;
-  yearBuilt?: InputMaybe<Scalars["String"]["input"]>;
+  readiness?: InputMaybe<Scalars['Int']['input']>;
+  sessionId?: InputMaybe<Scalars['String']['input']>;
+  sharedAmenities?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  squareFeet?: InputMaybe<Scalars['Int']['input']>;
+  streetAddress?: InputMaybe<Scalars['String']['input']>;
+  titleNumber?: InputMaybe<Scalars['String']['input']>;
+  totalDevelopmentCost?: InputMaybe<Scalars['Float']['input']>;
+  yearBuilt?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateRepaymentInput = {
-  conversationId?: InputMaybe<Scalars["ID"]["input"]>;
-  createdById?: InputMaybe<Scalars["ID"]["input"]>;
-  createdForId?: InputMaybe<Scalars["ID"]["input"]>;
-  id: Scalars["ID"]["input"];
-  interestRate?: InputMaybe<Scalars["Float"]["input"]>;
-  isSubscribedToReferenceRate?: InputMaybe<Scalars["Boolean"]["input"]>;
-  loanId?: InputMaybe<Scalars["ID"]["input"]>;
-  maxLoanAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  metadata?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  offerRequestId?: InputMaybe<Scalars["ID"]["input"]>;
-  propertyId?: InputMaybe<Scalars["ID"]["input"]>;
-  repaymentFrequency?: InputMaybe<Scalars["String"]["input"]>;
-  repaymentTerms?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  scheduleType?: InputMaybe<Scalars["String"]["input"]>;
-  totalInterest?: InputMaybe<Scalars["String"]["input"]>;
-  totalRepayment?: InputMaybe<Scalars["String"]["input"]>;
+  conversationId?: InputMaybe<Scalars['ID']['input']>;
+  createdById?: InputMaybe<Scalars['ID']['input']>;
+  createdForId?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
+  interestRate?: InputMaybe<Scalars['Float']['input']>;
+  isSubscribedToReferenceRate?: InputMaybe<Scalars['Boolean']['input']>;
+  loanId?: InputMaybe<Scalars['ID']['input']>;
+  maxLoanAmount?: InputMaybe<Scalars['Float']['input']>;
+  metadata?: InputMaybe<Scalars['JSONObject']['input']>;
+  offerRequestId?: InputMaybe<Scalars['ID']['input']>;
+  propertyId?: InputMaybe<Scalars['ID']['input']>;
+  repaymentFrequency?: InputMaybe<Scalars['String']['input']>;
+  repaymentTerms?: InputMaybe<Scalars['JSONObject']['input']>;
+  scheduleType?: InputMaybe<Scalars['String']['input']>;
+  totalInterest?: InputMaybe<Scalars['String']['input']>;
+  totalRepayment?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateReviewInput = {
-  comment?: InputMaybe<Scalars["String"]["input"]>;
-  conversationId?: InputMaybe<Scalars["String"]["input"]>;
-  id: Scalars["ID"]["input"];
-  rating?: InputMaybe<Scalars["Int"]["input"]>;
-  replies?: InputMaybe<Array<InputMaybe<Scalars["JSONObject"]["input"]>>>;
-  userAvatar?: InputMaybe<Scalars["String"]["input"]>;
-  userName?: InputMaybe<Scalars["String"]["input"]>;
+  comment?: InputMaybe<Scalars['String']['input']>;
+  conversationId?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  rating?: InputMaybe<Scalars['Int']['input']>;
+  replies?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>;
+  userAvatar?: InputMaybe<Scalars['String']['input']>;
+  userName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateSupportRoleInput = {
-  description?: InputMaybe<Scalars["String"]["input"]>;
-  name?: InputMaybe<Scalars["String"]["input"]>;
-  permissions?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  permissions?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type UpdateTailoringRuleInput = {
-  description?: InputMaybe<Scalars["String"]["input"]>;
-  documentCodes?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  entityType?: InputMaybe<Scalars["String"]["input"]>;
-  isActive?: InputMaybe<Scalars["Boolean"]["input"]>;
-  name?: InputMaybe<Scalars["String"]["input"]>;
-  platformRole?: InputMaybe<Scalars["String"]["input"]>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  documentCodes?: InputMaybe<Array<Scalars['String']['input']>>;
+  entityType?: InputMaybe<Scalars['String']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  platformRole?: InputMaybe<Scalars['String']['input']>;
   requirement?: InputMaybe<RequirementLevel>;
 };
 
 /**
- * The extractor's answer for a session (`id` is the session id): `result` with
- * the fields it read, or `error` when it could not read the document.
+ * The extractor's answer for a session (`id` is the session id). `result` is
+ * afram-ai's flat notification record: `extractionStatus` ("completed" or
+ * "failed") is the only success signal; a completed record carries the fields it
+ * read, a failed one a user-safe `error`, `errorCode` and `retryable`. A result
+ * without a valid `extractionStatus` is refused.
  *
  * Accepted only from the extractor: the request must carry EXTRACTOR_API_KEY in
  * the `x-extractor-key` header. A user session is neither needed nor sufficient.
- * Keys in `result` outside the extracted listing fields (address, title and unit
- * details — EXTRACTED_FIELDS in temp-project.broker) are dropped.
+ * Only the listing fields a land title yields are read from `result`, mapped to
+ * the draft's names (extractedFields in temp-project.broker); anything else is
+ * ignored.
  */
 export type UpdateTempProjectInput = {
   /** Why the document could not be read. Marks extraction failed. */
-  error?: InputMaybe<Scalars["String"]["input"]>;
-  id: Scalars["ID"]["input"];
-  result?: InputMaybe<Scalars["JSONObject"]["input"]>;
+  error?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  result?: InputMaybe<Scalars['JSONObject']['input']>;
 };
 
 export type UpdateTermSheetInput = {
-  buyerId?: InputMaybe<Scalars["ID"]["input"]>;
-  completionDate?: InputMaybe<Scalars["DateTime"]["input"]>;
-  currency?: InputMaybe<Scalars["String"]["input"]>;
-  documentUrl?: InputMaybe<Scalars["String"]["input"]>;
-  downPayment?: InputMaybe<Scalars["Float"]["input"]>;
-  dsraAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  executionDate?: InputMaybe<Scalars["DateTime"]["input"]>;
-  financedAmount?: InputMaybe<Scalars["Float"]["input"]>;
-  financierId?: InputMaybe<Scalars["ID"]["input"]>;
-  initialDeposit?: InputMaybe<Scalars["Float"]["input"]>;
-  interestRate?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  issuerId?: InputMaybe<Scalars["ID"]["input"]>;
-  loanTenor?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  longstopDate?: InputMaybe<Scalars["DateTime"]["input"]>;
-  ltv?: InputMaybe<Scalars["Float"]["input"]>;
-  metadata?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  modeOfFinancing?: InputMaybe<Scalars["String"]["input"]>;
-  purchasePrice?: InputMaybe<Scalars["Float"]["input"]>;
-  repaymentFrequency?: InputMaybe<Scalars["String"]["input"]>;
+  buyerId?: InputMaybe<Scalars['ID']['input']>;
+  completionDate?: InputMaybe<Scalars['DateTime']['input']>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  documentUrl?: InputMaybe<Scalars['String']['input']>;
+  downPayment?: InputMaybe<Scalars['Float']['input']>;
+  dsraAmount?: InputMaybe<Scalars['Float']['input']>;
+  executionDate?: InputMaybe<Scalars['DateTime']['input']>;
+  financedAmount?: InputMaybe<Scalars['Float']['input']>;
+  financierId?: InputMaybe<Scalars['ID']['input']>;
+  initialDeposit?: InputMaybe<Scalars['Float']['input']>;
+  interestRate?: InputMaybe<Scalars['JSONObject']['input']>;
+  issuerId?: InputMaybe<Scalars['ID']['input']>;
+  loanTenor?: InputMaybe<Scalars['JSONObject']['input']>;
+  longstopDate?: InputMaybe<Scalars['DateTime']['input']>;
+  ltv?: InputMaybe<Scalars['Float']['input']>;
+  metadata?: InputMaybe<Scalars['JSONObject']['input']>;
+  modeOfFinancing?: InputMaybe<Scalars['String']['input']>;
+  purchasePrice?: InputMaybe<Scalars['Float']['input']>;
+  repaymentFrequency?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<TermSheetStatus>;
-  termSheetExpiryDate?: InputMaybe<Scalars["DateTime"]["input"]>;
-  transactionRefNo?: InputMaybe<Scalars["String"]["input"]>;
+  termSheetExpiryDate?: InputMaybe<Scalars['DateTime']['input']>;
+  transactionRefNo?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateTransactionInput = {
-  amount?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  description?: InputMaybe<Scalars["String"]["input"]>;
-  from?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  id: Scalars["ID"]["input"];
-  propertyId?: InputMaybe<Scalars["ID"]["input"]>;
-  quantity?: InputMaybe<Scalars["Int"]["input"]>;
-  referenceNo?: InputMaybe<Scalars["String"]["input"]>;
-  state?: InputMaybe<Scalars["String"]["input"]>;
-  status?: InputMaybe<Scalars["String"]["input"]>;
-  to?: InputMaybe<Scalars["JSONObject"]["input"]>;
-  tokens?: InputMaybe<Scalars["Int"]["input"]>;
-  transactionId?: InputMaybe<Scalars["String"]["input"]>;
-  type?: InputMaybe<Scalars["String"]["input"]>;
+  amount?: InputMaybe<Scalars['JSONObject']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  from?: InputMaybe<Scalars['JSONObject']['input']>;
+  id: Scalars['ID']['input'];
+  propertyId?: InputMaybe<Scalars['ID']['input']>;
+  quantity?: InputMaybe<Scalars['Int']['input']>;
+  referenceNo?: InputMaybe<Scalars['String']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  to?: InputMaybe<Scalars['JSONObject']['input']>;
+  tokens?: InputMaybe<Scalars['Int']['input']>;
+  transactionId?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UploadComplianceDocumentInput = {
-  fileName: Scalars["String"]["input"];
-  fileSizeBytes: Scalars["Int"]["input"];
-  fileUrl: Scalars["String"]["input"];
-  mimeType: Scalars["String"]["input"];
-  note?: InputMaybe<Scalars["String"]["input"]>;
+  fileName: Scalars['String']['input'];
+  fileSizeBytes: Scalars['Int']['input'];
+  fileUrl: Scalars['String']['input'];
+  mimeType: Scalars['String']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
   roleType: ComplianceRoleType;
-  templateId: Scalars["ID"]["input"];
+  templateId: Scalars['ID']['input'];
 };
 
 export type UpsertAssessmentResponseInput = {
-  assessmentId: Scalars["ID"]["input"];
-  questionCode: Scalars["String"]["input"];
-  questionId: Scalars["ID"]["input"];
-  selectedOptionIds?: InputMaybe<Array<Scalars["ID"]["input"]>>;
-  valueBoolean?: InputMaybe<Scalars["Boolean"]["input"]>;
-  valueDate?: InputMaybe<Scalars["Date"]["input"]>;
-  valueNumber?: InputMaybe<Scalars["Float"]["input"]>;
-  valueText?: InputMaybe<Scalars["String"]["input"]>;
+  assessmentId: Scalars['ID']['input'];
+  questionCode: Scalars['String']['input'];
+  questionId: Scalars['ID']['input'];
+  selectedOptionIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+  valueBoolean?: InputMaybe<Scalars['Boolean']['input']>;
+  valueDate?: InputMaybe<Scalars['Date']['input']>;
+  valueNumber?: InputMaybe<Scalars['Float']['input']>;
+  valueText?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
-  __typename?: "User";
-  address?: Maybe<Scalars["String"]["output"]>;
-  bankDetails?: Maybe<Scalars["JSON"]["output"]>;
-  city?: Maybe<Scalars["String"]["output"]>;
-  completedWalkthroughs?: Maybe<Array<Scalars["String"]["output"]>>;
-  countryCode: Scalars["String"]["output"];
+  __typename?: 'User';
+  address?: Maybe<Scalars['String']['output']>;
+  bankDetails?: Maybe<Scalars['JSON']['output']>;
+  city?: Maybe<Scalars['String']['output']>;
+  completedWalkthroughs?: Maybe<Array<Scalars['String']['output']>>;
+  countryCode: Scalars['String']['output'];
   /** ISO 3166-1 alpha-2. Where the person lives — not `countryCode`, which is the phone's dialling code. */
-  countryOfResidence?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deactivatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  defaultRole?: Maybe<Scalars["String"]["output"]>;
-  deletionDate?: Maybe<Scalars["DateTime"]["output"]>;
-  deletionReason?: Maybe<Scalars["String"]["output"]>;
+  countryOfResidence?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  deactivatedAt?: Maybe<Scalars['DateTime']['output']>;
+  defaultRole?: Maybe<Scalars['String']['output']>;
+  deletionDate?: Maybe<Scalars['DateTime']['output']>;
+  deletionReason?: Maybe<Scalars['String']['output']>;
   /**
    * The signature held on this account, for offering back to a returning signer.
    *
@@ -12042,26 +13435,26 @@ export type User = {
    * counterparty being able to select it off a user they are transacting with is
    * the whole problem. Use `saveMySignature` / `deleteMySignature` to change it.
    */
-  digitalSignature?: Maybe<Scalars["String"]["output"]>;
+  digitalSignature?: Maybe<Scalars['String']['output']>;
   /** Area / neighbourhood, e.g. East Legon. */
-  district?: Maybe<Scalars["String"]["output"]>;
-  email: Scalars["String"]["output"];
-  employer?: Maybe<Scalars["String"]["output"]>;
+  district?: Maybe<Scalars['String']['output']>;
+  email: Scalars['String']['output'];
+  employer?: Maybe<Scalars['String']['output']>;
   entities?: Maybe<Array<Maybe<Entity>>>;
   entityMemberships?: Maybe<Array<Maybe<EntityMember>>>;
   /**
    * The live selfie the NIA check runs against. Readable only by its owner and by
    * platform staff; null for anyone else. Not the avatar — that is `profileImage`.
    */
-  faceImageUrl?: Maybe<Scalars["String"]["output"]>;
-  firstName?: Maybe<Scalars["String"]["output"]>;
+  faceImageUrl?: Maybe<Scalars['String']['output']>;
+  firstName?: Maybe<Scalars['String']['output']>;
   /** "MALE" | "FEMALE". Part of the KYC set a bank account needs. */
-  gender?: Maybe<Scalars["String"]["output"]>;
-  ghanaCard?: Maybe<Scalars["JSON"]["output"]>;
-  googleId?: Maybe<Scalars["String"]["output"]>;
-  gpsAddress?: Maybe<Scalars["String"]["output"]>;
-  hasCompletedWalkthrough?: Maybe<Scalars["Boolean"]["output"]>;
-  id: Scalars["ID"]["output"];
+  gender?: Maybe<Scalars['String']['output']>;
+  ghanaCard?: Maybe<Scalars['JSON']['output']>;
+  googleId?: Maybe<Scalars['String']['output']>;
+  gpsAddress?: Maybe<Scalars['String']['output']>;
+  hasCompletedWalkthrough?: Maybe<Scalars['Boolean']['output']>;
+  id: Scalars['ID']['output'];
   /**
    * Readable by the user themselves and by platform staff; null for anyone else.
    *
@@ -12072,30 +13465,30 @@ export type User = {
    * what login checks.
    */
   identityVerification?: Maybe<IdentityVerification>;
-  isDeactivated?: Maybe<Scalars["Boolean"]["output"]>;
-  isOnboarded?: Maybe<Scalars["Boolean"]["output"]>;
-  isSuspended?: Maybe<Scalars["Boolean"]["output"]>;
-  isVerified?: Maybe<Scalars["Boolean"]["output"]>;
-  lastName?: Maybe<Scalars["String"]["output"]>;
-  mfa?: Maybe<Scalars["Boolean"]["output"]>;
-  momoNumber?: Maybe<Scalars["String"]["output"]>;
-  monthlyNetIncome?: Maybe<Scalars["Float"]["output"]>;
+  isDeactivated?: Maybe<Scalars['Boolean']['output']>;
+  isOnboarded?: Maybe<Scalars['Boolean']['output']>;
+  isSuspended?: Maybe<Scalars['Boolean']['output']>;
+  isVerified?: Maybe<Scalars['Boolean']['output']>;
+  lastName?: Maybe<Scalars['String']['output']>;
+  mfa?: Maybe<Scalars['Boolean']['output']>;
+  momoNumber?: Maybe<Scalars['String']['output']>;
+  monthlyNetIncome?: Maybe<Scalars['Float']['output']>;
   /** ISO 3166-1 alpha-2, e.g. GH. */
-  nationality?: Maybe<Scalars["String"]["output"]>;
-  occupation?: Maybe<Scalars["String"]["output"]>;
-  otp?: Maybe<Scalars["String"]["output"]>;
-  passport?: Maybe<Scalars["JSON"]["output"]>;
-  phoneNumber: Scalars["String"]["output"];
+  nationality?: Maybe<Scalars['String']['output']>;
+  occupation?: Maybe<Scalars['String']['output']>;
+  otp?: Maybe<Scalars['String']['output']>;
+  passport?: Maybe<Scalars['JSON']['output']>;
+  phoneNumber: Scalars['String']['output'];
   /** In Ghana, the GhanaPost GPS address, e.g. GA-183-8164. */
-  postalCode?: Maybe<Scalars["String"]["output"]>;
-  profileImage?: Maybe<Scalars["String"]["output"]>;
-  region?: Maybe<Scalars["String"]["output"]>;
+  postalCode?: Maybe<Scalars['String']['output']>;
+  profileImage?: Maybe<Scalars['String']['output']>;
+  region?: Maybe<Scalars['String']['output']>;
   roles?: Maybe<Array<Maybe<RoleRequest>>>;
   /** Decomposed address — bank KYC needs street/city/region separately from `address`. */
-  streetAddress?: Maybe<Scalars["String"]["output"]>;
-  subscriptionId?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  walletId?: Maybe<Scalars["String"]["output"]>;
+  streetAddress?: Maybe<Scalars['String']['output']>;
+  subscriptionId?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  walletId?: Maybe<Scalars['String']['output']>;
 };
 
 export type UserFilter = {
@@ -12107,45 +13500,50 @@ export type UserFilter = {
 };
 
 export type UserPolicy = {
-  __typename?: "UserPolicy";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  data: Scalars["JSON"]["output"];
-  id: Scalars["ID"]["output"];
+  __typename?: 'UserPolicy';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  data: Scalars['JSON']['output'];
+  id: Scalars['ID']['output'];
   /** users.id when ownerType is user, entities.id when ownerType is entity */
-  ownerId: Scalars["ID"]["output"];
+  ownerId: Scalars['ID']['output'];
   /** 'user' for buyer policies, 'entity' for shared issuer/financier policies */
   ownerType: UserPolicyOwnerType;
   role: UserPolicyRole;
   /** The user who last saved this policy (audit) */
-  savedByUserId?: Maybe<Scalars["ID"]["output"]>;
-  schemaVersion: Scalars["Int"]["output"];
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  savedByUserId?: Maybe<Scalars['ID']['output']>;
+  schemaVersion: Scalars['Int']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
-export type UserPolicyOwnerType = "entity" | "user";
+export type UserPolicyOwnerType =
+  | 'entity'
+  | 'user';
 
-export type UserPolicyRole = "buyer" | "financier" | "issuer";
+export type UserPolicyRole =
+  | 'buyer'
+  | 'financier'
+  | 'issuer';
 
 export type UserReference = {
-  __typename?: "UserReference";
-  id: Scalars["ID"]["output"];
-  name: Scalars["String"]["output"];
+  __typename?: 'UserReference';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type UserReferenceInput = {
-  email?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["ID"]["input"]>;
-  name?: InputMaybe<Scalars["String"]["input"]>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UserStats = {
-  __typename?: "UserStats";
-  activeUsers: Scalars["Int"]["output"];
-  deactivatedUsers: Scalars["Int"]["output"];
-  onboardedUsers: Scalars["Int"]["output"];
-  roles: Scalars["JSON"]["output"];
-  suspendedUsers: Scalars["Int"]["output"];
-  totalUsers: Scalars["Int"]["output"];
+  __typename?: 'UserStats';
+  activeUsers: Scalars['Int']['output'];
+  deactivatedUsers: Scalars['Int']['output'];
+  onboardedUsers: Scalars['Int']['output'];
+  roles: Scalars['JSON']['output'];
+  suspendedUsers: Scalars['Int']['output'];
+  totalUsers: Scalars['Int']['output'];
 };
 
 /**
@@ -12164,26 +13562,26 @@ export type UserStats = {
  * valuation they ordered.
  */
 export type Valuation = {
-  __typename?: "Valuation";
-  commissionedAt: Scalars["DateTime"]["output"];
+  __typename?: 'Valuation';
+  commissionedAt: Scalars['DateTime']['output'];
   /**
    * The financier's note. The commissioning note is replaced by the note given
    * when the report is filed, where they gave one — the later note describes the
    * valuation as it now stands, which is what the borrower is reading.
    */
-  notes?: Maybe<Scalars["String"]["output"]>;
-  receivedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  notes?: Maybe<Scalars['String']['output']>;
+  receivedAt?: Maybe<Scalars['DateTime']['output']>;
   /**
    * The valuer's report. Nothing writes this yet: no client collects a file and
    * no upload path accepts one. It exists so the field is not designed out of the
    * shape, and reads null on every valuation until one does.
    */
-  reportFileId?: Maybe<Scalars["ID"]["output"]>;
+  reportFileId?: Maybe<Scalars['ID']['output']>;
   status: ValuationStatus;
   /** Set only once the valuer has filed. Null while COMMISSIONED. */
-  valuationAmount?: Maybe<Scalars["Float"]["output"]>;
+  valuationAmount?: Maybe<Scalars['Float']['output']>;
   /** The valuer the financier instructed, as they named them. */
-  valuerName: Scalars["String"]["output"];
+  valuerName: Scalars['String']['output'];
 };
 
 /**
@@ -12196,29 +13594,29 @@ export type Valuation = {
  */
 export type ValuationStatus =
   /** Ordered from a valuer; no figure yet. */
-  | "COMMISSIONED"
+  | 'COMMISSIONED'
   /** The valuer has filed, and `valuationAmount` is set. */
-  | "RECEIVED";
+  | 'RECEIVED';
 
 export type VapidPublicKeyResponse = {
-  __typename?: "VapidPublicKeyResponse";
-  publicKey?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'VapidPublicKeyResponse';
+  publicKey?: Maybe<Scalars['String']['output']>;
 };
 
 export type WalletAccount = {
-  __typename?: "WalletAccount";
-  accountName?: Maybe<Scalars["String"]["output"]>;
+  __typename?: 'WalletAccount';
+  accountName?: Maybe<Scalars['String']['output']>;
   /** The owner's own dedicated account number at the partner bank. */
-  accountNumber?: Maybe<Scalars["String"]["output"]>;
-  bankName?: Maybe<Scalars["String"]["output"]>;
+  accountNumber?: Maybe<Scalars['String']['output']>;
+  bankName?: Maybe<Scalars['String']['output']>;
   /** Not always known immediately — some facilitators only surface it via a balance/info call. */
-  branchCode?: Maybe<Scalars["String"]["output"]>;
+  branchCode?: Maybe<Scalars['String']['output']>;
   /** Funding money for use on Afram. Never withdrawable. */
-  cashBalance: Scalars["Float"]["output"];
+  cashBalance: Scalars['Float']['output'];
   /** Reconciliation key for deposits (currently == accountNumber). */
-  depositReference?: Maybe<Scalars["String"]["output"]>;
+  depositReference?: Maybe<Scalars['String']['output']>;
   /** Proceeds owned by the user. Withdrawable to verifiedBankAccount only. */
-  payoutBalance: Scalars["Float"]["output"];
+  payoutBalance: Scalars['Float']['output'];
   /**
    * Null until a payout account exists. User-scoped, like the wallet itself — an
    * issuer's or financier's entity account is read with `getPayoutAccount(entity)`,
@@ -12234,293 +13632,123 @@ export type WalletAccount = {
  * gap, not the population.
  */
 export type WalletProvisioningOutcome =
-  | "created"
-  | "existing"
+  | 'created'
+  | 'existing'
   /** The bank or the KYC check refused; see `reason`. */
-  | "failed"
+  | 'failed'
   /** Would be attempted — a dry run, or past this run's limit. */
-  | "pending"
+  | 'pending'
   /** The id matches neither a user nor an entity. */
-  | "unknown_owner";
+  | 'unknown_owner';
 
 export type WalletProvisioningReplayEntry = {
-  __typename?: "WalletProvisioningReplayEntry";
+  __typename?: 'WalletProvisioningReplayEntry';
   outcome: WalletProvisioningOutcome;
-  ownerId: Scalars["ID"]["output"];
+  ownerId: Scalars['ID']['output'];
   /** "user" | "entity", or null when the id resolves to neither. */
-  ownerType?: Maybe<Scalars["String"]["output"]>;
+  ownerType?: Maybe<Scalars['String']['output']>;
   /** Why it failed — usually the exact profile fields the bank still needs. */
-  reason?: Maybe<Scalars["String"]["output"]>;
+  reason?: Maybe<Scalars['String']['output']>;
   /** Which lifecycle points obliged this party to have a wallet. */
-  sources: Array<Scalars["String"]["output"]>;
-  walletId?: Maybe<Scalars["ID"]["output"]>;
+  sources: Array<Scalars['String']['output']>;
+  walletId?: Maybe<Scalars['ID']['output']>;
 };
 
 export type WalletProvisioningReplayResult = {
-  __typename?: "WalletProvisioningReplayResult";
-  created: Scalars["Int"]["output"];
-  currency: Scalars["String"]["output"];
-  dryRun: Scalars["Boolean"]["output"];
+  __typename?: 'WalletProvisioningReplayResult';
+  created: Scalars['Int']['output'];
+  currency: Scalars['String']['output'];
+  dryRun: Scalars['Boolean']['output'];
   entries: Array<WalletProvisioningReplayEntry>;
-  existing: Scalars["Int"]["output"];
-  failed: Scalars["Int"]["output"];
-  pending: Scalars["Int"]["output"];
+  existing: Scalars['Int']['output'];
+  failed: Scalars['Int']['output'];
+  pending: Scalars['Int']['output'];
   /** Distinct parties a wallet.provision was, or should have been, emitted for. */
-  scanned: Scalars["Int"]["output"];
-  unknownOwner: Scalars["Int"]["output"];
+  scanned: Scalars['Int']['output'];
+  unknownOwner: Scalars['Int']['output'];
 };
 
 export type WalletTxn = {
-  __typename?: "WalletTxn";
-  amount: Scalars["Float"]["output"];
-  createdAt: Scalars["DateTime"]["output"];
+  __typename?: 'WalletTxn';
+  amount: Scalars['Float']['output'];
+  createdAt: Scalars['DateTime']['output'];
   /** deposit/payout = in, payment/withdrawal = out — derived from kind, not stored. */
-  direction: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
+  direction: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   kind: WalletTxnKind;
-  note?: Maybe<Scalars["String"]["output"]>;
-  reference?: Maybe<Scalars["String"]["output"]>;
+  note?: Maybe<Scalars['String']['output']>;
+  reference?: Maybe<Scalars['String']['output']>;
   status: WalletTxnStatus;
 };
 
-export type WalletTxnKind = "deposit" | "payment" | "payout" | "withdrawal";
+export type WalletTxnKind =
+  | 'deposit'
+  | 'payment'
+  | 'payout'
+  | 'withdrawal';
 
-export type WalletTxnStatus = "cleared" | "failed" | "pending";
+export type WalletTxnStatus =
+  | 'cleared'
+  | 'failed'
+  | 'pending';
 
 export type WalletVerifiedBank = {
-  __typename?: "WalletVerifiedBank";
-  accountName: Scalars["String"]["output"];
-  accountNumberMasked: Scalars["String"]["output"];
-  bankName: Scalars["String"]["output"];
+  __typename?: 'WalletVerifiedBank';
+  accountName: Scalars['String']['output'];
+  accountNumberMasked: Scalars['String']['output'];
+  bankName: Scalars['String']['output'];
 };
 
 export type YearlyTermSchedule = {
-  __typename?: "YearlyTermSchedule";
+  __typename?: 'YearlyTermSchedule';
   months: Array<MonthlyPayment>;
-  year: Scalars["Int"]["output"];
+  year: Scalars['Int']['output'];
 };
 
 export type YearlyTermScheduleInput = {
-  months?: InputMaybe<Array<Scalars["JSONObject"]["input"]>>;
-  year?: InputMaybe<Scalars["Int"]["input"]>;
+  months?: InputMaybe<Array<Scalars['JSONObject']['input']>>;
+  year?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type ContactUsMutationVariables = Exact<{
   input: ContactUsInput;
 }>;
 
-export type ContactUsMutation = {
-  __typename?: "Mutation";
-  contactUs: { __typename?: "ContactUsResponse"; success: boolean; message?: string | null };
-};
+
+export type ContactUsMutation = { __typename?: 'Mutation', contactUs: { __typename?: 'ContactUsResponse', success: boolean, message?: string | null } };
 
 export type RequestAccessMutationVariables = Exact<{
   input: RequestAccessInput;
 }>;
 
-export type RequestAccessMutation = {
-  __typename?: "Mutation";
-  requestAccess: { __typename?: "RequestAccessResponse"; success: boolean; message: string };
-};
+
+export type RequestAccessMutation = { __typename?: 'Mutation', requestAccess: { __typename?: 'RequestAccessResponse', success: boolean, message: string } };
+
+export type SubmitSupportRequestMutationVariables = Exact<{
+  input: SubmitSupportRequestInput;
+}>;
+
+
+export type SubmitSupportRequestMutation = { __typename?: 'Mutation', submitSupportRequest: { __typename?: 'SubmitSupportRequestPayload', reference: string } };
 
 export type GetPublicPropertiesQueryVariables = Exact<{
   pagination?: InputMaybe<Pagination>;
 }>;
 
-export type GetPublicPropertiesQuery = {
-  __typename?: "Query";
-  getPublicProjects: Array<{
-    __typename?: "Project";
-    id?: string | null;
-    projectType?: string | null;
-    property?: {
-      __typename?: "Property";
-      id: string;
-      price: number;
-      currency?: string | null;
-      propertyType?: string | null;
-      status?: PropertyStatus | null;
-      bedroom?: number | null;
-      fullBathroom?: number | null;
-      halfBathroom?: number | null;
-      squareFeet?: number | null;
-      city?: string | null;
-      region?: string | null;
-      propertyNameOrNumber?: string | null;
-      propertyDescription?: string | null;
-      propertyCardDesc?: string | null;
-      propertyAmenities?: Array<string | null> | null;
-      titleType?: string | null;
-      landCertificateNumber?: string | null;
-      projectImages?: Array<string | null> | null;
-      thumbnail?: string | null;
-      streetAddress?: string | null;
-      gpsAddress?: string | null;
-      metadata?: any | null;
-      siteCoordinates?: any | null;
-      createdAt?: any | null;
-      updatedAt?: any | null;
-    } | null;
-  }>;
-};
 
-export const ContactUsDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "ContactUs" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "ContactUsInput" } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "contactUs" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "input" },
-                value: { kind: "Variable", name: { kind: "Name", value: "input" } },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "success" } },
-                { kind: "Field", name: { kind: "Name", value: "message" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<ContactUsMutation, ContactUsMutationVariables>;
-export const RequestAccessDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "RequestAccess" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "RequestAccessInput" } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "requestAccess" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "input" },
-                value: { kind: "Variable", name: { kind: "Name", value: "input" } },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "success" } },
-                { kind: "Field", name: { kind: "Name", value: "message" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<RequestAccessMutation, RequestAccessMutationVariables>;
-export const GetPublicPropertiesDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "query",
-      name: { kind: "Name", value: "GetPublicProperties" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "pagination" } },
-          type: { kind: "NamedType", name: { kind: "Name", value: "Pagination" } },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "getPublicProjects" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "pagination" },
-                value: { kind: "Variable", name: { kind: "Name", value: "pagination" } },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "projectType" } },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "property" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "price" } },
-                      { kind: "Field", name: { kind: "Name", value: "currency" } },
-                      { kind: "Field", name: { kind: "Name", value: "propertyType" } },
-                      { kind: "Field", name: { kind: "Name", value: "status" } },
-                      { kind: "Field", name: { kind: "Name", value: "bedroom" } },
-                      { kind: "Field", name: { kind: "Name", value: "fullBathroom" } },
-                      { kind: "Field", name: { kind: "Name", value: "halfBathroom" } },
-                      { kind: "Field", name: { kind: "Name", value: "squareFeet" } },
-                      { kind: "Field", name: { kind: "Name", value: "city" } },
-                      { kind: "Field", name: { kind: "Name", value: "region" } },
-                      { kind: "Field", name: { kind: "Name", value: "propertyNameOrNumber" } },
-                      { kind: "Field", name: { kind: "Name", value: "propertyDescription" } },
-                      { kind: "Field", name: { kind: "Name", value: "propertyCardDesc" } },
-                      { kind: "Field", name: { kind: "Name", value: "propertyAmenities" } },
-                      { kind: "Field", name: { kind: "Name", value: "titleType" } },
-                      { kind: "Field", name: { kind: "Name", value: "landCertificateNumber" } },
-                      { kind: "Field", name: { kind: "Name", value: "projectImages" } },
-                      { kind: "Field", name: { kind: "Name", value: "thumbnail" } },
-                      { kind: "Field", name: { kind: "Name", value: "streetAddress" } },
-                      { kind: "Field", name: { kind: "Name", value: "gpsAddress" } },
-                      { kind: "Field", name: { kind: "Name", value: "metadata" } },
-                      { kind: "Field", name: { kind: "Name", value: "siteCoordinates" } },
-                      { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                      { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GetPublicPropertiesQuery, GetPublicPropertiesQueryVariables>;
+export type GetPublicPropertiesQuery = { __typename?: 'Query', getPublicProjects: Array<{ __typename?: 'Project', id?: string | null, projectType?: string | null, property?: { __typename?: 'Property', id: string, price: number, currency?: string | null, propertyType?: string | null, status?: PropertyStatus | null, bedroom?: number | null, fullBathroom?: number | null, halfBathroom?: number | null, squareFeet?: number | null, city?: string | null, region?: string | null, propertyNameOrNumber?: string | null, propertyDescription?: string | null, propertyCardDesc?: string | null, propertyAmenities?: Array<string | null> | null, titleType?: string | null, landCertificateNumber?: string | null, projectImages?: Array<string | null> | null, thumbnail?: string | null, streetAddress?: string | null, gpsAddress?: string | null, metadata?: any | null, siteCoordinates?: any | null, createdAt?: any | null, updatedAt?: any | null } | null }> };
+
+export type GetSupportRequestStatusQueryVariables = Exact<{
+  reference: Scalars['String']['input'];
+  replyEmail: Scalars['String']['input'];
+}>;
+
+
+export type GetSupportRequestStatusQuery = { __typename?: 'Query', getSupportRequestStatus?: { __typename?: 'SupportRequestStatusResult', reference: string, status: SupportStatus, updatedAt: any } | null };
+
+
+export const ContactUsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ContactUs"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ContactUsInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contactUs"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<ContactUsMutation, ContactUsMutationVariables>;
+export const RequestAccessDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RequestAccess"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RequestAccessInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"requestAccess"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<RequestAccessMutation, RequestAccessMutationVariables>;
+export const SubmitSupportRequestDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SubmitSupportRequest"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SubmitSupportRequestInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"submitSupportRequest"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reference"}}]}}]}}]} as unknown as DocumentNode<SubmitSupportRequestMutation, SubmitSupportRequestMutationVariables>;
+export const GetPublicPropertiesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPublicProperties"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pagination"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Pagination"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getPublicProjects"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pagination"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pagination"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectType"}},{"kind":"Field","name":{"kind":"Name","value":"property"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"price"}},{"kind":"Field","name":{"kind":"Name","value":"currency"}},{"kind":"Field","name":{"kind":"Name","value":"propertyType"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"bedroom"}},{"kind":"Field","name":{"kind":"Name","value":"fullBathroom"}},{"kind":"Field","name":{"kind":"Name","value":"halfBathroom"}},{"kind":"Field","name":{"kind":"Name","value":"squareFeet"}},{"kind":"Field","name":{"kind":"Name","value":"city"}},{"kind":"Field","name":{"kind":"Name","value":"region"}},{"kind":"Field","name":{"kind":"Name","value":"propertyNameOrNumber"}},{"kind":"Field","name":{"kind":"Name","value":"propertyDescription"}},{"kind":"Field","name":{"kind":"Name","value":"propertyCardDesc"}},{"kind":"Field","name":{"kind":"Name","value":"propertyAmenities"}},{"kind":"Field","name":{"kind":"Name","value":"titleType"}},{"kind":"Field","name":{"kind":"Name","value":"landCertificateNumber"}},{"kind":"Field","name":{"kind":"Name","value":"projectImages"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail"}},{"kind":"Field","name":{"kind":"Name","value":"streetAddress"}},{"kind":"Field","name":{"kind":"Name","value":"gpsAddress"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}},{"kind":"Field","name":{"kind":"Name","value":"siteCoordinates"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]} as unknown as DocumentNode<GetPublicPropertiesQuery, GetPublicPropertiesQueryVariables>;
+export const GetSupportRequestStatusDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSupportRequestStatus"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"reference"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"replyEmail"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getSupportRequestStatus"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"reference"},"value":{"kind":"Variable","name":{"kind":"Name","value":"reference"}}},{"kind":"Argument","name":{"kind":"Name","value":"replyEmail"},"value":{"kind":"Variable","name":{"kind":"Name","value":"replyEmail"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reference"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetSupportRequestStatusQuery, GetSupportRequestStatusQueryVariables>;

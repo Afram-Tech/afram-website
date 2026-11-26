@@ -13,31 +13,44 @@ import {
   MapPin,
   Maximize,
   Navigation,
-  Share2,
   ShieldCheck,
-  Star,
 } from "lucide-react";
 import Link from "next/link";
 
 import { LockedSection } from "@/components/ui/LockedSection";
+import { SecBadge } from "@/components/ui/SecBadge";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { siteConfig } from "@/config/site";
 import type { Property } from "@/features/landing/data/properties";
 import { PropertyGallery } from "@/features/properties/PropertyGallery";
+import { ShareButton } from "@/features/properties/ShareButton";
 import { formatMoney, formatPropertySize, titleCase } from "@/lib/format";
 import { locationName, locationPath, locationTrail } from "@/lib/property-seo";
+import { bathsLabel, listingStatusPill } from "@/features/properties/listing-display";
+import { cn } from "@/lib/utils";
 
 const DEPOSIT_RATE = 0.1;
 const ASSUMED_RATE = 0.12;
 
+/** Status pill tones, by the API's status. */
+const STATUS_TONE: Record<string, string> = {
+  available: "bg-success-lighter text-success-darker",
+  listed: "bg-success-lighter text-success-darker",
+  under_offer: "bg-away-lighter text-away-darker",
+  pending: "bg-away-lighter text-away-darker",
+  sold: "bg-ink-50 text-ink-600",
+  delisted: "bg-ink-50 text-ink-600",
+  unlisted: "bg-ink-50 text-ink-600",
+};
+
 function Spec({ icon: Icon, label, value }: { icon: typeof Home; label: string; value: string }) {
   return (
     <div className="flex items-center gap-2.5">
-      <span className="bg-brand-50 text-brand-600 flex h-9 w-9 items-center justify-center rounded-lg">
+      <span className="bg-brand-50 text-brand-500 flex h-9 w-9 items-center justify-center rounded-[10px]">
         <Icon className="h-[18px] w-[18px]" />
       </span>
       <span className="flex flex-col">
-        <span className="text-ink-400 text-[11px] tracking-wider uppercase">{label}</span>
+        <span className="text-ink-400 text-[12px] font-medium">{label}</span>
         <span className="tnum text-ink-900 text-[15px] font-semibold">{value}</span>
       </span>
     </div>
@@ -56,26 +69,26 @@ function LegalCard({
   good?: boolean;
 }) {
   return (
-    <div className="bg-ink-50/70 ring-ink-100 flex items-start gap-3 rounded-2xl p-4 ring-1">
+    <div className="bg-ink-50 flex items-start gap-3 rounded-2xl p-4">
       <span
         className={
           good
-            ? "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
-            : "bg-brand-50 text-brand-600 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+            ? "text-success-darker flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-white"
+            : "bg-brand-50 text-brand-500 flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px]"
         }
       >
         <Icon className="h-[18px] w-[18px]" />
       </span>
       <span className="flex flex-col">
-        <span className="text-ink-400 text-[11px] tracking-wider uppercase">{label}</span>
-        <span className="text-ink-900 text-[14px] font-semibold">{value}</span>
+        <span className="text-ink-400 text-[12px] font-medium">{label}</span>
+        <span className="tnum text-ink-900 text-[14px] font-semibold">{value}</span>
       </span>
     </div>
   );
 }
 
 function H2({ children }: { children: React.ReactNode }) {
-  return <h2 className="text-ink-900 text-[1.4rem] font-bold tracking-[-0.01em]">{children}</h2>;
+  return <h2 className="t-h3 text-ink-900">{children}</h2>;
 }
 
 export function PropertyDetail({ property }: { property: Property }) {
@@ -88,10 +101,10 @@ export function PropertyDetail({ property }: { property: Property }) {
         <div className="border-ink-100 flex items-center justify-between gap-4 border-b pb-5">
           <Link
             href="/properties"
-            className="text-ink-500 hover:text-ink-900 inline-flex items-center gap-2 text-[14px] font-medium transition-colors"
+            className="text-ink-500 hover:text-ink-900 inline-flex items-center gap-1.5 text-[14px] font-medium transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back
+            All properties
           </Link>
           <nav
             aria-label="Breadcrumb"
@@ -111,26 +124,27 @@ export function PropertyDetail({ property }: { property: Property }) {
             <span>›</span>
             <span className="text-ink-700 truncate">{property.name}</span>
           </nav>
-          <button className="text-ink-500 hover:text-ink-900 inline-flex items-center gap-2 text-[14px] font-medium transition-colors">
-            <Share2 className="h-4 w-4" />
-            Share
-          </button>
+          <ShareButton title={property.name} />
         </div>
 
         {/* Title */}
         <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="text-ink-900 text-[clamp(1.8rem,3.4vw,2.5rem)] font-extrabold tracking-[-0.02em]">
-              {property.name}
-            </h1>
+            <SecBadge className="mb-4" />
+            <h1 className="t-h1-sm text-ink-900">{property.name}</h1>
             <p className="text-ink-500 mt-2 inline-flex items-center gap-1.5 text-[15px]">
               <MapPin className="text-ink-400 h-4 w-4" />
               {property.location}
             </p>
           </div>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3.5 py-1.5 text-[13px] font-semibold text-emerald-700 ring-1 ring-emerald-100">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            {titleCase(property.status)}
+          <span
+            className={cn(
+              "inline-flex h-7 items-center gap-1.5 rounded-full px-3 text-[13px] font-medium",
+              STATUS_TONE[property.status.toLowerCase()] ?? STATUS_TONE.available,
+            )}
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-current" />
+            {listingStatusPill(property.status)}
           </span>
         </div>
 
@@ -141,14 +155,14 @@ export function PropertyDetail({ property }: { property: Property }) {
         <div className="border-ink-100 mt-7 flex flex-wrap gap-x-6 gap-y-4 border-y py-5 sm:gap-x-10">
           <Spec icon={Home} label="Type" value={titleCase(property.type)} />
           <Spec icon={Bed} label="Bedrooms" value={String(property.beds)} />
-          <Spec icon={Bath} label="Bathrooms" value={String(property.baths)} />
+          <Spec icon={Bath} label="Bathrooms" value={bathsLabel(property)} />
           <Spec icon={Maximize} label="Size" value={formatPropertySize(property.sqft)} />
         </div>
 
         {/* Listed by */}
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <span className="bg-brand-700 flex h-10 w-10 items-center justify-center rounded-full text-[13px] font-bold text-white">
+            <span className="bg-brand-50 text-brand-500 flex h-10 w-10 items-center justify-center rounded-full text-[13px] font-bold">
               AF
             </span>
             <span className="flex flex-col">
@@ -157,8 +171,8 @@ export function PropertyDetail({ property }: { property: Property }) {
             </span>
           </div>
           <span className="text-ink-900 inline-flex items-center gap-1.5 text-[14px] font-semibold">
-            <Star className="fill-gold-400 text-gold-400 h-4 w-4" />
-            Verified Developer
+            <BadgeCheck className="text-brand-500 h-4 w-4" />
+            Verified Vendor
           </span>
         </div>
 
@@ -192,24 +206,43 @@ export function PropertyDetail({ property }: { property: Property }) {
 
             <section>
               <H2>Legal &amp; Title</H2>
-              <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <LegalCard icon={FileText} label="Title type" value={property.legal.titleType} />
+              {/* The title number is public, so a buyer can check it against
+                  the Lands Commission before signing up; the rest of the
+                  record is for signed-in members, like the address and price
+                  history. */}
+              <div className="mt-4">
                 <LegalCard
-                  icon={Map}
-                  label="Land certificate"
-                  value={property.legal.landCertificate}
+                  icon={Hash}
+                  label="Land title number"
+                  value={property.legal.landCertificate || "Available on request"}
                 />
-                <LegalCard
-                  icon={CheckCircle2}
-                  label="Listing status"
-                  value={property.legal.listingStatus}
-                  good
-                />
-                <LegalCard
-                  icon={ShieldCheck}
-                  label="Verification"
-                  value={property.legal.verification}
-                />
+              </div>
+              <div className="mt-3">
+                <LockedSection label="the full title record">
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <LegalCard
+                      icon={FileText}
+                      label="Title type"
+                      value={property.legal.titleType}
+                    />
+                    <LegalCard
+                      icon={Map}
+                      label="Land certificate"
+                      value={property.legal.landCertificate}
+                    />
+                    <LegalCard
+                      icon={CheckCircle2}
+                      label="Listing status"
+                      value={property.legal.listingStatus}
+                      good
+                    />
+                    <LegalCard
+                      icon={ShieldCheck}
+                      label="Verification"
+                      value={property.legal.verification}
+                    />
+                  </div>
+                </LockedSection>
               </div>
             </section>
 
@@ -217,35 +250,29 @@ export function PropertyDetail({ property }: { property: Property }) {
               <H2>Address</H2>
               <LockedSection label="the exact address">
                 <div className="mt-4 space-y-3">
-                  <div className="bg-ink-50/70 ring-ink-100 flex items-center gap-3 rounded-2xl p-4 ring-1">
+                  <div className="bg-ink-50 flex items-center gap-3 rounded-2xl p-4">
                     <Navigation className="text-brand-500 h-5 w-5 shrink-0" />
                     <span className="flex min-w-0 flex-col">
-                      <span className="text-ink-400 text-[11px] tracking-wider uppercase">
-                        Street address
-                      </span>
+                      <span className="text-ink-400 text-[12px] font-medium">Street address</span>
                       <span className="text-ink-900 truncate text-[14px] font-semibold">
                         {property.address.street}
                       </span>
                     </span>
                   </div>
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    <div className="bg-ink-50/70 ring-ink-100 flex items-center gap-3 rounded-2xl p-4 ring-1">
+                    <div className="bg-ink-50 flex items-center gap-3 rounded-2xl p-4">
                       <Hash className="text-brand-500 h-5 w-5 shrink-0" />
                       <span className="flex min-w-0 flex-col">
-                        <span className="text-ink-400 text-[11px] tracking-wider uppercase">
-                          GPS address
-                        </span>
+                        <span className="text-ink-400 text-[12px] font-medium">GPS address</span>
                         <span className="tnum text-ink-900 truncate text-[14px] font-semibold">
                           {property.address.gps}
                         </span>
                       </span>
                     </div>
-                    <div className="bg-ink-50/70 ring-ink-100 flex items-center gap-3 rounded-2xl p-4 ring-1">
+                    <div className="bg-ink-50 flex items-center gap-3 rounded-2xl p-4">
                       <MapPin className="text-brand-500 h-5 w-5 shrink-0" />
                       <span className="flex min-w-0 flex-col">
-                        <span className="text-ink-400 text-[11px] tracking-wider uppercase">
-                          Property ID
-                        </span>
+                        <span className="text-ink-400 text-[12px] font-medium">Property ID</span>
                         <span className="tnum text-ink-900 truncate text-[14px] font-semibold">
                           {property.address.propertyId}
                         </span>
@@ -272,19 +299,19 @@ export function PropertyDetail({ property }: { property: Property }) {
               <LockedSection label="price history">
                 <div className="ring-ink-100 mt-4 min-h-[25dvh] overflow-hidden rounded-2xl ring-1">
                   <table className="w-full text-left text-[14px]">
-                    <thead>
-                      <tr className="bg-ink-50/70 text-ink-400 text-[11px] tracking-wider uppercase">
-                        <th className="px-4 py-3 font-semibold">Date</th>
-                        <th className="px-4 py-3 font-semibold">Event</th>
-                        <th className="px-4 py-3 text-right font-semibold">Price</th>
+                    <thead className="bg-ink-50/70 text-ink-400 text-[12px] font-medium">
+                      <tr>
+                        <th className="px-5 py-3 font-medium">Date</th>
+                        <th className="px-5 py-3 font-medium">Activity</th>
+                        <th className="px-5 py-3 text-right font-medium">Price</th>
                       </tr>
                     </thead>
                     <tbody className="divide-ink-100 divide-y">
                       {property.priceHistory.map((entry, i) => (
                         <tr key={i}>
-                          <td className="text-ink-500 px-4 py-3">{entry.date}</td>
-                          <td className="text-ink-700 px-4 py-3 font-medium">{entry.event}</td>
-                          <td className="tnum text-ink-900 px-4 py-3 text-right font-semibold">
+                          <td className="tnum text-ink-700 px-5 py-3.5">{entry.date}</td>
+                          <td className="text-ink-700 px-5 py-3.5">{entry.event}</td>
+                          <td className="tnum text-ink-900 px-5 py-3.5 text-right font-semibold">
                             {formatMoney(entry.price, property.currency)}
                           </td>
                         </tr>
@@ -292,26 +319,24 @@ export function PropertyDetail({ property }: { property: Property }) {
                     </tbody>
                   </table>
                 </div>
+                <p className="text-ink-400 mt-3 text-[13px]">
+                  Price history recorded on-chain via Polygon. All figures in {property.currency}.
+                </p>
               </LockedSection>
-              <p className="text-ink-400 mt-3 text-[12px] leading-relaxed">
-                Price changes are tracked by Afram to help you evaluate this listing over time.
-              </p>
             </section>
           </div>
 
           {/* Sticky purchase card */}
           <aside className="lg:relative">
             <div className="lg:sticky lg:top-24">
-              <div className="ring-ink-100 rounded-[1.5rem] bg-white p-6 shadow-[0_24px_70px_-30px_rgba(15,20,25,0.28)] ring-1">
+              <div className="shadow-raised ring-ink-100 rounded-3xl bg-white p-6 ring-1">
                 <p className="text-ink-400 text-[13px]">Starting from</p>
-                <p className="tnum text-brand-500 mt-0.5 text-[2rem] font-extrabold tracking-[-0.02em]">
+                <p className="tnum text-ink-900 mt-0.5 text-[1.75rem] font-semibold tracking-[calc(-0.02em*var(--tracking-scale,1))]">
                   {formatMoney(property.price, property.currency)}
                 </p>
 
                 <div className="bg-brand-50 mt-4 rounded-2xl p-4">
-                  <p className="text-brand-600 text-[11px] font-semibold tracking-wider uppercase">
-                    10% deposit to reserve
-                  </p>
+                  <p className="text-brand-500 text-[12px] font-semibold">10% deposit to reserve</p>
                   <p className="tnum text-ink-900 mt-0.5 text-[1.25rem] font-bold">
                     {formatMoney(deposit, property.currency)}
                   </p>
@@ -320,8 +345,8 @@ export function PropertyDetail({ property }: { property: Property }) {
                   </p>
                 </div>
 
-                <div className="bg-ink-50/70 ring-ink-100 mt-3 flex items-center justify-between rounded-xl px-4 py-2.5 ring-1">
-                  <span className="text-ink-500 text-[12px] font-medium">Amortization rate</span>
+                <div className="bg-ink-50 mt-3 flex items-center justify-between rounded-xl px-4 py-2.5">
+                  <span className="text-ink-500 text-[12px] font-medium">Amortisation rate</span>
                   <span className="tnum text-ink-900 text-[13px] font-bold">
                     {(ASSUMED_RATE * 100).toFixed(0)}% p.a.
                   </span>
@@ -342,7 +367,7 @@ export function PropertyDetail({ property }: { property: Property }) {
                   ].map(([Icon, label], i) => {
                     const IconComponent = Icon as typeof Check;
                     return (
-                      <p key={i} className="text-ink-700 flex items-center gap-2.5 text-[14px]">
+                      <p key={i} className="text-ink-600 flex items-center gap-2.5 text-[14px]">
                         <IconComponent className="text-brand-500 h-[18px] w-[18px]" />
                         {label as string}
                       </p>

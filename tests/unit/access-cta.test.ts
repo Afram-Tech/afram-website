@@ -25,6 +25,19 @@ describe("accessCta", () => {
     expect(cta.href).toContain("userType=issuer");
   });
 
+  it("links to this page's request-access form, not the app's sign-up URL", async () => {
+    vi.stubEnv("NEXT_PUBLIC_INVITE_ONLY", "true");
+    const { accessCta, signUpHref } = await load();
+
+    // Even when NEXT_PUBLIC_CLIENT_APP is unset and the sign-up URL is junk.
+    expect(accessCta({ label: "Get Started", href: signUpHref("financier") }).href).toBe(
+      "?request-access=1&userType=financier",
+    );
+    expect(accessCta({ label: "Get Started", href: "undefined/get-started" }).href).toBe(
+      "?request-access=1",
+    );
+  });
+
   it("leaves a CTA alone when signup is open", async () => {
     vi.stubEnv("NEXT_PUBLIC_INVITE_ONLY", "false");
     const { accessCta, signUpHref } = await load();

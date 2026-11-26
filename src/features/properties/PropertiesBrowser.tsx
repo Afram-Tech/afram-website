@@ -1,56 +1,49 @@
 "use client";
 
 import {
+  ArrowDownUp,
   Building2,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   ChevronUp,
   Home,
   LayoutGrid,
-  Loader2,
   Map as MapIcon,
   MapPin,
-  Search,
-  SlidersHorizontal,
+  Navigation,
   Tag,
+  TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, type ComponentType, type ReactNode } from "react";
 
-import { buttonVariants } from "@/components/ui/button-variants";
-import {
-  FilterDropdown,
-  filterTriggerClass,
-  type FilterOption,
-} from "@/features/properties/FilterDropdown";
 import { LocationPicker, type LocationPickerSelection } from "@/features/properties/LocationPicker";
-import { MobileFilterSheet } from "@/features/properties/MobileFilterSheet";
 import { PropertyMap } from "@/features/properties/map/PropertyMap";
 import { PropertyListPanel } from "@/features/properties/map/PropertyListPanel";
 import { deriveMapMarkers } from "@/features/properties/map/markers";
 import type { Property } from "@/features/landing/data/properties";
 import { PropertyCard } from "@/features/landing/PropertyCard";
-import { titleCase } from "@/lib/format";
+import { formatMoney, titleCase } from "@/lib/format";
 import { getBySlug, getPath } from "@/lib/location-taxonomy";
-import { clientSearchProperties } from "@/lib/property-search";
 import { countPropertiesByLocation } from "@/lib/location-match";
-import { cn } from "@/lib/utils";
+import { clientSearchProperties } from "@/lib/property-search";
 import {
   filtersFromSearchParams,
   filtersToSearchParams,
   type PropertySearchFilters,
 } from "@/lib/property-search-filters";
+import { cn } from "@/lib/utils";
 
 type BrowseView = "grid" | "map";
 const GRID_PATH = "/properties";
 const MAP_PATH = "/properties/map";
 
 /**
- * Status/type/price stay local component state, never written to the URL —
- * same scope decision afram-web's BrowseProjects migration made when it
- * adopted this engine: only what already had a taxonomy-backed picker
- * (region/city/area) moves to the URL in this pass. See that repo's
- * BrowseProjects.tsx for the identical split.
+ * Status/type/price/text stay local component state. Region/city/area live in
+ * the URL (the location taxonomy's codec), so a place is bookmarkable and the
+ * SEO collection pages can link straight into a filtered view.
  */
 interface Filters {
   status: string;
@@ -58,60 +51,115 @@ interface Filters {
   price: string;
 }
 
-const DEFAULT_FILTERS: Filters = { status: "all", type: "all", price: "all" };
+const DEFAULT_FILTERS: Filters = { status: "", type: "", price: "" };
 
-/** How many cards a scroll into view reveals at a time. */
-const PAGE_SIZE = 12;
+/** Three rows of three on desktop, as in the design. */
+const PAGE_SIZE = 9;
 
+const SORTS = [
+  { id: "featured", label: "Featured" },
+  { id: "newest", label: "Newest" },
+  { id: "price-asc", label: "Price: Low to High" },
+  { id: "price-desc", label: "Price: High to Low" },
+] as const;
+type SortId = (typeof SORTS)[number]["id"];
+
+/** In the listings' own currency: prices are compared as-is, with no
+ *  conversion, so the labels must name that currency too (AFX-LST-059). */
 const PRICE_BANDS = [
-  { value: "0-100000", label: "Under $100,000", min: 0, max: 100_000 },
-  { value: "100000-300000", label: "$100,000 – $300,000", min: 100_000, max: 300_000 },
-  { value: "300000-600000", label: "$300,000 – $600,000", min: 300_000, max: 600_000 },
-  { value: "600000-", label: "Over $600,000", min: 600_000, max: Infinity },
+  { value: "0-100000", min: 0, max: 100_000 },
+  { value: "100000-300000", min: 100_000, max: 300_000 },
+  { value: "300000-600000", min: 300_000, max: 600_000 },
+  { value: "600000-", min: 600_000, max: Infinity },
 ];
 
-/** Fixed to what clientSearchProperties' status filter actually understands
- *  (getPropertyAvailability's available/under_offer split) — not every raw
- *  PropertyStatus value that happens to appear in the data. The dropdown
- *  used to list whatever statuses existed verbatim (Listed, Pending, Sold,
- *  Divided…), but nothing here filtered by "Sold" or "Divided" in a way
- *  that matched the engine's status semantics; this makes the two agree. */
-const STATUS_OPTIONS: FilterOption[] = [
-  { value: "all", label: "All Status" },
+const DEFAULT_CURRENCY = "GHS";
+
+/** The currency most listings are priced in. */
+function listingCurrency(properties: Property[]) {
+  const counts = new Map<string, number>();
+  for (const { currency } of properties) {
+    if (currency) counts.set(currency, (counts.get(currency) ?? 0) + 1);
+  }
+  return [...counts].sort(([, a], [, b]) => b - a)[0]?.[0] ?? DEFAULT_CURRENCY;
+}
+
+function priceBandLabel({ min, max }: (typeof PRICE_BANDS)[number], currency: string) {
+  if (min === 0) return `Under ${formatMoney(max, currency)}`;
+  if (max === Infinity) return `Over ${formatMoney(min, currency)}`;
+  return `${formatMoney(min, currency)} – ${formatMoney(max, currency)}`;
+}
+
+/** What clientSearchProperties' status filter understands. */
+const STATUS_OPTIONS = [
   { value: "available", label: "Available" },
   { value: "under_offer", label: "Under Offer" },
 ];
 
-/** Params the codec owns — cleared before re-applying a patch, so a patch
- *  that omits a field actually removes it rather than leaving a stale
- *  value from a previous selection sitting in the URL. */
+/** Params the codec owns, cleared before re-applying a patch. */
 const CODEC_PARAM_KEYS = ["region", "city", "area"];
 
-function uniqueOptions(values: string[], allLabel: string): FilterOption[] {
+function uniqueTypes(values: string[]) {
   const seen = new Map<string, string>();
   for (const value of values) {
     if (!value) continue;
     const key = value.toLowerCase();
     if (!seen.has(key)) seen.set(key, titleCase(value));
   }
-  return [
-    { value: "all", label: allLabel },
-    ...[...seen.entries()]
-      .sort(([, a], [, b]) => a.localeCompare(b))
-      .map(([value, label]) => ({ value, label })),
-  ];
+  return [...seen.entries()]
+    .sort(([, a], [, b]) => a.localeCompare(b))
+    .map(([value, label]) => ({ value, label }));
 }
+
+function listedAt(property: Property) {
+  return Date.parse(property.priceHistory[0]?.date ?? property.updatedAt ?? "") || 0;
+}
+
+function Field({
+  label,
+  htmlFor,
+  icon: Icon,
+  chevron = true,
+  children,
+}: {
+  label: string;
+  htmlFor: string;
+  icon: ComponentType<{ className?: string }>;
+  chevron?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <div className="min-w-0">
+      <label
+        htmlFor={htmlFor}
+        className="text-ink-900 mb-1.5 block text-[13px] leading-[18px] font-semibold"
+      >
+        {label}
+      </label>
+      <div className="border-brand-500/10 bg-brand-50 hover:border-brand-500/30 focus-within:border-brand-500 focus-within:shadow-focus relative flex h-11 items-center rounded-xl border px-3.5 transition-[border-color,box-shadow] duration-[160ms]">
+        <Icon className="text-ink-400 mr-2 h-4 w-4 shrink-0" />
+        {children}
+        {chevron && (
+          <ChevronDown className="text-ink-400 pointer-events-none ml-1 h-4 w-4 shrink-0" />
+        )}
+      </div>
+    </div>
+  );
+}
+
+const selectCls =
+  "w-full cursor-pointer appearance-none bg-transparent text-[14px] font-medium text-ink-900 focus:outline-none";
+
+const pillCls =
+  "inline-flex h-10 items-center gap-2 rounded-full border border-ink-100 bg-white px-4 shadow-secondary transition-colors hover:border-ink-200";
 
 export function PropertiesBrowser({ properties }: { properties: Property[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  /* Grid and Map are separate routes (/properties, /properties/map), not a
-     client-side tab — a route switch is bookmarkable, shareable, and
-     back-button-able on its own; a useState toggle was none of those. Both
-     routes render this exact component (see each page.tsx), so which one
-     is "current" is read from the URL, not held here. */
+  /* Grid and Map are sibling routes, so each is bookmarkable and
+     back-button-able. Both render this component. */
   const view: BrowseView = pathname === MAP_PATH ? "map" : "grid";
   const viewHref = (target: BrowseView) => {
     const base = target === "map" ? MAP_PATH : GRID_PATH;
@@ -121,17 +169,12 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
 
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
+  const [sort, setSort] = useState<SortId>("featured");
+  const [page, setPage] = useState(1);
   const [locationPickerOpen, setLocationPickerOpen] = useState(false);
-  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const topRef = useRef<HTMLDivElement>(null);
 
-  /* ─── Location (LocationPicker + URL) ───
-     region/city/area are URL-driven, read through the shared codec — the
-     same taxonomy-backed model afram-web's BrowseProjects.tsx uses. Status/
-     type/price stay in local `filters` state (see the Filters comment
-     above). */
   const urlFilters = useMemo(() => filtersFromSearchParams(searchParams), [searchParams]);
-
-  // The most specific level the URL names — area, then city, then region.
   const selectedLocationSlug = urlFilters.area ?? urlFilters.city ?? urlFilters.region;
   const selectedLocationNode = selectedLocationSlug ? getBySlug(selectedLocationSlug) : null;
   const selectedLocationLabel = selectedLocationNode
@@ -140,10 +183,6 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
       : selectedLocationNode.name
     : null;
 
-  /* Merges a codec-owned patch into the URL without disturbing params the
-     codec doesn't model — filtersToSearchParams on its own builds a
-     URLSearchParams from scratch, which would silently drop anything else
-     a future feature adds to this URL if used directly as the next value. */
   const applyFilterParams = (patch: PropertySearchFilters) => {
     const merged = new URLSearchParams(searchParams.toString());
     for (const key of CODEC_PARAM_KEYS) merged.delete(key);
@@ -173,42 +212,28 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
     applyFilterParams(next);
   };
 
-  const typeOptions = useMemo(
-    () =>
-      uniqueOptions(
-        properties.map((p) => p.type),
-        "All Types",
-      ),
-    [properties],
-  );
-  const priceOptions: FilterOption[] = [
-    { value: "all", label: "Price" },
-    ...PRICE_BANDS.map((band) => ({ value: band.value, label: band.label })),
-  ];
+  const typeOptions = useMemo(() => uniqueTypes(properties.map((p) => p.type)), [properties]);
+  const priceOptions = useMemo(() => {
+    const currency = listingCurrency(properties);
+    return PRICE_BANDS.map((band) => ({
+      value: band.value,
+      label: priceBandLabel(band, currency),
+    }));
+  }, [properties]);
 
   const searchFilters = useMemo<PropertySearchFilters>(() => {
-    const band =
-      filters.price !== "all" ? PRICE_BANDS.find((b) => b.value === filters.price) : undefined;
+    const band = filters.price ? PRICE_BANDS.find((b) => b.value === filters.price) : undefined;
     return {
       region: urlFilters.region,
       city: urlFilters.city,
       area: urlFilters.area,
-      status:
-        filters.status !== "all" ? (filters.status as PropertySearchFilters["status"]) : undefined,
-      type: filters.type !== "all" ? filters.type : undefined,
+      status: (filters.status || undefined) as PropertySearchFilters["status"],
+      type: filters.type || undefined,
       priceMin: band ? band.min : undefined,
       priceMax: band && band.max !== Infinity ? band.max : undefined,
       q: search.trim() || undefined,
     };
-  }, [
-    urlFilters.region,
-    urlFilters.city,
-    urlFilters.area,
-    filters.status,
-    filters.type,
-    filters.price,
-    search,
-  ]);
+  }, [urlFilters.region, urlFilters.city, urlFilters.area, filters, search]);
 
   const filteredProperties = useMemo(
     () =>
@@ -220,8 +245,7 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
     [properties, searchFilters],
   );
 
-  // How many listings each place holds under the other active filters —
-  // location itself left out, or every place but the selected one would read 0.
+  // Counts per place under the other active filters, location left out.
   const locationCounts = useMemo(
     () =>
       countPropertiesByLocation(
@@ -234,30 +258,35 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
     [properties, searchFilters],
   );
 
-  // Markers derive from the same filtered set the grid shows — switching
-  // view is a presentation choice, not a second query, and a property with
-  // no resolved coordinates (Property.coordinates' own doc explains why
-  // that happens) simply has nothing to plot, same as it would for any map.
-  const mapMarkers = useMemo(() => deriveMapMarkers(filteredProperties), [filteredProperties]);
-  const handleMarkerClick = (slug: string) => router.push(`/properties/${slug}`);
+  const sorted = useMemo(() => {
+    const rows = [...filteredProperties];
+    if (sort === "price-asc") rows.sort((a, b) => a.price - b.price);
+    else if (sort === "price-desc") rows.sort((a, b) => b.price - a.price);
+    else if (sort === "newest") rows.sort((a, b) => listedAt(b) - listedAt(a));
+    else rows.sort((a, b) => Number(b.isFeatured) - Number(a.isFeatured));
+    return rows;
+  }, [filteredProperties, sort]);
 
-  // Hover previews a pin (transient); selecting a list row flies the map to
-  // it and keeps it marked until another row is picked (sticky) — kept as
-  // two separate pieces of state because they mean different things to
-  // PropertyMap: hover is display-only, selection also drives the camera.
-  const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
-  const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
-  const handleListSelect = (slug: string) => setSelectedSlug(slug);
-  // Mobile pull-up sheet's own open/collapsed state — irrelevant on lg+,
-  // where the list is a permanently visible sidebar instead.
-  const [listExpanded, setListExpanded] = useState(false);
+  // Back to page 1 whenever the result set or its order changes — adjusted
+  // during render so a filter change never flashes an out-of-range page.
+  const [pagedFor, setPagedFor] = useState(sorted);
+  if (pagedFor !== sorted) {
+    setPagedFor(sorted);
+    setPage(1);
+  }
+
+  const pageCount = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+  const current = Math.min(page, pageCount);
+  const pageItems = sorted.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE);
+
+  function goTo(n: number) {
+    setPage(n);
+    topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   const hasActiveFilters =
-    filters.status !== "all" ||
-    filters.type !== "all" ||
-    filters.price !== "all" ||
-    Boolean(urlFilters.region || urlFilters.city || urlFilters.area) ||
-    search.trim().length > 0;
+    Boolean(filters.status || filters.type || filters.price || search.trim()) ||
+    Boolean(urlFilters.region || urlFilters.city || urlFilters.area);
 
   const clearFilters = () => {
     setFilters(DEFAULT_FILTERS);
@@ -265,39 +294,99 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
     applyFilterParams({});
   };
 
-  // Infinite scroll: reveal PAGE_SIZE cards at a time, resetting to the first
-  // page whenever the filtered result set itself changes (a new search or
-  // filter) rather than every render — adjusted during render, not in an
-  // effect, so a filter change never flashes the old page count first.
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const [pagedFor, setPagedFor] = useState(filteredProperties);
-  if (pagedFor !== filteredProperties) {
-    setPagedFor(filteredProperties);
-    setVisibleCount(PAGE_SIZE);
-  }
+  /* Map pins and the map's list come from the same filtered set as the grid. */
+  const mapMarkers = useMemo(() => deriveMapMarkers(filteredProperties), [filteredProperties]);
+  const handleMarkerClick = (slug: string) => router.push(`/properties/${slug}`);
+  const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
+  const [listExpanded, setListExpanded] = useState(false);
 
-  const visibleProperties = filteredProperties.slice(0, visibleCount);
-  const hasMore = visibleCount < filteredProperties.length;
+  const filterForm = (
+    <form
+      onSubmit={(e) => e.preventDefault()}
+      className="border-ink-100 shadow-card rounded-[20px] border bg-white p-4 sm:p-5"
+    >
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Field label="Status" htmlFor="filter-status" icon={Tag}>
+          <select
+            id="filter-status"
+            value={filters.status}
+            onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value }))}
+            className={selectCls}
+          >
+            <option value="">Any status</option>
+            {STATUS_OPTIONS.map((s) => (
+              <option key={s.value} value={s.value}>
+                {s.label}
+              </option>
+            ))}
+          </select>
+        </Field>
 
-  const sentinelRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = sentinelRef.current;
-    if (!el || !hasMore) return;
+        <Field label="Location" htmlFor="filter-location" icon={MapPin} chevron={false}>
+          <input
+            id="filter-location"
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Area or property name"
+            className="text-ink-900 placeholder:text-ink-400 w-full bg-transparent text-[14px] font-medium placeholder:font-normal focus:outline-none max-sm:text-base"
+          />
+        </Field>
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisibleCount((count) => Math.min(count + PAGE_SIZE, filteredProperties.length));
-        }
-      },
-      { rootMargin: "600px" },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [hasMore, filteredProperties.length]);
+        <Field label="Type" htmlFor="filter-type" icon={Home}>
+          <select
+            id="filter-type"
+            value={filters.type}
+            onChange={(e) => setFilters((f) => ({ ...f, type: e.target.value }))}
+            className={selectCls}
+          >
+            <option value="">Any type</option>
+            {typeOptions.map((t) => (
+              <option key={t.value} value={t.value}>
+                {t.label}
+              </option>
+            ))}
+          </select>
+        </Field>
+
+        <Field label="Price" htmlFor="filter-price" icon={TrendingUp}>
+          <select
+            id="filter-price"
+            value={filters.price}
+            onChange={(e) => setFilters((f) => ({ ...f, price: e.target.value }))}
+            className={selectCls}
+          >
+            <option value="">Any price</option>
+            {priceOptions.map((b) => (
+              <option key={b.value} value={b.value}>
+                {b.label}
+              </option>
+            ))}
+          </select>
+        </Field>
+      </div>
+    </form>
+  );
+
+  /* Region picker and Grid/Map switch: the two live-catalogue tools the
+     design's filter card has no slot for, kept beside the sort control. */
+  const regionButton = (
+    <button
+      type="button"
+      onClick={() => setLocationPickerOpen(true)}
+      aria-haspopup="dialog"
+      aria-expanded={locationPickerOpen}
+      className={cn(pillCls, "text-ink-800 max-w-[220px] text-[14px] font-medium")}
+    >
+      <Navigation className="text-ink-400 h-4 w-4 shrink-0" />
+      <span className="truncate">{selectedLocationLabel ?? "All regions"}</span>
+      <ChevronDown className="text-ink-400 h-4 w-4 shrink-0" />
+    </button>
+  );
 
   const viewToggle = (
-    <div className="border-ink-200 flex items-center gap-1 rounded-full border bg-white p-1">
+    <div className="border-ink-100 shadow-secondary flex h-10 items-center gap-1 rounded-full border bg-white p-1">
       {(
         [
           { key: "grid", label: "Grid", icon: LayoutGrid },
@@ -309,8 +398,8 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
           href={viewHref(key)}
           aria-current={view === key ? "page" : undefined}
           className={cn(
-            "flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-semibold transition-colors",
-            view === key ? "bg-brand-600 text-white" : "text-ink-500 hover:bg-ink-50",
+            "flex h-8 items-center gap-1.5 rounded-full px-3.5 text-[13px] font-semibold transition-colors",
+            view === key ? "btn-primary" : "text-ink-500 hover:bg-ink-50",
           )}
         >
           <Icon className="h-3.5 w-3.5" />
@@ -320,137 +409,67 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
     </div>
   );
 
-  /* One filter bar for both routes — a single row of pills, all the same
-     height as the search input beside them, so every control sits on one
-     baseline.
-
-     Mobile (<sm): the pills collapse to one "Filters" button — there's no
-     room for four dropdowns plus search on a phone width without wrapping
-     into a mess — which opens MobileFilterSheet, an Apple Settings–style
-     sheet: one row per filter, its options hidden until that row is tapped
-     (progressive disclosure), so a visitor sees one decision at a time
-     instead of every option for every filter competing for the same small
-     screen at once. */
-  const filterBar = (
-    <div className="flex items-center gap-3">
-      <div className="hidden flex-1 flex-wrap items-center gap-2 sm:flex">
-        <FilterDropdown
-          label="Status"
-          icon={<Tag className="h-3.5 w-3.5" />}
-          value={filters.status}
-          options={STATUS_OPTIONS}
-          onChange={(value) => setFilters((f) => ({ ...f, status: value }))}
-        />
-        <button
-          type="button"
-          onClick={() => setLocationPickerOpen(true)}
-          aria-haspopup="dialog"
-          aria-expanded={locationPickerOpen}
-          className={filterTriggerClass}
-        >
-          <MapPin className="text-brand-500 h-3.5 w-3.5 shrink-0" />
-          <span className="truncate">{selectedLocationLabel ?? "All Locations"}</span>
-          <ChevronDown className="text-ink-400 h-4 w-4 shrink-0" />
-        </button>
-        <FilterDropdown
-          label="Type"
-          icon={<Home className="h-3.5 w-3.5" />}
-          value={filters.type}
-          options={typeOptions}
-          onChange={(value) => setFilters((f) => ({ ...f, type: value }))}
-        />
-        <FilterDropdown
-          label="Price"
-          value={filters.price}
-          options={priceOptions}
-          onChange={(value) => setFilters((f) => ({ ...f, price: value }))}
-        />
-        <div className="relative max-w-[220px] min-w-[160px] flex-1">
-          <Search className="text-ink-400 absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2" />
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search properties..."
-            className="border-ink-200 text-ink-900 placeholder:text-ink-400 focus:border-brand-400 h-10 w-full rounded-full border bg-white pr-3 pl-9 text-[13px] transition-colors outline-none"
-          />
-        </div>
+  const toolbar = (
+    <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+      <p className="tnum text-ink-500 text-[14px]">
+        {sorted.length} {sorted.length === 1 ? "property" : "properties"} found
+        {hasActiveFilters && (
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="text-brand-600 hover:text-brand-700 ml-3 font-semibold"
+          >
+            Clear filters
+          </button>
+        )}
+      </p>
+      <div className="flex flex-wrap items-center gap-2">
+        {regionButton}
+        {view === "grid" && (
+          <div className={pillCls}>
+            <ArrowDownUp className="text-ink-400 h-4 w-4 shrink-0" />
+            <label htmlFor="sort" className="text-ink-400 text-[13px]">
+              Sort
+            </label>
+            <select
+              id="sort"
+              value={sort}
+              onChange={(e) => setSort(e.target.value as SortId)}
+              className="text-ink-800 appearance-none bg-transparent text-[14px] font-medium focus:outline-none"
+            >
+              {SORTS.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="text-ink-400 pointer-events-none h-4 w-4 shrink-0" />
+          </div>
+        )}
+        {viewToggle}
       </div>
-
-      <button
-        type="button"
-        onClick={() => setMobileFilterOpen(true)}
-        className="border-ink-200 text-ink-900 flex h-10 flex-1 items-center justify-center gap-2 rounded-full border bg-white px-4 text-[14px] font-semibold sm:hidden"
-      >
-        <SlidersHorizontal className="h-4 w-4" />
-        Filters
-        {hasActiveFilters && <span className="bg-brand-600 h-2 w-2 rounded-full" />}
-      </button>
-
-      {viewToggle}
     </div>
   );
 
-  const resultSummary = (
-    <p className="text-ink-500 text-[13px]">
-      {filteredProperties.length} propert{filteredProperties.length === 1 ? "y" : "ies"} found
-      {hasActiveFilters && (
-        <button
-          onClick={clearFilters}
-          className="text-brand-600 hover:text-brand-700 ml-3 font-semibold"
-        >
-          Clear filters
-        </button>
-      )}
-    </p>
-  );
-
-  const filterDialogs = (
-    <>
-      <LocationPicker
-        open={locationPickerOpen}
-        onOpenChange={setLocationPickerOpen}
-        onSelect={handleLocationSelect}
-        counts={locationCounts}
-        selectedId={selectedLocationNode?.id}
-      />
-      <MobileFilterSheet
-        open={mobileFilterOpen}
-        onOpenChange={setMobileFilterOpen}
-        filters={filters}
-        onFiltersChange={setFilters}
-        statusOptions={STATUS_OPTIONS}
-        typeOptions={typeOptions}
-        priceOptions={priceOptions}
-        locationLabel={selectedLocationLabel ?? "All Locations"}
-        onLocationClick={() => setLocationPickerOpen(true)}
-        resultCount={filteredProperties.length}
-        hasActiveFilters={hasActiveFilters}
-        onClear={clearFilters}
-      />
-    </>
+  const locationPicker = (
+    <LocationPicker
+      open={locationPickerOpen}
+      onOpenChange={setLocationPickerOpen}
+      onSelect={handleLocationSelect}
+      counts={locationCounts}
+      selectedId={selectedLocationNode?.id}
+    />
   );
 
   if (view === "map") {
     return (
-      <>
-        {/* No heading here — the map is the point of this route, so the
-            chrome around it stays minimal: just the shared filter bar. */}
-        {filterBar}
-        <div className="mt-3">{resultSummary}</div>
+      <div ref={topRef}>
+        {filterForm}
+        {toolbar}
 
-        {/* One PropertyMap, always — it owns a real WebGL context, a
-            geolocation request, and a MapLibre worker, so two instances
-            (one per breakpoint, swapped via CSS visibility) would mean two
-            of all of that running at once, and a display:none'd canvas
-            that often never recovers its size once shown again. Only the
-            list's presentation is responsive: a fixed sidebar on the left
-            on desktop/tablet (lg+, the map's container shifts right to
-            make room for it), or — on mobile — Apple Maps' own pattern, a
-            pull-up sheet over a full-screen map, collapsed to a handle bar
-            by default so the map (the actual reason to be on this route)
-            gets the whole screen and the list stays one tap away instead
-            of a permanently cramped strip above it. */}
-        <div className="border-ink-100 relative mt-3 h-[calc(100vh-190px)] min-h-[420px] overflow-hidden rounded-[22px] border lg:h-[calc(100vh-230px)] lg:min-h-[520px]">
+        {/* One PropertyMap at every width (it owns a WebGL context). The list
+            is a sidebar on lg+ and a pull-up sheet on phones. */}
+        <div className="border-ink-100 relative mt-4 h-[calc(100vh-238px)] min-h-[420px] overflow-hidden rounded-[22px] border lg:h-[calc(100vh-230px)] lg:min-h-[520px]">
           <div className="absolute inset-0 lg:left-[380px]">
             <PropertyMap
               markers={mapMarkers}
@@ -460,23 +479,17 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
             />
           </div>
 
-          {/* Desktop/tablet sidebar. z-10: MapLibre's own controls
-              (attribution, zoom) are absolutely positioned inside the map
-              layer too, with no explicit stacking order of their own —
-              without this, the browser's default paint order can let the
-              attribution control's (wider than it looks) hit area
-              intercept clicks meant for whatever sits at the same
-              coordinates on top of it. */}
+          {/* z-10 keeps MapLibre's own controls from catching clicks meant
+              for the list. */}
           <div className="border-ink-100 absolute inset-y-0 left-0 z-10 hidden w-[380px] overflow-hidden border-r bg-white lg:block">
             <PropertyListPanel
               properties={filteredProperties}
               selectedSlug={selectedSlug}
-              onSelect={handleListSelect}
+              onSelect={setSelectedSlug}
               onHoverChange={setHoveredSlug}
             />
           </div>
 
-          {/* Mobile pull-up sheet — same z-10 reasoning as the sidebar above. */}
           <div
             className={cn(
               "absolute inset-x-0 bottom-0 z-10 flex flex-col rounded-t-2xl bg-white shadow-[0_-8px_30px_-12px_rgba(10,13,20,0.35)] transition-[height] duration-300 ease-out lg:hidden",
@@ -505,7 +518,7 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
                 properties={filteredProperties}
                 selectedSlug={selectedSlug}
                 onSelect={(slug) => {
-                  handleListSelect(slug);
+                  setSelectedSlug(slug);
                   setListExpanded(false);
                 }}
                 onHoverChange={setHoveredSlug}
@@ -514,67 +527,93 @@ export function PropertiesBrowser({ properties }: { properties: Property[] }) {
           </div>
         </div>
 
-        {filterDialogs}
-      </>
+        {locationPicker}
+      </div>
     );
   }
 
   return (
-    <>
-      <div className="max-w-2xl">
-        <h1 className="text-ink-900 text-[clamp(2rem,4vw,2.75rem)] leading-[1.15] font-bold tracking-[-0.02em]">
-          Browse verified properties
-        </h1>
-        <p className="text-ink-500 mt-3 text-[16px] leading-relaxed">
-          Every listing below is title-verified against Ghana&apos;s Lands Commission records and
-          recorded on-chain.
-        </p>
-      </div>
-
-      <div className="mt-8">{filterBar}</div>
-      <div className="mt-3">{resultSummary}</div>
+    <div ref={topRef} className="scroll-mt-24">
+      {filterForm}
+      {toolbar}
 
       {properties.length === 0 ? (
-        <div className="py-16 text-center">
-          <div className="border-ink-100 bg-ink-50 mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full border">
-            <Building2 className="text-ink-300 h-12 w-12" />
-          </div>
-          <h3 className="text-ink-900 mb-2 text-2xl font-semibold">No properties available</h3>
-          <p className="text-ink-500 mx-auto max-w-md">
+        <div className="border-ink-100 bg-ink-50 mt-8 rounded-[20px] border py-12 text-center sm:py-16">
+          <Building2 className="text-ink-300 mx-auto mb-4 h-10 w-10" />
+          <p className="text-ink-500 text-[15px]">
             We don&rsquo;t have any properties listed at the moment. Please check back later.
           </p>
         </div>
-      ) : filteredProperties.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <SlidersHorizontal className="text-ink-200 mb-3 h-10 w-10" />
-          <p className="text-ink-900 mb-2 text-[15px] font-semibold">
-            No properties match your filters
-          </p>
-          <p className="text-ink-400 text-[13px]">
-            Try adjusting or clearing your filters to see more results.
-          </p>
-          <button onClick={clearFilters} className={buttonVariants("primary", "sm", "mt-4")}>
-            Clear All Filters
-          </button>
-        </div>
       ) : (
         <>
-          <div className="gap-x-card mt-10 grid grid-cols-1 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-y-12">
-            {visibleProperties.map((property) => (
-              <PropertyCard key={property.slug} property={property} />
+          {/* Keyed on the query, so a new set of results settles in together. */}
+          <div
+            key={`${filters.status}|${search}|${filters.type}|${filters.price}|${selectedLocationSlug}|${sort}|${current}`}
+            className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {pageItems.map((property, i) => (
+              <div
+                key={property.slug}
+                className="rise flex [&>article]:w-full"
+                style={{ animationDelay: `${(i % 3) * 50 + Math.floor(i / 3) * 40}ms` }}
+              >
+                <PropertyCard property={property} />
+              </div>
             ))}
           </div>
 
-          {hasMore && (
-            <div ref={sentinelRef} className="mt-10 flex items-center justify-center gap-2 py-6">
-              <Loader2 className="text-ink-300 h-5 w-5 animate-spin" />
-              <span className="text-ink-400 text-[13px]">Loading more properties…</span>
+          {sorted.length === 0 && (
+            <div className="border-ink-100 bg-ink-50 mt-8 rounded-[20px] border py-12 text-center sm:py-16">
+              <p className="text-ink-500 text-[15px]">
+                No properties match those filters. Try widening your search.
+              </p>
             </div>
+          )}
+
+          {pageCount > 1 && (
+            <nav
+              aria-label="Pagination"
+              className="mt-9 flex items-center justify-center gap-2 sm:mt-14"
+            >
+              <button
+                type="button"
+                onClick={() => goTo(current - 1)}
+                disabled={current === 1}
+                aria-label="Previous page"
+                className="border-ink-100 text-ink-600 shadow-secondary hover:border-ink-200 hover:bg-ink-50 disabled:text-ink-300 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors disabled:pointer-events-none disabled:shadow-none"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              {Array.from({ length: pageCount }, (_, i) => i + 1).map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => goTo(n)}
+                  aria-current={n === current ? "page" : undefined}
+                  className={
+                    n === current
+                      ? "btn-primary tnum shadow-primary flex h-10 min-w-10 items-center justify-center rounded-full px-3 text-[14px] font-semibold"
+                      : "tnum text-ink-600 hover:bg-ink-50 hover:text-ink-900 flex h-10 min-w-10 items-center justify-center rounded-full px-3 text-[14px] font-medium transition-colors"
+                  }
+                >
+                  {n}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={() => goTo(current + 1)}
+                disabled={current === pageCount}
+                aria-label="Next page"
+                className="border-ink-100 text-ink-600 shadow-secondary hover:border-ink-200 hover:bg-ink-50 disabled:text-ink-300 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors disabled:pointer-events-none disabled:shadow-none"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </nav>
           )}
         </>
       )}
 
-      {filterDialogs}
-    </>
+      {locationPicker}
+    </div>
   );
 }

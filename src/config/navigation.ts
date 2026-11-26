@@ -15,19 +15,19 @@ export interface NavGroup {
 export const NAV_GROUPS: NavGroup[] = [
   {
     label: "List Properties",
-    href: "/developers",
+    href: "/vendors",
     accentColor: "#7e22ce",
     exploreLabel: "vendor options",
     items: [
       {
         label: "Individual vendor",
         description: "Sell faster, recover capital sooner",
-        href: "/developers#individual",
+        href: "/vendors#individual",
       },
       {
         label: "Corporate firm",
         description: "Scale sales without diluting your brand",
-        href: "/developers#corporate",
+        href: "/vendors#corporate",
       },
     ],
   },
@@ -57,6 +57,7 @@ export const FOOTER_COMPANY_LINKS = [
   { label: "How it works", href: "/how-it-works" },
   { label: "Insights", href: "/insights" },
   { label: "About", href: "/how-it-works" },
+  { label: "Help", href: "/help" },
 ];
 
 export const FOOTER_SOCIAL_LINKS = [
@@ -68,7 +69,7 @@ export const FOOTER_SOCIAL_LINKS = [
 ];
 
 export const FOOTER_LEGAL_LINKS = [
-  { label: "Terms", href: "/privacy-policy" },
-  { label: "Privacy Policy", href: "/privacy-policy" },
-  { label: "Cookie Policy", href: "/privacy-policy" },
+  { label: "Terms", href: "/legal/terms" },
+  { label: "Privacy Policy", href: "/legal/privacy" },
+  { label: "Cookie Policy", href: "/legal/cookie-policy" },
 ];
