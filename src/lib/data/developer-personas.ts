@@ -1,5 +1,5 @@
 import type { PersonaContent } from "./persona";
-import { AFRAM_EXCHANGE_URL } from "../config";
+import { accessCta, signUpHref } from "@/features/access/cta";
 import { PHOTOS } from "./photos";
 
 export const PERSONAS: Record<string, PersonaContent> = {
@@ -39,7 +39,7 @@ export const PERSONAS: Record<string, PersonaContent> = {
         body: "Finished a project without a formal title? That may not rule you out. We’ll tell you what is missing and what it takes to fix it.",
       },
     ],
-    blocksCta: { label: "Get Started", href: AFRAM_EXCHANGE_URL },
+    blocksCta: accessCta({ label: "Get Started", href: signUpHref("issuer") }),
     faqs: [
       {
         q: "Do I give up control or a share of my project?",
@@ -86,7 +86,7 @@ export const PERSONAS: Record<string, PersonaContent> = {
         body: "You get buyers with financing ready. You also see demand: which areas are heating up, and which unit sizes and prices sell.",
       },
     ],
-    blocksCta: { label: "Get Started", href: AFRAM_EXCHANGE_URL },
+    blocksCta: accessCta({ label: "Get Started", href: signUpHref("issuer") }),
     // The brand, sales-team and market-data questions are answered by the
     // "Built around how you already sell." cards above the FAQ, so they are
     // not repeated here.

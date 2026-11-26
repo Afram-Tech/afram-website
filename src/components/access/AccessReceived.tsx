@@ -1,32 +1,30 @@
-import { Check } from "lucide-react";
+import { Clock } from "lucide-react";
 
 interface AccessReceivedProps {
   email: string;
   onDone: () => void;
 }
 
+/** V2's "Request received" step, without its demo approval panel: here the
+ *  request goes to the team, who approve it outside the site. */
 export function AccessReceived({ email, onDone }: AccessReceivedProps) {
   return (
     <div aria-live="polite">
-      <span className="check-pop bg-brand-50 text-brand-700 flex h-14 w-14 items-center justify-center rounded-full sm:h-16 sm:w-16">
-        <Check className="h-6 w-6" strokeWidth={2.5} />
+      <span className="bg-accent-50 text-accent-700 flex h-12 w-12 items-center justify-center rounded-full">
+        <Clock className="h-5 w-5" />
       </span>
-      <h2
-        id="access-title"
-        className="rise text-ink-900 mt-5 pr-10 text-[1.75rem] leading-[1.15] font-bold tracking-[-0.02em] sm:mt-6 sm:text-[2.25rem]"
-      >
+      <h2 id="access-title" className="t-h3 text-ink-900 mt-5 pr-8">
         Request received
       </h2>
-      <p className="rise text-ink-500 mt-2 text-[15px] leading-relaxed break-words sm:mt-3 sm:text-[16.5px]">
-        Thanks. We&apos;ll review your request and email{" "}
-        <b className="text-ink-900 font-semibold">{email}</b> with your invite once you&apos;re
+      <p className="text-ink-500 mt-2 text-[15px] leading-relaxed break-words">
+        We&apos;ll email <b className="text-ink-900 font-semibold">{email}</b> once you&apos;re
         approved.
       </p>
       <button
         type="button"
         onClick={onDone}
         autoFocus
-        className="text-ink-700 ring-ink-200 hover:bg-ink-50 mt-8 h-12 w-full rounded-full text-[15px] font-semibold ring-1 transition-colors sm:h-13 sm:text-base"
+        className="btn-secondary mt-6 h-11 w-full rounded-full text-[14px] font-semibold"
       >
         Done
       </button>

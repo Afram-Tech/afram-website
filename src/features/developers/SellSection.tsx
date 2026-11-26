@@ -1,6 +1,6 @@
 import { BadgeCheck, Banknote, Building2 } from "lucide-react";
 import { StoryBand, type StoryPoint } from "@/components/persona/StoryBand";
-import { AFRAM_EXCHANGE_URL } from "@/lib/config";
+import { accessCta, signUpHref } from "@/features/access/cta";
 
 /**
  * The first section under the vendors hero: selling. Raising capital follows
@@ -33,7 +33,7 @@ export function SellSection() {
       id="sell"
       title="Sell to buyers who already have financing."
       lead="Sell your units faster with financiers on Afram financing potential buyers, so your units don’t sit on the market for long."
-      cta={{ label: "Get Started", href: AFRAM_EXCHANGE_URL }}
+      cta={accessCta({ label: "Get Started", href: signUpHref("issuer") })}
       points={POINTS}
     />
   );

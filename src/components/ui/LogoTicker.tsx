@@ -57,6 +57,8 @@ export function LogoTicker({
                   alt={i < logos.length ? l.name : ""}
                   fill
                   sizes="140px"
+                  // Off-screen copies slide in; lazy loading would show them blank.
+                  loading="eager"
                   className="object-contain"
                 />
               </div>

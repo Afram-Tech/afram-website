@@ -14,7 +14,7 @@ import { LogoTicker, type TickerLogo } from "@/components/ui/LogoTicker";
 export const LENDERS: TickerLogo[] = [
   { name: "Affinity" },
   { name: "Ecobank", src: "/partners/ecobank.svg" },
-  { name: "Origen", src: "/partners/origen.png" },
+  { name: "Origen", src: "/partners/origen-logo-trimmed.png" },
 ];
 
 /**

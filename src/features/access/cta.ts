@@ -1,6 +1,7 @@
 import { siteConfig } from "@/config/site";
 
 import { INVITE_ONLY, REQUEST_ACCESS_LABEL } from "./invite-only";
+import { REQUEST_ACCESS_PARAM, USER_TYPE_PARAM } from "./roles";
 
 /** The app's wire values for a role, as the `?userType=` param carries them. */
 export type UserType = "buyer" | "issuer" | "financier";
@@ -22,10 +23,17 @@ export function signUpHref(userType?: UserType): string {
  * people report as broken. With INVITE_ONLY off, every one of them keeps its
  * own wording and navigates to the app as before.
  *
- * The href is left alone on purpose: it still carries `?userType=`, which is
- * what opens the request dialog on the right role (see RequestAccess), and a
- * visitor without JS lands on the app's own invite notice rather than nowhere.
+ * While invite-only, the href becomes this page's own `?request-access=1`
+ * link (keeping the original `?userType=`, so the form opens on the right
+ * role), which the
+ * click handler in components/access catches. It no longer depends on the
+ * app's sign-up URL, which is built from NEXT_PUBLIC_CLIENT_APP: with that
+ * unset the link was `undefined/get-started`, which nothing caught.
  */
 export function accessCta(cta: AccessCta): AccessCta {
-  return INVITE_ONLY ? { label: REQUEST_ACCESS_LABEL, href: cta.href } : cta;
+  if (!INVITE_ONLY) return cta;
+  const userType = new URLSearchParams(cta.href.split("?")[1] ?? "").get(USER_TYPE_PARAM);
+  const params = new URLSearchParams({ [REQUEST_ACCESS_PARAM]: "1" });
+  if (userType) params.set(USER_TYPE_PARAM, userType);
+  return { label: REQUEST_ACCESS_LABEL, href: `?${params}` };
 }
