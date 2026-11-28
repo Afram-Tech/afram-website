@@ -9,6 +9,7 @@ import {
   type ReportCheck,
   type RequestState,
 } from "@/features/help/report-issue";
+import { AppHelpNote } from "@/components/help/AppHelpNote";
 import { useSupportRequestStatus } from "@/hooks/data";
 import { cn } from "@/lib/utils";
 
@@ -66,6 +67,10 @@ export function TrackRequest({
       <p className="text-ink-500 -mt-1 text-[14px] leading-relaxed">
         Enter the reference from your confirmation and the email you sent it with.
       </p>
+      <AppHelpNote className="-mt-1">
+        Raised it while signed in to the Afram app? Those requests are tracked in the app under
+        Help.
+      </AppHelpNote>
       <div className="flex flex-col gap-2">
         <label htmlFor={`${id}-ref`} className="sr-only">
           Reference
@@ -89,7 +94,7 @@ export function TrackRequest({
           onChange={(event) => setEmail(event.target.value)}
           placeholder="Your email"
           autoComplete="email"
-          className="tnum text-ink-900 ring-ink-200 placeholder:text-ink-400 focus:ring-brand-400 h-11 min-w-[350px] rounded-[14px] bg-white px-4 text-[14px] font-semibold tracking-[0.04em] ring-1 placeholder:font-normal placeholder:tracking-normal placeholder:normal-case focus:ring-2 focus:outline-none sm:w-[150px] sm:shrink-0"
+          className="tnum text-ink-900 ring-ink-200 placeholder:text-ink-400 focus:ring-brand-400 h-11 w-full min-w-0 rounded-[14px] bg-white px-4 text-[14px] font-semibold tracking-[0.04em] ring-1 placeholder:font-normal placeholder:tracking-normal placeholder:normal-case focus:ring-2 focus:outline-none"
         />
         <button
           type="button"
@@ -104,11 +109,17 @@ export function TrackRequest({
       <div aria-live="polite">
         {result?.status === "found" && <TrackResult result={result} />}
         {result?.status === "not_found" && (
-          <p className="bg-ink-50 text-ink-700 rounded-2xl px-4 py-3 text-[14px] leading-relaxed">
-            We couldn&apos;t find <b className="font-semibold">{result.reference}</b> with that
-            email. Check both against your confirmation: AF- and then 6 letters and numbers, and the
-            email you sent it from.
-          </p>
+          <div className="bg-ink-50 flex flex-col gap-2 rounded-2xl px-4 py-3">
+            <p className="text-ink-700 text-[14px] leading-relaxed">
+              We couldn&apos;t find <b className="font-semibold">{result.reference}</b> with that
+              email. Check both against your confirmation: AF- and then 6 letters and numbers, and
+              the email you sent it from.
+            </p>
+            <AppHelpNote>
+              If you raised it while signed in to the Afram app, it won&apos;t show here. Track it
+              in the app under Help.
+            </AppHelpNote>
+          </div>
         )}
         {result?.status === "error" && (
           <p className="bg-coral-100/60 text-ink-700 rounded-2xl px-4 py-3 text-[14px]">
