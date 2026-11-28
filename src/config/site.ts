@@ -14,6 +14,9 @@ export const siteConfig = {
   appUrl: appUrl,
   signInUrl: `${appUrl}/signin`,
   signUpUrl: `${appUrl}/get-started`,
+  /** The app's Help, where requests raised while signed in are tracked. `/dashboard/*`
+   *  redirects to the signed-in role's own area, so one link serves every role. */
+  appHelpUrl: `${appUrl}/dashboard/help`,
   social: {
     twitter: "@afram",
     facebook: "https://facebook.com/afram",
