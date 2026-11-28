@@ -6,7 +6,10 @@ import { expect, test } from "@playwright/test";
 test.beforeEach(async ({ page }) => {
   await page.route(/\/graph(ql)?(\?|$)/, async (route) => {
     const body = route.request().postDataJSON() as { operationName?: string } | null;
-    if (body?.operationName !== "GetSupportRequestStatus") return route.continue();
+    // Every other operation is answered here too, so the spec never calls a real API.
+    if (body?.operationName !== "GetSupportRequestStatus") {
+      return route.fulfill({ json: { data: {} } });
+    }
     await route.fulfill({ json: { data: { getSupportRequestStatus: null } } });
   });
 });
